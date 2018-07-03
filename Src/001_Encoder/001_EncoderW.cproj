@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{24DD12B5-33DB-4305-AFBE-1FB2A3BF9021}</ProjectGuid>
+    <Compiler>
+      <Compiler ctype="GppCompiler" />
+    </Compiler>
+    <Language>CPP</Language>
+    <Target>Bin</Target>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\..\Build\x64UbuntuDebug</OutputPath>
+    <OutputName>001_EncoderW</OutputName>
+    <CompileTarget>StaticLibrary</CompileTarget>
+    <DefineSymbols>DEBUG MONODEVELOP UNICODE</DefineSymbols>
+    <SourceDirectory>.</SourceDirectory>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>..\..\Build\x64UbuntuRelease</OutputPath>
+    <OutputName>001_EncoderW</OutputName>
+    <CompileTarget>StaticLibrary</CompileTarget>
+    <OptimizationLevel>3</OptimizationLevel>
+    <DefineSymbols>MONODEVELOP UNICODE</DefineSymbols>
+    <SourceDirectory>.</SourceDirectory>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'DebugFPic|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\..\Build\x64UbuntuDebugFPic</OutputPath>
+    <OutputName>001_EncoderW</OutputName>
+    <CompileTarget>StaticLibrary</CompileTarget>
+    <DefineSymbols>DEBUG MONODEVELOP UNICODE</DefineSymbols>
+    <SourceDirectory>.</SourceDirectory>
+    <ExtraCompilerArguments>-fPIC</ExtraCompilerArguments>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'ReleaseFPic|AnyCPU' ">
+    <OutputPath>..\..\Build\x64UbuntuReleaseFPic</OutputPath>
+    <OutputName>001_EncoderW</OutputName>
+    <CompileTarget>StaticLibrary</CompileTarget>
+    <OptimizationLevel>3</OptimizationLevel>
+    <DefineSymbols>MONODEVELOP UNICODE</DefineSymbols>
+    <SourceDirectory>.</SourceDirectory>
+    <ExtraCompilerArguments>-fPIC</ExtraCompilerArguments>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Base64.cpp" />
+    <Compile Include="HashFunction.cpp" />
+    <Compile Include="SHA1.cpp" />
+    <Compile Include="StringFunction.cpp" />
+    <Compile Include="SymAES.cpp" />
+    <Compile Include="SymCipher.cpp" />
+    <Compile Include="SymCipherFunction.cpp" />
+    <Compile Include="StringSymCipherFunction.cpp" />
+    <Compile Include="SymModeCBC.cpp" />
+    <Compile Include="SymModeCFB.cpp" />
+    <Compile Include="SymModeCTR.cpp" />
+    <Compile Include="SymModeECB.cpp" />
+    <Compile Include="SymModeOFB.cpp" />
+    <Compile Include="SymModePCBC.cpp" />
+    <Compile Include="SymModePlain.cpp" />
+    <Compile Include="SymPlain.cpp" />
+    <Compile Include="SymSeed128.cpp" />
+    <Compile Include="SymSeed256.cpp" />
+    <Compile Include="has160.cpp" />
+    <Compile Include="md5.cpp" />
+    <Compile Include="sha256.cpp" />
+    <Compile Include="AES\aescrypt.c" />
+    <Compile Include="AES\aeshash.c" />
+    <Compile Include="AES\aeskey.c" />
+    <Compile Include="AES\aestab.c" />
+    <Compile Include="SEED\SEED_128_KISA.cpp" />
+    <Compile Include="SEED\SEED_256_KISA.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Base64.h" />
+    <None Include="Encoder.h" />
+    <None Include="HashFunction.h" />
+    <None Include="ISymAlgorithm.h" />
+    <None Include="ISymMode.h" />
+    <None Include="SHA1.h" />
+    <None Include="StringFunction.h" />
+    <None Include="SymAES.h" />
+    <None Include="SymCipher.h" />
+    <None Include="SymCipherFunction.h" />
+    <None Include="StringSymCipherFunction.h" />
+    <None Include="SymModeCBC.h" />
+    <None Include="SymModeCFB.h" />
+    <None Include="SymModeCTR.h" />
+    <None Include="SymModeECB.h" />
+    <None Include="SymModeOFB.h" />
+    <None Include="SymModePCBC.h" />
+    <None Include="SymModePlain.h" />
+    <None Include="SymPlain.h" />
+    <None Include="SymSeed128.h" />
+    <None Include="SymSeed256.h" />
+    <None Include="Type.h" />
+    <None Include="has160.h" />
+    <None Include="md5.h" />
+    <None Include="sha256.h" />
+    <None Include="stdafx.h" />
+    <None Include="AES\aes.h" />
+    <None Include="AES\aescrypt.asm" />
+    <None Include="AES\aesopt.h" />
+    <None Include="SEED\SEED_128_KISA.h" />
+    <None Include="SEED\SEED_128_KISA.tab" />
+    <None Include="SEED\SEED_256_KISA.h" />
+    <None Include="SEED\SEED_256_KISA.tab" />
+  </ItemGroup>
+</Project>

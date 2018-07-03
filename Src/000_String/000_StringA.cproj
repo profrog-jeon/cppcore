@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{03FE7C80-5FCA-49B3-9780-8717734C06D7}</ProjectGuid>
+    <Compiler>
+      <Compiler ctype="GppCompiler" />
+    </Compiler>
+    <Language>CPP</Language>
+    <Target>Bin</Target>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\..\Build\x64UbuntuDebug</OutputPath>
+    <OutputName>000_StringA</OutputName>
+    <CompileTarget>StaticLibrary</CompileTarget>
+    <DefineSymbols>DEBUG MONODEVELOP</DefineSymbols>
+    <SourceDirectory>.</SourceDirectory>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>..\..\Build\x64UbuntuRelease</OutputPath>
+    <OutputName>000_StringA</OutputName>
+    <CompileTarget>StaticLibrary</CompileTarget>
+    <OptimizationLevel>3</OptimizationLevel>
+    <DefineSymbols>MONODEVELOP</DefineSymbols>
+    <SourceDirectory>.</SourceDirectory>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'DebugFPic|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\..\Build\x64UbuntuDebugFPic</OutputPath>
+    <OutputName>000_StringA</OutputName>
+    <CompileTarget>StaticLibrary</CompileTarget>
+    <DefineSymbols>DEBUG MONODEVELOP</DefineSymbols>
+    <SourceDirectory>.</SourceDirectory>
+    <ExtraCompilerArguments>-fPIC</ExtraCompilerArguments>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'ReleaseFPic|AnyCPU' ">
+    <OutputPath>..\..\Build\x64UbuntuReleaseFPic</OutputPath>
+    <OutputName>000_StringA</OutputName>
+    <CompileTarget>StaticLibrary</CompileTarget>
+    <OptimizationLevel>3</OptimizationLevel>
+    <DefineSymbols>MONODEVELOP</DefineSymbols>
+    <SourceDirectory>.</SourceDirectory>
+    <ExtraCompilerArguments>-fPIC</ExtraCompilerArguments>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="stdafx.h" />
+    <None Include="BOM.h" />
+    <None Include="Exception.h" />
+    <None Include="NumericString.h" />
+    <None Include="POSIX.h" />
+    <None Include="STLString.h" />
+    <None Include="StdString.h" />
+    <None Include="StdStringLegacy.h" />
+    <None Include="String.h" />
+    <None Include="Unicode.h" />
+    <None Include="UnicodeEncoding.h" />
+    <None Include="Utility.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BOM.cpp" />
+    <Compile Include="BOMT.cpp" />
+    <Compile Include="Exception.cpp" />
+    <Compile Include="NumericString.cpp" />
+    <Compile Include="STLString.cpp" />
+    <Compile Include="StdString.cpp" />
+    <Compile Include="StdStringLegacy.cpp" />
+    <Compile Include="UnicodeEncoding.cpp" />
+    <Compile Include="Utility.cpp" />
+    <Compile Include="UnicodeEncoding_Linux_Mac.cpp" />
+    <Compile Include="Unicode_Linux_Mac.cpp" />
+    <Compile Include="Unicode.cpp" />
+  </ItemGroup>
+</Project>
