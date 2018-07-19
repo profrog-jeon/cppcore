@@ -9,7 +9,6 @@
 #include "../__Common/Type.h"
 #include "../__Common/Define.h"
 #include "../__Common/ErrorCode.h"
-#include "../__Common/Struct.h"
 
 #include "../000_String/String.h"
 #include "../001_Encoder/Encoder.h"

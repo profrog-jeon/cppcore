@@ -263,15 +263,10 @@
     <ClInclude Include="FileUtility.h" />
     <ClInclude Include="HashFunction.h" />
     <ClInclude Include="IMemoryAccess.h" />
-    <ClInclude Include="INIParser.h" />
-    <ClInclude Include="INIParserFunc.h" />
     <ClInclude Include="LockFreeQueue.h" />
     <ClInclude Include="Log.h" />
     <ClInclude Include="MemoryMappedFile.h" />
     <ClInclude Include="Mutex.h" />
-    <ClInclude Include="PEParser.h" />
-    <ClInclude Include="PEParserData.h" />
-    <ClInclude Include="PipePeer.h" />
     <ClInclude Include="SafeQueue.h" />
     <ClInclude Include="Semaphore.h" />
     <ClInclude Include="SharedMemory.h" />
@@ -280,34 +275,25 @@
     <ClInclude Include="TextFileReader.h" />
     <ClInclude Include="TextFileWriter.h" />
     <ClInclude Include="Uncopyable.h" />
-    <ClInclude Include="unzip.h" />
     <ClInclude Include="Utility.h" />
-    <ClInclude Include="zip.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CriticalSection.cpp" />
     <ClCompile Include="FileUtility.cpp" />
     <ClCompile Include="HashFunction.cpp" />
-    <ClCompile Include="INIParser.cpp" />
-    <ClCompile Include="INIParserFunc.cpp" />
     <ClCompile Include="Log.cpp" />
     <ClCompile Include="MemoryMappedFile.cpp" />
     <ClCompile Include="MemoryMappedFileT.cpp" />
     <ClCompile Include="Mutex.cpp" />
     <ClCompile Include="MutexT.cpp" />
-    <ClCompile Include="PEParser.cpp" />
-    <ClCompile Include="PEParserT.cpp" />
-    <ClCompile Include="PipePeer.cpp" />
     <ClCompile Include="Semaphore.cpp" />
     <ClCompile Include="SharedMemory.cpp" />
     <ClCompile Include="TextFileReader.cpp" />
     <ClCompile Include="TextFileReaderT.cpp" />
     <ClCompile Include="TextFileWriter.cpp" />
     <ClCompile Include="TextFileWriterT.cpp" />
-    <ClCompile Include="unzip.cpp" />
     <ClCompile Include="Utility.cpp" />
     <ClCompile Include="UtilityT.cpp" />
-    <ClCompile Include="zip.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\000_String\000_StringA.vcxproj">

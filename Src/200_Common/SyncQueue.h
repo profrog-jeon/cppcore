@@ -81,6 +81,7 @@ namespace core
 
 			m_csItems.Enter();
 			(*pOutItem) = m_queItems.front();
+			m_queItems.pop();
 			m_csItems.Leave();
 			return WAIT_OBJECT_0_;
 		}

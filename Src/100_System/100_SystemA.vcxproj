@@ -259,9 +259,7 @@
   <ItemGroup>
     <ClInclude Include="..\__Common\Define.h" />
     <ClInclude Include="..\__Common\ErrorCode.h" />
-    <ClInclude Include="..\__Common\Struct.h" />
     <ClInclude Include="..\__Common\Type.h" />
-    <ClInclude Include="ELFParser.h" />
     <ClInclude Include="Environment.h" />
     <ClInclude Include="FileSystem.h" />
     <ClInclude Include="GlobalSemaphoreMap.h" />
@@ -270,8 +268,6 @@
     <ClInclude Include="KernelObject.h" />
     <ClInclude Include="Log.h" />
     <ClInclude Include="LogInstance.h" />
-    <ClInclude Include="Socket.h" />
-    <ClInclude Include="Socket_Win.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Struct.h" />
     <ClInclude Include="System.h" />
@@ -279,7 +275,6 @@
     <ClInclude Include="TZFileParser.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ELFParser.cpp" />
     <ClCompile Include="Environment.cpp" />
     <ClCompile Include="EnvironmentT.cpp" />
     <ClCompile Include="Environment_Win.cpp" />
@@ -293,7 +288,6 @@
     <ClCompile Include="KernelObject_WinT.cpp" />
     <ClCompile Include="Log.cpp" />
     <ClCompile Include="LogInstance.cpp" />
-    <ClCompile Include="Socket_Win.cpp" />
     <ClCompile Include="TZFileParser.cpp" />
   </ItemGroup>
   <ItemGroup>

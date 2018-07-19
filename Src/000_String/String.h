@@ -2,7 +2,7 @@
 
 #include "../__Common/Type.h"
 #include "../__Common/Define.h"
-#include "../__Common/Struct.h"
+#include "../__Common/ErrorCode.h"
 
 #include "BOM.h"
 #include "Exception.h"

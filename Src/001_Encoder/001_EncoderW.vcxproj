@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="DebugMT|Win32">
@@ -277,13 +277,6 @@
     <ClCompile Include="SEED\SEED_256_KISA.cpp" />
     <ClCompile Include="SHA1.cpp" />
     <ClCompile Include="sha256.cpp" />
-    <ClCompile Include="ssdeep\edit_dist.cpp" />
-    <ClCompile Include="ssdeep\filedata.cpp" />
-    <ClCompile Include="ssdeep\find-file-size.cpp" />
-    <ClCompile Include="ssdeep\fuzzy.cpp" />
-    <ClCompile Include="ssdeep\helpers.cpp" />
-    <ClCompile Include="ssdeep\match.cpp" />
-    <ClCompile Include="ssdeep\ui.cpp" />
     <ClCompile Include="StringFunction.cpp" />
     <ClCompile Include="StringSymCipherFunction.cpp" />
     <ClCompile Include="SymAES.cpp" />
@@ -303,7 +296,6 @@
   <ItemGroup>
     <ClInclude Include="..\__Common\Define.h" />
     <ClInclude Include="..\__Common\ErrorCode.h" />
-    <ClInclude Include="..\__Common\Struct.h" />
     <ClInclude Include="..\__Common\Type.h" />
     <ClInclude Include="AES\aes.h" />
     <ClInclude Include="AES\aesopt.h" />
@@ -318,12 +310,7 @@
     <ClInclude Include="SEED\SEED_256_KISA.h" />
     <ClInclude Include="SHA1.h" />
     <ClInclude Include="sha256.h" />
-    <ClInclude Include="ssdeep\edit_dist.h" />
-    <ClInclude Include="ssdeep\filedata.h" />
-    <ClInclude Include="ssdeep\fuzzy.h" />
-    <ClInclude Include="ssdeep\match.h" />
     <ClInclude Include="ssdeep\ssdeep.h" />
-    <ClInclude Include="ssdeep\tchar-local.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="StringFunction.h" />
     <ClInclude Include="StringSymCipherFunction.h" />

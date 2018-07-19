@@ -259,7 +259,6 @@
   <ItemGroup>
     <ClInclude Include="..\__Common\Define.h" />
     <ClInclude Include="..\__Common\ErrorCode.h" />
-    <ClInclude Include="..\__Common\Struct.h" />
     <ClInclude Include="..\__Common\Type.h" />
     <ClInclude Include="BOM.h" />
     <ClInclude Include="Exception.h" />
