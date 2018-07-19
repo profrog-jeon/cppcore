@@ -531,10 +531,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\__Common\Struct.h"
-				>
-			</File>
-			<File
 				RelativePath="..\__Common\Type.h"
 				>
 			</File>
