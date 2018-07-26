@@ -58,7 +58,7 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	std::tstring MakeLowerCase(LPCTSTR pszContext)
+	std::tstring MakeLower(LPCTSTR pszContext)
 	{
 		std::tstring strContext(pszContext);
 
@@ -77,7 +77,7 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	std::tstring MakeLowerCase(std::tstring strContext)
+	std::tstring MakeLower(std::tstring strContext)
 	{
 		size_t i = 0;
 		for (i=0; i<strContext.length(); i++)
@@ -94,7 +94,7 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	std::tstring MakeUpperCase(LPCTSTR pszContext)
+	std::tstring MakeUpper(LPCTSTR pszContext)
 	{
 		std::tstring strContext(pszContext);
 
@@ -113,7 +113,7 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	std::tstring MakeUpperCase(std::tstring strContext)
+	std::tstring MakeUpper(std::tstring strContext)
 	{
 		size_t i = 0;
 		for (i=0; i<strContext.length(); i++)
@@ -130,7 +130,7 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	std::tstring& BecomeLowerCase(std::tstring& strContext)
+	std::tstring& BecomeLower(std::tstring& strContext)
 	{
 		size_t i = 0;
 		for (i = 0; i<strContext.length(); i++)
@@ -147,7 +147,7 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	std::tstring& BecomeUpperCase(std::tstring& strContext)
+	std::tstring& BecomeUpper(std::tstring& strContext)
 	{
 		size_t i = 0;
 		for (i = 0; i<strContext.length(); i++)
