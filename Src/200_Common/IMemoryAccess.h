@@ -7,9 +7,9 @@ namespace core
 	struct IMemoryAccess
 	{
 		template <typename T>
-		T Cast(void)
+		T Cast(size_t tOffset = 0)
 		{
-			return (T)Ptr();
+			return (T)(Ptr() + tOffset);
 		}
 
 		template <typename T>
@@ -22,7 +22,7 @@ namespace core
 			if( Size() < (tOffset + sizeof(T)) )
 				return EC_NO_DATA;
 
-			pOut = (T*)(pPtr + tOffset);
+			memcpy(pOut, pPtr + tOffset, sizeof(T));
 			return EC_SUCCESS;
 		}
 
