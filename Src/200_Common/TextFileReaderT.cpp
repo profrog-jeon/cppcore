@@ -135,7 +135,7 @@ namespace core
 			{
 				std::vector<char> vecBuffer;
 				if( (nReadSize = ReadLineFromFile(vecBuffer, m_hFile)) > 0 )
-					strContext = TCSFromEUCKR(&vecBuffer[0]);
+					strContext = TCSFromASCII(&vecBuffer[0]);
 			}
 			break;
 			}

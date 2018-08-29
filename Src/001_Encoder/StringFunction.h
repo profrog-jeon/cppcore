@@ -7,13 +7,13 @@
 #define	GetHashTypeString			GetHashTypeStringW		
 #define	GetCipherTypeString			GetCipherTypeStringW		
 #define	GetSymEncModeString			GetSymEncModeStringW		
-#define	GetASymCipherTypeString		GetASymCipherTypeStringW	
+#define	GetPubKeyCipherTypeString		GetASymCipherTypeStringW	
 #else
 #define StringFromHex				StringFromHexA
 #define	GetHashTypeString			GetHashTypeStringA		
 #define	GetCipherTypeString			GetCipherTypeStringA		
 #define	GetSymEncModeString			GetSymEncModeStringA		
-#define	GetASymCipherTypeString		GetASymCipherTypeStringA	
+#define	GetPubKeyCipherTypeString		GetASymCipherTypeStringA	
 #endif
 
 namespace core
@@ -28,10 +28,10 @@ namespace core
 	LPCSTR		GetHashTypeStringA		(E_HASH_TYPE dwHashType);
 	LPCSTR		GetCipherTypeStringA	(E_SYM_CIPHER_TYPE dwHashType);
 	LPCSTR		GetSymEncModeStringA	(E_SYM_CIPHER_MODE dwEncMode);
-	LPCSTR		GetASymCipherTypeStringA(E_ASYM_CIPHER_TYPE dwHashType);
+	LPCSTR		GetASymCipherTypeStringA(E_PUBKEY_CIPHER_TYPE dwHashType);
 
 	LPCWSTR		GetHashTypeStringW		(E_HASH_TYPE dwHashType);
 	LPCWSTR		GetCipherTypeStringW	(E_SYM_CIPHER_TYPE dwHashType);
 	LPCWSTR		GetSymEncModeStringW	(E_SYM_CIPHER_MODE dwEncMode);
-	LPCWSTR		GetASymCipherTypeStringW(E_ASYM_CIPHER_TYPE dwHashType);
+	LPCWSTR		GetASymCipherTypeStringW(E_PUBKEY_CIPHER_TYPE dwHashType);
 }

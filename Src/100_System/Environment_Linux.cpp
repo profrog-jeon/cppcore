@@ -153,6 +153,66 @@ namespace core
 
 		return stTimeSpec.tv_sec * 1000 + stTimeSpec.tv_nsec / 1000000;
 	}
+	
+	//////////////////////////////////////////////////////////////////////////
+	ECODE GetSystemInfo(ST_SYSTEMINFO* pSystemInfo)
+	{
+		pSystemInfo->dwNumberOfProcessors	= get_nprocs(); 
+		
+		//SYSTEM_INFO stSystemInfo = { 0, };
+		//::GetSystemInfo(&stSystemInfo);
+		
+		//pSystemInfo->dwPageSize						= stSystemInfo.dwPageSize					;
+		//pSystemInfo->lpMinimumApplicationAddress	= stSystemInfo.lpMinimumApplicationAddress	;
+		//pSystemInfo->lpMaximumApplicationAddress	= stSystemInfo.lpMaximumApplicationAddress	;
+		//pSystemInfo->dwActiveProcessorMask			= stSystemInfo.dwActiveProcessorMask		;
+		//pSystemInfo->dwNumberOfProcessors			= stSystemInfo.dwNumberOfProcessors			;
+		//pSystemInfo->dwProcessorType				= stSystemInfo.dwProcessorType				;
+		//pSystemInfo->dwAllocationGranularity		= stSystemInfo.dwAllocationGranularity		;
+		//pSystemInfo->wProcessorLevel				= stSystemInfo.wProcessorLevel				;
+		//pSystemInfo->wProcessorRevision				= stSystemInfo.wProcessorRevision			;
+		return EC_SUCCESS;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	E_OS_TYPE GetOSType(void)
+	{
+		struct utsname uts;
+		memset(&uts, 0x00, sizeof(struct utsname));
+		::uname(&uts);
+
+		// #uname -a: Linux profrog-ubuntu 4.4.0-31-generic #50-Ubuntu SMP Wed Jul 13 00:07:12 UTC 2016 x86_64 x86_64 x86_64 GNU/Linux
+		//printf("%s\n", uts.sysname);	// Linux
+		//printf("%s\n", uts.nodename);	// profrog-ubuntu
+		//printf("%s\n", uts.release);	// 4.4.0-31-generic
+		//printf("%s\n", uts.version);	// #50-Ubuntu SMP Wed Jul 13 00:07:12 UTC 2016
+		//printf("%s\n", uts.machine);	// x86_64
+		//printf("%s\n", uts.domainname);	// (none)
+		if( 0 == ::strcasecmp(uts.machine, "x86_64") )
+			return OS_TYPE_LINUX_X64;
+
+		return OS_TYPE_LINUX_X86;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	FP_TerminateSignalCallback g_fpTerminationSignalCallback = NULL;
+	static void SignalCtrlHandler(int sig)
+	{
+		if( g_fpTerminationSignalCallback )
+			g_fpTerminationSignalCallback();
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	ECODE RegisterTerminateSignalCallback(FP_TerminateSignalCallback fpCallback)
+	{
+		if( NULL == fpCallback )
+			return EC_INVALID_ARGUMENT;
+
+		::signal(SIGINT, SignalCtrlHandler);
+		::signal(SIGTERM, SignalCtrlHandler);
+		g_fpTerminationSignalCallback = fpCallback;
+		return EC_SUCCESS;
+	}
 
 	//////////////////////////////////////////////////////////////////////////
 	void* GetProcAddress(HANDLE hModule, const char* pszProcName)

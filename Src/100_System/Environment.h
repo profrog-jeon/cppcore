@@ -32,9 +32,21 @@ namespace core
 	DWORD			GetCurrentThreadId(void);
 	DWORD			GetCurrentProcessId(void);
 	DWORD			GetTickCount(void);						// A time value of milli-second.
+	ECODE			GetSystemInfo(ST_SYSTEMINFO* pSystemInfo);
 	
+	//$ cat /etc/issue.net 
+	//Ubuntu 16.04.1 LTS
+
+	//$ cat /etc/issue.net 
+	//CentOS release 6.8 (Final)
+	//Kernel \r on an \m_
+
 	bool			operator==(const ST_SYSTEMTIME& lhs, const ST_SYSTEMTIME& rhs);
 	bool			operator!=(const ST_SYSTEMTIME& lhs, const ST_SYSTEMTIME& rhs);	
+	E_OS_TYPE		GetOSType(void);
+
+	typedef void	(*FP_TerminateSignalCallback)(void);
+	ECODE			RegisterTerminateSignalCallback(FP_TerminateSignalCallback fpCallback);
 
 	HANDLE			LoadLibrary(const char* pszPath);
 	HANDLE			LoadLibrary(const wchar_t* pszPath);
@@ -56,6 +68,23 @@ namespace core
 	std::wstring	GetComputerNameW(void);
 	std::string		GenerateGuidA(void);
 	std::wstring	GenerateGuidW(void);
+
+	#undef			GetFileVersionInfo
+	ECODE			GetFileVersionInfo(const char* pszFilePath, ST_VERSIONINFO* pVersionInfo);
+	ECODE			GetFileVersionInfo(const wchar_t* pszFilePath, ST_VERSIONINFO* pVersionInfo);
+	ECODE			GetProductVersionInfo(const char* pszFilePath, ST_VERSIONINFO* pVersionInfo);
+	ECODE			GetProductVersionInfo(const wchar_t* pszFilePath, ST_VERSIONINFO* pVersionInfo);
+	
+	ECODE			QueryRouteInfo(std::vector<ST_ROUTEINFOA>& outInfo);
+	ECODE			QueryRouteInfo(std::vector<ST_ROUTEINFOW>& outInfo);
+	ECODE			QueryEthernetInfo(std::vector<ST_ETHERNETINFOA>& outInfo);
+	ECODE			QueryEthernetInfo(std::vector<ST_ETHERNETINFOW>& outInfo);
+	ECODE			QueryDNSInfo(std::vector<std::string>& outInfo);
+	ECODE			QueryDNSInfo(std::vector<std::wstring>& outInfo);
+	ECODE			GetNetworkInfo(ST_NETWORKINFOA& outInfo);
+	ECODE			GetNetworkInfo(ST_NETWORKINFOW& outInfo);
+	ECODE			ParseNetworkInfo(std::string strEthName, const ST_NETWORKINFOA& stNetworkInfo, ST_ETH_NETWORKA& outInfo);
+	ECODE			ParseNetworkInfo(std::wstring strEthName, const ST_NETWORKINFOW& stNetworkInfo, ST_ETH_NETWORKW& outInfo);
 
 	#undef			OutputDebugString
 	void			OutputDebugString(const char* pszFormat, ...);
@@ -131,6 +160,12 @@ namespace core
 	WORD			CalcDayOfWeek(WORD wYear, WORD wMonth, WORD wDay);
 	UINT64			UnixTimeFrom(ST_SYSTEMTIME stTime);
 	ST_SYSTEMTIME	SystemTimeFrom(UINT64 tUnixTime);
+
+	UINT64			UnixTimeFrom_NativeAPI(ST_SYSTEMTIME stTime);
+	ST_SYSTEMTIME	SystemTimeFrom_NativeAPI(UINT64 tUnixTime);
+
+	void			ParsingDNSContext(std::string strContext, std::vector<std::tstring>& outDNS);
+	void			ModifyDNSContext(std::string& strContext, const std::vector<std::tstring>& newDNS);
 
 	bool			MakeAbsoluteTZTime(WORD wYear, const ST_SYSTEMTIME& stTZTime, ST_SYSTEMTIME& outAbsTime);
 }

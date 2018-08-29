@@ -16,7 +16,7 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t CalcUnicodeCchFromEUCKR(LPCSTR pSrc, size_t tSrcCch, size_t* ptSrcReadCch)
+	size_t CalcUnicodeCchFromASCII(LPCSTR pSrc, size_t tSrcCch, size_t* ptSrcReadCch)
 	{
 		size_t tSrcReadCch = 0;
 		size_t tDestLen = 0;
@@ -41,7 +41,7 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t EUCKR_TO_EUCKR(const char* pSrc, size_t tSrcCch, char* pDest, size_t tDestCch)
+	size_t ASCII_TO_ASCII(const char* pSrc, size_t tSrcCch, char* pDest, size_t tDestCch)
 	{
 		if( pDest )
 			memcpy(pDest, pSrc, min(tSrcCch, tDestCch));

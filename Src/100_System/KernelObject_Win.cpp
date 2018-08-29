@@ -79,6 +79,26 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
+	bool GetFileInformationByHandle(HANDLE hFile, ST_BY_HANDLE_FILE_INFORMATION* lpFileInformation)
+	{
+		BY_HANDLE_FILE_INFORMATION stInfo;
+		if( FALSE == ::GetFileInformationByHandle(hFile, &stInfo) )
+			return false;
+
+		lpFileInformation->dwFileAttributes		 = stInfo.dwFileAttributes		;
+		lpFileInformation->dwVolumeSerialNumber	 = stInfo.dwVolumeSerialNumber	;
+		lpFileInformation->nFileSizeHigh		 = stInfo.nFileSizeHigh			;
+		lpFileInformation->nFileSizeLow			 = stInfo.nFileSizeLow			;
+		lpFileInformation->nNumberOfLinks		 = stInfo.nNumberOfLinks		;
+		lpFileInformation->nFileIndexHigh		 = stInfo.nFileIndexHigh		;
+		lpFileInformation->nFileIndexLow		 = stInfo.nFileIndexLow			;
+		lpFileInformation->tCreationTime		 = UnixTimeFrom(stInfo.ftCreationTime	)	;
+		lpFileInformation->tLastAccessTime		 = UnixTimeFrom(stInfo.ftLastAccessTime	)	;
+		lpFileInformation->tLastWriteTime		 = UnixTimeFrom(stInfo.ftLastWriteTime	)	;
+		return true;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
 	void CloseFile(HANDLE hFile)
 	{
 		::CloseHandle(hFile);

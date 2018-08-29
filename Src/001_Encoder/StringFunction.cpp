@@ -144,11 +144,11 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	LPCTSTR GetASymCipherTypeString(E_ASYM_CIPHER_TYPE dwHashType)
+	LPCTSTR GetPubKeyCipherTypeString(E_PUBKEY_CIPHER_TYPE dwHashType)
 	{
 		switch(dwHashType)
 		{
-			CASE_TO_STR_T(ASYM_CIPHER_TYPE_RSA);
+			CASE_TO_STR_T(PUBKEY_CIPHER_TYPE_RSA);
             default:
                 return TEXT("UNDEFINED_ASYM_CIPHER_TYPE");
 		}

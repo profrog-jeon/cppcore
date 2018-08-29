@@ -6,14 +6,14 @@
 namespace core
 {
 	template<typename T>
-	class CSyncQueue
+	class TSyncQueue
 	{
 		HANDLE				m_hSemaphore;
 		CCriticalSection	m_csItems;
 		std::queue<T>		m_queItems;
 
 	public:
-		CSyncQueue(void)
+		TSyncQueue(void)
 			: m_hSemaphore(NULL)
 			, m_csItems()
 			, m_queItems()
@@ -21,7 +21,7 @@ namespace core
 			Create();
 		}
 
-		~CSyncQueue(void)
+		~TSyncQueue(void)
 		{
 			Destroy();
 		}

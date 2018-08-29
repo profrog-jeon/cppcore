@@ -64,12 +64,12 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	std::wstring WCSFromEUCKR(std::string strInput, size_t* ptReadSize)
+	std::wstring WCSFromASCII(std::string strInput, size_t* ptReadSize)
 	{
 		std::wstring strRet;
-		size_t tRequiredCch = EUCKR_TO_UTF32(strInput.c_str(), strInput.length(), NULL, 0);
+		size_t tRequiredCch = ASCII_TO_UTF32(strInput.c_str(), strInput.length(), NULL, 0);
 		strRet.resize(tRequiredCch);
-		EUCKR_TO_UTF32(strInput.c_str(), strInput.length(), (DWORD*)strRet.c_str(), tRequiredCch, ptReadSize);
+		ASCII_TO_UTF32(strInput.c_str(), strInput.length(), (DWORD*)strRet.c_str(), tRequiredCch, ptReadSize);
 		return strRet;
 	}
 
@@ -102,13 +102,13 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	std::string  MBSFromEUCKR(std::string strInput, size_t* ptReadSize)
+	std::string  MBSFromASCII(std::string strInput, size_t* ptReadSize)
 	{
 		std::wstring strUTF16;
 		{
-			size_t tUTF16Len = EUCKR_TO_UTF16(strInput.c_str(), strInput.length(), NULL, 0, ptReadSize);
+			size_t tUTF16Len = ASCII_TO_UTF16(strInput.c_str(), strInput.length(), NULL, 0, ptReadSize);
 			strUTF16.resize(tUTF16Len);
-			EUCKR_TO_UTF16(strInput.c_str(), strInput.length(), (WORD*)strUTF16.c_str(), tUTF16Len, ptReadSize);
+			ASCII_TO_UTF16(strInput.c_str(), strInput.length(), (WORD*)strUTF16.c_str(), tUTF16Len, ptReadSize);
 		}
 
 		std::string strRet;
@@ -139,7 +139,7 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	std::string EUCKRFromMBS(std::string strInput)
+	std::string ASCIIFromMBS(std::string strInput)
 	{
 		std::wstring strUTF16;
 		size_t tUTF16Size = UTF8_TO_UTF16(strInput.c_str(), strInput.length(), NULL, 0, NULL);
@@ -147,19 +147,19 @@ namespace core
 		UTF8_TO_UTF16(strInput.c_str(), strInput.length(), (WORD*)strUTF16.c_str(), tUTF16Size, NULL);
 
 		std::string strRet;
-		size_t tRequiredCch = UTF16_TO_EUCKR((const WORD*)strUTF16.c_str(), tUTF16Size, NULL, 0);
+		size_t tRequiredCch = UTF16_TO_ASCII((const WORD*)strUTF16.c_str(), tUTF16Size, NULL, 0);
 		strRet.resize(tRequiredCch);
-		UTF16_TO_EUCKR((const WORD*)strUTF16.c_str(), tUTF16Size, (char*)strRet.c_str(), tRequiredCch);	
+		UTF16_TO_ASCII((const WORD*)strUTF16.c_str(), tUTF16Size, (char*)strRet.c_str(), tRequiredCch);	
 		return strRet;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	std::string EUCKRFromWCS(std::wstring strInput)
+	std::string ASCIIFromWCS(std::wstring strInput)
 	{
 		std::string strRet;
-		size_t tRequiredCch = UTF32_TO_EUCKR((const DWORD*)strInput.c_str(), strInput.length(), NULL, 0);
+		size_t tRequiredCch = UTF32_TO_ASCII((const DWORD*)strInput.c_str(), strInput.length(), NULL, 0);
 		strRet.resize(tRequiredCch);
-		UTF32_TO_EUCKR((const DWORD*)strInput.c_str(), strInput.length(), (char*)strRet.c_str(), tRequiredCch);
+		UTF32_TO_ASCII((const DWORD*)strInput.c_str(), strInput.length(), (char*)strRet.c_str(), tRequiredCch);
 		return strRet;
 	}
 

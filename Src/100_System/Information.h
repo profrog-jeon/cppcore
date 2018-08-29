@@ -27,4 +27,7 @@ namespace core
 	std::wstring	GetMonthStringW(WORD wMonth);
 	const char*		GetOSTypeStringA(E_OS_TYPE nVersion);
 	const wchar_t*	GetOSTypeStringW(E_OS_TYPE nVersion);
+
+	std::string		StringFromA(const ST_VERSIONINFO& stVersionInfo);
+	std::wstring	StringFromW(const ST_VERSIONINFO& stVersionInfo);
 }

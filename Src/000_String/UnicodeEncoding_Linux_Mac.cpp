@@ -133,7 +133,7 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t EUCKR_TO_UTF16(const char* pSrc, size_t tSrcCch, WORD* pDest, size_t tDestCch, size_t* ptReadSize)
+	size_t ASCII_TO_UTF16(const char* pSrc, size_t tSrcCch, WORD* pDest, size_t tDestCch, size_t* ptReadSize)
 	{
 		const size_t tCharSize = sizeof(WORD);
 		size_t tRet = 0;
@@ -141,9 +141,9 @@ namespace core
 		size_t tDestSize = tDestCch * tCharSize;
 
 		if( NULL == pDest )
-			return CalcUnicodeCchFromEUCKR(pSrc, tSrcSize, ptReadSize);
+			return CalcUnicodeCchFromASCII(pSrc, tSrcSize, ptReadSize);
 
-		E_BOM_TYPE nRetType = IconvWorker("EUC-KR", "UTF-16", pSrc, tSrcSize, (char*)pDest, tDestSize, tRet, ptReadSize);
+		E_BOM_TYPE nRetType = IconvWorker("CP949", "UTF-16", pSrc, tSrcSize, (char*)pDest, tDestSize, tRet, ptReadSize);
 		if( BOM_UTF16_BE == nRetType )
 		{
 			size_t i;
@@ -158,7 +158,7 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t UTF16_TO_EUCKR(const WORD* pSrc, size_t tSrcCch, char* pDest, size_t tDestCch)
+	size_t UTF16_TO_ASCII(const WORD* pSrc, size_t tSrcCch, char* pDest, size_t tDestCch)
 	{
 		const size_t tCharSize = sizeof(char);
 		size_t tRet = 0;
@@ -167,18 +167,18 @@ namespace core
 
 		if( pDest )
 		{
-			IconvWorker("UTF-16LE", "EUC-KR", (const char*)pSrc, tSrcSize, (char*)pDest, tDestSize, tRet, NULL);
+			IconvWorker("UTF-16LE", "CP949", (const char*)pSrc, tSrcSize, (char*)pDest, tDestSize, tRet, NULL);
 		}
 		else
 		{
-			CalcDestMemorySize("UTF-16LE", "EUC-KR", (const char*)pSrc, tSrcSize, tRet);
+			CalcDestMemorySize("UTF-16LE", "CP949", (const char*)pSrc, tSrcSize, tRet);
 		}
 
 		return tRet / tCharSize;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t EUCKR_TO_UTF32(const char* pSrc, size_t tSrcCch, DWORD* pDest, size_t tDestCch, size_t* ptReadSize)
+	size_t ASCII_TO_UTF32(const char* pSrc, size_t tSrcCch, DWORD* pDest, size_t tDestCch, size_t* ptReadSize)
 	{
 		const size_t tCharSize = sizeof(DWORD);
 		size_t tRet = 0;
@@ -187,7 +187,7 @@ namespace core
 
 		if( pDest )
 		{
-			E_BOM_TYPE nRetType = IconvWorker("EUC-KR", "UTF-32", pSrc, tSrcSize, (char*)pDest, tDestSize, tRet, ptReadSize);
+			E_BOM_TYPE nRetType = IconvWorker("CP949", "UTF-32", pSrc, tSrcSize, (char*)pDest, tDestSize, tRet, ptReadSize);
             if( BOM_UTF32_BE == nRetType )
             {
                 size_t i;
@@ -203,14 +203,14 @@ namespace core
 		}
 		else
 		{
-			CalcDestMemorySize("EUC-KR", "UTF-32", pSrc, tSrcSize, tRet);
+			CalcDestMemorySize("CP949", "UTF-32", pSrc, tSrcSize, tRet);
 		}
 
 		return tRet / tCharSize;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t UTF32_TO_EUCKR(const DWORD* pSrc, size_t tSrcCch, char* pDest, size_t tDestCch)
+	size_t UTF32_TO_ASCII(const DWORD* pSrc, size_t tSrcCch, char* pDest, size_t tDestCch)
 	{
 		const size_t tCharSize = sizeof(char);
 		size_t tRet = 0;
@@ -219,11 +219,11 @@ namespace core
 
 		if( pDest )
 		{
-			IconvWorker("UTF-32", "EUC-KR", (const char*)pSrc, tSrcSize, (char*)pDest, tDestSize, tRet, NULL);
+			IconvWorker("UTF-32", "CP949", (const char*)pSrc, tSrcSize, (char*)pDest, tDestSize, tRet, NULL);
 		}
 		else
 		{
-			CalcDestMemorySize("UTF-32", "EUC-KR", (const char*)pSrc, tSrcSize, tRet);
+			CalcDestMemorySize("UTF-32", "CP949", (const char*)pSrc, tSrcSize, tRet);
 		}
 
 		return tRet / tCharSize;

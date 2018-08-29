@@ -6,7 +6,7 @@
 namespace core
 {
 	//////////////////////////////////////////////////////////////////////////
-	size_t EUCKR_TO_UTF16(LPCSTR pSrc, size_t tSrcCch, WORD* pDest, size_t tDestCch, size_t* ptReadSize)
+	size_t ASCII_TO_UTF16(LPCSTR pSrc, size_t tSrcCch, WORD* pDest, size_t tDestCch, size_t* ptReadSize)
 	{
 		try
 		{
@@ -14,7 +14,7 @@ namespace core
 				return 0;
 
 			size_t tSrcReadCch;
-			size_t tReqDestCch = CalcUnicodeCchFromEUCKR(pSrc, tSrcCch, &tSrcReadCch);
+			size_t tReqDestCch = CalcUnicodeCchFromASCII(pSrc, tSrcCch, &tSrcReadCch);
 
 			if( NULL == pDest )
 			{
@@ -43,7 +43,7 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t UTF16_TO_EUCKR(const WORD* pSrc, size_t tSrcCch, char* pDest, size_t tDestCch)
+	size_t UTF16_TO_ASCII(const WORD* pSrc, size_t tSrcCch, char* pDest, size_t tDestCch)
 	{
 		size_t tDstLen = 0;
 
@@ -76,10 +76,10 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t EUCKR_TO_UTF32(const char* pSrc, size_t tSrcCch, DWORD* pDest, size_t tDestCch, size_t* ptReadSize)
+	size_t ASCII_TO_UTF32(const char* pSrc, size_t tSrcCch, DWORD* pDest, size_t tDestCch, size_t* ptReadSize)
 	{
 		// [TODO] optimization
-		size_t tReqCch = EUCKR_TO_UTF16(pSrc, tSrcCch, (WORD*)pDest, tDestCch, ptReadSize);
+		size_t tReqCch = ASCII_TO_UTF16(pSrc, tSrcCch, (WORD*)pDest, tDestCch, ptReadSize);
 		if( pDest )
 		{
 			// memory rearrangement
@@ -91,7 +91,7 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t UTF32_TO_EUCKR(const DWORD* pSrc, size_t tSrcCch, char* pDest, size_t tDestCch)
+	size_t UTF32_TO_ASCII(const DWORD* pSrc, size_t tSrcCch, char* pDest, size_t tDestCch)
 	{
 		// [TODO] optimization
 		std::vector<WORD> vecUTF16;
@@ -101,6 +101,6 @@ namespace core
 		for(i=0; i<tSrcCch; i++)
 			vecUTF16[i] = (WORD)pSrc[i];
 
-		return UTF16_TO_EUCKR(&vecUTF16[0], tSrcCch, pDest, tDestCch);
+		return UTF16_TO_ASCII(&vecUTF16[0], tSrcCch, pDest, tDestCch);
 	}
 }

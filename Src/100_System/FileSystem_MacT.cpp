@@ -26,9 +26,9 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	std::tstring GetSystemDirectory(void)		// c:\  or  /
+	std::tstring GetSystemDirectory(void)
 	{
-		return TEXT("/");
+		return TEXT("/sys/");
 	}
 
 	//////////////////////////////////////////////////////////////////////////
@@ -38,10 +38,10 @@ namespace core
 		passwd* pPasswd = getpwuid(geteuid());
 		if( pPasswd )
 			pszUserName = pPasswd->pw_name;
-		std::tstring strTmpPath = Format(TEXT("/tmp/%s/"), pszUserName);
+		std::string strTmpPath = Format("/tmp/%s/", pszUserName);
 		if( !PathFileExists(strTmpPath.c_str()) )
 			CreateDirectory(strTmpPath.c_str());
-		return strTmpPath;
+		return TCSFromMBS(strTmpPath);
 	}
 
 	//////////////////////////////////////////////////////////////////////////

@@ -86,6 +86,24 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
+	ECODE GetSystemInfo(ST_SYSTEMINFO* pSystemInfo)
+	{
+		SYSTEM_INFO stSystemInfo = { 0, };
+		::GetSystemInfo(&stSystemInfo);
+
+		pSystemInfo->dwPageSize						= stSystemInfo.dwPageSize					;
+		pSystemInfo->lpMinimumApplicationAddress	= stSystemInfo.lpMinimumApplicationAddress	;
+		pSystemInfo->lpMaximumApplicationAddress	= stSystemInfo.lpMaximumApplicationAddress	;
+		pSystemInfo->dwActiveProcessorMask			= (DWORD)stSystemInfo.dwActiveProcessorMask	;
+		pSystemInfo->dwNumberOfProcessors			= stSystemInfo.dwNumberOfProcessors			;
+		pSystemInfo->dwProcessorType				= stSystemInfo.dwProcessorType				;
+		pSystemInfo->dwAllocationGranularity		= stSystemInfo.dwAllocationGranularity		;
+		pSystemInfo->wProcessorLevel				= stSystemInfo.wProcessorLevel				;
+		pSystemInfo->wProcessorRevision				= stSystemInfo.wProcessorRevision			;
+		return EC_SUCCESS;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
 	struct _ST_GET_OS_TYPE_DATA
 	{
 		E_OS_TYPE	nOSType					;
@@ -141,6 +159,85 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
+	E_OS_TYPE GetOSType(void)
+	{
+		try
+		{
+			OSVERSIONINFOEX stInfoEx = { 0, };
+			stInfoEx.dwOSVersionInfoSize = sizeof(stInfoEx);
+			if( FALSE == ::GetVersionEx((LPOSVERSIONINFO)&stInfoEx) )
+			{
+				Log_Warn("GetVersionEx(OSVERSIONINFOEX) failure.");
+				stInfoEx.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
+				if( FALSE == ::GetVersionEx((LPOSVERSIONINFO)&stInfoEx) )
+					throw exception_format("GetVersionEx(OSVERSIONINFO) failure.");
+			}
+
+			// to correct windows version
+			GetWindowsVersion(stInfoEx);
+
+			bool bWorkStation = (stInfoEx.wProductType == VER_NT_WORKSTATION);
+			bool bServerR2 = ::GetSystemMetrics(SM_SERVERR2) != 0;
+
+			size_t i;
+			for(i=0; i<g_tOSTypeDataCount; i++)
+			{
+				if( g_cOSTypeData[i].dwMajorVersion != stInfoEx.dwMajorVersion )
+					continue;
+
+				if( g_cOSTypeData[i].dwMinorVersion != stInfoEx.dwMinorVersion )
+					continue;
+
+				if( g_cOSTypeData[i].bCheckProductType && (g_cOSTypeData[i].bIsProductTypeWorkStation != bWorkStation) )
+					continue;
+
+				if( g_cOSTypeData[i].bCheckSystemMetrics && (g_cOSTypeData[i].bIsSystemMetrixServerR2 != bServerR2) )
+					continue;
+
+				return g_cOSTypeData[i].nOSType;
+			}
+		}
+		catch (std::exception& e)
+		{
+			Log_Error("%s", e.what());
+		}
+		return OS_TYPE_UNDEFINED;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	FP_TerminateSignalCallback g_fpTerminationSignalCallback = NULL;
+
+	//////////////////////////////////////////////////////////////////////////
+	BOOL WINAPI __internal_WindowCtrlHandler( DWORD fdwCtrlType ) 
+	{ 
+		switch( fdwCtrlType ) 
+		{ 
+		case CTRL_C_EVENT: 
+		case CTRL_CLOSE_EVENT: 
+		case CTRL_SHUTDOWN_EVENT: 
+			if( g_fpTerminationSignalCallback )
+				g_fpTerminationSignalCallback();			
+			return TRUE; 
+		}
+
+		return FALSE; 
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	ECODE RegisterTerminateSignalCallback(FP_TerminateSignalCallback fpCallback)
+	{
+		if( fpCallback )
+		{			
+			if( !::SetConsoleCtrlHandler(__internal_WindowCtrlHandler, TRUE ) )
+				return ::GetLastError();
+
+			g_fpTerminationSignalCallback = fpCallback;
+		}
+
+		return EC_SUCCESS;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
 	void* GetProcAddress(HANDLE hModule, LPCSTR pszProcName)
 	{
 		return ::GetProcAddress((HMODULE)hModule, pszProcName);
@@ -167,6 +264,29 @@ namespace core
 	{  
 		LONGLONG llFileTime = ((LONGLONG)ft.dwHighDateTime << 32) + ft.dwLowDateTime;  
 		return (time_t)((llFileTime - 116444736000000000L) / 10000000L);
+	} 
+
+	//////////////////////////////////////////////////////////////////////////
+	UINT64 UnixTimeFrom_NativeAPI(ST_SYSTEMTIME stTime)
+	{
+		::FILETIME		stFileTime	= { 0, };
+		::SYSTEMTIME	stSysTime	= { 0, };
+		memcpy(&stSysTime, &stTime, sizeof(SYSTEMTIME));
+		SystemTimeToFileTime(&stSysTime, &stFileTime);
+		return UnixTimeFrom(stFileTime);
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	ST_SYSTEMTIME SystemTimeFrom_NativeAPI(UINT64 tUnixTime)
+	{
+		::FILETIME		stFileTime	= { 0, };
+		::SYSTEMTIME	stSysTime	= { 0, };
+		UnixTimeToFileTime(tUnixTime, &stFileTime); 
+		FileTimeToSystemTime(&stFileTime, &stSysTime);
+
+		ST_SYSTEMTIME		stSystemTime;
+		memcpy(&stSystemTime, &stSysTime, sizeof(SYSTEMTIME));
+		return stSystemTime;
 	}
 }
 

@@ -260,6 +260,7 @@
     <ClInclude Include="..\__Common\Define.h" />
     <ClInclude Include="..\__Common\ErrorCode.h" />
     <ClInclude Include="..\__Common\Type.h" />
+    <ClInclude Include="100_System.h" />
     <ClInclude Include="Environment.h" />
     <ClInclude Include="FileSystem.h" />
     <ClInclude Include="GlobalSemaphoreMap.h" />
@@ -270,7 +271,6 @@
     <ClInclude Include="LogInstance.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Struct.h" />
-    <ClInclude Include="System.h" />
     <ClInclude Include="System_Win.h" />
     <ClInclude Include="TZFileParser.h" />
   </ItemGroup>

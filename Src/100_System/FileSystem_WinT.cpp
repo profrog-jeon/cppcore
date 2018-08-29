@@ -34,7 +34,7 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	std::tstring GetSystemDirectory(void)		// c:\  or  /
+	std::tstring GetSystemDirectory(void)
 	{
 		const size_t tBuffSize = 1024;
 		TCHAR szBuff[tBuffSize] = { 0, };
@@ -45,8 +45,7 @@ namespace core
 			return TEXT("C:\\");
 		}
 
-		std::tstring strRet(szBuff);
-		return strRet.substr(0, 3);
+		return std::tstring(szBuff);
 	}
 
 	//////////////////////////////////////////////////////////////////////////

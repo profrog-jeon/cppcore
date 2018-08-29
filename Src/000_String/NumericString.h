@@ -51,7 +51,6 @@ namespace core
 	float		FloatFrom(std::string strNum);
 	double		DoubleFrom(std::string strNum);
 
-	bool		BoolFrom(std::wstring strNum);
 	char		CharFrom(std::wstring strNum);
 	short		ShortFrom(std::wstring strNum);
 	int			IntFrom(std::wstring strNum);

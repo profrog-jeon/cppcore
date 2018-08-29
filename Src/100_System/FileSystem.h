@@ -23,10 +23,10 @@ namespace core
 	FILE*			fopenA(const char* pszPath, const char* pszMode);
 	FILE*			fopenW(const wchar_t* pszPath, const wchar_t* pszMode);
 
-	std::string		GetSystemDirectoryA(void);		// c:\  or  /
-	std::wstring	GetSystemDirectoryW(void);		// c:\  or  /
-	std::string		GetTempPathA(void);		// c:\  or  /etc/local
-	std::wstring	GetTempPathW(void);		// c:\  or  /
+	std::string		GetSystemDirectoryA(void);		// c:\Windows\System32  or  /
+	std::wstring	GetSystemDirectoryW(void);
+	std::string		GetTempPathA(void);		// c:\User\Local\Temp  or  /etc/local
+	std::wstring	GetTempPathW(void);
 
 	bool			PathFileExists(const char* pszExistFile);
 	bool			PathFileExists(const wchar_t* pszExistFile);

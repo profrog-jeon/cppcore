@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "Encoder.h"
+#include "001_Encoder.h"
 #include "SHA1.h"
 #include "sha256.h"
 #include "has160.h"

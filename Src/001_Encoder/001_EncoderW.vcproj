@@ -756,6 +756,14 @@
 			>
 		</File>
 		<File
+			RelativePath=".\CryptoPPSingleton.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\CryptoPPSingleton.h"
+			>
+		</File>
+		<File
 			RelativePath=".\Encoder.h"
 			>
 		</File>
@@ -765,6 +773,34 @@
 		</File>
 		<File
 			RelativePath=".\HashFunction.h"
+			>
+		</File>
+		<File
+			RelativePath=".\IPubKeyCipher.h"
+			>
+		</File>
+		<File
+			RelativePath=".\PubKeyCipherFunction.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\PubKeyCipherFunction.h"
+			>
+		</File>
+		<File
+			RelativePath=".\PubKeyElGamal.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\PubKeyElGamal.h"
+			>
+		</File>
+		<File
+			RelativePath=".\PubKeyRSA.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\PubKeyRSA.h"
 			>
 		</File>
 		<File

@@ -74,7 +74,7 @@ namespace core
 
 			default:
 			{
-				std::string strData = EUCKRFromTCS(strContext);
+				std::string strData = ASCIIFromTCS(strContext);
 				WriteFile(m_hFile, strData.c_str(), 1 * strData.size(), &dwWriteSize);
 			}	break;
 			}
