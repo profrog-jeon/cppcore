@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "Environment.h"
 #include "Log.h"
-#include "ELFParser.h"
 #include "FileSystem.h"
 #include "TZFileParser.h"
 #include <arpa/inet.h>
@@ -354,28 +353,6 @@ namespace core
 	void OutputDebugString(const TCHAR* pszFormat, ...)
 	{
 		// [TODO]
-	}
-
-	//////////////////////////////////////////////////////////////////////////
-	ECODE GetFileVersionInfo(LPCTSTR pszFilePath, ST_VERSIONINFO* pVersionInfo)
-	{
-		CELFParser ELF;
-		ECODE nRet = ELF.Parse(MBSFromTCS(pszFilePath).c_str());
-		if( EC_SUCCESS != nRet )
-			return nRet;
-
-		return ELF.QueryFileVersion(*pVersionInfo);
-	}
-
-	//////////////////////////////////////////////////////////////////////////
-	ECODE GetProductVersionInfo(LPCTSTR pszFilePath, ST_VERSIONINFO* pVersionInfo)
-	{
-		CELFParser ELF;
-		ECODE nRet = ELF.Parse(MBSFromTCS(pszFilePath).c_str());
-		if( EC_SUCCESS != nRet )
-			return nRet;
-
-		return ELF.QueryProductVersion(*pVersionInfo);
 	}
 
 	//////////////////////////////////////////////////////////////////////////

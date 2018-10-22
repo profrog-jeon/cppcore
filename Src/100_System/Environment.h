@@ -69,23 +69,6 @@ namespace core
 	std::string		GenerateGuidA(void);
 	std::wstring	GenerateGuidW(void);
 
-	#undef			GetFileVersionInfo
-	ECODE			GetFileVersionInfo(const char* pszFilePath, ST_VERSIONINFO* pVersionInfo);
-	ECODE			GetFileVersionInfo(const wchar_t* pszFilePath, ST_VERSIONINFO* pVersionInfo);
-	ECODE			GetProductVersionInfo(const char* pszFilePath, ST_VERSIONINFO* pVersionInfo);
-	ECODE			GetProductVersionInfo(const wchar_t* pszFilePath, ST_VERSIONINFO* pVersionInfo);
-	
-	ECODE			QueryRouteInfo(std::vector<ST_ROUTEINFOA>& outInfo);
-	ECODE			QueryRouteInfo(std::vector<ST_ROUTEINFOW>& outInfo);
-	ECODE			QueryEthernetInfo(std::vector<ST_ETHERNETINFOA>& outInfo);
-	ECODE			QueryEthernetInfo(std::vector<ST_ETHERNETINFOW>& outInfo);
-	ECODE			QueryDNSInfo(std::vector<std::string>& outInfo);
-	ECODE			QueryDNSInfo(std::vector<std::wstring>& outInfo);
-	ECODE			GetNetworkInfo(ST_NETWORKINFOA& outInfo);
-	ECODE			GetNetworkInfo(ST_NETWORKINFOW& outInfo);
-	ECODE			ParseNetworkInfo(std::string strEthName, const ST_NETWORKINFOA& stNetworkInfo, ST_ETH_NETWORKA& outInfo);
-	ECODE			ParseNetworkInfo(std::wstring strEthName, const ST_NETWORKINFOW& stNetworkInfo, ST_ETH_NETWORKW& outInfo);
-
 	#undef			OutputDebugString
 	void			OutputDebugString(const char* pszFormat, ...);
 	void			OutputDebugString(const wchar_t* pszFormat, ...);

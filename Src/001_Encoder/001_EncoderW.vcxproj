@@ -35,174 +35,47 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AES\aescrypt.c" />
+    <ClCompile Include="AES\aeshash.c" />
+    <ClCompile Include="AES\aeskey.c" />
+    <ClCompile Include="AES\aestab.c" />
+    <ClCompile Include="Base64.cpp" />
+    <ClCompile Include="Base64_.cpp" />
+    <ClCompile Include="CryptoPPSingleton.cpp" />
+    <ClCompile Include="has160.cpp" />
+    <ClCompile Include="HashFunction.cpp" />
+    <ClCompile Include="md5.cpp" />
+    <ClCompile Include="md5_.cpp" />
+    <ClCompile Include="PubKeyCipherFunction.cpp" />
+    <ClCompile Include="PubKeyElGamal.cpp" />
+    <ClCompile Include="PubKeyRSA.cpp" />
+    <ClCompile Include="SEED\SEED_128_KISA.cpp" />
+    <ClCompile Include="SEED\SEED_256_KISA.cpp" />
+    <ClCompile Include="SHA1.cpp" />
+    <ClCompile Include="sha256.cpp" />
+    <ClCompile Include="StringFunction.cpp" />
+    <ClCompile Include="StringSymCipherFunction.cpp" />
+    <ClCompile Include="SymAES.cpp" />
+    <ClCompile Include="SymCipher.cpp" />
+    <ClCompile Include="SymCipherFunction.cpp" />
+    <ClCompile Include="SymModeCBC.cpp" />
+    <ClCompile Include="SymModeCFB.cpp" />
+    <ClCompile Include="SymModeCTR.cpp" />
+    <ClCompile Include="SymModeECB.cpp" />
+    <ClCompile Include="SymModeOFB.cpp" />
+    <ClCompile Include="SymModePCBC.cpp" />
+    <ClCompile Include="SymModePlain.cpp" />
+    <ClCompile Include="SymPlain.cpp" />
+    <ClCompile Include="SymSeed128.cpp" />
+    <ClCompile Include="SymSeed256.cpp" />
+  </ItemGroup>
+  <ItemGroup>
     <ClInclude Include="001_Encoder.h" />
     <ClInclude Include="AES\aes.h" />
     <ClInclude Include="AES\aesopt.h" />
     <ClInclude Include="Base64.h" />
-    <ClInclude Include="cryptopp700\3way.h" />
-    <ClInclude Include="cryptopp700\adler32.h" />
-    <ClInclude Include="cryptopp700\adv-simd.h" />
-    <ClInclude Include="cryptopp700\aes.h" />
-    <ClInclude Include="cryptopp700\algebra.h" />
-    <ClInclude Include="cryptopp700\algparam.h" />
-    <ClInclude Include="cryptopp700\arc4.h" />
-    <ClInclude Include="cryptopp700\argnames.h" />
-    <ClInclude Include="cryptopp700\aria.h" />
-    <ClInclude Include="cryptopp700\asn.h" />
-    <ClInclude Include="cryptopp700\authenc.h" />
-    <ClInclude Include="cryptopp700\base32.h" />
-    <ClInclude Include="cryptopp700\base64.h" />
-    <ClInclude Include="cryptopp700\basecode.h" />
-    <ClInclude Include="cryptopp700\bench.h" />
-    <ClInclude Include="cryptopp700\blake2.h" />
-    <ClInclude Include="cryptopp700\blowfish.h" />
-    <ClInclude Include="cryptopp700\blumshub.h" />
-    <ClInclude Include="cryptopp700\camellia.h" />
-    <ClInclude Include="cryptopp700\cast.h" />
-    <ClInclude Include="cryptopp700\cbcmac.h" />
-    <ClInclude Include="cryptopp700\ccm.h" />
-    <ClInclude Include="cryptopp700\chacha.h" />
-    <ClInclude Include="cryptopp700\channels.h" />
-    <ClInclude Include="cryptopp700\cmac.h" />
-    <ClInclude Include="cryptopp700\config.h" />
-    <ClInclude Include="cryptopp700\cpu.h" />
-    <ClInclude Include="cryptopp700\crc.h" />
-    <ClInclude Include="cryptopp700\cryptlib.h" />
-    <ClInclude Include="cryptopp700\default.h" />
-    <ClInclude Include="cryptopp700\des.h" />
-    <ClInclude Include="cryptopp700\dh.h" />
-    <ClInclude Include="cryptopp700\dh2.h" />
-    <ClInclude Include="cryptopp700\dll.h" />
-    <ClInclude Include="cryptopp700\dmac.h" />
-    <ClInclude Include="cryptopp700\drbg.h" />
-    <ClInclude Include="cryptopp700\dsa.h" />
-    <ClInclude Include="cryptopp700\eax.h" />
-    <ClInclude Include="cryptopp700\ec2n.h" />
-    <ClInclude Include="cryptopp700\eccrypto.h" />
-    <ClInclude Include="cryptopp700\ecp.h" />
-    <ClInclude Include="cryptopp700\ecpoint.h" />
-    <ClInclude Include="cryptopp700\elgamal.h" />
-    <ClInclude Include="cryptopp700\emsa2.h" />
-    <ClInclude Include="cryptopp700\eprecomp.h" />
-    <ClInclude Include="cryptopp700\esign.h" />
-    <ClInclude Include="cryptopp700\factory.h" />
-    <ClInclude Include="cryptopp700\fhmqv.h" />
-    <ClInclude Include="cryptopp700\files.h" />
-    <ClInclude Include="cryptopp700\filters.h" />
-    <ClInclude Include="cryptopp700\fips140.h" />
-    <ClInclude Include="cryptopp700\fltrimpl.h" />
-    <ClInclude Include="cryptopp700\gcm.h" />
-    <ClInclude Include="cryptopp700\gf256.h" />
-    <ClInclude Include="cryptopp700\gf2n.h" />
-    <ClInclude Include="cryptopp700\gf2_32.h" />
-    <ClInclude Include="cryptopp700\gfpcrypt.h" />
-    <ClInclude Include="cryptopp700\gost.h" />
-    <ClInclude Include="cryptopp700\gzip.h" />
-    <ClInclude Include="cryptopp700\hashfwd.h" />
-    <ClInclude Include="cryptopp700\hex.h" />
-    <ClInclude Include="cryptopp700\hkdf.h" />
-    <ClInclude Include="cryptopp700\hmac.h" />
-    <ClInclude Include="cryptopp700\hmqv.h" />
-    <ClInclude Include="cryptopp700\hrtimer.h" />
-    <ClInclude Include="cryptopp700\ida.h" />
-    <ClInclude Include="cryptopp700\idea.h" />
-    <ClInclude Include="cryptopp700\integer.h" />
-    <ClInclude Include="cryptopp700\iterhash.h" />
-    <ClInclude Include="cryptopp700\kalyna.h" />
-    <ClInclude Include="cryptopp700\keccak.h" />
-    <ClInclude Include="cryptopp700\lubyrack.h" />
-    <ClInclude Include="cryptopp700\luc.h" />
-    <ClInclude Include="cryptopp700\mars.h" />
-    <ClInclude Include="cryptopp700\md2.h" />
-    <ClInclude Include="cryptopp700\md4.h" />
-    <ClInclude Include="cryptopp700\md5.h" />
-    <ClInclude Include="cryptopp700\mdc.h" />
-    <ClInclude Include="cryptopp700\mersenne.h" />
-    <ClInclude Include="cryptopp700\misc.h" />
-    <ClInclude Include="cryptopp700\modarith.h" />
-    <ClInclude Include="cryptopp700\modes.h" />
-    <ClInclude Include="cryptopp700\modexppc.h" />
-    <ClInclude Include="cryptopp700\mqueue.h" />
-    <ClInclude Include="cryptopp700\mqv.h" />
-    <ClInclude Include="cryptopp700\naclite.h" />
-    <ClInclude Include="cryptopp700\nbtheory.h" />
-    <ClInclude Include="cryptopp700\network.h" />
-    <ClInclude Include="cryptopp700\nr.h" />
-    <ClInclude Include="cryptopp700\oaep.h" />
-    <ClInclude Include="cryptopp700\oids.h" />
-    <ClInclude Include="cryptopp700\osrng.h" />
-    <ClInclude Include="cryptopp700\ossig.h" />
-    <ClInclude Include="cryptopp700\padlkrng.h" />
-    <ClInclude Include="cryptopp700\panama.h" />
-    <ClInclude Include="cryptopp700\pch.h" />
-    <ClInclude Include="cryptopp700\pkcspad.h" />
-    <ClInclude Include="cryptopp700\poly1305.h" />
-    <ClInclude Include="cryptopp700\polynomi.h" />
-    <ClInclude Include="cryptopp700\ppc-simd.h" />
-    <ClInclude Include="cryptopp700\pssr.h" />
-    <ClInclude Include="cryptopp700\pubkey.h" />
-    <ClInclude Include="cryptopp700\pwdbased.h" />
-    <ClInclude Include="cryptopp700\queue.h" />
-    <ClInclude Include="cryptopp700\rabin.h" />
-    <ClInclude Include="cryptopp700\randpool.h" />
-    <ClInclude Include="cryptopp700\rc2.h" />
-    <ClInclude Include="cryptopp700\rc5.h" />
-    <ClInclude Include="cryptopp700\rc6.h" />
-    <ClInclude Include="cryptopp700\rdrand.h" />
-    <ClInclude Include="cryptopp700\resource.h" />
-    <ClInclude Include="cryptopp700\rijndael.h" />
-    <ClInclude Include="cryptopp700\ripemd.h" />
-    <ClInclude Include="cryptopp700\rng.h" />
-    <ClInclude Include="cryptopp700\rsa.h" />
-    <ClInclude Include="cryptopp700\rw.h" />
-    <ClInclude Include="cryptopp700\safer.h" />
-    <ClInclude Include="cryptopp700\salsa.h" />
-    <ClInclude Include="cryptopp700\scrypt.h" />
-    <ClInclude Include="cryptopp700\seal.h" />
-    <ClInclude Include="cryptopp700\secblock.h" />
-    <ClInclude Include="cryptopp700\seckey.h" />
-    <ClInclude Include="cryptopp700\seed.h" />
-    <ClInclude Include="cryptopp700\serpent.h" />
-    <ClInclude Include="cryptopp700\serpentp.h" />
-    <ClInclude Include="cryptopp700\sha.h" />
-    <ClInclude Include="cryptopp700\sha3.h" />
-    <ClInclude Include="cryptopp700\shacal2.h" />
-    <ClInclude Include="cryptopp700\shark.h" />
-    <ClInclude Include="cryptopp700\simon.h" />
-    <ClInclude Include="cryptopp700\simple.h" />
-    <ClInclude Include="cryptopp700\siphash.h" />
-    <ClInclude Include="cryptopp700\skipjack.h" />
-    <ClInclude Include="cryptopp700\sm3.h" />
-    <ClInclude Include="cryptopp700\sm4.h" />
-    <ClInclude Include="cryptopp700\smartptr.h" />
-    <ClInclude Include="cryptopp700\socketft.h" />
-    <ClInclude Include="cryptopp700\sosemanuk.h" />
-    <ClInclude Include="cryptopp700\speck.h" />
-    <ClInclude Include="cryptopp700\square.h" />
-    <ClInclude Include="cryptopp700\stdcpp.h" />
-    <ClInclude Include="cryptopp700\strciphr.h" />
-    <ClInclude Include="cryptopp700\tea.h" />
-    <ClInclude Include="cryptopp700\threefish.h" />
-    <ClInclude Include="cryptopp700\tiger.h" />
-    <ClInclude Include="cryptopp700\trap.h" />
-    <ClInclude Include="cryptopp700\trdlocal.h" />
-    <ClInclude Include="cryptopp700\trunhash.h" />
-    <ClInclude Include="cryptopp700\ttmac.h" />
-    <ClInclude Include="cryptopp700\tweetnacl.h" />
-    <ClInclude Include="cryptopp700\twofish.h" />
-    <ClInclude Include="cryptopp700\validate.h" />
-    <ClInclude Include="cryptopp700\vmac.h" />
-    <ClInclude Include="cryptopp700\wait.h" />
-    <ClInclude Include="cryptopp700\wake.h" />
-    <ClInclude Include="cryptopp700\whrlpool.h" />
-    <ClInclude Include="cryptopp700\winpipes.h" />
-    <ClInclude Include="cryptopp700\words.h" />
-    <ClInclude Include="cryptopp700\xtr.h" />
-    <ClInclude Include="cryptopp700\xtrcrypt.h" />
-    <ClInclude Include="cryptopp700\zdeflate.h" />
-    <ClInclude Include="cryptopp700\zinflate.h" />
-    <ClInclude Include="cryptopp700\zlib.h" />
     <ClInclude Include="CryptoPPSingleton.h" />
+    <ClInclude Include="Encoder.h" />
     <ClInclude Include="has160.h" />
     <ClInclude Include="HashFunction.h" />
     <ClInclude Include="IPubKeyCipher.h" />
@@ -235,202 +108,7 @@
     <ClInclude Include="Type.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AES\aescrypt.c" />
-    <ClCompile Include="AES\aeshash.c" />
-    <ClCompile Include="AES\aeskey.c" />
-    <ClCompile Include="AES\aestab.c" />
-    <ClCompile Include="Base64_.cpp" />
-    <ClCompile Include="cryptopp700\3way.cpp" />
-    <ClCompile Include="cryptopp700\adler32.cpp" />
-    <ClCompile Include="cryptopp700\algebra.cpp" />
-    <ClCompile Include="cryptopp700\algparam.cpp" />
-    <ClCompile Include="cryptopp700\arc4.cpp" />
-    <ClCompile Include="cryptopp700\aria-simd.cpp" />
-    <ClCompile Include="cryptopp700\aria.cpp" />
-    <ClCompile Include="cryptopp700\ariatab.cpp" />
-    <ClCompile Include="cryptopp700\asn.cpp" />
-    <ClCompile Include="cryptopp700\authenc.cpp" />
-    <ClCompile Include="cryptopp700\base32.cpp" />
-    <ClCompile Include="cryptopp700\base64.cpp" />
-    <ClCompile Include="cryptopp700\basecode.cpp" />
-    <ClCompile Include="cryptopp700\bench1.cpp" />
-    <ClCompile Include="cryptopp700\bench2.cpp" />
-    <ClCompile Include="cryptopp700\bfinit.cpp" />
-    <ClCompile Include="cryptopp700\blake2-simd.cpp" />
-    <ClCompile Include="cryptopp700\blake2.cpp" />
-    <ClCompile Include="cryptopp700\blowfish.cpp" />
-    <ClCompile Include="cryptopp700\blumshub.cpp" />
-    <ClCompile Include="cryptopp700\camellia.cpp" />
-    <ClCompile Include="cryptopp700\cast.cpp" />
-    <ClCompile Include="cryptopp700\casts.cpp" />
-    <ClCompile Include="cryptopp700\cbcmac.cpp" />
-    <ClCompile Include="cryptopp700\ccm.cpp" />
-    <ClCompile Include="cryptopp700\chacha.cpp" />
-    <ClCompile Include="cryptopp700\channels.cpp" />
-    <ClCompile Include="cryptopp700\cmac.cpp" />
-    <ClCompile Include="cryptopp700\cpu.cpp" />
-    <ClCompile Include="cryptopp700\crc-simd.cpp" />
-    <ClCompile Include="cryptopp700\crc.cpp" />
-    <ClCompile Include="cryptopp700\cryptlib.cpp" />
-    <ClCompile Include="cryptopp700\default.cpp" />
-    <ClCompile Include="cryptopp700\des.cpp" />
-    <ClCompile Include="cryptopp700\dessp.cpp" />
-    <ClCompile Include="cryptopp700\dh.cpp" />
-    <ClCompile Include="cryptopp700\dh2.cpp" />
-    <ClCompile Include="cryptopp700\dll.cpp" />
-    <ClCompile Include="cryptopp700\dsa.cpp" />
-    <ClCompile Include="cryptopp700\eax.cpp" />
-    <ClCompile Include="cryptopp700\ec2n.cpp" />
-    <ClCompile Include="cryptopp700\eccrypto.cpp" />
-    <ClCompile Include="cryptopp700\ecp.cpp" />
-    <ClCompile Include="cryptopp700\elgamal.cpp" />
-    <ClCompile Include="cryptopp700\emsa2.cpp" />
-    <ClCompile Include="cryptopp700\eprecomp.cpp" />
-    <ClCompile Include="cryptopp700\esign.cpp" />
-    <ClCompile Include="cryptopp700\files.cpp" />
-    <ClCompile Include="cryptopp700\filters.cpp" />
-    <ClCompile Include="cryptopp700\fips140.cpp" />
-    <ClCompile Include="cryptopp700\fipsalgt.cpp" />
-    <ClCompile Include="cryptopp700\gcm-simd.cpp" />
-    <ClCompile Include="cryptopp700\gcm.cpp" />
-    <ClCompile Include="cryptopp700\gf256.cpp" />
-    <ClCompile Include="cryptopp700\gf2n.cpp" />
-    <ClCompile Include="cryptopp700\gf2_32.cpp" />
-    <ClCompile Include="cryptopp700\gfpcrypt.cpp" />
-    <ClCompile Include="cryptopp700\gost.cpp" />
-    <ClCompile Include="cryptopp700\gzip.cpp" />
-    <ClCompile Include="cryptopp700\hex.cpp" />
-    <ClCompile Include="cryptopp700\hmac.cpp" />
-    <ClCompile Include="cryptopp700\hrtimer.cpp" />
-    <ClCompile Include="cryptopp700\ida.cpp" />
-    <ClCompile Include="cryptopp700\idea.cpp" />
-    <ClCompile Include="cryptopp700\integer.cpp" />
-    <ClCompile Include="cryptopp700\iterhash.cpp" />
-    <ClCompile Include="cryptopp700\kalyna.cpp" />
-    <ClCompile Include="cryptopp700\kalynatab.cpp" />
-    <ClCompile Include="cryptopp700\keccak.cpp" />
-    <ClCompile Include="cryptopp700\luc.cpp" />
-    <ClCompile Include="cryptopp700\mars.cpp" />
-    <ClCompile Include="cryptopp700\marss.cpp" />
-    <ClCompile Include="cryptopp700\md2.cpp" />
-    <ClCompile Include="cryptopp700\md4.cpp" />
-    <ClCompile Include="cryptopp700\md5.cpp" />
-    <ClCompile Include="cryptopp700\misc.cpp" />
-    <ClCompile Include="cryptopp700\modes.cpp" />
-    <ClCompile Include="cryptopp700\mqueue.cpp" />
-    <ClCompile Include="cryptopp700\mqv.cpp" />
-    <ClCompile Include="cryptopp700\nbtheory.cpp" />
-    <ClCompile Include="cryptopp700\neon-simd.cpp" />
-    <ClCompile Include="cryptopp700\network.cpp" />
-    <ClCompile Include="cryptopp700\oaep.cpp" />
-    <ClCompile Include="cryptopp700\osrng.cpp" />
-    <ClCompile Include="cryptopp700\padlkrng.cpp" />
-    <ClCompile Include="cryptopp700\panama.cpp" />
-    <ClCompile Include="cryptopp700\pch.cpp" />
-    <ClCompile Include="cryptopp700\pkcspad.cpp" />
-    <ClCompile Include="cryptopp700\poly1305.cpp" />
-    <ClCompile Include="cryptopp700\polynomi.cpp" />
-    <ClCompile Include="cryptopp700\ppc-simd.cpp" />
-    <ClCompile Include="cryptopp700\pssr.cpp" />
-    <ClCompile Include="cryptopp700\pubkey.cpp" />
-    <ClCompile Include="cryptopp700\queue.cpp" />
-    <ClCompile Include="cryptopp700\rabin.cpp" />
-    <ClCompile Include="cryptopp700\randpool.cpp" />
-    <ClCompile Include="cryptopp700\rc2.cpp" />
-    <ClCompile Include="cryptopp700\rc5.cpp" />
-    <ClCompile Include="cryptopp700\rc6.cpp" />
-    <ClCompile Include="cryptopp700\rdrand.cpp" />
-    <ClCompile Include="cryptopp700\rdtables.cpp" />
-    <ClCompile Include="cryptopp700\rijndael-simd.cpp" />
-    <ClCompile Include="cryptopp700\rijndael.cpp" />
-    <ClCompile Include="cryptopp700\ripemd.cpp" />
-    <ClCompile Include="cryptopp700\rng.cpp" />
-    <ClCompile Include="cryptopp700\rsa.cpp" />
-    <ClCompile Include="cryptopp700\rw.cpp" />
-    <ClCompile Include="cryptopp700\safer.cpp" />
-    <ClCompile Include="cryptopp700\salsa.cpp" />
-    <ClCompile Include="cryptopp700\scrypt.cpp" />
-    <ClCompile Include="cryptopp700\seal.cpp" />
-    <ClCompile Include="cryptopp700\seed.cpp" />
-    <ClCompile Include="cryptopp700\serpent.cpp" />
-    <ClCompile Include="cryptopp700\sha-simd.cpp" />
-    <ClCompile Include="cryptopp700\sha.cpp" />
-    <ClCompile Include="cryptopp700\sha3.cpp" />
-    <ClCompile Include="cryptopp700\shacal2-simd.cpp" />
-    <ClCompile Include="cryptopp700\shacal2.cpp" />
-    <ClCompile Include="cryptopp700\shark.cpp" />
-    <ClCompile Include="cryptopp700\sharkbox.cpp" />
-    <ClCompile Include="cryptopp700\simon-simd.cpp" />
-    <ClCompile Include="cryptopp700\simon.cpp" />
-    <ClCompile Include="cryptopp700\simple.cpp" />
-    <ClCompile Include="cryptopp700\skipjack.cpp" />
-    <ClCompile Include="cryptopp700\sm3.cpp" />
-    <ClCompile Include="cryptopp700\sm4.cpp" />
-    <ClCompile Include="cryptopp700\socketft.cpp" />
-    <ClCompile Include="cryptopp700\sosemanuk.cpp" />
-    <ClCompile Include="cryptopp700\speck-simd.cpp" />
-    <ClCompile Include="cryptopp700\speck.cpp" />
-    <ClCompile Include="cryptopp700\square.cpp" />
-    <ClCompile Include="cryptopp700\squaretb.cpp" />
-    <ClCompile Include="cryptopp700\sse-simd.cpp" />
-    <ClCompile Include="cryptopp700\strciphr.cpp" />
-    <ClCompile Include="cryptopp700\tea.cpp" />
-    <ClCompile Include="cryptopp700\tftables.cpp" />
-    <ClCompile Include="cryptopp700\threefish.cpp" />
-    <ClCompile Include="cryptopp700\tiger.cpp" />
-    <ClCompile Include="cryptopp700\tigertab.cpp" />
-    <ClCompile Include="cryptopp700\trdlocal.cpp" />
-    <ClCompile Include="cryptopp700\ttmac.cpp" />
-    <ClCompile Include="cryptopp700\tweetnacl.cpp" />
-    <ClCompile Include="cryptopp700\twofish.cpp" />
-    <ClCompile Include="cryptopp700\validat0.cpp" />
-    <ClCompile Include="cryptopp700\validat1.cpp" />
-    <ClCompile Include="cryptopp700\validat2.cpp" />
-    <ClCompile Include="cryptopp700\validat3.cpp" />
-    <ClCompile Include="cryptopp700\validat4.cpp" />
-    <ClCompile Include="cryptopp700\vmac.cpp" />
-    <ClCompile Include="cryptopp700\wait.cpp" />
-    <ClCompile Include="cryptopp700\wake.cpp" />
-    <ClCompile Include="cryptopp700\whrlpool.cpp" />
-    <ClCompile Include="cryptopp700\winpipes.cpp" />
-    <ClCompile Include="cryptopp700\xtr.cpp" />
-    <ClCompile Include="cryptopp700\xtrcrypt.cpp" />
-    <ClCompile Include="cryptopp700\zdeflate.cpp" />
-    <ClCompile Include="cryptopp700\zinflate.cpp" />
-    <ClCompile Include="cryptopp700\zlib.cpp" />
-    <ClCompile Include="CryptoPPSingleton.cpp" />
-    <ClCompile Include="has160.cpp" />
-    <ClCompile Include="HashFunction.cpp" />
-    <ClCompile Include="md5_.cpp" />
-    <ClCompile Include="PubKeyCipherFunction.cpp" />
-    <ClCompile Include="PubKeyElGamal.cpp" />
-    <ClCompile Include="PubKeyRSA.cpp" />
-    <ClCompile Include="SEED\SEED_128_KISA.cpp" />
-    <ClCompile Include="SEED\SEED_256_KISA.cpp" />
-    <ClCompile Include="SHA1.cpp" />
-    <ClCompile Include="sha256.cpp" />
-    <ClCompile Include="StringFunction.cpp" />
-    <ClCompile Include="StringSymCipherFunction.cpp" />
-    <ClCompile Include="SymAES.cpp" />
-    <ClCompile Include="SymCipher.cpp" />
-    <ClCompile Include="SymCipherFunction.cpp" />
-    <ClCompile Include="SymModeCBC.cpp" />
-    <ClCompile Include="SymModeCFB.cpp" />
-    <ClCompile Include="SymModeCTR.cpp" />
-    <ClCompile Include="SymModeECB.cpp" />
-    <ClCompile Include="SymModeOFB.cpp" />
-    <ClCompile Include="SymModePCBC.cpp" />
-    <ClCompile Include="SymModePlain.cpp" />
-    <ClCompile Include="SymPlain.cpp" />
-    <ClCompile Include="SymSeed128.cpp" />
-    <ClCompile Include="SymSeed256.cpp" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="AES\aescrypt.asm" />
-    <None Include="cryptopp700\rdrand.asm" />
-    <None Include="cryptopp700\rdrand.s" />
-    <None Include="cryptopp700\x64dll.asm" />
-    <None Include="cryptopp700\x64masm.asm" />
     <None Include="SEED\SEED_128_KISA.tab" />
     <None Include="SEED\SEED_256_KISA.tab" />
   </ItemGroup>
@@ -553,6 +231,7 @@
       <ProgramDataBaseFileName>$(OutDir)$(ProjectName).pdb</ProgramDataBaseFileName>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <AdditionalIncludeDirectories>$(ProjectDir)/../../Inc</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -569,6 +248,7 @@
       <ProgramDataBaseFileName>$(OutDir)$(ProjectName).pdb</ProgramDataBaseFileName>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <AdditionalIncludeDirectories>$(ProjectDir)/../../Inc</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -582,6 +262,7 @@
       <ProgramDataBaseFileName>$(OutDir)$(ProjectName).pdb</ProgramDataBaseFileName>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <AdditionalIncludeDirectories>$(ProjectDir)/../../Inc</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -598,6 +279,7 @@
       <ProgramDataBaseFileName>$(OutDir)$(ProjectName).pdb</ProgramDataBaseFileName>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <AdditionalIncludeDirectories>$(ProjectDir)/../../Inc</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugMT|Win32'">
@@ -611,6 +293,7 @@
       <ProgramDataBaseFileName>$(OutDir)$(ProjectName).pdb</ProgramDataBaseFileName>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <AdditionalIncludeDirectories>$(ProjectDir)/../../Inc</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugMT|x64'">
@@ -627,6 +310,7 @@
       <ProgramDataBaseFileName>$(OutDir)$(ProjectName).pdb</ProgramDataBaseFileName>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <AdditionalIncludeDirectories>$(ProjectDir)/../../Inc</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseMT|Win32'">
@@ -640,6 +324,7 @@
       <ProgramDataBaseFileName>$(OutDir)$(ProjectName).pdb</ProgramDataBaseFileName>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <AdditionalIncludeDirectories>$(ProjectDir)/../../Inc</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseMT|x64'">
@@ -656,6 +341,7 @@
       <ProgramDataBaseFileName>$(OutDir)$(ProjectName).pdb</ProgramDataBaseFileName>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <AdditionalIncludeDirectories>$(ProjectDir)/../../Inc</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

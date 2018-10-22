@@ -57,6 +57,7 @@ endforeach(SOURCE)
 ##############################################################
 ## Build setting
 ##############################################################
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../Inc)
 add_library(${TARGET_NAME}A OBJECT ${SOURCES})
 add_library(${TARGET_NAME}W OBJECT ${SOURCES})
 target_compile_options(${TARGET_NAME}A PUBLIC -fPIC)
