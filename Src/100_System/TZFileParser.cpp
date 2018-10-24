@@ -56,14 +56,14 @@ namespace core
 	};
 
 	//////////////////////////////////////////////////////////////////////////
-	static inline ECODE InternalParseTZFile(LPCSTR pszFileName, INTERNAL_TZFILE_DATA& outData)
+	static inline ECODE InternalParseTZFile(LPCTSTR pszFileName, INTERNAL_TZFILE_DATA& outData)
 	{
 		INTERNAL_TZ_FILEHEADER header;
 
 		FILE* pFile = NULL;
 		try
 		{
-			pFile = fopen(pszFileName, "rb");
+			pFile = fopenT(pszFileName, TEXT("rb"));
 			if( NULL == pFile )
 				throw exception_format(TEXT("fopen(%s) has failed."), pszFileName);
 
@@ -132,7 +132,7 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	ECODE ParseTZFile(LPCSTR pszFileName, ST_TZ_INFO& outInfo)
+	ECODE ParseTZFile(LPCTSTR pszFileName, ST_TZ_INFO& outInfo)
 	{
 		INTERNAL_TZFILE_DATA stTZData;
 		ECODE nRet = InternalParseTZFile(pszFileName, stTZData);

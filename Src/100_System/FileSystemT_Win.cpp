@@ -64,14 +64,9 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	#undef PathFileExists
 	bool PathFileExists(LPCTSTR pszExistFile)
 	{
-#ifdef UNICODE
-		return ::PathFileExistsW(pszExistFile) != FALSE;
-#else
-		return ::PathFileExistsA(pszExistFile) != FALSE;
-#endif
+		return ::PathFileExists(pszExistFile) != FALSE;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
@@ -105,74 +100,60 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	#undef CopyFile
 	bool CopyFile(LPCTSTR pszExistFile, LPCTSTR pszNewFile, BOOL bFailIfExist)
 	{
-#ifdef UNICODE
-		return ::CopyFileW(pszExistFile, pszNewFile, bFailIfExist) != FALSE;
-#else
-		return ::CopyFileA(pszExistFile, pszNewFile, bFailIfExist) != FALSE;
-#endif
+		return ::CopyFile(pszExistFile, pszNewFile, bFailIfExist) != FALSE;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	#undef MoveFile
 	bool MoveFile(LPCTSTR pszExistFile, LPCTSTR pszNewFile)
 	{
-#ifdef UNICODE
-		return ::MoveFileW(pszExistFile, pszNewFile) != FALSE;
-#else
-		return ::MoveFileA(pszExistFile, pszNewFile) != FALSE;
-#endif
+		return ::MoveFile(pszExistFile, pszNewFile) != FALSE;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	#undef DeleteFile
 	bool DeleteFile(LPCTSTR pszFileName)
 	{
-#ifdef UNICODE
-		return ::DeleteFileW(pszFileName) != FALSE;
-#else
-		return ::DeleteFileA(pszFileName) != FALSE;
-#endif
+		return ::DeleteFile(pszFileName) != FALSE;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	#undef RemoveDirectory
 	bool RemoveDirectory(LPCTSTR pszPath)
 	{
-#ifdef UNICODE
-		return ::RemoveDirectoryW(pszPath) != FALSE;
-#else
-		return ::RemoveDirectoryA(pszPath) != FALSE;
-#endif
+		return ::RemoveDirectory(pszPath) != FALSE;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	#undef CreateDirectory
 	bool CreateDirectory(LPCTSTR pszPath)
 	{
-#ifdef UNICODE
-		if( (FALSE == ::CreateDirectoryW(pszPath, NULL)) && (::GetLastError() != ERROR_ALREADY_EXISTS) )
-#else
-		if( (FALSE == ::CreateDirectoryA(pszPath, NULL)) && (::GetLastError() != ERROR_ALREADY_EXISTS) )
-#endif	
+		if( (FALSE == ::CreateDirectory(pszPath, NULL)) && (::GetLastError() != ERROR_ALREADY_EXISTS) )
 			return false;
 		return true;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	#undef CreateSymbolicLink
 	bool CreateSymbolicLink(LPCTSTR pszSymlinkFilename, LPCTSTR pszTargetFilename)
 	{
-		DWORD dwFlag = IsDirectory(pszTargetFilename)? SYMBOLIC_LINK_FLAG_DIRECTORY : 0;
-#ifdef UNICODE
-		if( FALSE == ::CreateSymbolicLinkW(pszSymlinkFilename, pszTargetFilename, dwFlag) )
-#else
-		if( FALSE == ::CreateSymbolicLinkA(pszSymlinkFilename, pszTargetFilename, dwFlag) )
-#endif
+		typedef BOOLEAN (APIENTRY *FP_CreateSymbolicLink)(LPCTSTR pszSymlinkFilename, LPCTSTR pszTargetFilename, DWORD dwFlags);
+		HMODULE hModule = ::LoadLibrary(TEXT("kernel32.dll"));
+		if( NULL == hModule )
 			return false;
-		return true;
+
+#ifdef UNICODE
+		FP_CreateSymbolicLink fpFunc = (FP_CreateSymbolicLink)::GetProcAddress(hModule, "CreateSymbolicLinkW");
+#else
+		FP_CreateSymbolicLink fpFunc = (FP_CreateSymbolicLink)::GetProcAddress(hModule, "CreateSymbolicLinkA");
+#endif
+		if( NULL == fpFunc )
+		{
+			::FreeLibrary(hModule);
+			return false;
+		}
+
+		DWORD dwFlag = IsDirectory(pszTargetFilename)? SYMBOLIC_LINK_FLAG_DIRECTORY : 0;
+		BOOLEAN bRet = fpFunc(pszSymlinkFilename, pszTargetFilename, dwFlag);
+		::FreeLibrary(hModule);
+		return bRet != 0;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
@@ -238,14 +219,9 @@ std::tstring GetModuleFileName(HANDLE hModule)
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	#undef SetCurrentDirectory
 	bool SetCurrentDirectory(LPCTSTR pszNewPath)
 	{
-#ifdef UNICODE
-		if( !::SetCurrentDirectoryW(pszNewPath) )
-#else
-		if( !::SetCurrentDirectoryA(pszNewPath) )
-#endif
+		if( !::SetCurrentDirectory(pszNewPath) )
 		{
 			Log_Error("SetCurrentDirectory calling failure, %u", ::GetLastError());
 			return false;
@@ -267,16 +243,10 @@ std::tstring GetModuleFileName(HANDLE hModule)
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	#undef FindFirstFile
 	HANDLE FindFirstFile(LPCTSTR pszFilePattern, ST_FILE_FINDDATA* pFindData)
 	{
-#ifdef UNICODE
-		WIN32_FIND_DATAW stData = { 0, };
-		HANDLE hHandle = ::FindFirstFileW(pszFilePattern, &stData);
-#else
-		WIN32_FIND_DATAA stData = { 0, };
-		HANDLE hHandle = ::FindFirstFileA(pszFilePattern, &stData);
-#endif
+		WIN32_FIND_DATA stData = { 0, };
+		HANDLE hHandle = ::FindFirstFile(pszFilePattern, &stData);
 		if( INVALID_HANDLE_VALUE == hHandle )
 			return NULL;
 
@@ -285,18 +255,11 @@ std::tstring GetModuleFileName(HANDLE hModule)
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	#undef FindNextFile
 	bool FindNextFile(HANDLE hFindFile, ST_FILE_FINDDATA* pFindData)
 	{
-#ifdef UNICODE
-		WIN32_FIND_DATAW stData = { 0, };
-		if( FALSE == ::FindNextFileW(hFindFile, &stData) )
+		WIN32_FIND_DATA stData = { 0, };
+		if( FALSE == ::FindNextFile(hFindFile, &stData) )
 			return false;
-#else
-		WIN32_FIND_DATAA stData = { 0, };
-		if( FALSE == ::FindNextFileA(hFindFile, &stData) )
-			return false;
-#endif
 
 		ConvertFINDDATA(stData, pFindData);
 		return true;

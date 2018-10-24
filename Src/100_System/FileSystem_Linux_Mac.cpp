@@ -1,6 +1,10 @@
 #include "stdafx.h"
 #include "Information.h"
+#ifdef __APPLE__
 #include "System_Mac.h"
+#else
+#include "System_Linux.h"
+#endif
 #include "FileSystem.h"
 #include "Log.h"
 #include <sys/stat.h>

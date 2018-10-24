@@ -13,6 +13,7 @@
 #define OpenMutex			OpenMutexW
 #define CreateSemaphore		CreateSemaphoreW
 #define OpenSemaphore		OpenSemaphoreW
+#define EnumProcesses		EnumProcessesW
 #else
 #define CreateFile			CreateFileA
 #define CreateProcess       CreateProcessA
@@ -20,6 +21,7 @@
 #define OpenMutex			OpenMutexA
 #define CreateSemaphore		CreateSemaphoreA
 #define OpenSemaphore		OpenSemaphoreA
+#define EnumProcesses		EnumProcessesA
 #endif
 
 namespace core
@@ -175,7 +177,6 @@ namespace core
 	bool UnmapViewOfFile(HANDLE hFileMapping, LPCVOID lpBaseAddress);
 	void CloseFileMappingHandle(HANDLE hFileMapping);
 
-	#undef EnumProcesses
-	size_t EnumProcesses(std::string strNamePattern, std::vector<ST_PROCESS_INFOA>& vecProcesses);
-	size_t EnumProcesses(std::wstring strNamePattern, std::vector<ST_PROCESS_INFOW>& vecProcesses);
+	size_t EnumProcessesA(std::string strNamePattern, std::vector<ST_PROCESS_INFOA>& vecProcesses);
+	size_t EnumProcessesW(std::wstring strNamePattern, std::vector<ST_PROCESS_INFOW>& vecProcesses);
 }

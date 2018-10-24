@@ -1,5 +1,10 @@
 #include "stdafx.h"
 #include "Environment.h"
+#ifdef __APPLE__
+#include "System_Mac.h"
+#else
+#include <sys/sysinfo.h>
+#endif
 #include "Log.h"
 #include <arpa/inet.h>
 #include <net/if.h>
@@ -9,7 +14,6 @@
 #include <sys/syscall.h>
 #include <sys/time.h>
 #include <sys/types.h>
-#include <sys/sysinfo.h>
 #include <sys/socket.h>
 #include <time.h>
 #include <fcntl.h>
@@ -131,7 +135,11 @@ namespace core
 	//////////////////////////////////////////////////////////////////////////
 	DWORD GetCurrentThreadId(void)
 	{
+	#ifdef __APPLE__
+		return syscall(SYS_thread_selfid);
+	#else
 		return syscall(SYS_gettid);
+	#endif
 	}
 	
 	//////////////////////////////////////////////////////////////////////////

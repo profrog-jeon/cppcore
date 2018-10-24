@@ -1,6 +1,10 @@
 #include "stdafx.h"
 #include "Environment.h"
+#ifdef __linux__
+#include "System_Linux.h"
+#else
 #include "System_Mac.h"
+#endif
 #include "Log.h"
 #include "ELFParser.h"
 #include "FileSystem.h"
@@ -35,52 +39,6 @@ namespace core
 	std::tstring GetErrorString(ECODE nCode)
 	{
 		return TCSFromMBS(strerror(nCode));
-	}
-
-
-	//////////////////////////////////////////////////////////////////////////
-	ECODE QueryRouteInfo(std::vector<ST_ROUTEINFO>& outInfo)
-	{
-		return EC_NOT_IMPLEMENTED;
-	}
-
-	//////////////////////////////////////////////////////////////////////////
-	ECODE QueryDNSInfo(std::vector<std::tstring>& outInfo)
-	{
-		ECODE nRet = EC_SUCCESS;
-		try
-		{
-			FILE* pFile = fopen("/etc/resolv.conf", "rt");
-			if( NULL == pFile )
-			{
-				nRet = errno;
-				throw exception_format("opening resolv.conf has failed, %s", strerror(errno));
-			}
-
-			std::string strResolvContents;
-			while(!feof(pFile))
-			{
-				char szBuff[256] = { 0, };
-				char* pRet = fgets(szBuff, 256, pFile);
-				strResolvContents += szBuff;
-			}
-			fclose(pFile);
-
-			ParsingDNSContext(strResolvContents, outInfo);
-		}
-		catch (std::exception& e)
-		{
-			Log_Error("%s", e.what());
-			return nRet;
-		}
-		
-		return EC_SUCCESS;
-	}
-
-	//////////////////////////////////////////////////////////////////////////
-	ECODE QueryEthernetInfo(std::vector<ST_ETHERNETINFO>& outInfo)
-	{
-		return EC_NOT_IMPLEMENTED;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
@@ -138,20 +96,6 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	ECODE GetFileVersionInfo(LPCTSTR pszFilePath, ST_VERSIONINFO* pVersionInfo)
-	{
-		// [TODO]
-		return EC_SUCCESS;
-	}
-
-	//////////////////////////////////////////////////////////////////////////
-	ECODE GetProductVersionInfo(LPCTSTR pszFilePath, ST_VERSIONINFO* pVersionInfo)
-	{
-		// [TODO]
-		return EC_SUCCESS;
-	}
-
-	//////////////////////////////////////////////////////////////////////////
 	ETIMEZONE GetTimeZoneInformation(ST_TIME_ZONE_INFORMATION* pTimeZone)
 	{
 		memset(pTimeZone, 0, sizeof(*pTimeZone));
@@ -178,6 +122,6 @@ namespace core
 		if( 0 == daylight )
 			return TIME_ZONE_ID_UNKNOWN_;
 
-		return GetTimeZoneInformationByTZFile(pTimeZone, "/etc/localtime", stUTC);
+		return GetTimeZoneInformationByTZFile(pTimeZone, TEXT("/etc/localtime"), stUTC);
 	}
 }

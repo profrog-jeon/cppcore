@@ -57,7 +57,7 @@ namespace core
 		const std::wstring	strFilePattern	= strCurPath + L"/" + pszFilePattern;
 
 		ST_FILE_FINDDATAW stFindFileData	= { 0, };
-		HANDLE hFindFile = FindFirstFile(strFilePattern.c_str(), &stFindFileData);
+		HANDLE hFindFile = FindFirstFileW(strFilePattern.c_str(), &stFindFileData);
 		if( NULL == hFindFile )
 			return GetLastError();
 
@@ -68,7 +68,7 @@ namespace core
 
 			std::wstring strFilePath = strCurPath + L"/" + stFindFileData.strFileName;
 			setFiles.insert(strFilePath);
-		}	while(FindNextFile(hFindFile, &stFindFileData));
+		}	while(FindNextFileW(hFindFile, &stFindFileData));
 		FindClose(hFindFile);
 
 		return EC_SUCCESS;
@@ -106,7 +106,7 @@ namespace core
 			std::wstring strEXT = ExtractFileExt(g_stLogContext.strOutputPath);
 			std::wstring strSystemTime = BuildLocalTimeStringW();
 			std::wstring strNewFilename = Format(L"%s/%s_%s.%s", strDir.c_str(), strFile.c_str(), strSystemTime.c_str(), strEXT.c_str());
-			MoveFile(g_stLogContext.strOutputPath.c_str(), strNewFilename.c_str());
+			MoveFileW(g_stLogContext.strOutputPath.c_str(), strNewFilename.c_str());
 
 			std::wstring strFilePattern = Format(L"%s*.%s", strFile.c_str(), strEXT.c_str());
 			std::set<std::wstring> setFiles;
@@ -114,7 +114,7 @@ namespace core
 
 			while(setFiles.size() >= g_stLogContext.dwMaxFileCount)
 			{
-				DeleteFile(setFiles.begin()->c_str());
+				DeleteFileW(setFiles.begin()->c_str());
 				setFiles.erase(setFiles.begin());
 			}
 		}
@@ -152,7 +152,7 @@ namespace core
 		}
 
 		if( g_stLogContext.dwOutputFlag & LOG_OUTPUT_DBGWND )
-			OutputDebugString("%s", strOutputMsgA.c_str());
+			OutputDebugStringA("%s", strOutputMsgA.c_str());
 
 		if( g_stLogContext.fpCustomOutput )
 			g_stLogContext.fpCustomOutput(pszPrefix, strLog.c_str());

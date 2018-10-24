@@ -27,8 +27,8 @@ namespace core
 {
 	struct _ST_FINDFIRSTFILE
 	{
-		std::tstring strRootPath;
-		std::tstring strPattern;
+		std::string strRootPath;
+		std::string strPattern;
 		DIR* pDir;
 	};
 

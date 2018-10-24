@@ -2,6 +2,7 @@
 #include "KernelObject.h" 
 #include "Log.h"
 #undef TEXT
+#undef EnumProcesses
 #include "System_Win.h"
 #include <Windows.h>
 #include <process.h>
@@ -170,10 +171,42 @@ namespace core
 			std::tstring strCmdLine = std::tstring(pszFilePath) + TEXT(" ") + strParam;
 			Log_Info(TEXT("Try to call CreateProcess. CmdLine:%s"), strCmdLine.c_str());
 
+			// Set the bInheritHandle flag so pipe handles are inherited. 
+			SECURITY_ATTRIBUTES saAttr;
+			saAttr.nLength = sizeof(SECURITY_ATTRIBUTES);
+			saAttr.bInheritHandle = TRUE;
+			saAttr.lpSecurityDescriptor = NULL;
+
+			// Create a pipe for the child process's STDOUT. 
+			HANDLE hStdOutPair[2] = { 0, };
+			if( !::CreatePipe(&hStdOutPair[0], &hStdOutPair[1], &saAttr, 0) )
+				throw exception_format(TEXT("StdoutRd CreatePipe"));
+
+			// Ensure the read handle to the pipe for STDOUT is not inherited.
+			if( !::SetHandleInformation(hStdOutPair[0], HANDLE_FLAG_INHERIT, 0) )
+				throw exception_format(TEXT("Stdout SetHandleInformation"));
+
+			// Create a pipe for the child process's STDIN. 
+			HANDLE hStdInPair[2] = { 0, };
+			if( !::CreatePipe(&hStdInPair[0], &hStdInPair[1], &saAttr, 0) )
+				throw exception_format(TEXT("Stdin CreatePipe"));
+
+			// Ensure the write handle to the pipe for STDIN is not inherited. 
+			if( !::SetHandleInformation(hStdInPair[1], HANDLE_FLAG_INHERIT, 0) )
+				throw exception_format(TEXT("Stdin SetHandleInformation"));
+
+			if( pStartupInfo )
+			{
+				stStartupInfo.dwFlags |= STARTF_USESTDHANDLES;
+				stStartupInfo.hStdInput = hStdInPair[0];
+				stStartupInfo.hStdOutput = hStdOutPair[1];
+				stStartupInfo.hStdError = hStdOutPair[1];
+			}
+
 #ifdef UNICODE
-			if( !::CreateProcessW(NULL, (LPTSTR)strCmdLine.c_str(), NULL, NULL, FALSE, 0, NULL, pszDirectory, &stStartupInfo, &stProcessInfo) )
+			if( !::CreateProcessW(NULL, (LPTSTR)strCmdLine.c_str(), NULL, NULL, TRUE, 0, NULL, pszDirectory, &stStartupInfo, &stProcessInfo) )
 #else
-			if( !::CreateProcessA(NULL, (LPTSTR)strCmdLine.c_str(), NULL, NULL, FALSE, 0, NULL, pszDirectory, &stStartupInfo, &stProcessInfo) )
+			if( !::CreateProcessA(NULL, (LPTSTR)strCmdLine.c_str(), NULL, NULL, TRUE, 0, NULL, pszDirectory, &stStartupInfo, &stProcessInfo) )
 #endif
 				throw exception_format(TEXT("CreateProcess calling failure, CmdLine:%s"), strCmdLine.c_str());
 
@@ -181,15 +214,16 @@ namespace core
 
 			if( pStartupInfo )
 			{
-				pStartupInfo->hStdInput = stStartupInfo.hStdInput;
-				pStartupInfo->hStdOutput = stStartupInfo.hStdOutput;
-				pStartupInfo->hStdError = stStartupInfo.hStdError;
+				pStartupInfo->hStdInput = hStdInPair[1];
+				pStartupInfo->hStdOutput = hStdOutPair[0];
+				pStartupInfo->hStdError = hStdOutPair[0];
 			}
 			else
 			{
-				::CloseHandle(stStartupInfo.hStdInput);
-				::CloseHandle(stStartupInfo.hStdOutput);
-				::CloseHandle(stStartupInfo.hStdError);
+				::CloseHandle(hStdInPair[0]);
+				::CloseHandle(hStdInPair[1]);
+				::CloseHandle(hStdOutPair[0]);
+				::CloseHandle(hStdOutPair[1]);
 			}
 
 			if( pProcessInfo )
@@ -285,8 +319,11 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	#undef EnumProcesses
-	size_t EnumProcesses(std::tstring strNamePattern, std::vector<ST_PROCESS_INFO>& vecProcesses)
+#ifdef UNICODE
+	size_t EnumProcessesW(std::tstring strNamePattern, std::vector<ST_PROCESS_INFO>& vecProcesses)
+#else
+	size_t EnumProcessesA(std::tstring strNamePattern, std::vector<ST_PROCESS_INFO>& vecProcesses)
+#endif
 	{
 		// Get the list of process identifiers.
 		DWORD aProcesses[1024], cbNeeded;

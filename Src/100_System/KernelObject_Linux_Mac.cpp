@@ -1,7 +1,11 @@
 #include "stdafx.h"
 #include "KernelObject.h"
 #include "GlobalSemaphoreMap.h"
+#ifdef __linux__
 #include "System_Linux.h"
+#else
+#include "System_Mac.h"
+#endif
 #include "Information.h"
 #include "Log.h"
 #include "Environment.h"
@@ -83,7 +87,7 @@ namespace core
 			return -1;
 		}
 
-		return tNewOffset;
+		return (int64_t)tNewOffset;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
@@ -500,7 +504,16 @@ namespace core
 		CSemHandle SemHandle;
 		if( !Internal()->GetSemHandle(hMutex, SemHandle) )
 			return WAIT_FAILED_;
-
+#ifdef __APPLE__
+        if( _ST_SEM_HANDLE::UNNAMED_SEM == SemHandle->nType )
+        {
+            int64_t nNanoSec = (int64_t)dwTimeOut * 1000000;
+            if( dispatch_wait(SemHandle->Unnamed.Sem, dispatch_time(DISPATCH_TIME_NOW, nNanoSec)) )
+                return WAIT_TIMEOUT_;
+			__sync_sub_and_fetch(&SemHandle->Unnamed.nFlag, 1);
+            return WAIT_OBJECT_0_;
+        }
+#endif
 		if( GlobalSemMap()->CheckAbandoned(SemHandle->hGlobalSem) )
 			return WAIT_ABANDONED_;
 
@@ -553,7 +566,14 @@ namespace core
 		CSemHandle SemHandle;
 		if( !Internal()->GetSemHandle(hMutex, SemHandle) )
 			return false;
-
+#ifdef __APPLE__
+        if( _ST_SEM_HANDLE::UNNAMED_SEM == SemHandle->nType )
+        {
+            dispatch_semaphore_signal(SemHandle->Unnamed.Sem);
+            __sync_add_and_fetch(&SemHandle->Unnamed.nFlag, 1);
+            return true;
+        }
+#endif
 		if( GlobalSemMap()->CheckAbandoned(SemHandle->hGlobalSem) )
 		{
 			GlobalSemMap()->UnmarkOwner(SemHandle->hGlobalSem);
@@ -718,13 +738,34 @@ namespace core
 		CSemHandle SemHandle;
 		if( !Internal()->GetSemHandle(hSemaphore, SemHandle) )
 			return EC_INVALID_HANDLE;
-
+#ifdef __linux__
 		while(nReleaseCount--)
 		{
 			if( ::sem_post(SemHandle->pSem) )
 				return errno;
 		}
 		return EC_SUCCESS;
+#else
+		if( _ST_SEM_HANDLE::UNNAMED_SEM == SemHandle->nType )
+		{
+			while(nReleaseCount--)
+				dispatch_semaphore_signal(SemHandle->Unnamed.Sem);
+			__sync_add_and_fetch(&SemHandle->Unnamed.nFlag, nReleaseCount);
+			return EC_SUCCESS;
+		}
+
+        if( _ST_SEM_HANDLE::NAMED_SEM == SemHandle->nType )
+        {
+            while(nReleaseCount--)
+            {
+                if( ::sem_post(SemHandle->pSem) )
+                    return errno;
+            }
+			return EC_SUCCESS;
+        }
+
+		return EC_INVALID_HANDLE;
+#endif
 	}
 
 	//////////////////////////////////////////////////////////////////////////
@@ -733,7 +774,16 @@ namespace core
 		CSemHandle SemHandle;
 		if( !Internal()->GetSemHandle(hSemaphore, SemHandle) )
 			return WAIT_FAILED_;
-
+#ifdef __APPLE__
+        if( _ST_SEM_HANDLE::UNNAMED_SEM == SemHandle->nType )
+        {
+            int64_t nNanoSec = (int64_t)dwTimeOut * 1000000;
+            if( dispatch_wait(SemHandle->Unnamed.Sem, dispatch_time(DISPATCH_TIME_NOW, nNanoSec)) )
+                return WAIT_TIMEOUT_;
+            __sync_sub_and_fetch(&SemHandle->Unnamed.nFlag, 1);
+            return WAIT_OBJECT_0_;
+        }
+#endif
 		int nRet = 0;
 		if( dwTimeOut == 0xFFFFFFFF )
 		{

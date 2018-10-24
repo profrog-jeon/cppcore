@@ -3,22 +3,16 @@
 #include "Log.h"
 #include "Information.h"
 #undef TEXT
+#undef GetTimeZoneInformation
 #include <Windows.h>
-#include <IPTypes.h>
-#include <Iphlpapi.h>
 #pragma comment(lib, "version.lib")
 
 namespace core
 {
 	//////////////////////////////////////////////////////////////////////////
-#undef LoadLibrary
 	HANDLE LoadLibrary(LPCTSTR pszPath)
 	{
-#ifdef UNICODE
-		return ::LoadLibraryW(pszPath);
-#else
-		return ::LoadLibraryA(pszPath);
-#endif
+		return ::LoadLibrary(pszPath);
 	}
 
 	//////////////////////////////////////////////////////////////////////////
@@ -63,11 +57,7 @@ namespace core
 		TCHAR szName[MAX_COMPUTERNAME_LENGTH+1]= {0,};
 		DWORD dwCchLen = MAX_COMPUTERNAME_LENGTH+1;
 
-#ifdef UNICODE
-		if( FALSE == ::GetComputerNameW(szName, &dwCchLen) )
-#else
-		if( FALSE == ::GetComputerNameA(szName, &dwCchLen) )
-#endif
+		if( FALSE == ::GetComputerName(szName, &dwCchLen) )
 		{
 			Log_Error("GetComputerName calling failure");
 			return TEXT("");
@@ -104,7 +94,6 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-#undef OutputDebugString
 	void OutputDebugString(const TCHAR* pszFormat, ...)
 	{
 		const size_t tBuffSize = 2048;
@@ -113,15 +102,15 @@ namespace core
 		va_start(list, pszFormat);
 		SafeSVPrintf(szBuff, tBuffSize, pszFormat, list);
 		va_end(list);
-#ifdef UNICODE
-		::OutputDebugStringW(szBuff);
-#else
-		::OutputDebugStringA(szBuff);
-#endif
+		::OutputDebugString(szBuff);
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	ETIMEZONE GetTimeZoneInformation(ST_TIME_ZONE_INFORMATION* pTimeZone)
+#ifdef UNICODE
+	ETIMEZONE GetTimeZoneInformationW(ST_TIME_ZONE_INFORMATIONW* pTimeZone)
+#else
+	ETIMEZONE GetTimeZoneInformationA(ST_TIME_ZONE_INFORMATIONA* pTimeZone)
+#endif
 	{
 		::TIME_ZONE_INFORMATION stTemp = { 0, };
 		DWORD dwRet = ::GetTimeZoneInformation(&stTemp);
@@ -145,7 +134,11 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	ETIMEZONE GetTimeZoneInformation(const ST_SYSTEMTIME& stGMT, ST_TIME_ZONE_INFORMATION* pOutTimeZone)
+#ifdef UNICODE
+	ETIMEZONE GetTimeZoneInformationW(const ST_SYSTEMTIME& stGMT, ST_TIME_ZONE_INFORMATION* pOutTimeZone)
+#else
+	ETIMEZONE GetTimeZoneInformationA(const ST_SYSTEMTIME& stGMT, ST_TIME_ZONE_INFORMATION* pOutTimeZone)
+#endif
 	{
 		::TIME_ZONE_INFORMATION stTemp = { 0, };
 		DWORD dwRet = ::GetTimeZoneInformation(&stTemp);

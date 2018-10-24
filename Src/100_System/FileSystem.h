@@ -6,16 +6,40 @@
 #define fopenT						fopenW
 #define GetSystemDirectory			GetSystemDirectoryW
 #define GetCurrentDirectory			GetCurrentDirectoryW
+#define SetCurrentDirectory			SetCurrentDirectoryW
 #define GetTempPath					GetTempPathW
 #define GetFileName					GetFileNameW
 #define GetModuleFileName			GetModuleFileNameW
+#define PathFileExists				PathFileExistsW
+#define IsFileExist					IsFileExistW
+#define IsDirectory					IsDirectoryW
+#define CopyFile					CopyFileW
+#define MoveFile					MoveFileW
+#define DeleteFile					DeleteFileW
+#define RemoveDirectory				RemoveDirectoryW
+#define CreateDirectory				CreateDirectoryW
+#define CreateSymbolicLink			CreateSymbolicLinkW
+#define FindFirstFile				FindFirstFileW
+#define FindNextFile				FindNextFileW
 #else
 #define fopenT						fopenA
 #define GetSystemDirectory			GetSystemDirectoryA
 #define GetCurrentDirectory			GetCurrentDirectoryA
+#define SetCurrentDirectory			SetCurrentDirectoryA
 #define GetTempPath					GetTempPathA
 #define GetFileName					GetFileNameA
 #define GetModuleFileName			GetModuleFileNameA
+#define PathFileExists				PathFileExistsA
+#define IsFileExist					IsFileExistA
+#define IsDirectory					IsDirectoryA
+#define CopyFile					CopyFileA
+#define MoveFile					MoveFileA
+#define DeleteFile					DeleteFileA
+#define RemoveDirectory				RemoveDirectoryA
+#define CreateDirectory				CreateDirectoryA
+#define CreateSymbolicLink			CreateSymbolicLinkA
+#define FindFirstFile				FindFirstFileA
+#define FindNextFile				FindNextFileA
 #endif
 
 namespace core
@@ -27,37 +51,31 @@ namespace core
 	std::wstring	GetSystemDirectoryW(void);
 	std::string		GetTempPathA(void);		// c:\User\Local\Temp  or  /etc/local
 	std::wstring	GetTempPathW(void);
+	
+	bool			PathFileExistsA(const char* pszExistFile);
+	bool			PathFileExistsW(const wchar_t* pszExistFile);
+	bool			IsFileExistA(const char* pszExistFile);
+	bool			IsFileExistW(const wchar_t* pszExistFile);
+	bool			IsDirectoryA(const char* pszPath);
+	bool			IsDirectoryW(const wchar_t* pszPath);
 
-	bool			PathFileExists(const char* pszExistFile);
-	bool			PathFileExists(const wchar_t* pszExistFile);
-	bool			IsFileExist(const char* pszExistFile);
-	bool			IsFileExist(const wchar_t* pszExistFile);
-	bool			IsDirectory(const char* pszPath);
-	bool			IsDirectory(const wchar_t* pszPath);
+	bool			CopyFileA(const char* pszExistFile, const char* pszNewFile, BOOL bFailIfExist = FALSE);
+	bool			CopyFileW(const wchar_t* pszExistFile, const wchar_t* pszNewFile, BOOL bFailIfExist = FALSE);
 
-	#undef			CopyFile
-	bool			CopyFile(const char* pszExistFile, const char* pszNewFile, BOOL bFailIfExist = FALSE);
-	bool			CopyFile(const wchar_t* pszExistFile, const wchar_t* pszNewFile, BOOL bFailIfExist = FALSE);
+	bool			MoveFileA(const char* pszExistFile, const char* pszNewFile);
+	bool			MoveFileW(const wchar_t* pszExistFile, const wchar_t* pszNewFile);
 
-	#undef			MoveFile
-	bool			MoveFile(const char* pszExistFile, const char* pszNewFile);
-	bool			MoveFile(const wchar_t* pszExistFile, const wchar_t* pszNewFile);
+	bool			DeleteFileA(const char* pszFileName);
+	bool			DeleteFileW(const wchar_t* pszFileName);
 
-	#undef			DeleteFile
-	bool			DeleteFile(const char* pszFileName);
-	bool			DeleteFile(const wchar_t* pszFileName);
+	bool			RemoveDirectoryA(const char* pszPath);
+	bool			RemoveDirectoryW(const wchar_t* pszPath);
 
-	#undef			RemoveDirectory
-	bool			RemoveDirectory(const char* pszPath);
-	bool			RemoveDirectory(const wchar_t* pszPath);
+	bool			CreateDirectoryA(const char* pszPath);
+	bool			CreateDirectoryW(const wchar_t* pszPath);
 
-	#undef			CreateDirectory
-	bool			CreateDirectory(const char* pszPath);
-	bool			CreateDirectory(const wchar_t* pszPath);
-
-	#undef			CreateSymbolicLink
-	bool			CreateSymbolicLink(const char* pszSymlinkFilename, const char* pszTargetFilename);
-	bool			CreateSymbolicLink(const wchar_t* pszSymlinkFilename, const wchar_t* pszTargetFilename);
+	bool			CreateSymbolicLinkA(const char* pszSymlinkFilename, const char* pszTargetFilename);
+	bool			CreateSymbolicLinkW(const wchar_t* pszSymlinkFilename, const wchar_t* pszTargetFilename);
 
 	std::string		GetFileNameA(void);			// returns executable file
 	std::wstring	GetFileNameW(void);			// returns executable file
@@ -66,13 +84,12 @@ namespace core
 
 	std::string		GetCurrentDirectoryA(void);
 	std::wstring	GetCurrentDirectoryW(void);
-	bool			SetCurrentDirectory(const char* pszNewPath);
-	bool			SetCurrentDirectory(const wchar_t* pszNewPath);
+	bool			SetCurrentDirectoryA(const char* pszNewPath);
+	bool			SetCurrentDirectoryW(const wchar_t* pszNewPath);
 
-	HANDLE			FindFirstFile(const char* pszFilePattern, ST_FILE_FINDDATAA* pFindData);
-	HANDLE			FindFirstFile(const wchar_t* pszFilePattern, ST_FILE_FINDDATAW* pFindData);
-	bool			FindNextFile(HANDLE hFindFile, ST_FILE_FINDDATAA* pFindData);
-	bool			FindNextFile(HANDLE hFindFile, ST_FILE_FINDDATAW* pFindData);
+	HANDLE			FindFirstFileA(const char* pszFilePattern, ST_FILE_FINDDATAA* pFindData);
+	HANDLE			FindFirstFileW(const wchar_t* pszFilePattern, ST_FILE_FINDDATAW* pFindData);
+	bool			FindNextFileA(HANDLE hFindFile, ST_FILE_FINDDATAA* pFindData);
+	bool			FindNextFileW(HANDLE hFindFile, ST_FILE_FINDDATAW* pFindData);
 	void			FindClose(HANDLE hFindFile);
 }
-

@@ -1,6 +1,10 @@
 #include "stdafx.h"
 #include "Information.h"
+#ifdef __APPLE__
+#include "System_Mac.h"
+#else
 #include "System_Linux.h"
+#endif
 #include "FileSystem.h"
 #include "Log.h"
 #include <sys/stat.h>
@@ -39,21 +43,29 @@ namespace core
 		if( pPasswd )
 			pszUserName = pPasswd->pw_name;
 		std::string strTmpPath = Format("/tmp/%s/", pszUserName);
-		if( !PathFileExists(strTmpPath.c_str()) )
-			CreateDirectory(strTmpPath.c_str());
+		if( !PathFileExistsA(strTmpPath.c_str()) )
+			CreateDirectoryA(strTmpPath.c_str());
 		return TCSFromMBS(strTmpPath);
 	}
 
 	//////////////////////////////////////////////////////////////////////////
 	bool PathFileExists(LPCTSTR pszExistFile)
 	{
-		return 0 == ::access(MBSFromTCS(pszExistFile).c_str(), F_OK);
+		struct stat stStat = { 0, };
+		if( ::stat(MBSFromTCS(pszExistFile).c_str(), &stStat) < 0 )
+			return false;
+
+		return (S_ISDIR(stStat.st_mode) || S_ISREG(stStat.st_mode));
 	}
 
 	//////////////////////////////////////////////////////////////////////////
 	bool IsFileExist(LPCTSTR pszExistFile)
 	{
-		return 0 == ::access(MBSFromTCS(pszExistFile).c_str(), F_OK);
+		struct stat stStat = { 0, };
+		if( ::stat(MBSFromTCS(pszExistFile).c_str(), &stStat) < 0 )
+			return false;
+
+		return (S_ISDIR(stStat.st_mode) || S_ISREG(stStat.st_mode));
 	}
 
 	//////////////////////////////////////////////////////////////////////////
@@ -71,9 +83,9 @@ namespace core
 	{
 		std::string strExistFile = MBSFromTCS(pszExistFile);
 		std::string strNewFile = MBSFromTCS(pszNewFile);
-		FILE* pInFile	= NULL;
-		FILE* pOutFile	= NULL;
-		size_t tReadLen	= 0;
+		FILE* pInFile = NULL;
+		FILE* pOutFile = NULL;
+		size_t tReadLen = 0;
 
 		try
 		{
@@ -82,11 +94,11 @@ namespace core
 				Log_Info(TEXT("The destination file(%s) exists already."), pszNewFile);
 				return false;
 			}
-			
-			if((pInFile  = fopen(strExistFile.c_str(), "rb")) == NULL)
+
+			if( (pInFile = fopen(strExistFile.c_str(), "rb")) == NULL )
 				throw exception_format(TEXT("Opening exist(%s) failed."), pszExistFile);
 
-			if((pOutFile = fopen(strNewFile.c_str(), "wb")) == NULL)
+			if( (pOutFile = fopen(strNewFile.c_str(), "wb")) == NULL )
 				throw exception_format(TEXT("Opening new(%s) failed."), pszNewFile);
 
 			const size_t tBuffSize = 1024;
@@ -100,7 +112,7 @@ namespace core
 			fclose(pInFile);
 			fclose(pOutFile);
 		}
-		catch (std::exception& e)
+		catch( std::exception& e )
 		{
 			Log_Error("%s", e.what());
 
@@ -113,7 +125,7 @@ namespace core
 			DeleteFile(pszNewFile);
 			return false;
 		}
-		
+
 		struct stat stStat = { 0, };
 		if( ::stat(strExistFile.c_str(), &stStat) < 0 )
 			Log_Warn(TEXT("%s mode_t copy has failed."), pszExistFile);
@@ -180,11 +192,19 @@ namespace core
 	//////////////////////////////////////////////////////////////////////////
 	std::tstring GetFileName(void)
 	{
+#ifdef __APPLE__
+		Dl_info stModuleInfo;
+		if( 0 == ::dladdr((void*)GetFileName, &stModuleInfo) )
+			return TEXT("");
+		std::tstring strRet = TCSFromMBS(stModuleInfo.dli_fname);
+		return MakeFormalPath(strRet);
+#else
 		std::string strTmp = Format("/proc/%d/exe", ::getpid());
 		char szPath[1024] = { 0x00, };
 		if( ::readlink(strTmp.c_str(), szPath, 1024) < 0 )
 			Log_Error("readlink(%s) failure, %d", strTmp.c_str(), errno);
 		return TCSFromMBS(szPath);
+#endif
 	}
 
 	//////////////////////////////////////////////////////////////////////////
@@ -231,13 +251,13 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	static inline bool FindFileWorkder(DIR* pDir, std::tstring strRootPath, std::tstring strPattern, ST_FILE_FINDDATA* pFindData)
+	static inline bool FindFileWorkder(DIR* pDir, std::string strRootPath, std::string strPattern, ST_FILE_FINDDATA* pFindData)
 	{
 		struct dirent* pDirEntry = NULL;
-		while((pDirEntry = ::readdir(pDir)) != NULL)
+		while( (pDirEntry = ::readdir(pDir)) != NULL )
 		{
-			std::tstring strFileName = TCSFromMBS(pDirEntry->d_name);
-			std::string strFilePath = MBSFromTCS(strRootPath + TEXT("/") + strFileName);
+			std::string strFileName = pDirEntry->d_name;
+			std::string strFilePath = strRootPath + "/" + strFileName;
 			if( !SafeStrCmpWithWildcard(strFileName.c_str(), strFileName.length(), strPattern.c_str()) )
 				continue;
 
@@ -257,7 +277,7 @@ namespace core
 			pFindData->bIsDirectory = S_ISDIR(stStat.st_mode);
 			pFindData->bIsFile = S_ISREG(stStat.st_mode);
 			pFindData->bIsLink = S_ISLNK(stStat.st_mode);
-			pFindData->strFileName = strFileName;
+			pFindData->strFileName = TCSFromMBS(strFileName);
 			pFindData->uFileSize = stStat.st_size;
 			pFindData->uCreationTime = stStat.st_ctime;
 			pFindData->uLastAccessTime = stStat.st_atime;
@@ -271,13 +291,13 @@ namespace core
 	//////////////////////////////////////////////////////////////////////////
 	HANDLE FindFirstFile(LPCTSTR pszFilePattern, ST_FILE_FINDDATA* pFindData)
 	{
-		std::tstring strCurPath = ExtractDirectory(pszFilePattern);
-		std::tstring strPattern = ExtractFileName(pszFilePattern);
+		std::string strCurPath = ExtractDirectory(MBSFromTCS(pszFilePattern));
+		std::string strPattern = ExtractFileName(MBSFromTCS(pszFilePattern));
 
-		DIR* pDir = ::opendir(MBSFromTCS(strCurPath).c_str());
+		DIR* pDir = ::opendir(strCurPath.c_str());
 		if( NULL == pDir )
 		{
-			Log_Error(TEXT("opendir(%s) operation failure, %s"), strCurPath.c_str(), strerror(errno));
+			Log_Error("opendir(%s) operation failure, %s", strCurPath.c_str(), strerror(errno));
 			return NULL;
 		}
 

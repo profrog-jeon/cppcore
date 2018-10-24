@@ -49,7 +49,7 @@ namespace core
 #endif
 #ifdef __linux__
 		std::string strProcPath = Format("/proc/%d", nPID);
-		if( IsDirectory(strProcPath.c_str()) )
+		if( IsDirectoryA(strProcPath.c_str()) )
 			return true;
 		return false;
 #endif

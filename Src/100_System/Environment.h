@@ -2,19 +2,28 @@
 
 #include "../__Common/Define.h"
 #include "../__Common/Type.h"
+#include "../__Common/ErrorCode.h"
 #include "Struct.h"
 #include <vector>
 
 #ifdef UNICODE
-#define GetUserName					GetUserNameW
-#define GetComputerName				GetComputerNameW
-#define GetErrorString				GetErrorStringW
-#define GenerateGuid				GenerateGuidW
+#define LoadLibrary							LoadLibraryW
+#define GetTimeZoneInformation				GetTimeZoneInformationW
+#define GetTimeZoneInformationByTZFile		GetTimeZoneInformationByTZFileW
+#define GetErrorString						GetErrorStringW
+#define GetUserName							GetUserNameW
+#define GetComputerName						GetComputerNameW
+#define GenerateGuid						GenerateGuidW
+#define OutputDebugString					OutputDebugStringW
 #else
-#define GetUserName					GetUserNameA
-#define GetComputerName				GetComputerNameA
-#define GetErrorString				GetErrorStringA
-#define GenerateGuid				GenerateGuidA
+#define LoadLibrary							LoadLibraryA
+#define GetTimeZoneInformation				GetTimeZoneInformationA
+#define GetTimeZoneInformationByTZFile		GetTimeZoneInformationByTZFileA
+#define GetErrorString						GetErrorStringA
+#define GetUserName							GetUserNameA
+#define GetComputerName						GetComputerNameA
+#define GenerateGuid						GenerateGuidA
+#define OutputDebugString					OutputDebugStringA
 #endif
 
 namespace core
@@ -48,17 +57,17 @@ namespace core
 	typedef void	(*FP_TerminateSignalCallback)(void);
 	ECODE			RegisterTerminateSignalCallback(FP_TerminateSignalCallback fpCallback);
 
-	HANDLE			LoadLibrary(const char* pszPath);
-	HANDLE			LoadLibrary(const wchar_t* pszPath);
+	HANDLE			LoadLibraryA(const char* pszPath);
+	HANDLE			LoadLibraryW(const wchar_t* pszPath);
 	void*			GetProcAddress(HANDLE hModule, const char* pszProcName);
 	bool			FreeLibrary(HANDLE hModule);
-
-	ETIMEZONE		GetTimeZoneInformation(ST_TIME_ZONE_INFORMATIONA* pTimeZone);
-	ETIMEZONE		GetTimeZoneInformation(ST_TIME_ZONE_INFORMATIONW* pTimeZone);
-	ETIMEZONE		GetTimeZoneInformation(const ST_SYSTEMTIME& stGMT, ST_TIME_ZONE_INFORMATIONA* pTimeZone);
-	ETIMEZONE		GetTimeZoneInformation(const ST_SYSTEMTIME& stGMT, ST_TIME_ZONE_INFORMATIONW* pTimeZone);
-	ETIMEZONE		GetTimeZoneInformationByTZFile(ST_TIME_ZONE_INFORMATIONA* pOut, LPCSTR pszFilePath, ST_SYSTEMTIME stUTC);
-	ETIMEZONE		GetTimeZoneInformationByTZFile(ST_TIME_ZONE_INFORMATIONW* pOut, LPCSTR pszFilePath, ST_SYSTEMTIME stUTC);
+	
+	ETIMEZONE		GetTimeZoneInformationA(ST_TIME_ZONE_INFORMATIONA* pTimeZone);
+	ETIMEZONE		GetTimeZoneInformationW(ST_TIME_ZONE_INFORMATIONW* pTimeZone);
+	ETIMEZONE		GetTimeZoneInformationA(const ST_SYSTEMTIME& stGMT, ST_TIME_ZONE_INFORMATIONA* pTimeZone);
+	ETIMEZONE		GetTimeZoneInformationW(const ST_SYSTEMTIME& stGMT, ST_TIME_ZONE_INFORMATIONW* pTimeZone);
+	ETIMEZONE		GetTimeZoneInformationByTZFileA(ST_TIME_ZONE_INFORMATIONA* pOut, LPCSTR pszFilePath, ST_SYSTEMTIME stUTC);
+	ETIMEZONE		GetTimeZoneInformationByTZFileW(ST_TIME_ZONE_INFORMATIONW* pOut, LPCWSTR pszFilePath, ST_SYSTEMTIME stUTC);
 
 	std::string		GetErrorStringA(ECODE nErrCode);
 	std::wstring	GetErrorStringW(ECODE nErrCode);
@@ -69,9 +78,8 @@ namespace core
 	std::string		GenerateGuidA(void);
 	std::wstring	GenerateGuidW(void);
 
-	#undef			OutputDebugString
-	void			OutputDebugString(const char* pszFormat, ...);
-	void			OutputDebugString(const wchar_t* pszFormat, ...);
+	void			OutputDebugStringA(const char* pszFormat, ...);
+	void			OutputDebugStringW(const wchar_t* pszFormat, ...);
 
 	bool			IsBigEndian(void);
 	bool			IsLittleEndian(void);
@@ -146,9 +154,6 @@ namespace core
 
 	UINT64			UnixTimeFrom_NativeAPI(ST_SYSTEMTIME stTime);
 	ST_SYSTEMTIME	SystemTimeFrom_NativeAPI(UINT64 tUnixTime);
-
-	void			ParsingDNSContext(std::string strContext, std::vector<std::tstring>& outDNS);
-	void			ModifyDNSContext(std::string& strContext, const std::vector<std::tstring>& newDNS);
 
 	bool			MakeAbsoluteTZTime(WORD wYear, const ST_SYSTEMTIME& stTZTime, ST_SYSTEMTIME& outAbsTime);
 }

@@ -1,7 +1,11 @@
 #include "stdafx.h"
 #include "KernelObject.h"
 #include "GlobalSemaphoreMap.h"
+#ifdef __linux__
 #include "System_Linux.h"
+#else
+#include "System_Mac.h"
+#endif
 #include "Environment.h"
 #include "FileSystem.h"
 #include "Log.h"
@@ -89,6 +93,17 @@ namespace core
 			if( !IsFileExist(pszFilePath) )
 				throw exception_format(TEXT("file(%s) is not exist."), pszFilePath);
 
+			int nStdInPipe[2] = { 0, 0 };
+			int nStdOutPipe[2] = { 0, 0 };
+			if( pStartupInfo )
+			{
+				if( 0 < pipe(nStdInPipe) || pipe(nStdOutPipe) )
+					Log_Error("pipe() calling failure");
+				pStartupInfo->hStdInput = (HANDLE)(size_t)nStdInPipe[1];
+				pStartupInfo->hStdOutput = (HANDLE)(size_t)nStdOutPipe[0];
+				pStartupInfo->hStdError = (HANDLE)(size_t)nStdOutPipe[0];
+			}
+
 			int nPID = ::fork();
 			if( nPID < 0 )
 				throw exception_format("fork failure, %s", strerror(errno));
@@ -96,6 +111,15 @@ namespace core
 			// child
 			if( 0 == nPID )
 			{
+				if( pStartupInfo && nStdInPipe[1] && nStdOutPipe[1] )
+				{
+					dup2(nStdInPipe[0], STDIN_FILENO);
+					dup2(nStdOutPipe[1], STDOUT_FILENO);
+					dup2(nStdOutPipe[1], STDERR_FILENO);
+					close(nStdInPipe[1]);
+					close(nStdOutPipe[0]);
+					close(nStdOutPipe[1]);
+				}
 				if( pszDirectory )
 				{
 					std::string strDirectoryA = MBSFromTCS(pszDirectory);
@@ -114,8 +138,15 @@ namespace core
 				}
 			}
 
+			// parent
 			Log_Info(TEXT("%s(pid:%d) created."), pszFilePath, nPID);
 			Log_Info("--------------------------");
+
+			if( pStartupInfo && nStdInPipe[0] )
+			{
+				close(nStdInPipe[0]);
+				close(nStdOutPipe[1]);
+			}
 			return (HANDLE)(size_t)nPID;
 		}
 		catch(std::exception& e)
@@ -289,10 +320,18 @@ namespace core
 			}
 			else
 			{
+#ifdef __linux__
 				SemHandle->nType = _ST_SEM_HANDLE::UNNAMED_SEM;
 				SemHandle->pSem = new(std::nothrow) sem_t;
 				if( ::sem_init(SemHandle->pSem, 0, nInitialCount) )
 					throw exception_format("sem_init failure, %d(%s).", errno, strerror(errno));
+#else
+				SemHandle->nType = _ST_SEM_HANDLE::UNNAMED_SEM;
+                SemHandle->Unnamed.Sem = dispatch_semaphore_create(nInitialCount);
+                SemHandle->Unnamed.nFlag = 0;
+				if( NULL == SemHandle->Unnamed.Sem )
+					throw exception_format("dispatch_semaphore_create failure, %d(%s).", errno, strerror(errno));
+#endif
 			}
 		}
 		catch (std::exception& e)
@@ -373,10 +412,18 @@ namespace core
 			}
 			else
 			{
+#ifdef __linux__
 				SemHandle->nType = _ST_SEM_HANDLE::UNNAMED_SEM;
 				SemHandle->pSem = new(std::nothrow) sem_t;
 				if( ::sem_init(SemHandle->pSem, 0, nInitialCount) )
 					throw exception_format("sem_init failure, %d(%s).", errno, strerror(errno));
+#else
+				SemHandle->nType = _ST_SEM_HANDLE::UNNAMED_SEM;
+                SemHandle->Unnamed.Sem = dispatch_semaphore_create(1);
+                SemHandle->Unnamed.nFlag = 0;
+                if( NULL == SemHandle->Unnamed.Sem )
+                    throw exception_format("dispatch_semaphore_create failure, %d(%s).", errno, strerror(errno));
+#endif
 			}
 		}
 		catch (std::exception& e)
@@ -472,6 +519,9 @@ namespace core
 			strCMD = ExtractFileName(Trim(strCMD));
 
 			if( !SafeStrCmpWithWildcard(strCMD.c_str(), strCMD.length(), strNamePattern.c_str()) )
+				continue;
+
+			if( std::tstring::npos != strCMD.find(TEXT(" <defunct>")) )
 				continue;
 
 			size_t tPID = ValueFrom<size_t>(strPID);
