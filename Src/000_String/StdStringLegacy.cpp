@@ -2,11 +2,23 @@
 #include "StdStringLegacy.h"
 #include "POSIX.h"
 #include <stack>
+#include <locale.h>
 
 namespace core
 {
 	//////////////////////////////////////////////////////////////////////////
 	static const size_t g_tCharSize = sizeof(TCHAR);
+    
+    struct __INTERNAL_ST_DEFAULT_LOCALE_FOR_MAC
+    {
+        __INTERNAL_ST_DEFAULT_LOCALE_FOR_MAC(void)
+        {
+            setlocale(LC_ALL, "ko_KR");
+        }
+    };
+#if defined(__APPLE__) && defined(UNICODE)
+    __INTERNAL_ST_DEFAULT_LOCALE_FOR_MAC g_GlobalLocale;
+#endif
 
 	//////////////////////////////////////////////////////////////////////////
 	bool IsWhiteSpace(TCHAR cChar)

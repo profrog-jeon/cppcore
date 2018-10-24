@@ -15,6 +15,12 @@ namespace core
 		{
 			size_t tPreSize = strRet.size();
 			size_t tNewSize = (tPreSize == 0)? 512 : tPreSize * 2;
+            
+            // Exceptional escape: recommended that "do not use WideChar" in MacOSX.
+            //                     It is a problem related with setlocale(LS_ALL, "ko_KR")
+            if( tNewSize > 100 * 1024 * 1024 )
+                return TEXT("This context is exceeded 100(MB).");
+            
 			strRet.resize(tNewSize);
 
 			va_list list;
