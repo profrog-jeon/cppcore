@@ -1,0 +1,38 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DummyProcess", "DummyProcess.vcproj", "{319EEE46-E6B1-4B8E-B68B-1FD568B1B3DC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Debug|x64 = Debug|x64
+		DebugMT|Win32 = DebugMT|Win32
+		DebugMT|x64 = DebugMT|x64
+		Release|Win32 = Release|Win32
+		Release|x64 = Release|x64
+		ReleaseMT|Win32 = ReleaseMT|Win32
+		ReleaseMT|x64 = ReleaseMT|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{319EEE46-E6B1-4B8E-B68B-1FD568B1B3DC}.Debug|Win32.ActiveCfg = Debug|Win32
+		{319EEE46-E6B1-4B8E-B68B-1FD568B1B3DC}.Debug|Win32.Build.0 = Debug|Win32
+		{319EEE46-E6B1-4B8E-B68B-1FD568B1B3DC}.Debug|x64.ActiveCfg = Debug|x64
+		{319EEE46-E6B1-4B8E-B68B-1FD568B1B3DC}.Debug|x64.Build.0 = Debug|x64
+		{319EEE46-E6B1-4B8E-B68B-1FD568B1B3DC}.DebugMT|Win32.ActiveCfg = DebugMT|Win32
+		{319EEE46-E6B1-4B8E-B68B-1FD568B1B3DC}.DebugMT|Win32.Build.0 = DebugMT|Win32
+		{319EEE46-E6B1-4B8E-B68B-1FD568B1B3DC}.DebugMT|x64.ActiveCfg = DebugMT|x64
+		{319EEE46-E6B1-4B8E-B68B-1FD568B1B3DC}.DebugMT|x64.Build.0 = DebugMT|x64
+		{319EEE46-E6B1-4B8E-B68B-1FD568B1B3DC}.Release|Win32.ActiveCfg = Release|Win32
+		{319EEE46-E6B1-4B8E-B68B-1FD568B1B3DC}.Release|Win32.Build.0 = Release|Win32
+		{319EEE46-E6B1-4B8E-B68B-1FD568B1B3DC}.Release|x64.ActiveCfg = Release|x64
+		{319EEE46-E6B1-4B8E-B68B-1FD568B1B3DC}.Release|x64.Build.0 = Release|x64
+		{319EEE46-E6B1-4B8E-B68B-1FD568B1B3DC}.ReleaseMT|Win32.ActiveCfg = ReleaseMT|Win32
+		{319EEE46-E6B1-4B8E-B68B-1FD568B1B3DC}.ReleaseMT|Win32.Build.0 = ReleaseMT|Win32
+		{319EEE46-E6B1-4B8E-B68B-1FD568B1B3DC}.ReleaseMT|x64.ActiveCfg = ReleaseMT|x64
+		{319EEE46-E6B1-4B8E-B68B-1FD568B1B3DC}.ReleaseMT|x64.Build.0 = ReleaseMT|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
