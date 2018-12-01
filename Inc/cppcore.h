@@ -7,3 +7,4 @@
 #include "../Src/001_Encoder/001_Encoder.h"
 #include "../Src/100_System/100_System.h"
 #include "../Src/200_Common/200_Common.h"
+#include "../Src/300_Formatter/300_Formatter.h"

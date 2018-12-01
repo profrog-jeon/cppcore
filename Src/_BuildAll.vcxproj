@@ -162,6 +162,9 @@
     <Lib>
       <AdditionalLibraryDirectories>$(ProjectDir)/../../Lib</AdditionalLibraryDirectories>
     </Lib>
+    <PostBuildEvent>
+      <Command>LIB.exe /LTCG /OUT:../Build/$(Platform)$(Configuration)/cppcore.lib ../Build/$(Platform)$(Configuration)/*.lib</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Midl>
@@ -180,6 +183,9 @@
     <Lib>
       <AdditionalLibraryDirectories>$(ProjectDir)/../../Lib</AdditionalLibraryDirectories>
     </Lib>
+    <PostBuildEvent>
+      <Command>LIB.exe /LTCG /OUT:../Build/$(Platform)$(Configuration)/cppcore.lib ../Build/$(Platform)$(Configuration)/*.lib</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -195,6 +201,9 @@
     <Lib>
       <AdditionalLibraryDirectories>$(ProjectDir)/../../Lib</AdditionalLibraryDirectories>
     </Lib>
+    <PostBuildEvent>
+      <Command>LIB.exe /LTCG /OUT:../Build/$(Platform)$(Configuration)/cppcore.lib ../Build/$(Platform)$(Configuration)/*.lib</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Midl>
@@ -213,6 +222,9 @@
     <Lib>
       <AdditionalLibraryDirectories>$(ProjectDir)/../../Lib</AdditionalLibraryDirectories>
     </Lib>
+    <PostBuildEvent>
+      <Command>LIB.exe /LTCG /OUT:../Build/$(Platform)$(Configuration)/cppcore.lib ../Build/$(Platform)$(Configuration)/*.lib</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugMT|Win32'">
     <ClCompile>
@@ -228,6 +240,9 @@
     <Lib>
       <AdditionalLibraryDirectories>$(ProjectDir)/../../Lib</AdditionalLibraryDirectories>
     </Lib>
+    <PostBuildEvent>
+      <Command>LIB.exe /LTCG /OUT:../Build/$(Platform)$(Configuration)/cppcore.lib ../Build/$(Platform)$(Configuration)/*.lib</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugMT|x64'">
     <Midl>
@@ -246,6 +261,9 @@
     <Lib>
       <AdditionalLibraryDirectories>$(ProjectDir)/../../Lib</AdditionalLibraryDirectories>
     </Lib>
+    <PostBuildEvent>
+      <Command>LIB.exe /LTCG /OUT:../Build/$(Platform)$(Configuration)/cppcore.lib ../Build/$(Platform)$(Configuration)/*.lib</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseMT|Win32'">
     <ClCompile>
@@ -261,6 +279,9 @@
     <Lib>
       <AdditionalLibraryDirectories>$(ProjectDir)/../../Lib</AdditionalLibraryDirectories>
     </Lib>
+    <PostBuildEvent>
+      <Command>LIB.exe /LTCG /OUT:../Build/$(Platform)$(Configuration)/cppcore.lib ../Build/$(Platform)$(Configuration)/*.lib</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseMT|x64'">
     <Midl>
@@ -279,6 +300,9 @@
     <Lib>
       <AdditionalLibraryDirectories>$(ProjectDir)/../../Lib</AdditionalLibraryDirectories>
     </Lib>
+    <PostBuildEvent>
+      <Command>LIB.exe /LTCG /OUT:../Build/$(Platform)$(Configuration)/cppcore.lib ../Build/$(Platform)$(Configuration)/*.lib</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ProjectReference Include="000_String\000_StringA.vcxproj">
