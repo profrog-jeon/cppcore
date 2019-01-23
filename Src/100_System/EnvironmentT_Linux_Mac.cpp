@@ -6,7 +6,6 @@
 #include "System_Mac.h"
 #endif
 #include "Log.h"
-#include "ELFParser.h"
 #include "FileSystem.h"
 #include "TZFileParser.h"
 #include <arpa/inet.h>
