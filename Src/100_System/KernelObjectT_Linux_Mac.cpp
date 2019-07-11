@@ -70,6 +70,14 @@ namespace core
 			Log_Error("open failed, %d(%s)", errno, strerror(errno));
 			return NULL;
 		}
+		
+		// FD zero is reserved for INVALID HANDLE
+		// Change to non-zero
+		if (0 == nFile)
+		{
+			nFile = dup(0);
+			close(0);
+		}
 		return (HANDLE)(size_t)nFile;
 	}
 
