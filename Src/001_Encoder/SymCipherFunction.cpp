@@ -129,7 +129,7 @@ namespace core
 			case SYM_CIPHER_TYPE_AES192:	pAlgorithm = new CSymAES192();	break;
 			case SYM_CIPHER_TYPE_AES256:	pAlgorithm = new CSymAES256();	break;
 			default:
-				throw std::runtime_error("Invalid algorithm type.");
+				throw std::exception("Invalid algorithm type.");
 			}
 
 			switch(stCipherKey.nMode)
@@ -142,7 +142,7 @@ namespace core
 			case SYM_CIPHER_MODE_OFB:	pMode = new CSymModeOFB();	break;
 			case SYM_CIPHER_MODE_CTR:	pMode = new CSymModeCTR();	break;
 			default:
-				throw std::runtime_error("Invalid cipher mode.");
+				throw std::exception("Invalid cipher mode.");
 			}
 
 			if( CIPHER_METHOD_ENCRYPT == nMethod )
@@ -152,7 +152,7 @@ namespace core
 				pCipher = new CSymDecoder(pAlgorithm, pMode);
 
 			if( NULL == pCipher )
-				throw std::runtime_error("Invalid cipher type.");
+				throw std::exception("Invalid cipher type.");
 
 			pCipher->Init(stCipherKey);
 		}
