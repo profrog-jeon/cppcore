@@ -345,14 +345,6 @@
       <Project>{939e852f-90dd-4e1a-ae69-ea7e6369a270}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
-    <ProjectReference Include="400_Server\400_ServerA.vcxproj">
-      <Project>{51b5478c-1b02-41df-9916-baf407470132}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-    <ProjectReference Include="400_Server\400_ServerW.vcxproj">
-      <Project>{68c8c2e6-d1f1-41aa-862f-5997fd33a492}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
     <ProjectReference Include="ConsolFramework\ConsolFrameworkA.vcxproj">
       <Project>{fec6eae2-4c4a-4669-8795-7a8b7ed560ae}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>

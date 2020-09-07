@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Struct.h"
+#include "SocketDefine.h"
 #include "Environment.h"
 #include "Information.h"
 #include "FileSystem.h"
