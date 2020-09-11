@@ -3,6 +3,10 @@
 namespace core
 {
 	size_t CalcUnicodeCchFromASCII(LPCSTR pSrc, size_t tSrcCch, size_t* ptSrcReadCch);
+	bool IsInvalidUTF8(LPCSTR pData, size_t tDataSize);
+	bool IsInvalidUTF8(const std::string& strUTF8);
+	void MaskUnreadableUTF8(char* pSrc, size_t tSrcSize);
+	std::string& MaskUnreadableUTF8(std::string& strUTF8);
 
 	size_t ASCII_TO_ASCII(const char* pSrc, size_t tSrcCch, char* pDest, size_t tDestCch);
 	size_t UTF8_TO_UTF8(const char* pSrc, size_t tSrcCch, char* pDest, size_t tDestCch);

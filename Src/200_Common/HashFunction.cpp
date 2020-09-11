@@ -6,22 +6,23 @@ namespace core
 	//////////////////////////////////////////////////////////////////////////
 	std::string HashFile(E_HASH_TYPE nType, std::tstring strFilePath)
 	{
-		FILE* pFile = fopenT(strFilePath.c_str(), TEXT("rb"));
-		if( NULL == pFile )
+		HANDLE hFile = CreateFile(strFilePath.c_str(), GENERIC_READ_, OPEN_EXISTING_, 0);
+		if( NULL == hFile )
 			return "";
 
 		HANDLE hHash = InitHash(nType);
 
-		while(!::feof(pFile))
+		const DWORD dwBuffSize = 1024;
+		char szBuff[dwBuffSize];
+
+		DWORD dwReadSize = 0;
+		while(ReadFile(hFile, szBuff, dwBuffSize, &dwReadSize) && dwReadSize > 0)
 		{
-			const size_t tBuffSize = 1024;
-			char szBuff[tBuffSize];
-			size_t tRead = fread(szBuff, 1, tBuffSize, pFile);
-			if( tRead )
-				UpdateHash(hHash, (LPCBYTE)szBuff, tRead);
+			UpdateHash(hHash, (LPCBYTE)szBuff, dwReadSize);
 		}
 
-		fclose(pFile);
+		FlushFileBuffers(hFile);
+		CloseFile(hFile);
 		return FinalHash(hHash);
 	}
 
@@ -48,6 +49,7 @@ namespace core
 			while(ReadFile(hFile, szBuff ,tBuffSize, &dwReadSize) && dwReadSize)
 				UpdateHash(hHash, (LPCBYTE)szBuff, dwReadSize);
 
+			FlushFileBuffers(hFile);
 			CloseFile(hFile);
 		}
 		catch (std::exception& e)

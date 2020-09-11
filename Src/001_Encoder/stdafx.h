@@ -10,4 +10,5 @@
 #include "../__Common/Type.h"
 #include "../__Common/Define.h"
 #include "../__Common/ErrorCode.h"
+#include "../000_String/000_String.h"
 #include "Type.h"

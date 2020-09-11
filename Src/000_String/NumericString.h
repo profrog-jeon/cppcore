@@ -4,8 +4,10 @@
 
 #ifdef UNICODE
 #define StringFrom		StringFromW
+#define HexFrom			HexFromW
 #else
 #define StringFrom		StringFromA
+#define HexFrom			HexFromA
 #endif
 
 namespace core
@@ -23,6 +25,7 @@ namespace core
 	std::string StringFromA(double dValue			);
 	std::string StringFromA(bool bValue				);
 	std::string StringFromA(std::string strValue	);
+	std::string StringFromA(std::wstring strValue	);
 
 	std::wstring StringFromW(char nValue			);
 	std::wstring StringFromW(short nValue			);
@@ -36,7 +39,38 @@ namespace core
 	std::wstring StringFromW(float fValue			);
 	std::wstring StringFromW(double dValue			);
 	std::wstring StringFromW(bool bValue			);
+	std::wstring StringFromW(std::string strValue	);
 	std::wstring StringFromW(std::wstring strValue	);
+
+	std::string HexFromA   (char nValue				);
+	std::string HexFromA   (short nValue			);
+	std::string HexFromA   (int32_t nValue			);
+	std::string HexFromA   (int64_t nValue			);
+	std::string HexFromA   (uint32_t nValue			);
+	std::string HexFromA   (BYTE uValue				);
+	std::string HexFromA   (WORD uValue				);
+	std::string HexFromA   (DWORD uValue			);
+	std::string HexFromA   (QWORD uValue			);
+	std::string HexFromA   (float fValue			);
+	std::string HexFromA   (double dValue			);
+	std::string HexFromA   (bool bValue				);
+	std::string HexFromA   (std::string strValue	);
+	std::string HexFromA   (std::wstring strValue	);
+
+	std::wstring HexFromW   (char nValue			);
+	std::wstring HexFromW   (short nValue			);
+	std::wstring HexFromW   (int32_t nValue			);
+	std::wstring HexFromW   (int64_t nValue			);
+	std::wstring HexFromW   (uint32_t nValue		);
+	std::wstring HexFromW   (BYTE uValue			);
+	std::wstring HexFromW   (WORD uValue			);
+	std::wstring HexFromW   (DWORD uValue			);
+	std::wstring HexFromW   (QWORD uValue			);
+	std::wstring HexFromW   (float fValue			);
+	std::wstring HexFromW   (double dValue			);
+	std::wstring HexFromW   (bool bValue			);
+	std::wstring HexFromW   (std::string strValue	);
+	std::wstring HexFromW   (std::wstring strValue	);
 
 	bool		BoolFrom(std::string strNum);
 	char		CharFrom(std::string strNum);
@@ -65,4 +99,7 @@ namespace core
 
 	template<typename T>	T ValueFrom(std::string strNum);
 	template<typename T>	T ValueFrom(std::wstring strNum);
+
+	DWORD		DWORDFromBase(std::string strNum, int nBase);
+	DWORD		DWORDFromBase(std::wstring strNum, int nBase);
 }

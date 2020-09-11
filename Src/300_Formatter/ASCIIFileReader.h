@@ -13,7 +13,7 @@ namespace fmt_internal
 	class CASCIIFileReader : public core::IChannel
 	{
 		std::tstring	m_strFilename	;
-		FILE*			m_pFile			;
+		HANDLE			m_hFile			;
 		std::string		m_strBuffer		;
 		std::tstring	m_strContext	;
 

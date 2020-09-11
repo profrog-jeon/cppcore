@@ -1,16 +1,16 @@
 #pragma once
 
-#include "cryptopp700/randpool.h"
-#include "cryptopp700/rsa.h"
-#include "cryptopp700/hex.h"
-#include "cryptopp700/files.h"
-#include "cryptopp700/filters.h"
-#include "cryptopp700/aes.h"
-#include "cryptopp700/modes.h"
-#include "cryptopp700/default.h"
-#include "cryptopp700/cryptlib.h"
-#include "cryptopp700/elgamal.h"
-#include "cryptopp700/osrng.h"
+#include "../../Inc/randpool.h"
+#include "../../Inc/rsa.h"
+#include "../../Inc/hex.h"
+#include "../../Inc/files.h"
+#include "../../Inc/filters.h"
+#include "../../Inc/aes.h"
+#include "../../Inc/modes.h"
+#include "../../Inc/default.h"
+#include "../../Inc/cryptlib.h"
+#include "../../Inc/elgamal.h"
+#include "../../Inc/osrng.h"
 
 namespace core
 {

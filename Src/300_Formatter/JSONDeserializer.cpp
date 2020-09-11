@@ -18,7 +18,7 @@ namespace fmt_internal
 
 		while(1)
 		{
-			const size_t tTokenSize = 512;
+			const size_t tTokenSize = 1024;
 			TCHAR szBuff[tTokenSize+1] = { 0, };
 			size_t tReadSize = channel.OnAccess(szBuff, sizeof(TCHAR) * tTokenSize);
 			if( 0 == tReadSize )
@@ -267,7 +267,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CJSONDeserializer::Sync(std::tstring& strKey, std::tstring* pString)
+	core::IFormatterT& CJSONDeserializer::Sync(std::tstring& strKey, std::tstring* pValue)
 	{
 		if( !m_GroupingStack.empty() )
 		{
@@ -277,7 +277,7 @@ namespace fmt_internal
 				if( topGroupingInfo.tReadPos < topGroupingInfo.vecChunk.size() )
 				{
 					fmt_internal::sChunk& jsonChunk = topGroupingInfo.vecChunk[topGroupingInfo.tReadPos++];
-					MakeValueStringFromJsonChunk(pString, jsonChunk);
+					MakeValueStringFromJsonChunk(pValue, jsonChunk);
 				}
 				return *this;
 			}
@@ -287,7 +287,7 @@ namespace fmt_internal
 				{
 					fmt_internal::sChunk& jsonChunk = topGroupingInfo.vecChunk[topGroupingInfo.tReadPos++];
 					strKey = jsonChunk.strKey;
-					MakeValueStringFromJsonChunk(pString, jsonChunk);
+					MakeValueStringFromJsonChunk(pValue, jsonChunk);
 				}
 				return *this;
 			}
@@ -301,7 +301,7 @@ namespace fmt_internal
 						continue;
 
 					strKey = jsonChunk.strKey;
-					MakeValueStringFromJsonChunk(pString, jsonChunk);
+					MakeValueStringFromJsonChunk(pValue, jsonChunk);
 					break;
 				}
 				return *this;
@@ -313,10 +313,19 @@ namespace fmt_internal
 				if( topGroupingInfo.vecChunk[i].strKey != strKey )
 					continue;
 
-				MakeValueStringFromJsonChunk(pString, topGroupingInfo.vecChunk[i]);
+				MakeValueStringFromJsonChunk(pValue, topGroupingInfo.vecChunk[i]);
 			}
 		}
 
+		return *this;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	core::IFormatterT & CJSONDeserializer::Sync(std::tstring & strKey, std::ntstring * pValue)
+	{
+		std::tstring strTempString = TCSFromNTCS(*pValue);
+		Sync(strKey, &strTempString);
+		*pValue = NTCSFromTCS(strTempString);
 		return *this;
 	}
 

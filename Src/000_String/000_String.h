@@ -3,8 +3,10 @@
 #include "../__Common/Type.h"
 #include "../__Common/Define.h"
 #include "../__Common/ErrorCode.h"
+#include "../__Common/Compatibility.h"
 
 #include "BOM.h"
+#include "EuckrEncoding.h"
 #include "Exception.h"
 #include "Unicode.h"
 #include "UnicodeEncoding.h"

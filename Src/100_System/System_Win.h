@@ -22,6 +22,12 @@ namespace core
 			m_csSharedMem = InitializeCriticalSection();
 		}
 
+		//~CWindowsInternal(void)
+		//{
+		//	DeleteCriticalSection(m_csSharedMem);
+		//	m_csSharedMem = NULL;
+		//}
+
 	public:
 		void RegisterSharedMemHandle(HANDLE hHandle, DWORD dwFileMapAccess)
 		{

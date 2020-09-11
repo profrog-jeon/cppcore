@@ -45,5 +45,14 @@ namespace core
 	ECODE CopyDirectory(std::wstring strDirFrom, std::wstring strDirTo);
 	ECODE CopyDirectory(const char* pszDirFrom, const char* pszDirTo);
 	ECODE CopyDirectory(const wchar_t* pszDirFrom, const wchar_t* pszDirTo);
+
+	bool CopyFiles(std::string strSourceFiles, std::string strDestDir);
+	bool CopyFiles(std::wstring strSourceFiles, std::wstring strDestDir);
+	bool MoveFileForcely(std::string strSourceFile, std::string strDestFile);
+	bool MoveFileForcely(std::wstring strSourceFile, std::wstring strDestFile);
+	bool MoveFiles(std::string strSourceFiles, std::string strDestDir, bool bOverwrite = true);
+	bool MoveFiles(std::wstring strSourceFiles, std::wstring strDestDir, bool bOverwrite = true);
+	bool ClearDirectory(std::string strDirectory);
+	bool ClearDirectory(std::wstring strDirectory);
 }
 

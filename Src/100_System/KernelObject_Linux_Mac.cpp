@@ -36,6 +36,21 @@ namespace core
 	}	g_InitSignalIGN;
 
 	//////////////////////////////////////////////////////////////////////////
+	bool CreatePipe(HANDLE* pOutReadHandle, HANDLE* pOutWriteHandle)
+	{
+		int nFD[2];
+		int nRet = pipe(nFD);
+		
+		// On success, zero is returned.  On error, -1 is returned, errno is set appropriately, and pipefd is left unchanged.
+		if( nRet != 0 )
+			return false;
+		
+		*pOutReadHandle = (HANDLE)nFD[0];
+		*pOutWriteHandle = (HANDLE)nFD[1];		
+		return true;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
 	bool ReadFile(HANDLE hFile, LPVOID lpBuffer, DWORD nNumberOfBytesToRead, LPDWORD lpNumberOfBytesRead)
 	{
 		int nFile = (int)(size_t)hFile;
@@ -158,6 +173,11 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
+	void FlushFileBuffers(HANDLE hFile)
+	{
+	}
+
+	//////////////////////////////////////////////////////////////////////////
 	void CloseFile(HANDLE hFile)
 	{
 		::close((int)(size_t)hFile);
@@ -231,7 +251,7 @@ namespace core
 	};
 
 	//////////////////////////////////////////////////////////////////////////
-	static void* InternalThreadCaller(void* pContext)
+	static void* ThreadCaller(void* pContext)
 	{
 		_ST_THREAD_CALLER_DATA* pData = (_ST_THREAD_CALLER_DATA*)pContext;
 		int nRet = pData->pfEntry(pData->pContext);
@@ -272,11 +292,11 @@ namespace core
 			if( nRet = pthread_attr_setinheritsched(&thAttr, PTHREAD_EXPLICIT_SCHED) )
 				Log_Error("pthread_attr_setinheritsched(PTHREAD_EXPLICIT_SCHED) ret:%d", nRet);
 
-			if( nRet = pthread_create(&tThread, &thAttr, InternalThreadCaller, pData) )
+			if( nRet = pthread_create(&tThread, &thAttr, ThreadCaller, pData) )
 			{
 				pthread_detach(tThread);
 				Log_Error("pthread_create with priority attr operation failure, ret:%d", nRet);
-				if( nRet = pthread_create(&tThread, NULL, InternalThreadCaller, pData) )
+				if( nRet = pthread_create(&tThread, NULL, ThreadCaller, pData) )
 					throw exception_format("pthread_create operation failure, ret:%d", nRet);
 			}
 
@@ -435,6 +455,7 @@ namespace core
 	EWAIT WaitForProcess(HANDLE hProcess, DWORD dwTimeOut, int* pOutExitCode)
 	{
 		ECODE nRet = EC_SUCCESS;
+		pthread_t tThread = (pthread_t)-1;
 		try
 		{
 			timespec tTimeout;
@@ -446,7 +467,6 @@ namespace core
 			stInfo.nPID = (int)(size_t)hProcess;
 			stInfo.nExitCode = 0;
 
-			pthread_t tThread;
 			if( nRet = ::pthread_create(&tThread, NULL, WaitForProcessWorker, &stInfo) )
 				throw exception_format("pthread_create operation failure, ret:%d", nRet);
 
@@ -466,10 +486,15 @@ namespace core
 
 			if( pOutExitCode )
 				*pOutExitCode = stInfo.nExitCode;
+
+			::pthread_detach(tThread);
 		}
 		catch(std::exception& e)
 		{
 			Log_Error("%s", e.what());
+			if( (pthread_t)-1 != tThread )
+				::pthread_detach(tThread);
+
 			return WAIT_FAILED_;
 		}
 
@@ -482,8 +507,9 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void ClosePipeHandle(HANDLE hProcess)
+	void ClosePipeHandle(HANDLE hPipe)
 	{
+		::close((int)(size_t)hPipe);
 	}
 
 	//////////////////////////////////////////////////////////////////////////

@@ -200,6 +200,15 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
+	core::IFormatterT & CJSONSerializer::Sync(std::tstring & strKey, std::ntstring * pValue)
+	{
+		std::tstring strTempString = TCSFromNTCS(*pValue);
+		Sync(strKey, &strTempString);
+		*pValue = NTCSFromTCS(strTempString);
+		return *this;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
 	template<typename T>
 	inline void JSONSerializerMetaSync(std::vector<sGroupingData>& m_vecObjectCountStack, core::IChannel& m_Channel, std::tstring& strKey, T& refValue)
 	{

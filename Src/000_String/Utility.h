@@ -2,6 +2,9 @@
 
 namespace core
 {
+	bool IsReadableChar(char cChar);
+	bool IsReadableChar(wchar_t cChar);
+
 	std::string& MakeFormalPath(std::string& strInformalPath);
 	std::wstring& MakeFormalPath(std::wstring& strInformalPath);
     std::string MakeFormalPath(LPCSTR pszInformalPath);

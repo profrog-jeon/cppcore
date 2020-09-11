@@ -49,7 +49,8 @@ namespace core
 			strFileNameA = ExtractDirectory(strFileNameA);
 			nFlag |= O_TMPFILE;
 #else
-			Log_Error("This system is not support O_TMPFILE");
+			// NEVER!!! uncomment this log. it evokes recursive calling by Log.
+			//Log_Error("This system is not support O_TMPFILE");
 #endif
 		}
 
@@ -67,12 +68,13 @@ namespace core
 		int nFile = ::open(strFileNameA.c_str(), nFlag, dwMode);
 		if( nFile < 0 )
 		{
-			Log_Error("open failed, %d(%s)", errno, strerror(errno));
+			// NEVER!!! uncomment this log. it evokes recursive calling by Log.
+			//Log_Error("open failed, %d(%s)", errno, strerror(errno));
 			return NULL;
 		}
-		
-		// FD zero is reserved for INVALID HANDLE
-		// Change to non-zero
+
+		// zero is reserved for INVALID HANDLE
+		// Change fd 0 to non-zero
 		if (0 == nFile)
 		{
 			nFile = dup(0);
@@ -101,17 +103,6 @@ namespace core
 			if( !IsFileExist(pszFilePath) )
 				throw exception_format(TEXT("file(%s) is not exist."), pszFilePath);
 
-			int nStdInPipe[2] = { 0, 0 };
-			int nStdOutPipe[2] = { 0, 0 };
-			if( pStartupInfo )
-			{
-				if( 0 < pipe(nStdInPipe) || pipe(nStdOutPipe) )
-					Log_Error("pipe() calling failure");
-				pStartupInfo->hStdInput = (HANDLE)(size_t)nStdInPipe[1];
-				pStartupInfo->hStdOutput = (HANDLE)(size_t)nStdOutPipe[0];
-				pStartupInfo->hStdError = (HANDLE)(size_t)nStdOutPipe[0];
-			}
-
 			int nPID = ::fork();
 			if( nPID < 0 )
 				throw exception_format("fork failure, %s", strerror(errno));
@@ -119,15 +110,16 @@ namespace core
 			// child
 			if( 0 == nPID )
 			{
-				if( pStartupInfo && nStdInPipe[1] && nStdOutPipe[1] )
+				if (pStartupInfo)
 				{
-					dup2(nStdInPipe[0], STDIN_FILENO);
-					dup2(nStdOutPipe[1], STDOUT_FILENO);
-					dup2(nStdOutPipe[1], STDERR_FILENO);
-					close(nStdInPipe[1]);
-					close(nStdOutPipe[0]);
-					close(nStdOutPipe[1]);
+					if (pStartupInfo->hStdInput)
+						dup2((int)(size_t)pStartupInfo->hStdInput, STDIN_FILENO);
+					if (pStartupInfo->hStdOutput)
+						dup2((int)(size_t)pStartupInfo->hStdOutput, STDOUT_FILENO);
+					if (pStartupInfo->hStdError)
+						dup2((int)(size_t)pStartupInfo->hStdError, STDERR_FILENO);
 				}
+
 				if( pszDirectory )
 				{
 					std::string strDirectoryA = MBSFromTCS(pszDirectory);
@@ -150,11 +142,6 @@ namespace core
 			Log_Info(TEXT("%s(pid:%d) created."), pszFilePath, nPID);
 			Log_Info("--------------------------");
 
-			if( pStartupInfo && nStdInPipe[0] )
-			{
-				close(nStdInPipe[0]);
-				close(nStdOutPipe[1]);
-			}
 			return (HANDLE)(size_t)nPID;
 		}
 		catch(std::exception& e)
@@ -202,26 +189,29 @@ namespace core
 	int ShellExecuteByPipe(std::tstring strCmdLine, std::tstring& strOutput)
 	{
 		FILE* pPipe = NULL;
+		signal(SIGPIPE, SIG_IGN);    // sigpipe 무시.
+
 		int nExitCode;
 		try
 		{
 			pPipe = ::popen(MBSFromTCS(strCmdLine).c_str(), "r");
-			if( NULL == pPipe )
+			if (NULL == pPipe)
 				throw exception_format(TEXT("Execute(%s) has failed."), strCmdLine.c_str());
 
 			const size_t tBuffSize = 64;
 			char szBuf[tBuffSize];
-			while(NULL != ::fgets(szBuf, tBuffSize, pPipe))
+			while (NULL != ::fgets(szBuf, tBuffSize, pPipe))
 				strOutput += TCSFromMBS(szBuf);
 
 			nExitCode = ::pclose(pPipe);
-			if( 0 == WIFEXITED(nExitCode) )
+			pPipe = NULL;
+			if (0 == WIFEXITED(nExitCode))
 				throw exception_format(TEXT("%s process is not well finished"), strCmdLine.c_str());
 		}
 		catch (std::exception& e)
 		{
 			Log_Error(TEXT("%s"), e.what());
-			if( pPipe )
+			if (pPipe)
 				::pclose(pPipe);
 			return -1;
 		}
@@ -477,18 +467,6 @@ namespace core
 			return NULL;
 		}
 		return hRet;
-	}
-
-	//////////////////////////////////////////////////////////////////////////
-	HANDLE LoadLibrary(LPCTSTR pszPath)
-	{
-		std::string strPath = MBSFromTCS(pszPath);
-		HANDLE hRet = dlopen(strPath.c_str(), RTLD_NOW);
-		if( hRet )
-			return hRet;
-		Log_Error("dlopen(%s) has failed, %s", strPath.c_str(), dlerror());
-		errno = EINVAL;
-		return NULL;
 	}
 
 	//////////////////////////////////////////////////////////////////////////

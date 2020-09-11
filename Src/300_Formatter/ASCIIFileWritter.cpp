@@ -7,41 +7,45 @@ namespace fmt_internal
 	CASCIIFileWritter::CASCIIFileWritter(std::tstring strFilename)
 		: IChannel()
 		, m_strFilename(strFilename)
-		, m_pFile(NULL)
+		, m_hFile(NULL)
 	{
-		FILE* pFile = NULL;
+		HANDLE hFile = NULL;
 		try
 		{
-			pFile = fopenT(strFilename.c_str(), TEXT("w+b"));
-			if( pFile == NULL )
-				throw exception_format(TEXT("`%s` file cannot be written!"), strFilename.c_str());
+			hFile = CreateFile(strFilename.c_str(), GENERIC_WRITE_, CREATE_ALWAYS_, 0);
+			if (hFile == NULL)
+			{
+				int nErrCode = GetLastError();
+				throw exception_format(TEXT("CreateFile(%s, GENERIC_WRITE_, CREATE_ALWAYS_) failure, %d"), strFilename.c_str(), nErrCode);
+			}
 		}
 		catch(std::exception& e)
 		{
-			if( pFile )
-				::fclose(pFile);
+			if( hFile )
+				CloseFile(hFile);
 
 			Log_Error("%s", e.what());
 			return;
 		}
 
-		m_pFile = pFile;
+		m_hFile = hFile;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
 	CASCIIFileWritter::~CASCIIFileWritter(void)
 	{
-		if( m_pFile )
+		if( m_hFile )
 		{
-			fclose(m_pFile);
-			m_pFile = NULL;
+			FlushFileBuffers(m_hFile);
+			CloseFile(m_hFile);
+			m_hFile = NULL;
 		}
 	}
 
 	//////////////////////////////////////////////////////////////////////////
 	bool CASCIIFileWritter::CheckValidity(std::tstring& refStrErrMsg)
 	{
-		if( m_pFile )
+		if( m_hFile )
 			return true;
 
 		refStrErrMsg = Format(TEXT("File named `%s` open for write failure!"), m_strFilename.c_str());
@@ -51,7 +55,7 @@ namespace fmt_internal
 	//////////////////////////////////////////////////////////////////////////
 	size_t CASCIIFileWritter::OnAccess(void* pData, size_t tDataSize)
 	{
-		if( m_pFile == NULL )
+		if( m_hFile == NULL )
 			return 0;
 
 		std::string strContextEuckr;
@@ -62,7 +66,10 @@ namespace fmt_internal
 			strContextEuckr = ASCIIFromTCS(strContext);
 		}
 		
-		fwrite(strContextEuckr.c_str(), 1, strContextEuckr.size(), m_pFile);
-		return tDataSize;
+		DWORD dwWritten = 0;
+		if (!WriteFile(m_hFile, strContextEuckr.c_str(), strContextEuckr.size(), &dwWritten))
+			return 0;
+
+		return dwWritten;
 	}
 }

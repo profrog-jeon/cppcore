@@ -14,6 +14,8 @@
 #define GetUserName							GetUserNameW
 #define GetComputerName						GetComputerNameW
 #define GenerateGuid						GenerateGuidW
+#define GetFileVersionInfo					GetFileVersionInfoW
+#define GetProductVersionInfo				GetProductVersionInfoW
 #define OutputDebugString					OutputDebugStringW
 #else
 #define LoadLibrary							LoadLibraryA
@@ -23,6 +25,8 @@
 #define GetUserName							GetUserNameA
 #define GetComputerName						GetComputerNameA
 #define GenerateGuid						GenerateGuidA
+#define GetFileVersionInfo					GetFileVersionInfoA
+#define GetProductVersionInfo				GetProductVersionInfoA
 #define OutputDebugString					OutputDebugStringA
 #endif
 
@@ -77,6 +81,11 @@ namespace core
 	std::wstring	GetComputerNameW(void);
 	std::string		GenerateGuidA(void);
 	std::wstring	GenerateGuidW(void);
+
+	ECODE			GetFileVersionInfoA(const char* pszFilePath, ST_VERSIONINFO* pVersionInfo);
+	ECODE			GetFileVersionInfoW(const wchar_t* pszFilePath, ST_VERSIONINFO* pVersionInfo);
+	ECODE			GetProductVersionInfoA(const char* pszFilePath, ST_VERSIONINFO* pVersionInfo);
+	ECODE			GetProductVersionInfoW(const wchar_t* pszFilePath, ST_VERSIONINFO* pVersionInfo);
 
 	void			OutputDebugStringA(const char* pszFormat, ...);
 	void			OutputDebugStringW(const wchar_t* pszFormat, ...);

@@ -2,8 +2,10 @@
 #include "001_Encoder.h"
 #include "SHA1.h"
 #include "sha256.h"
+#include "sha512.h"
 #include "has160.h"
 #include "md5.h"
+#include "ssdeep/fuzzy.h"
 
 namespace core
 {
@@ -16,7 +18,9 @@ namespace core
 			MD5_CTX*		pMd5;
 			CSHA1*			pSha1;
 			_SHA256_CTX*	pSha256;
+			_SHA512_CTX*	pSha512;
 			KISA_HAS160*	pHas160;
+			fuzzy_state*	pSsdeep;
 		}	Context;
 	};
 
@@ -42,10 +46,17 @@ namespace core
 			stHashInfo.Context.pSha256 = new _SHA256_CTX;
 			E_SHA256_Init(stHashInfo.Context.pSha256);
 			break;
-
+		case HASH_TYPE_SHA512:
+			stHashInfo.Context.pSha512 = new _SHA512_CTX;
+			E_SHA512_Init(stHashInfo.Context.pSha512);
+			break;
 		case HASH_TYPE_HAS160:
 			stHashInfo.Context.pHas160 = new KISA_HAS160();
 			KISA_HAS160_init(stHashInfo.Context.pHas160);
+			break;
+
+		case HASH_TYPE_SSDEEP:
+			stHashInfo.Context.pSsdeep = fuzzy_new();
 			break;
 
 		default:
@@ -74,8 +85,15 @@ namespace core
 			E_SHA256_Update(pHashInfo->Context.pSha256, pData, tSize);
 			break;
 
+		case HASH_TYPE_SHA512:
+			E_SHA512_Update(pHashInfo->Context.pSha512, pData, tSize);
+			break;
 		case HASH_TYPE_HAS160:
 			KISA_HAS160_update(pHashInfo->Context.pHas160, pData, (DWORD)tSize);
+			break;
+
+		case HASH_TYPE_SSDEEP:
+			fuzzy_update(pHashInfo->Context.pSsdeep, pData, tSize);
 			break;
 		}
 	}
@@ -123,7 +141,15 @@ namespace core
 				delete pHashInfo->Context.pSha256;
 			}
 			break;
-
+		case HASH_TYPE_SHA512:
+			{
+				unsigned char btSHA512[SHA512_DIGEST_LENGTH] = { 0, };
+				E_SHA512_Final(btSHA512, pHashInfo->Context.pSha512);
+				outBuff.resize(SHA512_DIGEST_LENGTH);
+				memcpy(&outBuff[0], btSHA512, SHA512_DIGEST_LENGTH);
+				delete pHashInfo->Context.pSha512;
+			}
+			break;
 		case HASH_TYPE_HAS160:
 			{
 				unsigned char btHAS160[20] = { 0, };
@@ -131,6 +157,18 @@ namespace core
 				outBuff.resize(20);
 				memcpy(&outBuff[0], btHAS160, 20);
 				delete pHashInfo->Context.pHas160;
+			}
+			break;
+
+		case HASH_TYPE_SSDEEP:
+			{
+				char szSSDEEP[FUZZY_MAX_RESULT+1] = { 0, };
+				fuzzy_digest(pHashInfo->Context.pSsdeep, szSSDEEP, 0);
+				fuzzy_free(pHashInfo->Context.pSsdeep);
+
+				size_t tSSDEEPLen = strlen(szSSDEEP);
+				outBuff.resize(tSSDEEPLen);
+				memcpy(&outBuff[0], szSSDEEP, tSSDEEPLen);
 			}
 			break;
 		}
@@ -171,13 +209,29 @@ namespace core
 				delete pHashInfo->Context.pSha256;
 			}
 			break;
-
+		case HASH_TYPE_SHA512:
+			{
+				unsigned char btSHA512[SHA512_DIGEST_LENGTH] = { 0, };
+				E_SHA512_Final(btSHA512, pHashInfo->Context.pSha512);
+				strOutput = StringFromHexA(btSHA512, SHA512_DIGEST_LENGTH);
+				delete pHashInfo->Context.pSha512;
+			}
+			break;
 		case HASH_TYPE_HAS160:
 			{
 				unsigned char btHAS160[20] = { 0, };
 				KISA_HAS160_final(pHashInfo->Context.pHas160, btHAS160);
 				strOutput = StringFromHexA(btHAS160,sizeof(btHAS160));
 				delete pHashInfo->Context.pHas160;
+			}
+			break;
+
+		case HASH_TYPE_SSDEEP:
+			{
+				char szSSDEEP[FUZZY_MAX_RESULT+1] = { 0, };
+				fuzzy_digest(pHashInfo->Context.pSsdeep, szSSDEEP, 0);
+				fuzzy_free(pHashInfo->Context.pSsdeep);
+				strOutput = szSSDEEP;
 			}
 			break;
 		}

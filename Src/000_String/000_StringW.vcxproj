@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="DebugMT|Win32">
       <Configuration>DebugMT</Configuration>
@@ -38,7 +38,9 @@
     <ProjectGuid>{499998BB-EF1F-4919-8A9F-685B2538F9F1}</ProjectGuid>
     <RootNamespace>My000_StringW</RootNamespace>
     <Keyword>Win32Proj</Keyword>
-    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>7.0</WindowsTargetPlatformVersion>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">Win32</Platform>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseMT|Win32'" Label="Configuration">
@@ -46,44 +48,68 @@
     <PlatformToolset>v141_xp</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
+    <OutputPath>.\</OutputPath>
+    <OutDir>../../Build/$(Platform)$(Configuration)\</OutDir>
+    <IntDir>../../Output/$(Platform)$(Configuration)/$(ProjectName)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugMT|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <PlatformToolset>v141_xp</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
+    <OutputPath>.\</OutputPath>
+    <OutDir>../../Build/$(Platform)$(Configuration)\</OutDir>
+    <IntDir>../../Output/$(Platform)$(Configuration)/$(ProjectName)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <PlatformToolset>v141_xp</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
+    <OutputPath>.\</OutputPath>
+    <OutDir>../../Build/$(Platform)$(Configuration)\</OutDir>
+    <IntDir>../../Output/$(Platform)$(Configuration)/$(ProjectName)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <PlatformToolset>v141_xp</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
+    <OutputPath>.\</OutputPath>
+    <OutDir>../../Build/$(Platform)$(Configuration)\</OutDir>
+    <IntDir>../../Output/$(Platform)$(Configuration)/$(ProjectName)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseMT|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <PlatformToolset>v141_xp</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
+    <OutputPath>.\</OutputPath>
+    <OutDir>../../Build/$(Platform)$(Configuration)\</OutDir>
+    <IntDir>../../Output/$(Platform)$(Configuration)/$(ProjectName)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugMT|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <PlatformToolset>v141_xp</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
+    <OutputPath>.\</OutputPath>
+    <OutDir>../../Build/$(Platform)$(Configuration)\</OutDir>
+    <IntDir>../../Output/$(Platform)$(Configuration)/$(ProjectName)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <PlatformToolset>v141_xp</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
+    <OutputPath>.\</OutputPath>
+    <OutDir>../../Build/$(Platform)$(Configuration)\</OutDir>
+    <IntDir>../../Output/$(Platform)$(Configuration)/$(ProjectName)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <PlatformToolset>v141_xp</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
+    <OutputPath>.\</OutputPath>
+    <OutDir>../../Build/$(Platform)$(Configuration)\</OutDir>
+    <IntDir>../../Output/$(Platform)$(Configuration)/$(ProjectName)\</IntDir>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -116,38 +142,6 @@
   <PropertyGroup>
     <_ProjectFileVersion>15.0.27625.0</_ProjectFileVersion>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>../../Build/$(Platform)$(Configuration)\</OutDir>
-    <IntDir>../../Output/$(Platform)$(Configuration)/$(ProjectName)\</IntDir>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>../../Build/$(Platform)$(Configuration)\</OutDir>
-    <IntDir>../../Output/$(Platform)$(Configuration)/$(ProjectName)\</IntDir>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>../../Build/$(Platform)$(Configuration)\</OutDir>
-    <IntDir>../../Output/$(Platform)$(Configuration)/$(ProjectName)\</IntDir>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>../../Build/$(Platform)$(Configuration)\</OutDir>
-    <IntDir>../../Output/$(Platform)$(Configuration)/$(ProjectName)\</IntDir>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugMT|Win32'">
-    <OutDir>../../Build/$(Platform)$(Configuration)\</OutDir>
-    <IntDir>../../Output/$(Platform)$(Configuration)/$(ProjectName)\</IntDir>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugMT|x64'">
-    <OutDir>../../Build/$(Platform)$(Configuration)\</OutDir>
-    <IntDir>../../Output/$(Platform)$(Configuration)/$(ProjectName)\</IntDir>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseMT|Win32'">
-    <OutDir>../../Build/$(Platform)$(Configuration)\</OutDir>
-    <IntDir>../../Output/$(Platform)$(Configuration)/$(ProjectName)\</IntDir>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseMT|x64'">
-    <OutDir>../../Build/$(Platform)$(Configuration)\</OutDir>
-    <IntDir>../../Output/$(Platform)$(Configuration)/$(ProjectName)\</IntDir>
-  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
@@ -158,7 +152,7 @@
       <PrecompiledHeader />
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <AdditionalIncludeDirectories>$(ProjectDir)/../../Inc</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\..\..\Inc</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -174,7 +168,7 @@
       <PrecompiledHeader />
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>$(ProjectDir)/../../Inc</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\..\..\Inc</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -187,7 +181,7 @@
       <PrecompiledHeader />
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>$(ProjectDir)/../../Inc</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\..\..\Inc</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -203,7 +197,7 @@
       <PrecompiledHeader />
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>$(ProjectDir)/../../Inc</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\..\..\Inc</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugMT|Win32'">
@@ -216,7 +210,7 @@
       <PrecompiledHeader />
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <AdditionalIncludeDirectories>$(ProjectDir)/../../Inc</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\..\..\Inc</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugMT|x64'">
@@ -232,7 +226,7 @@
       <PrecompiledHeader />
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>$(ProjectDir)/../../Inc</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\..\..\Inc</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseMT|Win32'">
@@ -245,7 +239,7 @@
       <PrecompiledHeader />
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>$(ProjectDir)/../../Inc</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\..\..\Inc</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseMT|x64'">
@@ -261,14 +255,20 @@
       <PrecompiledHeader />
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>$(ProjectDir)/../../Inc</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\..\..\Inc</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\cppcore-github\Src\__Common\Define.h" />
+    <ClInclude Include="..\..\..\cppcore-github\Src\__Common\ErrorCode.h" />
+    <ClInclude Include="..\..\..\cppcore-github\Src\__Common\Type.h" />
+    <ClInclude Include="..\__Common\Compatibility.h" />
     <ClInclude Include="..\__Common\Define.h" />
     <ClInclude Include="..\__Common\ErrorCode.h" />
     <ClInclude Include="..\__Common\Type.h" />
+    <ClInclude Include="000_String.h" />
     <ClInclude Include="BOM.h" />
+    <ClInclude Include="EuckrEncoding.h" />
     <ClInclude Include="Exception.h" />
     <ClInclude Include="NumericString.h" />
     <ClInclude Include="POSIX.h" />
@@ -276,7 +276,6 @@
     <ClInclude Include="StdString.h" />
     <ClInclude Include="StdStringLegacy.h" />
     <ClInclude Include="STLString.h" />
-    <ClInclude Include="String.h" />
     <ClInclude Include="Unicode.h" />
     <ClInclude Include="UnicodeEncoding.h" />
     <ClInclude Include="Utility.h" />
@@ -284,6 +283,12 @@
   <ItemGroup>
     <ClCompile Include="BOM.cpp" />
     <ClCompile Include="BOMT.cpp" />
+    <ClCompile Include="EuckrEncoding.cpp">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='ReleaseMT|Win32'">Disabled</Optimization>
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Disabled</Optimization>
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='ReleaseMT|x64'">Disabled</Optimization>
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Disabled</Optimization>
+    </ClCompile>
     <ClCompile Include="Exception.cpp" />
     <ClCompile Include="NumericString.cpp" />
     <ClCompile Include="StdString.cpp" />

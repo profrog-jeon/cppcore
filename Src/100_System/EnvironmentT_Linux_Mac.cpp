@@ -6,6 +6,7 @@
 #include "System_Mac.h"
 #endif
 #include "Log.h"
+#include "ELFParser.h"
 #include "FileSystem.h"
 #include "TZFileParser.h"
 #include <arpa/inet.h>
@@ -122,5 +123,47 @@ namespace core
 			return TIME_ZONE_ID_UNKNOWN_;
 
 		return GetTimeZoneInformationByTZFile(pTimeZone, TEXT("/etc/localtime"), stUTC);
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	HANDLE LoadLibrary(LPCTSTR pszPath)
+	{
+		std::string strPath = MBSFromTCS(pszPath);
+		HANDLE hRet = dlopen(strPath.c_str(), RTLD_NOW|RTLD_LOCAL);
+		if( hRet )
+			return hRet;
+		Log_Error("dlopen(%s) has failed, %s", strPath.c_str(), dlerror());
+		errno = EINVAL;
+		return NULL;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	ECODE GetFileVersionInfo(LPCTSTR pszFilePath, ST_VERSIONINFO* pVersionInfo)
+	{
+#ifdef __linux__
+		CELFParser ELF;
+		ECODE nRet = ELF.Parse(MBSFromTCS(pszFilePath).c_str());
+		if( EC_SUCCESS != nRet )
+			return nRet;
+
+		return ELF.QueryFileVersion(*pVersionInfo);
+#else
+		return EC_SUCCESS;
+#endif
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	ECODE GetProductVersionInfo(LPCTSTR pszFilePath, ST_VERSIONINFO* pVersionInfo)
+	{
+#ifdef __linux__
+		CELFParser ELF;
+		ECODE nRet = ELF.Parse(MBSFromTCS(pszFilePath).c_str());
+		if( EC_SUCCESS != nRet )
+			return nRet;
+
+		return ELF.QueryProductVersion(*pVersionInfo);
+#else
+		return EC_SUCCESS;
+#endif
 	}
 }

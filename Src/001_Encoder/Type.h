@@ -9,10 +9,12 @@ namespace core
 	enum E_HASH_TYPE
 	{
 		HASH_TYPE_NONE				= 0,
-		HASH_TYPE_MD5				= 1,
-		HASH_TYPE_SHA1				= 2,
-		HASH_TYPE_SHA256			= 3,
+		HASH_TYPE_MD5				,
+		HASH_TYPE_SHA1				,
+		HASH_TYPE_SHA256			,
+		HASH_TYPE_SHA512			,
 		HASH_TYPE_HAS160			,
+		HASH_TYPE_SSDEEP			,
 		HASH_TYPE_COUNT				,
 		HASH_TYPE_UNDEFINED			,
 	};

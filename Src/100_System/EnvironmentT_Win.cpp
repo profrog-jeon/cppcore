@@ -94,6 +94,90 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
+	ECODE GetFileVersionInfo(LPCTSTR pszFilePath, ST_VERSIONINFO* pVersionInfo)
+	{
+		ECODE nRet = EC_SUCCESS;
+		try
+		{
+			DWORD dwHandle = 0;
+			DWORD dwLen = ::GetFileVersionInfoSize(pszFilePath, &dwHandle); 
+
+			nRet = ERROR_RESOURCE_FAILED;
+			if( 0 == dwLen )
+				throw exception_format("GetFileVersionInfoSize calling failure");
+
+			std::vector<BYTE> vecBuffer;
+			vecBuffer.resize(dwLen);
+
+			nRet = ERROR_NOT_ENOUGH_MEMORY;
+			if( vecBuffer.size() != dwLen )
+				throw exception_format("Memory alloc failure, size:%u", dwLen);
+
+			nRet = ERROR_RESOURCE_FAILED;
+			if( !::GetFileVersionInfo(pszFilePath, dwHandle, dwLen, &vecBuffer[0]) ) 
+				throw exception_format("GetFileVersionInfo calling failure");
+
+			nRet = ERROR_RESOURCE_FAILED;
+			VS_FIXEDFILEINFO* pFileInfo = NULL;
+			if( FALSE == ::VerQueryValue(&vecBuffer[0], TEXT("\\"), (LPVOID *)&pFileInfo, NULL) )
+				throw exception_format("VerQueryValue calling failure");
+
+			pVersionInfo->dwMajor = HIWORD(pFileInfo->dwFileVersionMS);
+			pVersionInfo->dwMinor = LOWORD(pFileInfo->dwFileVersionMS);
+			pVersionInfo->dwPatch = HIWORD(pFileInfo->dwFileVersionLS);
+			pVersionInfo->dwBuild = LOWORD(pFileInfo->dwFileVersionLS);
+			return EC_SUCCESS;
+		}
+		catch (std::exception& e)
+		{
+			//Log_Error("%s", e.what());
+			return nRet;
+		}
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	ECODE GetProductVersionInfo(LPCTSTR pszFilePath, ST_VERSIONINFO* pVersionInfo)
+	{
+		ECODE nRet = EC_SUCCESS;
+		try
+		{
+			DWORD dwHandle = 0;
+			DWORD dwLen = ::GetFileVersionInfoSize(pszFilePath, &dwHandle);
+
+			nRet = ERROR_RESOURCE_FAILED;
+			if (0 == dwLen)
+				throw exception_format("GetFileVersionInfoSize calling failure");
+
+			std::vector<BYTE> vecBuffer;
+			vecBuffer.resize(dwLen);
+
+			nRet = ERROR_NOT_ENOUGH_MEMORY;
+			if (vecBuffer.size() != dwLen)
+				throw exception_format("Memory alloc failure, size:%u", dwLen);
+
+			nRet = EC_INVALID_FILE;
+			if (!::GetFileVersionInfo(pszFilePath, dwHandle, dwLen, &vecBuffer[0]))
+				throw exception_format("GetFileVersionInfo calling failure");
+
+			nRet = EC_INVALID_FILE;
+			VS_FIXEDFILEINFO* pFileInfo = NULL;
+			if (FALSE == ::VerQueryValue(&vecBuffer[0], TEXT("\\"), (LPVOID *)&pFileInfo, NULL))
+				throw exception_format("VerQueryValue calling failure");
+
+			pVersionInfo->dwMajor = HIWORD(pFileInfo->dwProductVersionMS);
+			pVersionInfo->dwMinor = LOWORD(pFileInfo->dwProductVersionMS);
+			pVersionInfo->dwPatch = HIWORD(pFileInfo->dwProductVersionLS);
+			pVersionInfo->dwBuild = LOWORD(pFileInfo->dwProductVersionLS);
+			return EC_SUCCESS;
+		}
+		catch (std::exception& e)
+		{
+			//Log_Error("%s", e.what());
+			return nRet;
+		}
+	}
+
+	//////////////////////////////////////////////////////////////////////////
 	void OutputDebugString(const TCHAR* pszFormat, ...)
 	{
 		const size_t tBuffSize = 2048;

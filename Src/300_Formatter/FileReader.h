@@ -15,7 +15,7 @@ namespace fmt_internal
 	private:
 		E_BOM_TYPE		m_nBomType		;
 		std::tstring	m_strFilename	;
-		FILE*			m_pFile			;
+		HANDLE			m_hFile			;
 
 	public:
 						CFileReader(std::tstring strFilename);

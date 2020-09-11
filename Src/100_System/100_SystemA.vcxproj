@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="DebugMT|Win32">
@@ -38,7 +38,7 @@
     <ProjectGuid>{8F091DE6-052A-4BB1-BC5E-B36D5313A870}</ProjectGuid>
     <RootNamespace>My100_SystemA</RootNamespace>
     <Keyword>Win32Proj</Keyword>
-    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>7.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseMT|Win32'" Label="Configuration">
@@ -158,7 +158,7 @@
       <PrecompiledHeader />
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <AdditionalIncludeDirectories>$(ProjectDir)/../../Inc</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\..\..\Inc</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -174,7 +174,7 @@
       <PrecompiledHeader />
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>$(ProjectDir)/../../Inc</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\..\..\Inc</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -187,7 +187,7 @@
       <PrecompiledHeader />
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>$(ProjectDir)/../../Inc</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\..\..\Inc</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -203,7 +203,7 @@
       <PrecompiledHeader />
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>$(ProjectDir)/../../Inc</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\..\..\Inc</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugMT|Win32'">
@@ -216,7 +216,7 @@
       <PrecompiledHeader />
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <AdditionalIncludeDirectories>$(ProjectDir)/../../Inc</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\..\..\Inc</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugMT|x64'">
@@ -232,7 +232,7 @@
       <PrecompiledHeader />
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>$(ProjectDir)/../../Inc</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\..\..\Inc</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseMT|Win32'">
@@ -245,7 +245,7 @@
       <PrecompiledHeader />
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>$(ProjectDir)/../../Inc</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\..\..\Inc</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseMT|x64'">
@@ -261,29 +261,14 @@
       <PrecompiledHeader />
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>$(ProjectDir)/../../Inc</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\..\..\Inc</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ProjectReference Include="..\000_String\000_StringA.vcxproj">
-      <Project>{be946c73-6f61-42ef-9541-0c85a20223ca}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-    <ProjectReference Include="..\000_String\000_StringW.vcxproj">
-      <Project>{499998bb-ef1f-4919-8a9f-685b2538f9f1}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-    <ProjectReference Include="..\001_Encoder\001_EncoderA.vcxproj">
-      <Project>{d7661b3a-d5d6-410e-ac94-70460fe10ef0}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-    <ProjectReference Include="..\001_Encoder\001_EncoderW.vcxproj">
-      <Project>{debcab2a-0359-49f0-a2fb-646aec0cf40d}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="100_System.h" />
+    <ClInclude Include="..\__Common\Define.h" />
+    <ClInclude Include="..\__Common\ErrorCode.h" />
+    <ClInclude Include="..\__Common\Type.h" />
+    <ClInclude Include="ELFParser.h" />
     <ClInclude Include="Environment.h" />
     <ClInclude Include="FileSystem.h" />
     <ClInclude Include="GlobalSemaphoreMap.h" />
@@ -291,17 +276,20 @@
     <ClInclude Include="InterlockedOperation.h" />
     <ClInclude Include="KernelObject.h" />
     <ClInclude Include="Log.h" />
-    <ClInclude Include="LogInstance.h" />
-    <ClInclude Include="SharedPtr.h" />
+    <ClInclude Include="LogEx.h" />
+    <ClInclude Include="LogWorker.h" />
+    <ClInclude Include="MemoryLeakFinder.h" />
+    <ClInclude Include="Network.h" />
     <ClInclude Include="Socket.h" />
     <ClInclude Include="SocketDefine.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Struct.h" />
-    <ClInclude Include="System.h" />
+    <ClInclude Include="100_System.h" />
     <ClInclude Include="System_Win.h" />
     <ClInclude Include="TZFileParser.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ELFParser.cpp" />
     <ClCompile Include="Environment.cpp" />
     <ClCompile Include="EnvironmentT.cpp" />
     <ClCompile Include="EnvironmentT_Win.cpp" />
@@ -314,7 +302,11 @@
     <ClCompile Include="KernelObjectT_Win.cpp" />
     <ClCompile Include="KernelObject_Win.cpp" />
     <ClCompile Include="Log.cpp" />
-    <ClCompile Include="LogInstance.cpp" />
+    <ClCompile Include="LogEx.cpp" />
+    <ClCompile Include="LogWorker.cpp" />
+    <ClCompile Include="MemoryLeakFinder_Win.cpp" />
+    <ClCompile Include="NetworkT.cpp" />
+    <ClCompile Include="NetworkT_Win.cpp" />
     <ClCompile Include="SocketDefine.cpp" />
     <ClCompile Include="SocketDefine_Win.cpp" />
     <ClCompile Include="Socket_Win.cpp" />

@@ -37,22 +37,22 @@ namespace fmt_internal
 
 		// Finding tokens to be changed JSON specialized charactor.
 		size_t i;
-		for(i=0; i<strValue.length(); i++)
+		for (i = 0; i < g_tSpecialCharCount; i++)
 		{
-			size_t j;
-			for(j=0; j<g_tSpecialCharCount; j++)
-			{
-				size_t tSpecialCharLeng = SafeStrLen(g_pszOrgSpecialCharArr[j], 3);
-				if( strValue.substr(i, tSpecialCharLeng) != g_pszOrgSpecialCharArr[j] )
-					continue;
+			size_t tPos = 0;
+			size_t tIndex = strValue.find(g_pszOrgSpecialCharArr[i], 0);
 
+			while (std::tstring::npos != tIndex)
+			{
 				sSpecialCharPosInfo info;
-				info.nIndex = (int)j;
-				info.tPos = i;
-				info.tLen = tSpecialCharLeng;
-				info.tEndPos = i + tSpecialCharLeng;
-				mapSpecialCharPos.insert(std::make_pair(i, info));
-				break;
+				info.nIndex = (int)i;
+				info.tPos = tIndex;
+				info.tLen = 1;
+				info.tEndPos = info.tPos + info.tLen;
+				mapSpecialCharPos.insert(std::make_pair(tIndex, info));
+
+				tPos = tIndex + 1;
+				tIndex = strValue.find(g_pszOrgSpecialCharArr[i], tPos);
 			}
 		}
 
@@ -233,6 +233,7 @@ namespace fmt_internal
 
 			// Reserve a quotation ATOMIC
 			int nPos = 0;
+			size_t tLastSepIndex = 0;
 			while(true)
 			{
 				int nStartIndex = FindFirstOfQuotation(strContext, nPos);
@@ -242,13 +243,13 @@ namespace fmt_internal
 				if( nEndIndex < 0 )
 					break;
 
-				for(i=0; i<vecSeperatorPos.size(); i++)
+				for(tLastSepIndex; tLastSepIndex<vecSeperatorPos.size(); tLastSepIndex++)
 				{
-					if( vecSeperatorPos[i] <= nStartIndex )
+					if( vecSeperatorPos[tLastSepIndex] <= nStartIndex )
 						continue;
-					if( vecSeperatorPos[i] > nEndIndex )
-						continue;
-					vecSeperatorPos[i] = -1;
+					if( vecSeperatorPos[tLastSepIndex] > nEndIndex )
+						break;
+					vecSeperatorPos[tLastSepIndex] = -1;
 				}
 				nPos = nEndIndex+1;
 			}

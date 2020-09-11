@@ -1,8 +1,9 @@
 #pragma once
 
 #include "CriticalSection.h"
+#include "DuplicatedProcChecker.h"
 #include "Mutex.h"
-#include "Log.h"
+#include "PEParser.h"
 #include "SafeQueue.h"
 #include "SyncQueue.h"
 #include "LockFreeQueue.h"
@@ -12,7 +13,12 @@
 #include "FileUtility.h"
 #include "Utility.h"
 #include "HashFunction.h"
+#include "INIParser.h"
+#include "INIParserFunc.h"
 #include "Semaphore.h"
 #include "TextFileReader.h"
 #include "TextFileWriter.h"
 #include "Thread.h"
+#include "ThreadPool.h"
+#include "zip.h"
+#include "unzip.h"

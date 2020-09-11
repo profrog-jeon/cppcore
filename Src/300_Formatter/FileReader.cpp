@@ -8,42 +8,45 @@ namespace fmt_internal
 		: IChannel()
 		, m_nBomType(BOM_UNDEFINED)
 		, m_strFilename(strFilename)
-		, m_pFile(NULL)
+		, m_hFile(NULL)
 	{
-		FILE* pFile = NULL;
+		HANDLE hFile = NULL;
 		try
 		{
-			pFile = fopenT(strFilename.c_str(), TEXT("rb"));
-			if( pFile == NULL )
-				throw exception_format(TEXT("`%s` cannot be opened!!"), strFilename.c_str());
+			hFile = CreateFile(strFilename.c_str(), GENERIC_READ_, OPEN_EXISTING_, 0);
+			if (hFile == NULL)
+			{
+				int nErrCode = GetLastError();
+				throw exception_format(TEXT("CreateFile(%s, GENERIC_READ_, OPEN_EXISTING_) failure, %d"), strFilename.c_str(), nErrCode);
+			}
 
-			m_nBomType = ReadBOM(pFile);
+			m_nBomType = ReadBOM(hFile);
 		}
 		catch(std::exception& e)
 		{
-			if( pFile )
-				fclose(pFile);
+			if( hFile )
+				CloseFile(hFile);
 			Log_Error("%s", e.what());
 			return;
 		}
 
-		m_pFile = pFile;
+		m_hFile = hFile;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
 	CFileReader::~CFileReader(void)
 	{
-		if( m_pFile )
+		if( m_hFile )
 		{
-			fclose(m_pFile);
-			m_pFile = NULL;
+			CloseFile(m_hFile);
+			m_hFile = NULL;
 		}
 	}
 
 	//////////////////////////////////////////////////////////////////////////
 	bool CFileReader::CheckValidity(std::tstring& refStrErrMsg)
 	{
-		if( m_pFile == NULL )
+		if( m_hFile == NULL )
 		{
 			refStrErrMsg = Format(TEXT("Read failure `%s`"), m_strFilename.c_str());
 			return false;
@@ -54,11 +57,14 @@ namespace fmt_internal
 	//////////////////////////////////////////////////////////////////////////
 	size_t CFileReader::OnAccess(void* pData, size_t tDataSize)
 	{
-		if( m_pFile == NULL )
+		if( m_hFile == NULL )
 			return 0;
 
-		size_t tRead = fread(pData, 1, tDataSize, m_pFile);
-		return tRead;
+		DWORD dwReadSize = 0;
+		if (!ReadFile(m_hFile, pData, tDataSize, &dwReadSize))
+			return 0;
+
+		return dwReadSize;
 	}
 }
 

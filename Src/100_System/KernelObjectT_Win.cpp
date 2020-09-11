@@ -22,7 +22,8 @@ namespace core
 		HANDLE hFile = ::CreateFile(lpFileName, dwDesiredAccess, FILE_SHARE_WRITE|FILE_SHARE_READ, NULL, (DWORD)nDisposition, dwFlagsAndAttributes, hTemplateFile);
 		if( INVALID_HANDLE_VALUE == hFile )
 		{
-			Log_Error(TEXT("CreateFile(%s) has failed"), lpFileName);
+			// NEVER!!! uncomment this log. it invokes recursive calling by Log.
+			//Log_Error(TEXT("CreateFile(%s) has failed"), lpFileName);
 			return NULL;
 		}
 		return hFile;
@@ -155,6 +156,10 @@ namespace core
 		STARTUPINFO stStartupInfo = {0,};
 		stStartupInfo.cb = sizeof(stStartupInfo);
 
+		// This option is reserved for future, currently DO NOT apply for GUI-programs
+		//stStartupInfo.dwFlags = STARTF_USESHOWWINDOW;
+		//stStartupInfo.wShowWindow = SW_HIDE;
+
 		try
 		{
 			Log_Info("--------------------------");
@@ -171,36 +176,13 @@ namespace core
 			std::tstring strCmdLine = std::tstring(pszFilePath) + TEXT(" ") + strParam;
 			Log_Info(TEXT("Try to call CreateProcess. CmdLine:%s"), strCmdLine.c_str());
 
-			// Set the bInheritHandle flag so pipe handles are inherited. 
-			SECURITY_ATTRIBUTES saAttr;
-			saAttr.nLength = sizeof(SECURITY_ATTRIBUTES);
-			saAttr.bInheritHandle = TRUE;
-			saAttr.lpSecurityDescriptor = NULL;
-
-			// Create a pipe for the child process's STDOUT. 
-			HANDLE hStdOutPair[2] = { 0, };
-			if( !::CreatePipe(&hStdOutPair[0], &hStdOutPair[1], &saAttr, 0) )
-				throw exception_format(TEXT("StdoutRd CreatePipe"));
-
-			// Ensure the read handle to the pipe for STDOUT is not inherited.
-			if( !::SetHandleInformation(hStdOutPair[0], HANDLE_FLAG_INHERIT, 0) )
-				throw exception_format(TEXT("Stdout SetHandleInformation"));
-
-			// Create a pipe for the child process's STDIN. 
-			HANDLE hStdInPair[2] = { 0, };
-			if( !::CreatePipe(&hStdInPair[0], &hStdInPair[1], &saAttr, 0) )
-				throw exception_format(TEXT("Stdin CreatePipe"));
-
-			// Ensure the write handle to the pipe for STDIN is not inherited. 
-			if( !::SetHandleInformation(hStdInPair[1], HANDLE_FLAG_INHERIT, 0) )
-				throw exception_format(TEXT("Stdin SetHandleInformation"));
-
-			if( pStartupInfo )
+			if (pStartupInfo && 
+				(pStartupInfo->hStdInput || pStartupInfo->hStdOutput || pStartupInfo->hStdError) )
 			{
 				stStartupInfo.dwFlags |= STARTF_USESTDHANDLES;
-				stStartupInfo.hStdInput = hStdInPair[0];
-				stStartupInfo.hStdOutput = hStdOutPair[1];
-				stStartupInfo.hStdError = hStdOutPair[1];
+				stStartupInfo.hStdInput = pStartupInfo->hStdInput;
+				stStartupInfo.hStdOutput = pStartupInfo->hStdOutput;
+				stStartupInfo.hStdError = pStartupInfo->hStdError;
 			}
 
 #ifdef UNICODE
@@ -211,20 +193,6 @@ namespace core
 				throw exception_format(TEXT("CreateProcess calling failure, CmdLine:%s"), strCmdLine.c_str());
 
 			Log_Info("Finished calling CreateProcess.");
-
-			if( pStartupInfo )
-			{
-				pStartupInfo->hStdInput = hStdInPair[1];
-				pStartupInfo->hStdOutput = hStdOutPair[0];
-				pStartupInfo->hStdError = hStdOutPair[0];
-			}
-			else
-			{
-				::CloseHandle(hStdInPair[0]);
-				::CloseHandle(hStdInPair[1]);
-				::CloseHandle(hStdOutPair[0]);
-				::CloseHandle(hStdOutPair[1]);
-			}
 
 			if( pProcessInfo )
 			{
@@ -238,16 +206,6 @@ namespace core
 		{
 			Log_Error("%s", e.what());
 			Log_Info("--------------------------");
-			if( stProcessInfo.hProcess )
-				::CloseHandle(stProcessInfo.hProcess);
-			if( stProcessInfo.hThread )
-				::CloseHandle(stProcessInfo.hThread);
-			if( stStartupInfo.hStdError )
-				::CloseHandle(stStartupInfo.hStdError);
-			if( stStartupInfo.hStdInput )
-				::CloseHandle(stStartupInfo.hStdInput);
-			if( stStartupInfo.hStdOutput )
-				::CloseHandle(stStartupInfo.hStdOutput);
 			return NULL;
 		}
 		Log_Info("--------------------------");
@@ -269,7 +227,8 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	int ShellExecuteByPipe(std::tstring strCmdLine, std::tstring& strOutput)
+	// Deprecated, CANNOT hide console window
+	static int ShellExecuteByPipe_Old(std::tstring strCmdLine, std::tstring& strOutput)
 	{
 		FILE* pPipe = NULL;
 		try
@@ -292,6 +251,98 @@ namespace core
 		}
 
 		return ::_pclose(pPipe);
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	static void ReadContextFromPipe(HANDLE hStdOut, std::tstring& strOutput)
+	{
+		DWORD dwAvail = 0;
+		while (::PeekNamedPipe(hStdOut, NULL, 0, NULL, &dwAvail, NULL))
+		{
+			if (0 == dwAvail)
+				return;
+
+			const DWORD dwBuffSize = 32;
+			char szBuffer[dwBuffSize + 1];
+
+			DWORD dwReadSize = 0;
+			ReadFile(hStdOut, szBuffer, MIN(dwAvail, dwBuffSize), &dwReadSize);
+			szBuffer[dwReadSize] = 0;
+			strOutput += TCSFromMBS(szBuffer);
+		}
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	static ECODE ShellExecuteByPipe_New(std::tstring strCmdLine, std::tstring& strOutput, DWORD& dwExitCode)
+	{
+		PROCESS_INFORMATION stProcessInfo = { 0, };
+		HANDLE hStdOutPair[2] = { 0, };
+		try
+		{
+			// Set the bInheritHandle flag so pipe handles are inherited. 
+			SECURITY_ATTRIBUTES saAttr;
+			saAttr.nLength = sizeof(SECURITY_ATTRIBUTES);
+			saAttr.bInheritHandle = TRUE;
+			saAttr.lpSecurityDescriptor = NULL;
+
+			// Create a pipe for the child process's STDOUT. 			
+			if (!::CreatePipe(&hStdOutPair[0], &hStdOutPair[1], &saAttr, 0))
+				throw exception_format(TEXT("hStdOutPair CreatePipe"));
+
+			// Ensure the read handle to the pipe for STDOUT is not inherited.
+			if (!::SetHandleInformation(hStdOutPair[0], HANDLE_FLAG_INHERIT, 0))
+				throw exception_format(TEXT("Stdout SetHandleInformation"));
+
+			STARTUPINFO stStartupInfo = { 0, };
+			stStartupInfo.cb = sizeof(stStartupInfo);
+			stStartupInfo.dwFlags = STARTF_USESHOWWINDOW;
+			stStartupInfo.wShowWindow = SW_HIDE;
+			stStartupInfo.dwFlags |= STARTF_USESTDHANDLES;
+			stStartupInfo.hStdInput = NULL;
+			stStartupInfo.hStdOutput = hStdOutPair[1];
+			stStartupInfo.hStdError = hStdOutPair[1];
+
+			if (!::CreateProcess(NULL, (LPTSTR)strCmdLine.c_str(), NULL, NULL, TRUE, 0, NULL, NULL, &stStartupInfo, &stProcessInfo))
+				throw exception_format(TEXT("Failed to CreateProcess(%s)"), strCmdLine.c_str());
+
+			while (WAIT_TIMEOUT == ::WaitForSingleObject(stProcessInfo.hProcess, 100))
+				ReadContextFromPipe(hStdOutPair[0], strOutput);
+			ReadContextFromPipe(hStdOutPair[0], strOutput);
+
+			if (!GetExitCodeProcess(stProcessInfo.hProcess, &dwExitCode))
+				Log_Warn(TEXT("GetExitCodeProcess failure."));
+
+			CloseProcessHandle(stProcessInfo.hProcess);
+			CloseProcessHandle(stProcessInfo.hThread);
+			ClosePipeHandle(hStdOutPair[0]);
+			ClosePipeHandle(hStdOutPair[1]);
+		}
+		catch (std::exception & e)
+		{
+			Log_Error("%s", e.what());
+			if(stProcessInfo.hProcess)
+				CloseProcessHandle(stProcessInfo.hProcess);
+			if (stProcessInfo.hThread)
+				CloseProcessHandle(stProcessInfo.hThread);
+			if(hStdOutPair[0])
+				ClosePipeHandle(hStdOutPair[0]);
+			if (hStdOutPair[1])
+				ClosePipeHandle(hStdOutPair[1]);
+			return EC_INTERNAL_ERROR;
+		}
+
+		return EC_SUCCESS;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	int ShellExecuteByPipe(std::tstring strCmdLine, std::tstring& strOutput)
+	{
+		DWORD dwExitCode = 0;
+		ECODE nRet = ShellExecuteByPipe_New(strCmdLine, strOutput, dwExitCode);
+		if (EC_SUCCESS != nRet)
+			return ShellExecuteByPipe_Old(strCmdLine, strOutput);
+
+		return (int)dwExitCode;
 	}
 
 	//////////////////////////////////////////////////////////////////////////

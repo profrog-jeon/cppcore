@@ -14,7 +14,7 @@ namespace fmt_internal
 	{
 		E_BOM_TYPE		m_nBomType		;
 		std::tstring	m_strFilename	;
-		FILE*			m_pFile			;
+		HANDLE			m_hFile			;
 		std::string		m_strBuffer		;
 		std::tstring	m_strContext	;
 

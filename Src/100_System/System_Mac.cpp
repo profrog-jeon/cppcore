@@ -302,10 +302,12 @@ int sem_timedwait(sem_t *sem, const struct timespec *abs_timeout)
 	{
 		::pthread_cancel(tWorkerThread);
 		::pthread_join(tWorkerThread, NULL);
+		::pthread_detach(tWorkerThread);
 		errno = ETIMEDOUT;
 		return -1;
 	}
 
+	::pthread_detach(tWorkerThread);
 	return stData.nRet;
 }
 
@@ -371,11 +373,14 @@ int pthread_timedjoin_np(pthread_t thread, void **retval, const struct timespec 
 	{
 		::pthread_cancel(tWorkerThread);
 		::pthread_join(tWorkerThread, NULL);
+		::pthread_detach(tWorkerThread);
 		return nRet;
 	}
 
 	if( retval )
 		*retval = stData.pThreadExit;
+	
+	::pthread_detach(tWorkerThread);
 	return stData.nRet;
 }
 

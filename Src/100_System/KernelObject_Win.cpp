@@ -9,6 +9,16 @@
 namespace core
 {
 	//////////////////////////////////////////////////////////////////////////
+	bool CreatePipe(HANDLE* pOutReadHandle, HANDLE* pOutWriteHandle)
+	{
+		SECURITY_ATTRIBUTES saAttr;
+		saAttr.nLength = sizeof(SECURITY_ATTRIBUTES);
+		saAttr.bInheritHandle = TRUE;
+		saAttr.lpSecurityDescriptor = NULL;
+		return ::CreatePipe(pOutReadHandle, pOutWriteHandle, &saAttr, 0) != FALSE;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
 	bool ReadFile(HANDLE hFile, LPVOID lpBuffer, DWORD nNumberOfBytesToRead, LPDWORD lpNumberOfBytesRead)
 	{
 		return FALSE != ::ReadFile(hFile, lpBuffer, nNumberOfBytesToRead, lpNumberOfBytesRead, NULL);
@@ -55,8 +65,8 @@ namespace core
 			return false;
 
 		if( pCreationTime )			*pCreationTime = UnixTimeFrom(ftCreateTime		);
-		if( pLastAccessTime )		*pCreationTime = UnixTimeFrom(ftLastAccessTime	);
-		if( pLastWriteTime )		*pCreationTime = UnixTimeFrom(ftLastWriteTime	);
+		if( pLastAccessTime )		*pLastAccessTime = UnixTimeFrom(ftLastAccessTime	);
+		if( pLastWriteTime )		*pLastWriteTime = UnixTimeFrom(ftLastWriteTime	);
 		return true;
 	}
 
@@ -99,6 +109,12 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
+	void FlushFileBuffers(HANDLE hFile)
+	{
+		::FlushFileBuffers(hFile);
+	}
+
+	//////////////////////////////////////////////////////////////////////////
 	void CloseFile(HANDLE hFile)
 	{
 		::CloseHandle(hFile);
@@ -112,7 +128,7 @@ namespace core
 	};
 
 	//////////////////////////////////////////////////////////////////////////
-	static unsigned WINAPI InternalThreadCaller(void* pContext)
+	static unsigned int WINAPI ThreadCaller(void* pContext)
 	{
 		_ST_CREATE_THREAD_DATA* pData = (_ST_CREATE_THREAD_DATA*)pContext;
 		int nRet = pData->pfEntry(pData->pContext);
@@ -127,7 +143,7 @@ namespace core
 		pData->pfEntry	= pfEntry;
 		pData->pContext = pContext;
 
-		HANDLE hThread = (HANDLE)::_beginthreadex(NULL, 0, InternalThreadCaller, pData, 0, NULL);
+		HANDLE hThread = (HANDLE)::_beginthreadex(NULL, 0, ThreadCaller, pData, 0, NULL);
 		if( INVALID_HANDLE_VALUE == hThread )
 		{
 			Log_Error("_beginthreadex operation failure");

@@ -10,7 +10,7 @@ namespace core
 #ifdef UNICODE
 		return BOM_UTF16;
 #else
-		return BOM_UNDEFINED;
+		return BOM_EUCKR;
 #endif
 #else
 #ifdef UNICODE

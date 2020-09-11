@@ -106,12 +106,13 @@ namespace core
 	bool GetFileTime(HANDLE hFile, UINT64* pCreationTime, UINT64* pLastAccessTime, UINT64* pLastWriteTime);
 	bool SetFileTime(HANDLE hFile, UINT64 tCreationTime, UINT64 tLastAccessTime, UINT64 tLastWriteTime);
 	bool GetFileInformationByHandle(HANDLE hFile, ST_BY_HANDLE_FILE_INFORMATION* lpFileInformation);
+	void FlushFileBuffers(HANDLE hFile);
 	void CloseFile(HANDLE hFile);
 
-	HANDLE	CreateProcessA(const char* pszFilePath, const char* pszDirectory = NULL, ST_STARTUPINFO* pStartupInfo = NULL, ST_PROCESSINFO* pProcessInfo = NULL);
-	HANDLE	CreateProcessW(const wchar_t* pszFilePath, const wchar_t* pszDirectory = NULL, ST_STARTUPINFO* pStartupInfo = NULL, ST_PROCESSINFO* pProcessInfo = NULL);
-	HANDLE	CreateProcessA(const char* pszFilePath, const char* pszDirectory, const std::vector<std::string>& vecArgs, ST_STARTUPINFO* pStartupInfo = NULL, ST_PROCESSINFO* pProcessInfo = NULL);
-	HANDLE	CreateProcessW(const wchar_t* pszFilePath, const wchar_t* pszDirectory, const std::vector<std::wstring>& vecArgs, ST_STARTUPINFO* pStartupInfo = NULL, ST_PROCESSINFO* pProcessInfo = NULL);
+	HANDLE	CreateProcessA(const char* pszFilePath, const char* pszDirectory = NULL, IN ST_STARTUPINFO* pStartupInfo = NULL, OUT ST_PROCESSINFO* pProcessInfo = NULL);
+	HANDLE	CreateProcessW(const wchar_t* pszFilePath, const wchar_t* pszDirectory = NULL, IN ST_STARTUPINFO* pStartupInfo = NULL, OUT ST_PROCESSINFO* pProcessInfo = NULL);
+	HANDLE	CreateProcessA(const char* pszFilePath, const char* pszDirectory, const std::vector<std::string>& vecArgs, IN ST_STARTUPINFO* pStartupInfo = NULL, OUT ST_PROCESSINFO* pProcessInfo = NULL);
+	HANDLE	CreateProcessW(const wchar_t* pszFilePath, const wchar_t* pszDirectory, const std::vector<std::wstring>& vecArgs, IN ST_STARTUPINFO* pStartupInfo = NULL, OUT ST_PROCESSINFO* pProcessInfo = NULL);
 	ECODE	TerminateProcess(HANDLE hProcess);
 	EWAIT	WaitForProcess(HANDLE hProcess, DWORD dwTimeOut, int* pOutExitCode);
 	void	CloseProcessHandle(HANDLE hProcess);
@@ -142,6 +143,7 @@ namespace core
 	void	EnterCriticalSection(HANDLE hCS);
 	void	LeaveCriticalSection(HANDLE hCS);
 
+	bool	CreatePipe(HANDLE* pOutReadHandle, HANDLE* pOutWriteHandle);
 	HANDLE	CreatePipe(const char* pszName);
 	HANDLE	CreatePipe(const wchar_t* pszName);
 	HANDLE	OpenPipe(const char* pszName);

@@ -8,6 +8,7 @@ namespace core
 	{
 		if( m_hFile )
 		{
+			FlushFileBuffers(m_hFile);
 			CloseFile(m_hFile);
 			m_hFile = NULL;
 		}

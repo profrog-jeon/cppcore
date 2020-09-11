@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "FileUtility.h"
-#include "Log.h"
 #include <map>
 #include <vector>
 #include <stack>
@@ -355,5 +354,85 @@ namespace core
 	{
 		return CopyDirectoryWorker(pszDirFrom, SafeStrLen(pszDirFrom, 0xFFFF), pszDirTo);
 	}
+
+	//////////////////////////////////////////////////////////////////////////
+	bool CopyFiles(std::tstring strSourceFiles, std::tstring strDestDir)
+	{
+		std::vector<std::tstring> vecFiles;
+		std::tstring strSourceDir = ExtractDirectory(strSourceFiles);
+		std::tstring strPattern = ExtractFileName(strSourceFiles);
+
+		GrepFiles(strSourceDir, strPattern, vecFiles);
+		CreateDirectoryRecursively(strDestDir);
+
+		size_t i;
+		for (i = 0; i < vecFiles.size(); i++)
+		{
+			std::tstring strFileName = ExtractFileName(vecFiles[i]);
+			std::tstring strTargetFile = strDestDir + TEXT("/") + strFileName;
+			if (!CopyFile(vecFiles[i].c_str(), strTargetFile.c_str()))
+			{
+				Log_Error(TEXT("CopyFile(%s, %s) has failed"), vecFiles[i].c_str(), strTargetFile.c_str());
+				return false;
+			}
+		}
+		return true;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	bool MoveFileForcely(std::tstring strSourceFile, std::tstring strDestFile)
+	{
+		if (MoveFile(strSourceFile.c_str(), strDestFile.c_str()))
+			return true;
+
+		if (!CopyFile(strSourceFile.c_str(), strDestFile.c_str()))
+		{
+			Log_Error(TEXT("CopyFile(%s, %s) has failed"), strSourceFile.c_str(), strDestFile.c_str());
+			return false;
+		}
+
+		DeleteFile(strSourceFile.c_str());
+		return true;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	bool MoveFiles(std::tstring strSourceFiles, std::tstring strDestDir, bool bOverwrite)
+	{
+		std::vector<std::tstring> vecFiles;
+		std::tstring strSourceDir = ExtractDirectory(strSourceFiles);
+		std::tstring strPattern = ExtractFileName(strSourceFiles);
+
+		GrepFiles(strSourceDir, strPattern, vecFiles);
+		CreateDirectoryRecursively(strDestDir);
+
+		size_t i;
+		for (i = 0; i < vecFiles.size(); i++)
+		{
+			std::tstring strFileName = ExtractFileName(vecFiles[i]);
+			std::tstring strTargetFile = strDestDir + TEXT("/") + strFileName;
+			if (!bOverwrite && PathFileExists(strTargetFile.c_str()))
+				continue;
+
+			if (!MoveFileForcely(vecFiles[i], strTargetFile))
+				Log_Warn(TEXT("MoveFile(%s, %s) has failed"), vecFiles[i].c_str(), strTargetFile.c_str());
+		}
+		return true;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	bool ClearDirectory(std::tstring strDirectory)
+	{
+		std::vector<std::tstring> vecFiles;
+		GrepFiles(strDirectory, TEXT("*"), vecFiles);
+
+		size_t i;
+		for (i = 0; i < vecFiles.size(); i++)
+		{
+			if (!DeleteFile(vecFiles[i].c_str()))
+				return false;
+		}
+		return true;
+	}
+
 }
 

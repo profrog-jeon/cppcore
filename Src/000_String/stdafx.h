@@ -8,6 +8,7 @@
 #include <string.h>
 #include <vector>
 #include <deque>
+#include <stdexcept>
 
 #include "../__Common/Type.h"
 #include "../__Common/Define.h"

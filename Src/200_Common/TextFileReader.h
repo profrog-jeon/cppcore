@@ -11,6 +11,7 @@ namespace core
 		HANDLE		m_hFile;
 		E_BOM_TYPE	m_nBOMType;
 		QWORD		m_qwFileSize;
+		std::string m_strUnreadLineBackup;
 
 	public:
 		CTextFileReader(std::string strFileName, E_BOM_TYPE nEncodeType = BOM_UNDEFINED);
@@ -22,5 +23,8 @@ namespace core
 		int64_t		Seek(int64_t nOffset, E_FILE_MOVE_METHOD nOrigin);
 		ECODE		ReadLine(std::string& strContext);
 		ECODE		ReadLine(std::wstring& strContext);
+
+		ECODE		UnreadLine(const std::string& strContext);
+		ECODE		UnreadLine(const std::wstring& strContext);
 	};
 }

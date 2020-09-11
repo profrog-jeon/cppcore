@@ -8,6 +8,8 @@
 #define GetCurrentBOM	GetCurrentBOMA
 #endif
 
+#define BOM_EUCKR		BOM_UNDEFINED
+
 namespace core
 {
 	enum E_BOM_TYPE

@@ -35,47 +35,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AES\aescrypt.c" />
-    <ClCompile Include="AES\aeshash.c" />
-    <ClCompile Include="AES\aeskey.c" />
-    <ClCompile Include="AES\aestab.c" />
-    <ClCompile Include="Base64.cpp" />
-    <ClCompile Include="Base64_.cpp" />
-    <ClCompile Include="CryptoPPSingleton.cpp" />
-    <ClCompile Include="has160.cpp" />
-    <ClCompile Include="HashFunction.cpp" />
-    <ClCompile Include="md5.cpp" />
-    <ClCompile Include="md5_.cpp" />
-    <ClCompile Include="PubKeyCipherFunction.cpp" />
-    <ClCompile Include="PubKeyElGamal.cpp" />
-    <ClCompile Include="PubKeyRSA.cpp" />
-    <ClCompile Include="SEED\SEED_128_KISA.cpp" />
-    <ClCompile Include="SEED\SEED_256_KISA.cpp" />
-    <ClCompile Include="SHA1.cpp" />
-    <ClCompile Include="sha256.cpp" />
-    <ClCompile Include="StringFunction.cpp" />
-    <ClCompile Include="StringSymCipherFunction.cpp" />
-    <ClCompile Include="SymAES.cpp" />
-    <ClCompile Include="SymCipher.cpp" />
-    <ClCompile Include="SymCipherFunction.cpp" />
-    <ClCompile Include="SymModeCBC.cpp" />
-    <ClCompile Include="SymModeCFB.cpp" />
-    <ClCompile Include="SymModeCTR.cpp" />
-    <ClCompile Include="SymModeECB.cpp" />
-    <ClCompile Include="SymModeOFB.cpp" />
-    <ClCompile Include="SymModePCBC.cpp" />
-    <ClCompile Include="SymModePlain.cpp" />
-    <ClCompile Include="SymPlain.cpp" />
-    <ClCompile Include="SymSeed128.cpp" />
-    <ClCompile Include="SymSeed256.cpp" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="001_Encoder.h" />
     <ClInclude Include="AES\aes.h" />
     <ClInclude Include="AES\aesopt.h" />
     <ClInclude Include="Base64.h" />
     <ClInclude Include="CryptoPPSingleton.h" />
-    <ClInclude Include="Encoder.h" />
     <ClInclude Include="has160.h" />
     <ClInclude Include="HashFunction.h" />
     <ClInclude Include="IPubKeyCipher.h" />
@@ -85,10 +49,18 @@
     <ClInclude Include="PubKeyCipherFunction.h" />
     <ClInclude Include="PubKeyElGamal.h" />
     <ClInclude Include="PubKeyRSA.h" />
+    <ClInclude Include="rc4.h" />
     <ClInclude Include="SEED\SEED_128_KISA.h" />
     <ClInclude Include="SEED\SEED_256_KISA.h" />
     <ClInclude Include="SHA1.h" />
     <ClInclude Include="sha256.h" />
+    <ClInclude Include="sha512.h" />
+    <ClInclude Include="ssdeep\edit_dist.h" />
+    <ClInclude Include="ssdeep\filedata.h" />
+    <ClInclude Include="ssdeep\fuzzy.h" />
+    <ClInclude Include="ssdeep\match.h" />
+    <ClInclude Include="ssdeep\ssdeep.h" />
+    <ClInclude Include="ssdeep\tchar-local.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="StringFunction.h" />
     <ClInclude Include="StringSymCipherFunction.h" />
@@ -106,6 +78,51 @@
     <ClInclude Include="SymSeed128.h" />
     <ClInclude Include="SymSeed256.h" />
     <ClInclude Include="Type.h" />
+    <ClInclude Include="ZipWrapper.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="AES\aescrypt.c" />
+    <ClCompile Include="AES\aeshash.c" />
+    <ClCompile Include="AES\aeskey.c" />
+    <ClCompile Include="AES\aestab.c" />
+    <ClCompile Include="Base64.cpp" />
+    <ClCompile Include="CryptoPPSingleton.cpp" />
+    <ClCompile Include="has160.cpp" />
+    <ClCompile Include="HashFunction.cpp" />
+    <ClCompile Include="md5.cpp" />
+    <ClCompile Include="PubKeyCipherFunction.cpp" />
+    <ClCompile Include="PubKeyElGamal.cpp" />
+    <ClCompile Include="PubKeyRSA.cpp" />
+    <ClCompile Include="rc4.cpp" />
+    <ClCompile Include="SEED\SEED_128_KISA.cpp" />
+    <ClCompile Include="SEED\SEED_256_KISA.cpp" />
+    <ClCompile Include="SHA1.cpp" />
+    <ClCompile Include="sha256.cpp" />
+    <ClCompile Include="sha512.cpp" />
+    <ClCompile Include="ssdeep\edit_dist.cpp" />
+    <ClCompile Include="ssdeep\filedata.cpp" />
+    <ClCompile Include="ssdeep\find-file-size.cpp" />
+    <ClCompile Include="ssdeep\fuzzy.cpp" />
+    <ClCompile Include="ssdeep\helpers.cpp" />
+    <ClCompile Include="ssdeep\match.cpp" />
+    <ClCompile Include="ssdeep\ui.cpp" />
+    <ClCompile Include="StringFunction.cpp" />
+    <ClCompile Include="StringSymCipherFunction.cpp" />
+    <ClCompile Include="SymAES.cpp" />
+    <ClCompile Include="SymCipher.cpp" />
+    <ClCompile Include="SymCipherFunction.cpp" />
+    <ClCompile Include="SymModeCBC.cpp" />
+    <ClCompile Include="SymModeCFB.cpp" />
+    <ClCompile Include="SymModeCTR.cpp" />
+    <ClCompile Include="SymModeECB.cpp" />
+    <ClCompile Include="SymModeOFB.cpp" />
+    <ClCompile Include="SymModePCBC.cpp" />
+    <ClCompile Include="SymModePlain.cpp" />
+    <ClCompile Include="SymPlain.cpp" />
+    <ClCompile Include="SymSeed128.cpp" />
+    <ClCompile Include="SymSeed256.cpp" />
+    <ClCompile Include="ZipWrapper.cpp" />
+    <ClCompile Include="ZipWrapperT.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="AES\aescrypt.asm" />
@@ -116,7 +133,7 @@
     <ProjectGuid>{D7661B3A-D5D6-410E-AC94-70460FE10EF0}</ProjectGuid>
     <RootNamespace>My001_Crypto</RootNamespace>
     <Keyword>Win32Proj</Keyword>
-    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>7.0</WindowsTargetPlatformVersion>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">Win32</Platform>
   </PropertyGroup>
@@ -231,7 +248,7 @@
       <ProgramDataBaseFileName>$(OutDir)$(ProjectName).pdb</ProgramDataBaseFileName>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <AdditionalIncludeDirectories>$(ProjectDir)/../../Inc</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\..\..\Inc</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -248,7 +265,7 @@
       <ProgramDataBaseFileName>$(OutDir)$(ProjectName).pdb</ProgramDataBaseFileName>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>$(ProjectDir)/../../Inc</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\..\..\Inc</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -262,7 +279,7 @@
       <ProgramDataBaseFileName>$(OutDir)$(ProjectName).pdb</ProgramDataBaseFileName>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>$(ProjectDir)/../../Inc</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\..\..\Inc</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -279,7 +296,7 @@
       <ProgramDataBaseFileName>$(OutDir)$(ProjectName).pdb</ProgramDataBaseFileName>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>$(ProjectDir)/../../Inc</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\..\..\Inc</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugMT|Win32'">
@@ -293,7 +310,7 @@
       <ProgramDataBaseFileName>$(OutDir)$(ProjectName).pdb</ProgramDataBaseFileName>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <AdditionalIncludeDirectories>$(ProjectDir)/../../Inc</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\..\..\Inc</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugMT|x64'">
@@ -310,7 +327,7 @@
       <ProgramDataBaseFileName>$(OutDir)$(ProjectName).pdb</ProgramDataBaseFileName>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>$(ProjectDir)/../../Inc</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\..\..\Inc</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseMT|Win32'">
@@ -324,7 +341,7 @@
       <ProgramDataBaseFileName>$(OutDir)$(ProjectName).pdb</ProgramDataBaseFileName>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>$(ProjectDir)/../../Inc</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\..\..\Inc</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseMT|x64'">
@@ -341,7 +358,7 @@
       <ProgramDataBaseFileName>$(OutDir)$(ProjectName).pdb</ProgramDataBaseFileName>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>$(ProjectDir)/../../Inc</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\..\..\Inc</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

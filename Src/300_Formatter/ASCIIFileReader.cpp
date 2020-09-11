@@ -7,42 +7,45 @@ namespace fmt_internal
 	CASCIIFileReader::CASCIIFileReader(std::tstring strFilename)
 		: IChannel()
 		, m_strFilename(strFilename)
-		, m_pFile(NULL)
+		, m_hFile(NULL)
 		, m_strBuffer()
 		, m_strContext()
 	{
-		FILE* pFile = NULL;
+		HANDLE hFile = NULL;
 		try
 		{
-			pFile = fopenT(strFilename.c_str(), TEXT("rb"));
-			if( pFile == NULL )
-				throw exception_format(TEXT("`%s` cannot be opened!!"), strFilename.c_str());
+			hFile = CreateFile(strFilename.c_str(), GENERIC_READ_, OPEN_EXISTING_, 0);
+			if( hFile == NULL )
+			{
+				int nErrCode = GetLastError();
+				throw exception_format(TEXT("CreateFile(%s, GENERIC_READ_, OPEN_EXISTING_) failure, %d"), strFilename.c_str(), nErrCode);
+			}
 		}
 		catch(std::exception& e)
 		{
-			if( pFile )
-				fclose(pFile);
+			if( hFile )
+				CloseFile(hFile);
 			Log_Error("%s", e.what());
 			return;
 		}
 
-		m_pFile = pFile;
+		m_hFile = hFile;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
 	CASCIIFileReader::~CASCIIFileReader(void)
 	{
-		if( m_pFile )
+		if( m_hFile )
 		{
-			fclose(m_pFile);
-			m_pFile = NULL;
+			CloseFile(m_hFile);
+			m_hFile = NULL;
 		}
 	}
 
 	//////////////////////////////////////////////////////////////////////////
 	bool CASCIIFileReader::CheckValidity(std::tstring& refStrErrMsg)
 	{
-		if( m_pFile == NULL )
+		if( m_hFile == NULL )
 		{
 			refStrErrMsg = Format(TEXT("Read failure `%s`"), m_strFilename.c_str());
 			return false;
@@ -53,17 +56,17 @@ namespace fmt_internal
 	//////////////////////////////////////////////////////////////////////////
 	size_t CASCIIFileReader::OnAccess(void* pData, size_t tDataSize)
 	{
-		if( m_pFile == NULL )
+		if( m_hFile == NULL )
 			return 0;
 
-		const size_t tBuffSize = 1024;
-		char szBuff[tBuffSize+1];
-		size_t tRead = fread(szBuff, 1, tBuffSize, m_pFile);
+		const DWORD dwBuffSize = 1024;
+		char szBuff[dwBuffSize+1];
 
-		if( (int)tRead == -1 && m_strContext.empty() )
+		DWORD dwRead = 0;
+		if( !ReadFile(m_hFile, szBuff, dwBuffSize, &dwRead) && m_strContext.empty() )
 			return 0;
 
-		szBuff[tRead] = 0;
+		szBuff[dwRead] = 0;
 		m_strBuffer += szBuff;
 
 		size_t tReadSize = 0;

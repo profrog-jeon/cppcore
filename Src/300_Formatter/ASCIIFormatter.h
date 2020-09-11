@@ -76,10 +76,10 @@ namespace core
 		bool ReadIniSectionFromString(IFormatterObjectA* pObject, std::string strInput, std::string strSection, std::string* pStrErrMsg = NULL);
 
 		// strSchema : ex) "[KEY]=\'[VALUE]\'"  - [KEY][VALUE] will be replaced key, value
-		void WriteKeyValueArrayToString(const IFormatterObjectW* pObject, std::wstring strSep, std::wstring strSchema, std::string& strOutput);
-		void WriteKeyValueArrayToString(const IFormatterObjectA* pObject, std::string strSep, std::string strSchema, std::string& strOutput);
-		bool WriteKeyValueArrayToFile(const IFormatterObjectW* pObject, std::wstring strSep, std::wstring strSchema, std::wstring strFilename, std::wstring* pStrErrMsg = NULL);
-		bool WriteKeyValueArrayToFile(const IFormatterObjectA* pObject, std::string strSep, std::string strSchema, std::string strFilename, std::string* pStrErrMsg = NULL);
+		void WriteKeyValueArrayToString(const IFormatterObjectW* pObject, std::wstring strSep, std::wstring strSchema, std::string& strOutput, bool bUseHex = false);
+		void WriteKeyValueArrayToString(const IFormatterObjectA* pObject, std::string strSep, std::string strSchema, std::string& strOutput, bool bUseHex = false);
+		bool WriteKeyValueArrayToFile(const IFormatterObjectW* pObject, std::wstring strSep, std::wstring strSchema, std::wstring strFilename, bool bUseHex = false, std::wstring* pStrErrMsg = NULL);
+		bool WriteKeyValueArrayToFile(const IFormatterObjectA* pObject, std::string strSep, std::string strSchema, std::string strFilename, bool bUseHex = false, std::string* pStrErrMsg = NULL);
 
 		// [KEY]=[VALUE]\n[KEY]=[VALUE]: strTokenDelimiter = '\n', strSpliter = '='
 		bool ReadKeyValueArrayFromString(IFormatterObjectW* pObject, std::wstring strTokenDelimiter, std::wstring strSpliter, std::string strContext, std::wstring* pStrErrMsg = NULL);
@@ -89,10 +89,10 @@ namespace core
 
 		void WriteKeyArrayToString(const IFormatterObjectW* pObject, std::wstring strSep, std::wstring strQuo, std::string& strOutput);
 		void WriteKeyArrayToString(const IFormatterObjectA* pObject, std::string strSep, std::string strQuo, std::string& strOutput);	
-		void WriteValueArrayToString(const IFormatterObjectW* pObject, std::wstring strSep, std::wstring strQuo, std::string& strOutput);
-		void WriteValueArrayToString(const IFormatterObjectA* pObject, std::string strSep, std::string strQuo, std::string& strOutput);
-		void WriteValueArrayToFile(const IFormatterObjectW* pObject, std::wstring strSep, std::wstring strQuo, std::wstring strFilename);
-		void WriteValueArrayToFile(const IFormatterObjectA* pObject, std::string strSep, std::string strQuo, std::string strFilename);
+		void WriteValueArrayToString(const IFormatterObjectW* pObject, std::wstring strSep, std::wstring strQuo, std::string& strOutput, bool bUseHex = false);
+		void WriteValueArrayToString(const IFormatterObjectA* pObject, std::string strSep, std::string strQuo, std::string& strOutput, bool bUseHex = false);
+		void WriteValueArrayToFile(const IFormatterObjectW* pObject, std::wstring strSep, std::wstring strQuo, std::wstring strFilename, bool bUseHex = false);
+		void WriteValueArrayToFile(const IFormatterObjectA* pObject, std::string strSep, std::string strQuo, std::string strFilename, bool bUseHex = false);
 
 		//bool ReadKeyArrayFromString(const IFormatterObjectW* pObject, std::wstring strSep, std::wstring strQuo, std::wstring& strOutput);
 		//bool ReadKeyArrayFromString(const IFormatterObjectA* pObject, std::string strSep, std::string strQuo, std::string& strOutput);	

@@ -71,7 +71,8 @@ namespace core
 		virtual void _BeginRootGrouping() = 0;
 		virtual void _EndRootGrouping() = 0;
 
-		virtual core::IFormatterA& Sync(std::string& strKey, std::string* pString) = 0;
+		virtual core::IFormatterA& Sync(std::string& strKey, std::string* pValue) = 0;
+		virtual core::IFormatterA& Sync(std::string& strKey, std::wstring* pValue) = 0;
 		virtual core::IFormatterA& Sync(std::string& strKey, bool* pValue) = 0;
 		virtual core::IFormatterA& Sync(std::string& strKey, char* pValue) = 0;
 		virtual core::IFormatterA& Sync(std::string& strKey, short* pValue) = 0;
@@ -302,6 +303,7 @@ namespace core
 
 		// A Value Formatting
 		virtual core::IFormatterW& Sync(std::wstring& strKey, std::wstring* pString) = 0;
+		virtual core::IFormatterW& Sync(std::wstring& strKey, std::string* pString) = 0;
 		virtual core::IFormatterW& Sync(std::wstring& strKey, bool* pValue) = 0;
 		virtual core::IFormatterW& Sync(std::wstring& strKey, char* pValue) = 0;
 		virtual core::IFormatterW& Sync(std::wstring& strKey, short* pValue) = 0;

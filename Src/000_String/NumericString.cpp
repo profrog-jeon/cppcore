@@ -4,6 +4,7 @@
 #include "POSIX.h"
 #include "StdString.h"
 #include "StdStringLegacy.h"
+#include "Unicode.h"
 
 namespace core
 {
@@ -53,8 +54,94 @@ namespace core
 	std::tstring StringFrom(std::tstring strValue)
 	{	return strValue;	}
 
+	std::tstring StringFrom(std::ntstring strValue)
+	{	return TCSFromNTCS(strValue);	}
+
+
+
+
+
+	std::tstring HexFrom(char nValue)
+	{
+		return Format(TEXT("0x%08X"), (unsigned char)nValue);
+	}
+
+	std::tstring HexFrom(short nValue)
+	{
+		return Format(TEXT("0x%08X"), (unsigned short)nValue);
+	}
+
+	std::tstring HexFrom(int32_t nValue)
+	{
+		return Format(TEXT("0x%08X"), (unsigned int)nValue);
+	}
+
+	std::tstring HexFrom(int64_t nValue)
+	{
+		return Format(TEXT("0x%016llX"), nValue);
+	}
+
+#if defined(_MSC_VER)
+	std::tstring HexFrom(uint32_t nValue)
+	{
+		return Format(TEXT("0x%08X"), nValue);
+	}
+#endif
+
+#if defined(__APPLE__)
+	std::tstring HexFrom(size_t nValue)
+	{
+		return Format(TEXT("0x%08X"), nValue);
+	}
+#endif
+
+	std::tstring HexFrom(BYTE uValue)
+	{
+		return Format(TEXT("0x%08X"), uValue);
+	}
+
+	std::tstring HexFrom(WORD uValue)
+	{
+		return Format(TEXT("0x%08X"), uValue);
+	}
+
+	std::tstring HexFrom(DWORD uValue)
+	{
+		return Format(TEXT("0x%08X"), uValue);
+	}
+
+	std::tstring HexFrom(QWORD uValue)
+	{
+		return Format(TEXT("0x%016llX"), uValue);
+	}
+
+	std::tstring HexFrom(float fValue)
+	{
+		return Format(TEXT("%f"), fValue);
+	}
+
+	std::tstring HexFrom(double dValue)
+	{
+		return Format(TEXT("%lf"), dValue);
+	}
+
+	std::tstring HexFrom(bool bValue)
+	{
+		return Format(TEXT("%s"), bValue ? TEXT("true") : TEXT("false"));
+	}
+
+	std::tstring HexFrom(std::tstring strValue)
+	{
+		return strValue;
+	}
+
+	std::tstring HexFrom(std::ntstring strValue)
+	{
+		return TCSFromNTCS(strValue);
+	}
+
 	//////////////////////////////////////////////////////////////////////////
-	const char g_cDigitTable[256] = 
+	static const char g_cDigitTable[256] = 
 	{
 		-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,	/* 00-0F */
 		-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,	/* 10-1F */
@@ -286,4 +373,13 @@ namespace core
 
 	template<> std::tstring	ValueFrom(std::tstring strNum)
 	{	return strNum;												}
+
+	template<> std::tstring	ValueFrom(std::ntstring strNum)
+	{	return TCSFromNTCS(strNum);									}
+
+	DWORD DWORDFromBase(std::tstring strNum, int nBase)
+	{
+		size_t tPos = 0;
+		return NaturalNumFrom<DWORD>(strNum.c_str(), strNum.length(), nBase, tPos);
+	}
 }

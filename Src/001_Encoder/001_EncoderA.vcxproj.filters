@@ -1,0 +1,157 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="ssdeep">
+      <UniqueIdentifier>{f52efd26-f559-490c-8567-f3a4538bc0fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AES">
+      <UniqueIdentifier>{059ab162-2bd7-4ec5-9dd2-0b295c9d99fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SEED">
+      <UniqueIdentifier>{214a6327-2631-46de-8034-aeb572f2f240}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="ssdeep\edit_dist.cpp">
+      <Filter>ssdeep</Filter>
+    </ClCompile>
+    <ClCompile Include="ssdeep\filedata.cpp">
+      <Filter>ssdeep</Filter>
+    </ClCompile>
+    <ClCompile Include="ssdeep\find-file-size.cpp">
+      <Filter>ssdeep</Filter>
+    </ClCompile>
+    <ClCompile Include="ssdeep\fuzzy.cpp">
+      <Filter>ssdeep</Filter>
+    </ClCompile>
+    <ClCompile Include="ssdeep\helpers.cpp">
+      <Filter>ssdeep</Filter>
+    </ClCompile>
+    <ClCompile Include="ssdeep\match.cpp">
+      <Filter>ssdeep</Filter>
+    </ClCompile>
+    <ClCompile Include="ssdeep\ui.cpp">
+      <Filter>ssdeep</Filter>
+    </ClCompile>
+    <ClCompile Include="AES\aescrypt.c">
+      <Filter>AES</Filter>
+    </ClCompile>
+    <ClCompile Include="AES\aeshash.c">
+      <Filter>AES</Filter>
+    </ClCompile>
+    <ClCompile Include="AES\aeskey.c">
+      <Filter>AES</Filter>
+    </ClCompile>
+    <ClCompile Include="AES\aestab.c">
+      <Filter>AES</Filter>
+    </ClCompile>
+    <ClCompile Include="SEED\SEED_128_KISA.cpp">
+      <Filter>SEED</Filter>
+    </ClCompile>
+    <ClCompile Include="SEED\SEED_256_KISA.cpp">
+      <Filter>SEED</Filter>
+    </ClCompile>
+    <ClCompile Include="Base64.cpp" />
+    <ClCompile Include="CryptoPPSingleton.cpp" />
+    <ClCompile Include="has160.cpp" />
+    <ClCompile Include="HashFunction.cpp" />
+    <ClCompile Include="md5.cpp" />
+    <ClCompile Include="PubKeyCipherFunction.cpp" />
+    <ClCompile Include="PubKeyElGamal.cpp" />
+    <ClCompile Include="PubKeyRSA.cpp" />
+    <ClCompile Include="SHA1.cpp" />
+    <ClCompile Include="sha256.cpp" />
+    <ClCompile Include="StringFunction.cpp" />
+    <ClCompile Include="StringSymCipherFunction.cpp" />
+    <ClCompile Include="SymAES.cpp" />
+    <ClCompile Include="SymCipher.cpp" />
+    <ClCompile Include="SymCipherFunction.cpp" />
+    <ClCompile Include="SymModeCBC.cpp" />
+    <ClCompile Include="SymModeCFB.cpp" />
+    <ClCompile Include="SymModeCTR.cpp" />
+    <ClCompile Include="SymModeECB.cpp" />
+    <ClCompile Include="SymModeOFB.cpp" />
+    <ClCompile Include="SymModePCBC.cpp" />
+    <ClCompile Include="SymModePlain.cpp" />
+    <ClCompile Include="SymPlain.cpp" />
+    <ClCompile Include="SymSeed128.cpp" />
+    <ClCompile Include="SymSeed256.cpp" />
+    <ClCompile Include="ZipWrapper.cpp" />
+    <ClCompile Include="ZipWrapperT.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ssdeep\edit_dist.h">
+      <Filter>ssdeep</Filter>
+    </ClInclude>
+    <ClInclude Include="ssdeep\filedata.h">
+      <Filter>ssdeep</Filter>
+    </ClInclude>
+    <ClInclude Include="ssdeep\fuzzy.h">
+      <Filter>ssdeep</Filter>
+    </ClInclude>
+    <ClInclude Include="ssdeep\match.h">
+      <Filter>ssdeep</Filter>
+    </ClInclude>
+    <ClInclude Include="ssdeep\ssdeep.h">
+      <Filter>ssdeep</Filter>
+    </ClInclude>
+    <ClInclude Include="ssdeep\tchar-local.h">
+      <Filter>ssdeep</Filter>
+    </ClInclude>
+    <ClInclude Include="AES\aes.h">
+      <Filter>AES</Filter>
+    </ClInclude>
+    <ClInclude Include="AES\aesopt.h">
+      <Filter>AES</Filter>
+    </ClInclude>
+    <ClInclude Include="SEED\SEED_128_KISA.h">
+      <Filter>SEED</Filter>
+    </ClInclude>
+    <ClInclude Include="SEED\SEED_256_KISA.h">
+      <Filter>SEED</Filter>
+    </ClInclude>
+    <ClInclude Include="001_Encoder.h" />
+    <ClInclude Include="Base64.h" />
+    <ClInclude Include="CryptoPPSingleton.h" />
+    <ClInclude Include="has160.h" />
+    <ClInclude Include="HashFunction.h" />
+    <ClInclude Include="IPubKeyCipher.h" />
+    <ClInclude Include="ISymAlgorithm.h" />
+    <ClInclude Include="ISymMode.h" />
+    <ClInclude Include="md5.h" />
+    <ClInclude Include="PubKeyCipherFunction.h" />
+    <ClInclude Include="PubKeyElGamal.h" />
+    <ClInclude Include="PubKeyRSA.h" />
+    <ClInclude Include="SHA1.h" />
+    <ClInclude Include="sha256.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="StringFunction.h" />
+    <ClInclude Include="StringSymCipherFunction.h" />
+    <ClInclude Include="SymAES.h" />
+    <ClInclude Include="SymCipher.h" />
+    <ClInclude Include="SymCipherFunction.h" />
+    <ClInclude Include="SymModeCBC.h" />
+    <ClInclude Include="SymModeCFB.h" />
+    <ClInclude Include="SymModeCTR.h" />
+    <ClInclude Include="SymModeECB.h" />
+    <ClInclude Include="SymModeOFB.h" />
+    <ClInclude Include="SymModePCBC.h" />
+    <ClInclude Include="SymModePlain.h" />
+    <ClInclude Include="SymPlain.h" />
+    <ClInclude Include="SymSeed128.h" />
+    <ClInclude Include="SymSeed256.h" />
+    <ClInclude Include="Type.h" />
+    <ClInclude Include="ZipWrapper.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="AES\aescrypt.asm">
+      <Filter>AES</Filter>
+    </None>
+    <None Include="SEED\SEED_128_KISA.tab">
+      <Filter>SEED</Filter>
+    </None>
+    <None Include="SEED\SEED_256_KISA.tab">
+      <Filter>SEED</Filter>
+    </None>
+  </ItemGroup>
+</Project>

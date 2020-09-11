@@ -62,7 +62,8 @@ namespace fmt_internal
 		void			_BeginRootGrouping();
 		void			_EndRootGrouping();
 
-		core::IFormatterT& Sync(std::tstring& strKey, std::tstring* pString);
+		core::IFormatterT& Sync(std::tstring& strKey, std::tstring* pValue);
+		core::IFormatterT& Sync(std::tstring& strKey, std::ntstring* pValue);
 		core::IFormatterT& Sync(std::tstring& strKey, bool* pValue);
 		core::IFormatterT& Sync(std::tstring& strKey, char* pValue);
 		core::IFormatterT& Sync(std::tstring& strKey, short* pValue);

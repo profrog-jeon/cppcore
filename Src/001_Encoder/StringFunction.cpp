@@ -105,6 +105,7 @@ namespace core
 			CASE_TO_STR_T(HASH_TYPE_SHA1	);
 			CASE_TO_STR_T(HASH_TYPE_SHA256	);
 			CASE_TO_STR_T(HASH_TYPE_HAS160	);
+			CASE_TO_STR_T(HASH_TYPE_SSDEEP	);
             default:
                 return TEXT("UNDEFINED_HASH_TYPE");
 		}

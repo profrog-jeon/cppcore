@@ -151,9 +151,12 @@ namespace core
 	//////////////////////////////////////////////////////////////////////////
 	size_t SafeFindStr(LPCTSTR pszDest, size_t tCchDest, LPCTSTR pszKey, size_t tPos)
 	{
+		const size_t tTCharSize = sizeof(TCHAR);
 		size_t tCchKey = SafeStrLen(pszKey, tCchDest);
-		if( tCchDest < tCchKey )
+		if( 0 == tCchKey )
 			return -1;
+		if (tCchKey == tCchDest)
+			return memcmp(pszDest, pszKey, tCchKey + tTCharSize) == 0? 0 : -1;
 
 		size_t nMaxDestSearchLen = tCchDest - tCchKey + 1;
 		size_t i;

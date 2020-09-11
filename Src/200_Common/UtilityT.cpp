@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Mutex.h"
 #include "Utility.h"
-#include "TextFileReader.h"
+#include "INIParser.h"
 
 namespace core
 {
@@ -157,6 +157,7 @@ namespace core
 				dwTotalWritten += dwWritten;
 			}
 
+			FlushFileBuffers(hFile);
 			CloseFile(hFile);
 		}
 		catch (std::exception& e)
@@ -223,6 +224,7 @@ namespace core
 				dwTotalWrittenSize += dwWrittenSize;
 			}
 
+			FlushFileBuffers(hFile);
 			CloseFile(hFile);
 		}
 		catch (std::exception& e)
@@ -273,36 +275,38 @@ namespace core
 	ECODE ReadFileContents(std::tstring strFilePath, std::tstring& strContents, std::string strKey, E_SYM_CIPHER_TYPE* pOutType, E_SYM_CIPHER_MODE* pOutMode)
 	{
 		ECODE nRet = EC_SUCCESS;
-		FILE* pFile = NULL;
+		HANDLE hFile = NULL;
 		try
 		{
-			pFile = fopenT(strFilePath.c_str(), TEXT("rb"));
-			if( NULL == pFile )
-				throw exception_format(TEXT("fopenT failure for ReadFileContents(%s)"), strFilePath.c_str());
+			hFile = CreateFile(strFilePath.c_str(), GENERIC_READ_, OPEN_EXISTING_, 0);
+			if( NULL == hFile )
+				throw exception_format(TEXT("ReadFileContents: CreateFile(%s, GENERIC_READ_, OPEN_EXISTING_) failure"), strFilePath.c_str());
 
 			ST_ENCRYPT_CONTENTS_HEADER test, header;
-			::fread(&header, sizeof(header), 1, pFile);
-			if( ::memcmp(test.btMagic, header.btMagic, sizeof(test.btMagic)) )
-			{
-				fclose(pFile);
+			DWORD dwReadSize = 0;
+			if (!ReadFile(hFile, &header, sizeof(header), &dwReadSize) || dwReadSize < sizeof(header))
+				throw exception_format(TEXT("ReadFileContents: ReadFile(size:%u, read:%u) header read failure"), sizeof(header), dwReadSize);
+
+			if (::memcmp(test.btMagic, header.btMagic, sizeof(test.btMagic)))
 				return EC_INVALID_DATA;
-			}
 
 			ST_SYM_CIPHER_KEY stKey;
 			nRet = GenerateCipherKey((E_SYM_CIPHER_TYPE)header.btType, (E_SYM_CIPHER_MODE)header.btMode, strKey, stKey);
 			if( EC_SUCCESS != nRet )
-				throw exception_format("GenerateCipherKey(%d,%d,%s) failure, %d", header.btType, header.btMode, strKey.c_str(), nRet);
+				throw exception_format("ReadFileContents: GenerateCipherKey(%d,%d,%s) failure, %d", header.btType, header.btMode, strKey.c_str(), nRet);
 
-			::fseek(pFile, 0, SEEK_END);
-			long nSize = ::ftell(pFile) - sizeof(header);
-			::fseek(pFile, sizeof(header), SEEK_SET);
+			QWORD qwSize = GetFileSize(hFile);
+			if( qwSize <= sizeof(header))
+				throw exception_format(TEXT("ReadFileContents: %s Contents is empty"), strFilePath.c_str());
 
-			if( nSize <= 0 )
-				throw exception_format(TEXT("%s Contents is empty"), strFilePath.c_str());
+			qwSize -= sizeof(header);
 
 			std::vector<BYTE> vecEncData;
-			vecEncData.resize(nSize);
-			::fread((void*)&vecEncData[0], 1, vecEncData.size(), pFile);
+			vecEncData.resize(qwSize);
+
+			dwReadSize = 0;
+			if( !ReadFile(hFile, (void*)&vecEncData[0], vecEncData.size(), &dwReadSize) || dwReadSize < vecEncData.size() )
+				throw exception_format(TEXT("ReadFileContents: ReadFile(size:%u, read:%u) content read failure"), vecEncData.size(), dwReadSize);
 
 			size_t tReqSize = DecodeData(stKey, &vecEncData[0], vecEncData.size(), NULL);
 
@@ -313,7 +317,7 @@ namespace core
 			if( header.btPaddingSize < tReqSize )
 				strContentsU8.resize(tReqSize - header.btPaddingSize);
 			strContents = TCSFromUTF8(strContentsU8);
-			fclose(pFile);
+			CloseFile(hFile);
 
 			if( pOutType )
 				(*pOutType) = (E_SYM_CIPHER_TYPE)header.btType;
@@ -324,8 +328,8 @@ namespace core
 		catch (std::exception& e)
 		{
 			Log_Error("%s - %s", __FUNCTION__, e.what());
-			if( pFile )
-				fclose(pFile);
+			if( hFile )
+				CloseFile(hFile);
 
 			return nRet;
 		}
@@ -337,22 +341,25 @@ namespace core
 	ECODE WriteFileContents(std::tstring strFilePath, const std::tstring strContents, E_SYM_CIPHER_TYPE nType, E_SYM_CIPHER_MODE nMode, std::string strKey)
 	{
 		ECODE nRet = EC_SUCCESS;
-		FILE* pFile = NULL;
+		HANDLE hFile = NULL;
 		try
 		{
-			pFile = fopenT(strFilePath.c_str(), TEXT("wb"));
-			if( NULL == pFile )
-				throw exception_format(TEXT("fopenT failure for WriteFileContents(%s)"), strFilePath.c_str());
+			hFile = CreateFile(strFilePath.c_str(), GENERIC_WRITE_, CREATE_ALWAYS_, 0);
+			if( NULL == hFile )
+				throw exception_format(TEXT("WriteFileContents: CreateFile(%s, GENERIC_WRITE_, CREATE_ALWAYS_) failure"), strFilePath.c_str());
 
 			ST_SYM_CIPHER_KEY stKey;
 			nRet = GenerateCipherKey(nType, nMode, strKey, stKey);
 			if( EC_SUCCESS != nRet )
-				throw exception_format("GenerateCipherKey(%d,%d,%s) failure, %d", nType, nMode, strKey.c_str(), nRet);
+				throw exception_format("WriteFileContents: GenerateCipherKey(%d,%d,%s) failure, %d", nType, nMode, strKey.c_str(), nRet);
 
 			std::string strContentsU8 = UTF8FromTCS(strContents);
 
 			std::vector<BYTE> vecEncContents;
 			size_t tReqSize = EncodeData(stKey, (LPCBYTE)strContentsU8.c_str(), strContentsU8.size(), NULL);
+			if( 0 == tReqSize )
+				throw exception_format("WriteFileContents: EncodeData(%u) reqSize:%u failure", strContents.size(), tReqSize);
+
 			vecEncContents.resize(tReqSize);
 			EncodeData(stKey, (LPCBYTE)strContentsU8.c_str(), strContentsU8.size(), &vecEncContents[0]);
 
@@ -360,16 +367,22 @@ namespace core
 			header.btType = nType;
 			header.btMode = nMode;
 			header.btPaddingSize = (BYTE)(vecEncContents.size() - strContentsU8.size());
-			::fwrite(&header, sizeof(header), 1, pFile);
-			::fwrite(&vecEncContents[0], 1, vecEncContents.size(), pFile);
 
-			::fclose(pFile);
+			DWORD dwWritten = 0;
+			if (!WriteFile(hFile, &header, sizeof(header), &dwWritten) || dwWritten < sizeof(header))
+				throw exception_format("WriteFileContents: WriteFile(try:%u, written:%u) has failed", sizeof(header), dwWritten);
+
+			if (!WriteFile(hFile, &vecEncContents[0], vecEncContents.size(), &dwWritten) || dwWritten < vecEncContents.size())
+				throw exception_format("WriteFileContents: WriteFile(try:%u, written:%u) has failed", vecEncContents.size(), dwWritten);
+
+			FlushFileBuffers(hFile);
+			CloseFile(hFile);
 		}
 		catch (std::exception& e)
 		{
 			Log_Error("%s - %s", __FUNCTION__, e.what());
-			if( pFile )
-				::fclose(pFile);
+			if (hFile)
+				CloseFile(hFile);
 			return nRet;
 		}
 

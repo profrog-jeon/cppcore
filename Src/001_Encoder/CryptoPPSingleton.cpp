@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "CryptoPPSingleton.h"
 
+#include <time.h>
+
 namespace core
 {
 	using namespace CryptoPP;

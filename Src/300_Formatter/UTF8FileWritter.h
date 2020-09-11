@@ -13,7 +13,7 @@ namespace fmt_internal
 	{
 	private:
 		std::tstring	m_strFilename;
-		FILE*			m_pFile;
+		HANDLE			m_hFile;
 
 	public:
 		CUTF8FileWritter(std::tstring strFilename, bool bUseBOM = true);

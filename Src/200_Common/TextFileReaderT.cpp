@@ -13,7 +13,7 @@ namespace core
 		m_hFile = CreateFile(strFileName.c_str(), GENERIC_READ_, OPEN_EXISTING_, 0);
 		if( NULL == m_hFile )
 		{
-			Log_Error(TEXT("fopenT failure at %s"), strFileName.c_str());
+			Log_Error(TEXT("CreateFile failure at %s"), strFileName.c_str());
 			return;
 		}
 
@@ -74,6 +74,13 @@ namespace core
 		{
 			if( NULL == m_hFile )
 				throw exception_format("File is not opened");
+
+			if (!m_strUnreadLineBackup.empty())
+			{
+				strContext = TCSFromUTF8(m_strUnreadLineBackup);
+				m_strUnreadLineBackup.clear();
+				return EC_SUCCESS;
+			}
 
 			if( (QWORD)Seek(0, FILE_CURRENT_) >= m_qwFileSize )
 				return EC_ENDOFFILE;
@@ -146,6 +153,13 @@ namespace core
 			return EC_INVALID_DATA;
 		}
 
+		return EC_SUCCESS;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	ECODE CTextFileReader::UnreadLine(const std::tstring& strContext)
+	{
+		m_strUnreadLineBackup = UTF8FromTCS(strContext);
 		return EC_SUCCESS;
 	}
 }

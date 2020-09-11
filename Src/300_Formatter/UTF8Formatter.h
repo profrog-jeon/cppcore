@@ -80,8 +80,8 @@ namespace core
 		bool WriteIniToFile(const IFormatterObjectA* pObject, std::string strFilename, std::string* pStrErrMsg, bool bWriteBOM);
 		bool ReadIniFromFile(IFormatterObjectW* pObject, std::wstring strFilename, std::wstring* pStrErrMsg = NULL);
 		bool ReadIniFromFile(IFormatterObjectA* pObject, std::string strFilename, std::string* pStrErrMsg = NULL);
-		bool WriteIniToString(const IFormatterObjectW* pObject, std::string& strOutput);
-		bool WriteIniToString(const IFormatterObjectA* pObject, std::string& strOutput);
+		bool WriteIniToString(const IFormatterObjectW* pObject, std::string& strOutput, std::wstring* pStrErrMsg = NULL);
+		bool WriteIniToString(const IFormatterObjectA* pObject, std::string& strOutput, std::string* pStrErrMsg = NULL);
 		bool ReadIniFromString(IFormatterObjectW* pObject, std::string strInput, std::wstring* pStrErrMsg = NULL);
 		bool ReadIniFromString(IFormatterObjectA* pObject, std::string strInput, std::string* pStrErrMsg = NULL);
 		bool ReadIniSectionFromFile(IFormatterObjectW* pObject, std::wstring strFilename, std::wstring strSection, std::wstring* pStrErrMsg = NULL);
@@ -90,12 +90,10 @@ namespace core
 		bool ReadIniSectionFromString(IFormatterObjectA* pObject, std::string strInput, std::string strSection, std::string* pStrErrMsg = NULL);
 
 		// strSchema : ex) "[KEY]=\'[VALUE]\'"  - [KEY][VALUE] will be replaced key, value
-		void WriteKeyValueArrayToString(const IFormatterObjectW* pObject, std::wstring strSep, std::wstring strSchema, std::string& strOutput);
-		void WriteKeyValueArrayToString(const IFormatterObjectA* pObject, std::string strSep, std::string strSchema, std::string& strOutput);
-		bool WriteKeyValueArrayToFile(const IFormatterObjectW* pObject, std::wstring strSep, std::wstring strSchema, std::wstring strFilename, std::wstring* pStrErrMsg = NULL);
-		bool WriteKeyValueArrayToFile(const IFormatterObjectA* pObject, std::string strSep, std::string strSchema, std::string strFilename, std::string* pStrErrMsg = NULL);
-		bool WriteKeyValueArrayToFile(const IFormatterObjectW* pObject, std::wstring strSep, std::wstring strSchema, std::wstring strFilename, bool bWriteBOM);
-		bool WriteKeyValueArrayToFile(const IFormatterObjectA* pObject, std::string strSep, std::string strSchema, std::string strFilename, bool bWriteBOM);
+		void WriteKeyValueArrayToString(const IFormatterObjectW* pObject, std::wstring strSep, std::wstring strSchema, std::string& strOutput, bool bUseHex = false);
+		void WriteKeyValueArrayToString(const IFormatterObjectA* pObject, std::string strSep, std::string strSchema, std::string& strOutput, bool bUseHex = false);
+		bool WriteKeyValueArrayToFile(const IFormatterObjectW* pObject, std::wstring strSep, std::wstring strSchema, std::wstring strFilename, bool bWriteBOM, bool bUseHex = false);
+		bool WriteKeyValueArrayToFile(const IFormatterObjectA* pObject, std::string strSep, std::string strSchema, std::string strFilename, bool bWriteBOM, bool bUseHex = false);
 
 		// [KEY]=[VALUE]\n[KEY]=[VALUE]: strTokenDelimiter = '\n', strSpliter = '='
 		bool ReadKeyValueArrayFromString(IFormatterObjectW* pObject, std::wstring strTokenDelimiter, std::wstring strSpliter, std::string strContext, std::wstring* pStrErrMsg = NULL);
@@ -107,8 +105,6 @@ namespace core
 		void WriteKeyArrayToString(const IFormatterObjectA* pObject, std::string strSep, std::string strQuo, std::string& strOutput);	
 		void WriteValueArrayToString(const IFormatterObjectW* pObject, std::wstring strSep, std::wstring strQuo, std::string& strOutput);
 		void WriteValueArrayToString(const IFormatterObjectA* pObject, std::string strSep, std::string strQuo, std::string& strOutput);
-		void WriteValueArrayToFile(const IFormatterObjectW* pObject, std::wstring strSep, std::wstring strQuo, std::wstring strFilename);
-		void WriteValueArrayToFile(const IFormatterObjectA* pObject, std::string strSep, std::string strQuo, std::string strFilename);
 		void WriteValueArrayToFile(const IFormatterObjectW* pObject, std::wstring strSep, std::wstring strQuo, std::wstring strFilename, bool bWriteBOM);
 		void WriteValueArrayToFile(const IFormatterObjectA* pObject, std::string strSep, std::string strQuo, std::string strFilename, bool bWriteBOM);
 

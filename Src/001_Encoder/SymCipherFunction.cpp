@@ -156,7 +156,7 @@ namespace core
 
 			pCipher->Init(stCipherKey);
 		}
-		catch (std::runtime_error& e)
+		catch (std::exception& e)
 		{
 			printf("%s\n", e.what());
 			if( pCipher )

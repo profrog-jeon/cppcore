@@ -236,6 +236,12 @@ namespace core
 	//////////////////////////////////////////////////////////////////////////
 	bool FreeLibrary(HANDLE hModule)
 	{
-		return ::dlclose(hModule);
+		int nRet = ::dlclose(hModule);
+		if( nRet )
+		{
+			Log_Error("dlclose error,%d, %s\n", nRet, ::dlerror());
+			return false;
+		}
+		return true;
 	}
 }

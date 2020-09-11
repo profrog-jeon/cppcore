@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "UnicodeEncoding.h"
+#include "Utility.h"
 
 namespace core
 {
@@ -18,26 +19,130 @@ namespace core
 	//////////////////////////////////////////////////////////////////////////
 	size_t CalcUnicodeCchFromASCII(LPCSTR pSrc, size_t tSrcCch, size_t* ptSrcReadCch)
 	{
-		size_t tSrcReadCch = 0;
 		size_t tDestLen = 0;
-		size_t i = 0;
-		while(true)
+		size_t tPos = 0;
+		while(tPos < tSrcCch)
 		{
-			tSrcReadCch = i;
-			if( pSrc[i] < 0 )
-				i += 2;
+			size_t tPrePos = tPos;
+			if( pSrc[tPos] < 0 )
+				tPos += 2;
 			else
-				i++;
+				tPos++;
 
-			if( i > tSrcCch )
+			if (tPos > tSrcCch)
+			{
+				tPos = tPrePos;
 				break;
+			}
 
 			tDestLen++;
 		}
 
 		if( ptSrcReadCch )
-			*ptSrcReadCch = tSrcReadCch;
+			*ptSrcReadCch = tPos;
 		return tDestLen;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	static inline size_t FindInvalidUTF8Char(LPCSTR pData, size_t tDataSize)
+	{
+		size_t i = 0;
+		while(i < tDataSize)
+		{
+			size_t tRequiredSize = 0;
+
+			// ASCII byte 
+			if (0 == (pData[i+0] & 0x80) && IsReadableChar(pData[i]))
+			{
+				tRequiredSize = 1;
+			}
+			else // Start byte for 2byte
+			if (((i + 1) < tDataSize) &&
+				0xC0 == (pData[i+0] & 0xE0) &&
+				0x80 == (pData[i+1] & 0xC0))
+			{
+				tRequiredSize = 2;
+			}
+			else // Start byte for 3byte
+			if (((i + 2) < tDataSize) &&
+				0xE0 == (pData[i+0] & 0xF0) &&
+				0x80 == (pData[i+1] & 0xC0) &&
+				0x80 == (pData[i+2] & 0xC0))
+			{
+				tRequiredSize = 3;
+			}
+			else // Start byte for 4byte
+			if (((i + 3) < tDataSize) &&
+				0xF0 == (pData[i+0] & 0xF8) &&
+				0x80 == (pData[i+1] & 0xC0) &&
+				0x80 == (pData[i+2] & 0xC0) &&
+				0x80 == (pData[i+3] & 0xC0))
+			{
+				tRequiredSize = 4;
+			}
+			else // Start byte for 5byte
+			if (((i + 4) < tDataSize) &&
+				0xF8 == (pData[i+0] & 0xFC) &&
+				0x80 == (pData[i+1] & 0xC0) &&
+				0x80 == (pData[i+2] & 0xC0) &&
+				0x80 == (pData[i+3] & 0xC0) &&
+				0x80 == (pData[i+4] & 0xC0))
+			{
+				tRequiredSize = 5;
+			}
+			else // Start byte for 6byte
+			if (((i + 5) < tDataSize) &&
+				0xFC == (pData[i+0] & 0xFE) &&
+				0x80 == (pData[i+1] & 0xC0) &&
+				0x80 == (pData[i+2] & 0xC0) &&
+				0x80 == (pData[i+3] & 0xC0) &&
+				0x80 == (pData[i+4] & 0xC0) &&
+				0x80 == (pData[i+5] & 0xC0))
+			{
+				tRequiredSize = 6;
+			}
+
+			if (0 == tRequiredSize)
+				return i;
+
+			i += tRequiredSize;
+		}
+		return std::string::npos;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	bool IsInvalidUTF8(LPCSTR pData, size_t tDataSize)
+	{
+		size_t tInvalidIndex = FindInvalidUTF8Char(pData, tDataSize);
+		return tInvalidIndex < tDataSize;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	bool IsInvalidUTF8(const std::string& strUTF8)
+	{
+		size_t tInvalidIndex = FindInvalidUTF8Char(strUTF8.c_str(), strUTF8.length());
+		return tInvalidIndex < strUTF8.length();
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	void MaskUnreadableUTF8(char* pSrc, size_t tSrcSize)	
+	{
+		size_t tPos = 0;
+		while (tPos < tSrcSize)
+		{
+			tPos = FindInvalidUTF8Char(pSrc, tSrcSize);
+			if (std::string::npos == tPos)
+				break;
+
+			pSrc[tPos] = '?';
+		}
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	std::string& MaskUnreadableUTF8(std::string& strUTF8)
+	{
+		MaskUnreadableUTF8((char*)strUTF8.c_str(), strUTF8.length());
+		return strUTF8;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
