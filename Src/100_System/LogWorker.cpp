@@ -4,7 +4,6 @@
 #include "KernelObject.h"
 #include "Environment.h"
 #include "FileSystem.h"
-#include "../../Inc/zip.h"
 
 namespace core
 {
@@ -116,41 +115,6 @@ namespace core
 		}
 
 		//////////////////////////////////////////////////////////////////////////
-		inline static ECODE ZipLogFile(std::wstring strNewZipFile, std::wstring strTargetFile)
-		{
-			zip_t* pZip = NULL;
-			zip_source_t* pSource = NULL;
-			try
-			{
-				std::string strZipFile = UTF8FromWCS(strNewZipFile);
-
-				int nRet = 0;
-				pZip = ::zip_open(strZipFile.c_str(), ZIP_CREATE | ZIP_TRUNCATE, &nRet);
-				if (NULL == pZip)
-					throw exception_format("zip_open(%s) failure, %s", strZipFile.c_str(), ::zip_strerror(pZip));
-
-				std::string strExistingFile = UTF8FromWCS(strTargetFile);
-				std::string strTargetZipPath = ExtractFileName(strExistingFile);
-				
-				pSource = ::zip_source_file(pZip, strExistingFile.c_str(), 0, -1);
-				if (NULL == pSource)
-					throw exception_format("zip_source_file(path:%s, exist:%s) failure, %s", strTargetZipPath.c_str(), strExistingFile.c_str(), zip_strerror(pZip));
-
-				zip_int64_t nIndex = ::zip_file_add(pZip, strTargetZipPath.c_str(), pSource, ZIP_FL_ENC_UTF_8 | ZIP_FL_OVERWRITE);
-				if (nIndex < 0)
-					throw exception_format("zip_file_add(path:%s, exist:%s) failure, %s", strTargetZipPath.c_str(), strExistingFile.c_str(), zip_strerror(pZip));
-
-				::zip_close(pZip);
-			}
-			catch (std::exception & e)
-			{
-				printf("%s", e.what());
-				return EC_INTERNAL_ERROR;
-			}
-			return EC_SUCCESS;
-		}
-
-		//////////////////////////////////////////////////////////////////////////
 		inline static void Internal_FileRotateWorker(ST_LOG_CONTEXT* pContext, size_t tCurFileSize);
 		inline static void Internal_FileWorker(ST_LOG_CONTEXT* pContext, std::string strOutputMsgA)
 		{
@@ -217,14 +181,7 @@ namespace core
 			std::wstring strSystemTime = BuildLocalTimeStringW();
 			std::wstring strNewFilename = Format(L"%s/%s_%s.%s", strDir.c_str(), strFile.c_str(), strSystemTime.c_str(), strEXT.c_str());
 
-			if (MoveFileW(pContext->strOutputFile.c_str(), strNewFilename.c_str()))
-			{
-				if (pContext->dwOutputFlag & LOG_OUTPUT_ZIPBACKUP)
-				{
-					if (EC_SUCCESS == ZipLogFile(strNewFilename + L".zip", strNewFilename))
-						DeleteFileW(strNewFilename.c_str());
-				}
-			}
+			MoveFileW(pContext->strOutputFile.c_str(), strNewFilename.c_str());
 
 			std::wstring strFilePattern = Format(L"%s*.%s", strFile.c_str(), strEXT.c_str());
 			std::set<std::wstring> setFiles;
