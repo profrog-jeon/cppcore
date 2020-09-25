@@ -1,13 +1,13 @@
 #pragma once
 
-#include "../../Inc/randpool.h"
-#include "../../Inc/rsa.h"
-#include "../../Inc/elgamal.h"
-#include "../../Inc/hex.h"
-#include "../../Inc/files.h"
-#include "../../Inc/filters.h"
-#include "../../Inc/aes.h"
-#include "../../Inc/modes.h"
+#include "../../Inc/cryptopp700/randpool.h"
+#include "../../Inc/cryptopp700/rsa.h"
+#include "../../Inc/cryptopp700/elgamal.h"
+#include "../../Inc/cryptopp700/hex.h"
+#include "../../Inc/cryptopp700/files.h"
+#include "../../Inc/cryptopp700/filters.h"
+#include "../../Inc/cryptopp700/aes.h"
+#include "../../Inc/cryptopp700/modes.h"
 
 #include "IPubKeyCipher.h"
 

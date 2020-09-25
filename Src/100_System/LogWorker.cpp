@@ -4,6 +4,7 @@
 #include "KernelObject.h"
 #include "Environment.h"
 #include "FileSystem.h"
+#include "InterlockedOperation.h"
 
 namespace core
 {

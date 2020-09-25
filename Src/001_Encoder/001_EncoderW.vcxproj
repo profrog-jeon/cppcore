@@ -78,7 +78,6 @@
     <ClInclude Include="SymSeed128.h" />
     <ClInclude Include="SymSeed256.h" />
     <ClInclude Include="Type.h" />
-    <ClInclude Include="ZipWrapper.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="AES\aescrypt.asm" />
@@ -126,8 +125,6 @@
     <ClCompile Include="SymPlain.cpp" />
     <ClCompile Include="SymSeed128.cpp" />
     <ClCompile Include="SymSeed256.cpp" />
-    <ClCompile Include="ZipWrapper.cpp" />
-    <ClCompile Include="ZipWrapperT.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{DEBCAB2A-0359-49F0-A2FB-646AEC0CF40D}</ProjectGuid>

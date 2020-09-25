@@ -76,8 +76,8 @@
     <ClCompile Include="SymPlain.cpp" />
     <ClCompile Include="SymSeed128.cpp" />
     <ClCompile Include="SymSeed256.cpp" />
-    <ClCompile Include="ZipWrapper.cpp" />
-    <ClCompile Include="ZipWrapperT.cpp" />
+    <ClCompile Include="rc4.cpp" />
+    <ClCompile Include="sha512.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ssdeep\edit_dist.h">
@@ -141,7 +141,8 @@
     <ClInclude Include="SymSeed128.h" />
     <ClInclude Include="SymSeed256.h" />
     <ClInclude Include="Type.h" />
-    <ClInclude Include="ZipWrapper.h" />
+    <ClInclude Include="rc4.h" />
+    <ClInclude Include="sha512.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="AES\aescrypt.asm">

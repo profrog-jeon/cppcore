@@ -7,5 +7,4 @@
 #include "PubKeyCipherFunction.h"
 #include "SymCipherFunction.h"
 #include "StringSymCipherFunction.h"
-#include "ZipWrapper.h"
 #include "rc4.h"
