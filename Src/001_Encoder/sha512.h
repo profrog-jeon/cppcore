@@ -68,7 +68,7 @@ extern "C" {
 #if 1
 	typedef unsigned char u_int8_t;		/* 1-byte  (8-bits)  */
 	typedef unsigned int u_int32_t;		/* 4-bytes (32-bits) */
-	typedef unsigned long long u_int64_t;	/* 8-bytes (64-bits) */
+	typedef __uint64_t u_int64_t;	/* 8-bytes (64-bits) */
 #endif
 /*
  * Most BSD systems already define u_intXX_t types, as does Linux.
