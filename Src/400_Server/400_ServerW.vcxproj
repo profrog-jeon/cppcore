@@ -273,12 +273,14 @@
     <ClInclude Include="SyncConnection.h" />
     <ClInclude Include="SyncServer.h" />
     <ClInclude Include="SyncTCPSocket.h" />
+    <ClInclude Include="SyncUDPSocket.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SocketCommon.cpp" />
     <ClCompile Include="SyncConnection.cpp" />
     <ClCompile Include="SyncServer.cpp" />
     <ClCompile Include="SyncTCPSocket.cpp" />
+    <ClCompile Include="SyncUDPSocket.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

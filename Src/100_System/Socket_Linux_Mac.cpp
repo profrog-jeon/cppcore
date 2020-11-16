@@ -122,7 +122,10 @@ namespace core
 		stAddress.sin_family = AF_INET;
 		stAddress.sin_port = NetworkFromHost(wPort);
 		stAddress.sin_addr.s_addr = dwIP;
-		return ::sendto(s, buf, len, flags, (sockaddr*)&stAddress, sizeof(stAddress));
+		int nRet = ::sendto(s, buf, len, flags, (sockaddr*)&stAddress, sizeof(stAddress));
+		if ((nRet < 0) && (EAGAIN == errno))
+			errno = EC_TIMEOUT;
+		return nRet;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
@@ -132,8 +135,9 @@ namespace core
 		struct sockaddr_in stAddress = { 0, };
 		socklen_t tLen = sizeof(stAddress);
 		int nRet = ::recvfrom(s, buf, len, 0, (sockaddr*)&stAddress, &tLen);
-		if( nRet <= 0 )
-			return nRet;
+		if ((nRet < 0) && (EAGAIN == errno))
+			errno = EC_TIMEOUT;
+		return nRet;
 
 		if( pSourceInfo )
 		{

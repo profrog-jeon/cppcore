@@ -123,6 +123,8 @@ namespace core
 	int		ShellExecuteByPipe(std::wstring strCmdLine, std::wstring& strOutput);
 
 	HANDLE	CreateThread(int (*pfEntry)(void* pContext), void* pContext, E_THREAD_PRIORITY nPriority = THREAD_PRIORITY_MIDDLE);
+	ECODE	SuspendThread(HANDLE hThread);
+	ECODE	ResumeThread(HANDLE hThread);
 	bool	TerminateThread(HANDLE hThread, DWORD dwExitCode);
 	EWAIT	WaitForThread(HANDLE hThread, DWORD dwTimeOut, int* pnOutRet = NULL);
 	void	CloseThreadHandle(HANDLE hThread);
