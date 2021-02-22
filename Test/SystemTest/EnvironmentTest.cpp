@@ -38,6 +38,19 @@ TEST(SystemTest, LocalTimeTest)
 }
 
 //////////////////////////////////////////////////////////////////////////
+TEST(SystemTest, QueryPerformanceTest)
+{
+	QWORD now;
+	EXPECT_EQ(EC_SUCCESS, QueryPerformanceCounter(&now));
+
+	QWORD freq;
+	EXPECT_EQ(EC_SUCCESS, QueryPerformanceFrequency(&freq));
+
+	double dMilliSecond = (double)now * 1000 / freq;
+	printf("Current time is %lf\n", dMilliSecond);
+}
+
+//////////////////////////////////////////////////////////////////////////
 TEST(SystemTest, SystemTimeTest)
 {
 	ST_SYSTEMTIME stCurrentTime;

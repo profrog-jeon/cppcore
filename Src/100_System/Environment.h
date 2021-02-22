@@ -46,6 +46,9 @@ namespace core
 	DWORD			GetCurrentProcessId(void);
 	DWORD			GetTickCount(void);						// A time value of milli-second.
 	ECODE			GetSystemInfo(ST_SYSTEMINFO* pSystemInfo);
+
+	ECODE			QueryPerformanceCounter(QWORD* pOutValue);
+	ECODE			QueryPerformanceFrequency(QWORD* pOutValue);
 	
 	//$ cat /etc/issue.net 
 	//Ubuntu 16.04.1 LTS

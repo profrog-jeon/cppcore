@@ -80,5 +80,18 @@ namespace core
 
 		return EC_SUCCESS;
 	}
+
+	//////////////////////////////////////////////////////////////////////////
+	double GetCurrentTime(void)
+	{
+		QWORD now;
+		QueryPerformanceCounter(&now);
+
+		QWORD freq;
+		QueryPerformanceFrequency(&freq);
+
+		const double dMilliSecond = (double)now / freq;
+		return dMilliSecond;
+	}
 }
 

@@ -183,6 +183,23 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
+	ECODE QueryPerformanceCounter(QWORD* pOutValue)
+	{
+		struct timeval stTimeVal = { 0, };
+		::gettimeofday(&stTimeVal, NULL);
+
+		*pOutValue = (QWORD)stTimeVal.tv_usec * 10 + (QWORD)stTimeVal.tv_sec * 1000000 * 10;
+		return EC_SUCCESS;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	ECODE QueryPerformanceFrequency(QWORD* pOutValue)
+	{
+		*pOutValue = 10000000;
+		return EC_SUCCESS;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
 	E_OS_TYPE GetOSType(void)
 	{
 		struct utsname uts;

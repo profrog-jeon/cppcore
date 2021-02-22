@@ -104,6 +104,28 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
+	ECODE QueryPerformanceCounter(QWORD* pOutValue)
+	{
+		LARGE_INTEGER tempInteger = { 0, };
+		if (FALSE == ::QueryPerformanceCounter(&tempInteger))
+			return ::GetLastError();
+
+		*pOutValue = tempInteger.QuadPart;
+		return EC_SUCCESS;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	ECODE QueryPerformanceFrequency(QWORD* pOutValue)
+	{
+		LARGE_INTEGER tempInteger = { 0, };
+		if (FALSE == ::QueryPerformanceFrequency(&tempInteger))
+			return ::GetLastError();
+
+		*pOutValue = tempInteger.QuadPart;
+		return EC_SUCCESS;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
 	struct _ST_GET_OS_TYPE_DATA
 	{
 		E_OS_TYPE	nOSType					;
