@@ -22,3 +22,4 @@
 #include "ThreadPool.h"
 #include "zip.h"
 #include "unzip.h"
+#include "RingBuffer.h"

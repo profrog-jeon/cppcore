@@ -280,6 +280,7 @@
     <ClInclude Include="PEParser.h" />
     <ClInclude Include="PEParserData.h" />
     <ClInclude Include="PipePeer.h" />
+    <ClInclude Include="RingBuffer.h" />
     <ClInclude Include="SafeQueue.h" />
     <ClInclude Include="Semaphore.h" />
     <ClInclude Include="SharedMemory.h" />
@@ -307,6 +308,7 @@
     <ClCompile Include="PEParser.cpp" />
     <ClCompile Include="PEParserT.cpp" />
     <ClCompile Include="PipePeer.cpp" />
+    <ClCompile Include="RingBuffer.cpp" />
     <ClCompile Include="Semaphore.cpp" />
     <ClCompile Include="SharedMemory.cpp" />
     <ClCompile Include="TextFileReader.cpp" />
