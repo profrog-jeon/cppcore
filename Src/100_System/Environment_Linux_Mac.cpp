@@ -188,14 +188,15 @@ namespace core
 		struct timeval stTimeVal = { 0, };
 		::gettimeofday(&stTimeVal, NULL);
 
-		*pOutValue = (QWORD)stTimeVal.tv_usec + (QWORD)stTimeVal.tv_sec * 1000000;
+		QWORD qwMicroTime = (QWORD)stTimeVal.tv_usec + (QWORD)stTimeVal.tv_sec * 1000 * 1000;
+		*pOutValue = qwMicroTime;
 		return EC_SUCCESS;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
 	ECODE QueryPerformanceFrequency(QWORD* pOutValue)
 	{
-		*pOutValue = 1000000;
+		*pOutValue = 1000 * 1000;
 		return EC_SUCCESS;
 	}
 

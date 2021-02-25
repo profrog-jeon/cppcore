@@ -83,5 +83,5 @@ namespace core
 	std::string BuildUniqFileName(std::string strTempFile);
 	std::wstring BuildUniqFileName(std::wstring strTempFile);
 
-	double GetCurrentTime(void);
+	double GetCurrentSecond(void);
 }

@@ -82,7 +82,7 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	double GetCurrentTime(void)
+	double GetCurrentSecond(void)
 	{
 		QWORD now;
 		QueryPerformanceCounter(&now);
