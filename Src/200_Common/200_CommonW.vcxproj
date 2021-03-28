@@ -293,6 +293,7 @@
     <ClInclude Include="Uncopyable.h" />
     <ClInclude Include="unzip.h" />
     <ClInclude Include="Utility.h" />
+    <ClInclude Include="WavFileReader.h" />
     <ClInclude Include="zip.h" />
     <ClInclude Include="zipcommon.h" />
   </ItemGroup>
@@ -323,6 +324,7 @@
     <ClCompile Include="unzip.cpp" />
     <ClCompile Include="Utility.cpp" />
     <ClCompile Include="UtilityT.cpp" />
+    <ClCompile Include="WavFileReader.cpp" />
     <ClCompile Include="zip.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
