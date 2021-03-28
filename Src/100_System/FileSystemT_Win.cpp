@@ -69,16 +69,6 @@ namespace core
 		return ::PathFileExists(pszExistFile) != FALSE;
 	}
 
-	//////////////////////////////////////////////////////////////////////////
-	bool IsFileExist(LPCTSTR pszExistFile)
-	{
-#ifdef UNICODE
-		return 0 == ::_waccess(pszExistFile, 0);
-#else
-		return 0 == ::_access(pszExistFile, 0);
-#endif
-	}
-
 	//////////////////////////////////////////////////////////////////////////	
 	bool IsDirectory(LPCTSTR pszPath)
 	{

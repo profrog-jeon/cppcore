@@ -59,16 +59,6 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	bool IsFileExist(LPCTSTR pszExistFile)
-	{
-		struct stat stStat = { 0, };
-		if( ::stat(MBSFromTCS(pszExistFile).c_str(), &stStat) < 0 )
-			return false;
-
-		return (S_ISDIR(stStat.st_mode) || S_ISREG(stStat.st_mode));
-	}
-
-	//////////////////////////////////////////////////////////////////////////
 	bool IsDirectory(LPCTSTR pszPath)
 	{
 		struct stat stStat = { 0, };

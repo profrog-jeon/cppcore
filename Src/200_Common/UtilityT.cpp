@@ -22,6 +22,12 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
+	bool IsFileExist(std::tstring strFile)
+	{
+		return PathFileExists(strFile.c_str());
+	}
+
+	//////////////////////////////////////////////////////////////////////////
 	template <typename T>
 	static inline ECODE ReadFileContentsWorker(LPCTSTR pszFilePath, T& strContents, E_BOM_TYPE nEncodeType)
 	{

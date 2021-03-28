@@ -3931,7 +3931,7 @@ ZRESULT TUnzip::Find(const TCHAR *tname,bool ic,int *index,ZIPENTRY *ze)
 }
 
 void EnsureDirectory(const TCHAR *rootdir, const TCHAR *dir)
-{ if (rootdir!=0 && !IsFileExist(rootdir)) CreateDirectory(rootdir);
+{ if (rootdir!=0 && !PathFileExists(rootdir)) CreateDirectory(rootdir);
   if (*dir==0) return;
   const TCHAR *lastslash=dir, *c=lastslash;
   while (*c!=0) {if (*c=='/' || *c=='\\') lastslash=c; c++;}
@@ -3943,7 +3943,7 @@ void EnsureDirectory(const TCHAR *rootdir, const TCHAR *dir)
     name++;
   }
   TCHAR cd[MAX_PATH]; *cd=0; if (rootdir!=0) SafeStrCpy(cd,MAX_PATH,rootdir); SafeStrCat(cd,MAX_PATH,dir);
-  if (!IsFileExist(cd)) CreateDirectory(cd);
+  if (!PathFileExists(cd)) CreateDirectory(cd);
 }
 
 

@@ -19,6 +19,9 @@ namespace core
 		ST_FUNC_CONSOLE_LOG(std::wstring strName);
 		~ST_FUNC_CONSOLE_LOG(void);
 	};
+
+	bool IsFileExist(std::string strFile);
+	bool IsFileExist(std::wstring strFile);
     
 	char ReverseByteOrder(char btData);
 	WORD ReverseByteOrder(WORD wData);

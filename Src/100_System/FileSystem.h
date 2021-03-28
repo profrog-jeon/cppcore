@@ -11,7 +11,6 @@
 #define GetFileName					GetFileNameW
 #define GetModuleFileName			GetModuleFileNameW
 #define PathFileExists				PathFileExistsW
-#define IsFileExist					IsFileExistW
 #define IsDirectory					IsDirectoryW
 #define CopyFile					CopyFileW
 #define MoveFile					MoveFileW
@@ -30,7 +29,6 @@
 #define GetFileName					GetFileNameA
 #define GetModuleFileName			GetModuleFileNameA
 #define PathFileExists				PathFileExistsA
-#define IsFileExist					IsFileExistA
 #define IsDirectory					IsDirectoryA
 #define CopyFile					CopyFileA
 #define MoveFile					MoveFileA
@@ -54,8 +52,6 @@ namespace core
 	
 	bool			PathFileExistsA(const char* pszExistFile);
 	bool			PathFileExistsW(const wchar_t* pszExistFile);
-	bool			IsFileExistA(const char* pszExistFile);
-	bool			IsFileExistW(const wchar_t* pszExistFile);
 	bool			IsDirectoryA(const char* pszPath);
 	bool			IsDirectoryW(const wchar_t* pszPath);
 
