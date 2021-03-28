@@ -4,16 +4,16 @@
 
 namespace core
 {
-	int ReadWavFile(LPCTSTR pszWavFile, ST_WAVE_FORMATEX* outFormat, std::vector<unsigned char>& vecPCM)
+	ECODE ReadWavFile(std::tstring strWavFile, ST_WAVE_FORMATEX* outFormat, std::vector<unsigned char>& vecPCM)
 	{
 		ECODE nRet = EC_SUCCESS;
 		CMemoryMappedFile MemFile;
 
 		try
 		{
-			nRet = MemFile.Create(pszWavFile, PAGE_READWRITE_, FILE_MAP_READ_);
+			nRet = MemFile.Create(strWavFile.c_str(), PAGE_READWRITE_, FILE_MAP_READ_);
 			if (EC_SUCCESS != nRet)
-				throw exception_format(TEXT("Creating MemMappedFile(%s) failure, %d"), pszWavFile, nRet);
+				throw exception_format(TEXT("Creating MemMappedFile(%s) failure, %d"), strWavFile.c_str(), nRet);
 
 			LPCBYTE pWavData = MemFile.Ptr();
 			size_t tWavSize = MemFile.Size();

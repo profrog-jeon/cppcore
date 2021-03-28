@@ -54,5 +54,6 @@ namespace core
 										/* extra information (after cbSize) */
 	};
 
-	int ReadWavFile(LPCTSTR pszWavFile, ST_WAVE_FORMATEX* outFormat, std::vector<unsigned char>& vecPCM);
+	ECODE ReadWavFile(std::string strWavFile, ST_WAVE_FORMATEX* outFormat, std::vector<unsigned char>& vecPCM);
+	ECODE ReadWavFile(std::wstring strWavFile, ST_WAVE_FORMATEX* outFormat, std::vector<unsigned char>& vecPCM);
 }
