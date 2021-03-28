@@ -23,3 +23,4 @@
 #include "zip.h"
 #include "unzip.h"
 #include "RingBuffer.h"
+#include "WavFileReader.h"
