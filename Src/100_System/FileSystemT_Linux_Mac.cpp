@@ -79,7 +79,7 @@ namespace core
 
 		try
 		{
-			if( bFailIfExist && IsFileExist(pszNewFile) )
+			if( bFailIfExist && PathFileExists(pszNewFile) )
 			{
 				Log_Info(TEXT("The destination file(%s) exists already."), pszNewFile);
 				return false;

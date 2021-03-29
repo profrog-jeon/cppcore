@@ -100,7 +100,7 @@ namespace core
 			Log_Info("- Param      :%s", strParamA.c_str()		);
 
 			Log_Info(TEXT("Try to call CreateProcess. FilePath:%s"), pszFilePath);
-			if( !IsFileExist(pszFilePath) )
+			if( !PathFileExists(pszFilePath) )
 				throw exception_format(TEXT("file(%s) is not exist."), pszFilePath);
 
 			int nPID = ::fork();
