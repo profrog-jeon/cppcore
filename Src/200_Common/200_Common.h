@@ -5,6 +5,7 @@
 #include "Mutex.h"
 #include "PEParser.h"
 #include "SafeQueue.h"
+#include "SafeStack.h"
 #include "SyncQueue.h"
 #include "LockFreeQueue.h"
 #include "CircularQueue.h"
