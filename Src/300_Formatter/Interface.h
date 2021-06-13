@@ -189,6 +189,24 @@ namespace core
 		}
 
 		template<typename T>
+		core::IFormatterA& Sync(std::string& strKey, std::vector<T*>* pVecObject)
+		{
+			const size_t tSize = _BeginArrayGrouping(strKey, pVecObject->size());
+			pVecObject->resize(tSize);
+
+			size_t i;
+			for (i = 0; i < tSize; i++)
+			{
+				_BeginArrayItem(i, tSize);
+				Sync(strKey, (*pVecObject)[i]);
+				_EndArrayItem(i, tSize);
+			}
+
+			_EndArrayGrouping();
+			return *this;
+		}
+
+		template<typename T>
 		core::IFormatterA& Sync(std::string& strKey, std::set<T>* pSetObject)
 		{
 			const size_t tSize = _BeginArrayGrouping(strKey, pSetObject->size());
@@ -412,6 +430,24 @@ namespace core
 			{
 				_BeginArrayItem(i, tSize);
 				Sync(strKey, &(*pVecObject)[i]);
+				_EndArrayItem(i, tSize);
+			}
+
+			_EndArrayGrouping();
+			return *this;
+		}
+
+		template<typename T>
+		core::IFormatterW& Sync(std::wstring& strKey, std::vector<T*>* pVecObject)
+		{
+			const size_t tSize = _BeginArrayGrouping(strKey, pVecObject->size());
+			pVecObject->resize(tSize);
+
+			size_t i;
+			for (i = 0; i < tSize; i++)
+			{
+				_BeginArrayItem(i, tSize);
+				Sync(strKey, (*pVecObject)[i]);
 				_EndArrayItem(i, tSize);
 			}
 
