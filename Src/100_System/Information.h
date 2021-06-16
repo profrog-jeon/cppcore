@@ -4,11 +4,13 @@
 #include "../__Common/Type.h"
 
 #ifdef UNICODE
+#define MakeIPString				MakeIPStringW
 #define IPAddressFrom				IPAddressFromW
 #define GetWeekString				GetWeekStringW
 #define GetMonthString				GetMonthStringW
 #define GetOSTypeString				GetOSTypeStringW
 #else
+#define MakeIPString				MakeIPStringA
 #define IPAddressFrom				IPAddressFromA
 #define GetWeekString				GetWeekStringA
 #define GetMonthString				GetMonthStringA
@@ -17,6 +19,22 @@
 
 namespace core
 {
+	struct ST_IP_ADDRESS
+	{
+		union
+		{
+			DWORD dwIP;
+			struct {
+				BYTE addr[4];
+			} ip;
+		};
+
+		ST_IP_ADDRESS(std::string strIP);
+		ST_IP_ADDRESS(std::wstring strIP);
+		std::string MakeIPStringA(void);
+		std::wstring MakeIPStringW(void);
+	};
+
 	DWORD			IPAddressFromA(const char* pszIP);
 	DWORD			IPAddressFromW(const wchar_t* pszIP);
 	std::string		IPAddressFromA(DWORD dwIP);
