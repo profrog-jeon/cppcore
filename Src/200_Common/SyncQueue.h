@@ -54,6 +54,11 @@ namespace core
 		{
 			return m_queItems.empty();
 		}
+		
+		size_t Count(void)
+		{
+			return m_queItems.size();
+		}
 
 		void Clear(void)
 		{
