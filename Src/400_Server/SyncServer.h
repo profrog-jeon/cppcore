@@ -48,7 +48,7 @@ namespace core
 
 	public:
 		CSyncServer();
-		~CSyncServer();
+		virtual ~CSyncServer();
 
 		virtual ECODE StartUp(const ST_SYNCSERVER_INIT& stInit);
 		virtual void ShutDown(void);
