@@ -123,6 +123,26 @@ namespace core
 		}
 	}
 
+	void CSyncServer::Broadcast(LPCVOID pData, size_t tSize, FP_BROADCAST_CALLBACK fpCallback, void* pContext)
+	{
+		CCriticalSection::Owner Lock(m_csConnected);
+
+		for (auto iter = m_setConnected.begin(); iter != m_setConnected.end(); iter++)
+		{
+			if (NULL == fpCallback)
+			{
+				(*iter)->Raw()->Send(pData, tSize, 5000);
+				continue;
+			}
+
+			if (fpCallback((*iter), pContext))
+			{
+				(*iter)->Raw()->Send(pData, tSize, 5000);
+				continue;
+			}
+		}
+	}
+
 	struct ST_CONNECTION_THREAD_DATA
 	{
 		CSyncServer* pServer;

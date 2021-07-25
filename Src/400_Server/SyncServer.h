@@ -55,6 +55,7 @@ namespace core
 
 		typedef bool (*FP_BROADCAST_CALLBACK)(CSyncConnection* pConnection, void* pContext);	// check send packet or not
 		void		Broadcast(std::string strContext, FP_BROADCAST_CALLBACK fpCallback = NULL, void* pContext = NULL);
+		void		Broadcast(LPCVOID pData, size_t tSize, FP_BROADCAST_CALLBACK fpCallback = NULL, void* pContext = NULL);
 
 		size_t		MaxConnectionCount(void) { return m_stInit.Connections.size(); }
 		size_t		ConnectionCount(void) { return m_setConnected.size(); }
