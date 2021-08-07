@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "WavFileReader.h"
+#include "WavFile.h"
 #include "MemoryMappedFile.h"
 
 namespace core
@@ -65,6 +65,52 @@ namespace core
 		{
 			Log_Error("%s", e.what());
 			MemFile.Destroy();
+			return nRet;
+		}
+
+		return EC_SUCCESS;
+	}
+
+	ECODE WriteWavFile(std::tstring strWavFile, const ST_WAVE_FORMATEX& stFormat, const std::vector<unsigned char>& vecPCM)
+	{
+		ECODE nRet = EC_SUCCESS;
+		HANDLE hFile = NULL;
+
+		try
+		{
+			hFile = CreateFile(strWavFile.c_str(), GENERIC_WRITE_, CREATE_ALWAYS_, 0);
+
+			nRet = EC_OPEN_FAILURE;
+			if (NULL == hFile)
+				throw exception_format(TEXT("CreateFile(%s) failure, %d"), strWavFile.c_str(), nRet);
+
+			DWORD dwWritten = 0;
+
+			ST_WAV_HEADER stHeader;
+			stHeader.dwPayloadSize = 4 + sizeof(ST_WAV_CHUNK_FMT) + sizeof(ST_WAV_CHUNK_DATA) + vecPCM.size();
+			WriteFile(hFile, &stHeader, sizeof(stHeader), &dwWritten);
+
+			ST_WAV_CHUNK_FMT stChunkFmt;
+			stChunkFmt.wAudioFormat = stFormat.wFormatTag;
+			stChunkFmt.wNumOfChannel = stFormat.nChannels;
+			stChunkFmt.dwSampleRate = stFormat.nSamplesPerSec;
+			stChunkFmt.dwByteRate = stFormat.nAvgBytesPerSec;
+			stChunkFmt.wBlockAlign = stFormat.nBlockAlign;
+			stChunkFmt.wBitPerSample = stFormat.wBitsPerSample;
+			WriteFile(hFile, &stChunkFmt, sizeof(stChunkFmt), &dwWritten);
+
+			ST_WAV_CHUNK_DATA stChunkData;
+			stChunkData.dwChunkSize = vecPCM.size();
+			WriteFile(hFile, &stChunkData, sizeof(stChunkData), &dwWritten);
+			WriteFile(hFile, vecPCM.data(), vecPCM.size(), &dwWritten);
+
+			CloseFile(hFile);
+		}
+		catch (std::exception& e)
+		{
+			Log_Error("%s", e.what());
+			if (hFile)
+				CloseFile(hFile);
 			return nRet;
 		}
 
