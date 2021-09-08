@@ -18,6 +18,6 @@ namespace core
 		ECODE Create(size_t tSize);
 		void Destroy(void);
 
-		LPBYTE Alloc(size_t tSize);
+		LPBYTE Alloc(size_t tSize, size_t tReservedSize = 0);
 	};
 }
