@@ -29,14 +29,14 @@ namespace core
 		m_vecBuffer.clear();
 	}
 
-	LPBYTE CRingBuffer::Alloc(size_t tSize)
+	LPBYTE CRingBuffer::Alloc(size_t tSize, size_t tReservedSize)
 	{
 		CCriticalSection::Owner lock(m_csPos);
 
 		size_t tPrePos = m_tPos;
 
 		m_tPos += tSize;
-		if (m_tPos <= m_vecBuffer.size())
+		if ((m_tPos + tReservedSize) <= m_vecBuffer.size())
 			return &m_vecBuffer[tPrePos];
 
 		m_tPos = tSize;
