@@ -254,13 +254,13 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	static void ReadContextFromPipe(HANDLE hStdOut, std::tstring& strOutput)
+	static void ReadContextFromPipe(HANDLE hStdOut, std::string& strOutput)
 	{
 		DWORD dwAvail = 0;
 		while (::PeekNamedPipe(hStdOut, NULL, 0, NULL, &dwAvail, NULL))
 		{
 			if (0 == dwAvail)
-				return;
+				break;
 
 			const DWORD dwBuffSize = 32;
 			char szBuffer[dwBuffSize + 1];
@@ -268,7 +268,7 @@ namespace core
 			DWORD dwReadSize = 0;
 			ReadFile(hStdOut, szBuffer, MIN(dwAvail, dwBuffSize), &dwReadSize);
 			szBuffer[dwReadSize] = 0;
-			strOutput += TCSFromMBS(szBuffer);
+			strOutput += szBuffer;
 		}
 	}
 
@@ -305,9 +305,11 @@ namespace core
 			if (!::CreateProcess(NULL, (LPTSTR)strCmdLine.c_str(), NULL, NULL, TRUE, 0, NULL, NULL, &stStartupInfo, &stProcessInfo))
 				throw exception_format(TEXT("Failed to CreateProcess(%s)"), strCmdLine.c_str());
 
+			std::string strTempOutput;
 			while (WAIT_TIMEOUT == ::WaitForSingleObject(stProcessInfo.hProcess, 100))
-				ReadContextFromPipe(hStdOutPair[0], strOutput);
-			ReadContextFromPipe(hStdOutPair[0], strOutput);
+				ReadContextFromPipe(hStdOutPair[0], strTempOutput);
+			ReadContextFromPipe(hStdOutPair[0], strTempOutput);
+			strOutput = TCSFromMBS(strTempOutput);
 
 			if (!GetExitCodeProcess(stProcessInfo.hProcess, &dwExitCode))
 				Log_Warn(TEXT("GetExitCodeProcess failure."));
