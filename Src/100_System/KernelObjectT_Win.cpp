@@ -309,7 +309,7 @@ namespace core
 			while (WAIT_TIMEOUT == ::WaitForSingleObject(stProcessInfo.hProcess, 100))
 				ReadContextFromPipe(hStdOutPair[0], strTempOutput);
 			ReadContextFromPipe(hStdOutPair[0], strTempOutput);
-			strOutput = TCSFromMBS(strTempOutput);
+			strOutput = TCSFromUTF8(strTempOutput);
 
 			if (!GetExitCodeProcess(stProcessInfo.hProcess, &dwExitCode))
 				Log_Warn(TEXT("GetExitCodeProcess failure."));
