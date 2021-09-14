@@ -238,21 +238,23 @@ namespace core
 		typedef std::map<std::string, ST_ELF_SECTION_HEADER64>				CELFSectionHeader64;
 		typedef std::map<std::string, ST_ELF_SECTION_HEADER64>::iterator	CELFSectionHeader64It;
 
-		std::string m_strFilePath;
+		std::map<std::string, ST_VERSIONINFO> m_mapVersionInfo;
+
 		CELFSectionHeader64 m_mapSection64;
 
 	public:
 		CELFParser(void);
 
 		ECODE Parse(const char* pszFilePath);
-		ECODE QueryFileVersion(ST_VERSIONINFO& stVersionInfo);
-		ECODE QueryProductVersion(ST_VERSIONINFO& stVersionInfo);
+		ECODE Parse(const wchar_t* pszFilePath);
+		ECODE QueryFileVersion(ST_VERSIONINFO& outVersionInfo);
+		ECODE QueryProductVersion(ST_VERSIONINFO& outVersionInfo);
 
 	private:
-		ECODE Parse32Bit(FILE* pFile, const ST_ELF_IDENTITY& stIdentity);
-		ECODE Parse64Bit(FILE* pFile, const ST_ELF_IDENTITY& stIdentity);
+		ECODE Parse32Bit(HANDLE hFile, const ST_ELF_IDENTITY& stIdentity);
+		ECODE Parse64Bit(HANDLE hFile, const ST_ELF_IDENTITY& stIdentity);
 
-		ECODE QueryELFVersion(const char* pszSectioName, ST_VERSIONINFO& stVersionInfo);
+		ECODE QueryVersion(HANDLE hFile, const char* pszSectioName, ST_VERSIONINFO& stVersionInfo);
 
 	};
 

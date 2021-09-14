@@ -290,6 +290,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ELFParser.cpp" />
+    <ClCompile Include="ELFParserT.cpp" />
     <ClCompile Include="Environment.cpp" />
     <ClCompile Include="EnvironmentT.cpp" />
     <ClCompile Include="EnvironmentT_Win.cpp" />
