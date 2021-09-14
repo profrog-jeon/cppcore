@@ -1,0 +1,13 @@
+﻿---------- V.0.0.0.0 2021-09-10 19:41:31
+릴리즈 노트 파일 추가
+github 용량 문제로 cryptopp 라이브러리 제거
+[100_System] 윈도우 콘솔에서 수집된 문자열은 UTF8 형식이라서 발생하는 유니코드 변환오류 수정
+[100_System] 윈도우 ShellExecuteByPipe 함수에서 한글이 포함된 출력문이 있을 경우 간혹 글자가 깨지는 문제 수정
+[200_Common] RingBuffer Alloc 메소드에 ReservedSize 인자 추가 -> 예상되는 추가 크기를 미리 잡아둘 수 있다.
+[200_Common] WriteWavFile 함수 추가
+[400_Server] SyncServer 상속 가능하도록 소멸자에 virtual 추가
+[400_Server] SyncServer 포인터 변수형 Broadcast 함수 추가
+[200_Common] TSyncQueue Count 메소드 추가함
+[100_System] IP주소 파서 추가
+[300_Formatter] 포인형 vector 인터페이스 추가
+[200_Common] SafeStack 추가
