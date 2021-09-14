@@ -186,7 +186,7 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	int ShellExecuteByPipe(std::tstring strCmdLine, std::tstring& strOutput)
+	int ShellExecuteByPipe(std::tstring strCmdLine, std::string& strOutput)
 	{
 		FILE* pPipe = NULL;
 		signal(SIGPIPE, SIG_IGN);    // sigpipe 무시.
@@ -201,7 +201,7 @@ namespace core
 			const size_t tBuffSize = 64;
 			char szBuf[tBuffSize];
 			while (NULL != ::fgets(szBuf, tBuffSize, pPipe))
-				strOutput += TCSFromMBS(szBuf);
+				strOutput += szBuf;
 
 			nExitCode = ::pclose(pPipe);
 			pPipe = NULL;

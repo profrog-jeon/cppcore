@@ -228,7 +228,7 @@ namespace core
 
 	//////////////////////////////////////////////////////////////////////////
 	// Deprecated, CANNOT hide console window
-	static int ShellExecuteByPipe_Old(std::tstring strCmdLine, std::tstring& strOutput)
+	static int ShellExecuteByPipe_Old(std::tstring strCmdLine, std::string& strOutput)
 	{
 		FILE* pPipe = NULL;
 		try
@@ -240,7 +240,7 @@ namespace core
 			const size_t tBuffSize = 64;
 			char szBuf[tBuffSize];
 			while(::fgets(szBuf, tBuffSize, pPipe))
-				strOutput += TCSFromMBS(szBuf);
+				strOutput += szBuf;
 		}
 		catch (std::exception& e)
 		{
@@ -273,7 +273,7 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	static ECODE ShellExecuteByPipe_New(std::tstring strCmdLine, std::tstring& strOutput, DWORD& dwExitCode)
+	static ECODE ShellExecuteByPipeWorker(std::tstring strCmdLine, std::string& strOutput, DWORD& dwExitCode)
 	{
 		PROCESS_INFORMATION stProcessInfo = { 0, };
 		HANDLE hStdOutPair[2] = { 0, };
@@ -305,11 +305,9 @@ namespace core
 			if (!::CreateProcess(NULL, (LPTSTR)strCmdLine.c_str(), NULL, NULL, TRUE, 0, NULL, NULL, &stStartupInfo, &stProcessInfo))
 				throw exception_format(TEXT("Failed to CreateProcess(%s)"), strCmdLine.c_str());
 
-			std::string strTempOutput;
 			while (WAIT_TIMEOUT == ::WaitForSingleObject(stProcessInfo.hProcess, 100))
-				ReadContextFromPipe(hStdOutPair[0], strTempOutput);
-			ReadContextFromPipe(hStdOutPair[0], strTempOutput);
-			strOutput = TCSFromUTF8(strTempOutput);
+				ReadContextFromPipe(hStdOutPair[0], strOutput);
+			ReadContextFromPipe(hStdOutPair[0], strOutput);
 
 			if (!GetExitCodeProcess(stProcessInfo.hProcess, &dwExitCode))
 				Log_Warn(TEXT("GetExitCodeProcess failure."));
@@ -337,10 +335,10 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	int ShellExecuteByPipe(std::tstring strCmdLine, std::tstring& strOutput)
+	int ShellExecuteByPipe(std::tstring strCmdLine, std::string& strOutput)
 	{
 		DWORD dwExitCode = 0;
-		ECODE nRet = ShellExecuteByPipe_New(strCmdLine, strOutput, dwExitCode);
+		ECODE nRet = ShellExecuteByPipeWorker(strCmdLine, strOutput, dwExitCode);
 		if (EC_SUCCESS != nRet)
 			return ShellExecuteByPipe_Old(strCmdLine, strOutput);
 

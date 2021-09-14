@@ -120,7 +120,7 @@ namespace core
 	void	ExitProcess(int nExitCode);
 
 	int		ShellExecuteByPipe(std::string strCmdLine, std::string& strOutput);
-	int		ShellExecuteByPipe(std::wstring strCmdLine, std::wstring& strOutput);
+	int		ShellExecuteByPipe(std::wstring strCmdLine, std::string& strOutput);
 
 	HANDLE	CreateThread(int (*pfEntry)(void* pContext), void* pContext, E_THREAD_PRIORITY nPriority = THREAD_PRIORITY_MIDDLE);
 	ECODE	SuspendThread(HANDLE hThread);
