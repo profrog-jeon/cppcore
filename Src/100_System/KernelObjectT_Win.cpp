@@ -266,9 +266,15 @@ namespace core
 			char szBuffer[dwBuffSize + 1];
 
 			DWORD dwReadSize = 0;
-			ReadFile(hStdOut, szBuffer, MIN(dwAvail, dwBuffSize), &dwReadSize);
+			if (!ReadFile(hStdOut, szBuffer, MIN(dwAvail, dwBuffSize), &dwReadSize))
+				break;
+
 			szBuffer[dwReadSize] = 0;
-			strOutput += szBuffer;
+			size_t tPreSize = strOutput.length();
+			strOutput.resize(tPreSize + dwReadSize);
+			memcpy((LPBYTE)strOutput.c_str() + tPreSize, szBuffer, dwReadSize);
+
+			printf("%s", szBuffer);
 		}
 	}
 
