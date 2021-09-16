@@ -48,7 +48,7 @@ namespace core
 		DWORD dwLow = ::GetFileSize(hFile, &dwHigh);
 		if( INVALID_FILE_SIZE == dwLow )
 		{
-			Log_Error("GetFileSize(0x%08X) failure, ", hFile);
+			Log_Debug("GetFileSize(0x%08X) failure, ", hFile);
 			return 0;
 		}
 		return MAKEQWORD(dwLow, dwHigh);
@@ -146,13 +146,13 @@ namespace core
 		HANDLE hThread = (HANDLE)::_beginthreadex(NULL, 0, ThreadCaller, pData, 0, NULL);
 		if( INVALID_HANDLE_VALUE == hThread )
 		{
-			Log_Error("_beginthreadex operation failure");
+			Log_Debug("_beginthreadex operation failure");
 			delete pData;
 			return NULL;
 		}
 
 		if( FALSE == core::SetThreadPriority(hThread, nPriority) )
-			Log_Error("SetThreadPriority calling failure, as (%d-)%d(-%d)", THREAD_PRIORITY_BELOW_LOW, nPriority, THREAD_PRIORITY_ABOVE_HIGH);
+			Log_Debug("SetThreadPriority calling failure, as (%d-)%d(-%d)", THREAD_PRIORITY_BELOW_LOW, nPriority, THREAD_PRIORITY_ABOVE_HIGH);
 		return hThread;	
 	}
 
@@ -190,7 +190,7 @@ namespace core
 			if( ::GetExitCodeThread(hThread, &dwRet) )
 				(*pnOutRet) = dwRet;
 			else
-				Log_Error("GetExitCodeThread calling failure");
+				Log_Debug("GetExitCodeThread calling failure");
 		}
 
 		return WAIT_OBJECT_0_;
@@ -215,7 +215,7 @@ namespace core
 			if( ::GetExitCodeThread(hThread, &dwRet) )
 				(*pnOutRet) = dwRet;
 			else
-				Log_Error("GetExitCodeThread calling failure");
+				Log_Debug("GetExitCodeThread calling failure");
 		}
 		
 		::CloseHandle(hThread);
@@ -275,7 +275,7 @@ namespace core
 		DWORD dwExitCode = 0xFFFFFFFF;
 		if( FALSE == ::GetExitCodeProcess(hProcess, &dwExitCode) )
 		{
-			Log_Error("GetExitCodeProcess failure");
+			Log_Debug("GetExitCodeProcess failure");
 			return WAIT_OBJECT_0_;
 		}
 
@@ -434,7 +434,7 @@ namespace core
 		}
 		catch(std::exception& e)
 		{
-			Log_Error("%s", e.what());
+			Log_Debug("%s", e.what());
 			return dwRet;
 		}
 
@@ -478,7 +478,7 @@ namespace core
 		}
 		catch(std::exception& e)
 		{
-			Log_Error("%s", e.what());
+			Log_Debug("%s", e.what());
 			return nRet;
 		}
 

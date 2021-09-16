@@ -23,7 +23,7 @@ namespace core
 		if( INVALID_HANDLE_VALUE == hFile )
 		{
 			// NEVER!!! uncomment this log. it invokes recursive calling by Log.
-			//Log_Error(TEXT("CreateFile(%s) has failed"), lpFileName);
+			//Log_Debug(TEXT("CreateFile(%s) has failed"), lpFileName);
 			return NULL;
 		}
 		return hFile;
@@ -57,7 +57,7 @@ namespace core
 		}
 		catch(std::exception& e)
 		{
-			Log_Error("%s", e.what());
+			Log_Debug("%s", e.what());
 
 			if( INVALID_HANDLE_VALUE != hPipe )
 				::CloseHandle(hPipe);
@@ -90,7 +90,7 @@ namespace core
 		}
 		catch(std::exception& e)
 		{
-			Log_Error("%s", e.what());
+			Log_Debug("%s", e.what());
 
 			if( INVALID_HANDLE_VALUE != hPipe )
 				::CloseHandle(hPipe);
@@ -117,7 +117,7 @@ namespace core
 		HANDLE hMutex = ::OpenMutex(MUTEX_ALL_ACCESS, FALSE, pszName);
 		if( NULL == hMutex )
 		{
-			Log_Error(TEXT("OpenMutex(%s) operation failed, %d"), pszName, GetLastError());
+			Log_Debug(TEXT("OpenMutex(%s) operation failed, %d"), pszName, GetLastError());
 			return NULL;
 		}
 		return hMutex;
@@ -129,7 +129,7 @@ namespace core
 		HANDLE hSemaphore = ::CreateSemaphore(NULL, nInitialCount, 0x7FFFFFFF, pszName);
 		if( NULL == hSemaphore )
 		{
-			Log_Error("CreateSemaphore(%d, %s) failure.", nInitialCount, pszName);
+			Log_Debug("CreateSemaphore(%d, %s) failure.", nInitialCount, pszName);
 			return NULL;
 		}
 
@@ -142,7 +142,7 @@ namespace core
 		HANDLE hSemaphore = ::OpenSemaphore(SEMAPHORE_ALL_ACCESS, FALSE, pszName);
 		if( NULL == hSemaphore )
 		{
-			Log_Error("OpenSemaphore(%s) failure.", pszName);
+			Log_Debug("OpenSemaphore(%s) failure.", pszName);
 			return NULL;
 		}
 
@@ -204,7 +204,7 @@ namespace core
 		}
 		catch (std::exception& e)
 		{
-			Log_Error("%s", e.what());
+			Log_Debug("%s", e.what());
 			Log_Info("--------------------------");
 			return NULL;
 		}
@@ -244,7 +244,7 @@ namespace core
 		}
 		catch (std::exception& e)
 		{
-			Log_Error(TEXT("%s"), e.what());
+			Log_Debug(TEXT("%s"), e.what());
 			if( pPipe )
 				::_pclose(pPipe);
 			return -1;
@@ -325,7 +325,7 @@ namespace core
 		}
 		catch (std::exception & e)
 		{
-			Log_Error("%s", e.what());
+			Log_Debug("%s", e.what());
 			if(stProcessInfo.hProcess)
 				CloseProcessHandle(stProcessInfo.hProcess);
 			if (stProcessInfo.hThread)

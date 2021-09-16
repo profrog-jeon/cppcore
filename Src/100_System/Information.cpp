@@ -113,7 +113,7 @@ namespace core
 			DWORD dwValue = DWORDFrom(strToken);
 			if( dwValue > 0xFF )
 			{
-				Log_Error(TEXT("IP address %dth token exceed 0xFF in %s"), i+1, pszIP);
+				Log_Debug(TEXT("IP address %dth token exceed 0xFF in %s"), i+1, pszIP);
 				SetLastError(EC_INVALID_IP_STRING);
 				return 0;
 			}
@@ -122,7 +122,7 @@ namespace core
 
 		if( (i != 4) || (nOffset > 0) )
 		{
-			Log_Error(TEXT("Invalid IP address token count, %s"), pszIP);
+			Log_Debug(TEXT("Invalid IP address token count, %s"), pszIP);
 			SetLastError(EC_INVALID_IP_STRING);
 			return 0;
 		}

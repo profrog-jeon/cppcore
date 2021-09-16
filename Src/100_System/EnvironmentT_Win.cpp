@@ -22,7 +22,7 @@ namespace core
 		TCHAR			szBuf[tBufSize] = { 0, };
 		if( 0 == ::FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM, 0, nCode, 0, szBuf, tBufSize, NULL) )
 		{
-			Log_Error("FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM, ... %u) calling failure, %u", nCode, ::GetLastError());
+			Log_Debug("FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM, ... %u) calling failure, %u", nCode, ::GetLastError());
 			return Format(TEXT("Error Code:%u"), nCode);
 		}
 
@@ -47,7 +47,7 @@ namespace core
 			return strName;
 		}
 
-		Log_Error("GetUserName calling failure");
+		Log_Debug("GetUserName calling failure");
 		return TEXT("");
 	}
 
@@ -59,7 +59,7 @@ namespace core
 
 		if( FALSE == ::GetComputerName(szName, &dwCchLen) )
 		{
-			Log_Error("GetComputerName calling failure");
+			Log_Debug("GetComputerName calling failure");
 			return TEXT("");
 		}
 
@@ -130,7 +130,7 @@ namespace core
 		}
 		catch (std::exception& e)
 		{
-			//Log_Error("%s", e.what());
+			//Log_Debug("%s", e.what());
 			return nRet;
 		}
 	}
@@ -172,7 +172,7 @@ namespace core
 		}
 		catch (std::exception& e)
 		{
-			//Log_Error("%s", e.what());
+			//Log_Debug("%s", e.what());
 			return nRet;
 		}
 	}
@@ -228,7 +228,7 @@ namespace core
 		DWORD dwRet = ::GetTimeZoneInformation(&stTemp);
 		if( TIME_ZONE_ID_INVALID == dwRet )
 		{
-			Log_Error("GetTimeZoneInformation calling failure");
+			Log_Debug("GetTimeZoneInformation calling failure");
 			return TIME_ZONE_ID_INVALID_;
 		}
 

@@ -104,7 +104,7 @@ namespace core
 		}
 		catch( std::exception& e )
 		{
-			Log_Error("%s", e.what());
+			Log_Debug("%s", e.what());
 
 			if( pInFile )
 				fclose(pInFile);
@@ -135,7 +135,7 @@ namespace core
 	{
 		if( ::unlink(MBSFromTCS(pszFileName).c_str()) < 0 )
 		{
-			Log_Error(TEXT("unlink(%s) failure, %d"), pszFileName, errno);
+			Log_Debug(TEXT("unlink(%s) failure, %d"), pszFileName, errno);
 			return false;
 		}
 
@@ -149,7 +149,7 @@ namespace core
 		{
 			if( errno != EEXIST )
 			{
-				Log_Error(TEXT("mkdir(%s) failure, %d"), pszPath, errno);
+				Log_Debug(TEXT("mkdir(%s) failure, %d"), pszPath, errno);
 				return false;
 			}
 
@@ -164,7 +164,7 @@ namespace core
 	{
 		if( ::rmdir(MBSFromTCS(pszPath).c_str()) < 0 )
 		{
-			Log_Error(TEXT("rmdir(%s) failure, %d"), pszPath, errno);
+			Log_Debug(TEXT("rmdir(%s) failure, %d"), pszPath, errno);
 			return false;
 		}
 		return true;
@@ -175,7 +175,7 @@ namespace core
 	{
 		if( 0 == ::link(MBSFromTCS(pszTargetFilename).c_str(), MBSFromTCS(pszSymlinkFilename).c_str()) )
 			return true;
-		Log_Error("link failure, %d(%s)", errno, strerror(errno));
+		Log_Debug("link failure, %d(%s)", errno, strerror(errno));
 		return false;
 	}
 
@@ -192,7 +192,7 @@ namespace core
 		std::string strTmp = Format("/proc/%d/exe", ::getpid());
 		char szPath[1024] = { 0x00, };
 		if( ::readlink(strTmp.c_str(), szPath, 1024) < 0 )
-			Log_Error("readlink(%s) failure, %d", strTmp.c_str(), errno);
+			Log_Debug("readlink(%s) failure, %d", strTmp.c_str(), errno);
 		return TCSFromMBS(szPath);
 #endif
 	}
@@ -206,7 +206,7 @@ namespace core
 		Dl_info stModuleInfo;
 		if( 0 == ::dladdr(hModule, &stModuleInfo) )
 		{
-			Log_Error("dladdr calling failure, hModule=0x%X", hModule);
+			Log_Debug("dladdr calling failure, hModule=0x%X", hModule);
 			return TEXT("");
 		}
 
@@ -219,7 +219,7 @@ namespace core
 		char* pszCWD = ::getcwd(NULL, 0);
 		if( NULL == pszCWD )
 		{
-			Log_Error("getcwd failure, %d", errno);
+			Log_Debug("getcwd failure, %d", errno);
 			return TEXT("");
 		}
 
@@ -234,7 +234,7 @@ namespace core
 		std::string strNewPathA = MBSFromTCS(pszNewPath);
 		if( ::chdir(strNewPathA.c_str()) < 0 )
 		{
-			Log_Error("chdir(%s) failure, %s", strNewPathA.c_str(), strerror(errno));
+			Log_Debug("chdir(%s) failure, %s", strNewPathA.c_str(), strerror(errno));
 			return false;
 		}
 		return true;
@@ -254,14 +254,14 @@ namespace core
 			struct stat stStat = { 0, };
 			if( ::stat(strFilePath.c_str(), &stStat) < 0 )
 			{
-				Log_Error("::stat(%s) has failed, %s", strFilePath.c_str(), strerror(errno));
+				Log_Debug("::stat(%s) has failed, %s", strFilePath.c_str(), strerror(errno));
 				continue;
 			}
 
 			if( S_ISLNK(stStat.st_mode) )
 			{
 				if( ::lstat(strFilePath.c_str(), &stStat) < 0 )
-					Log_Error("::lstat(%s) has failed, %s", strFilePath.c_str(), strerror(errno));
+					Log_Debug("::lstat(%s) has failed, %s", strFilePath.c_str(), strerror(errno));
 			}
 
 			pFindData->bIsDirectory = S_ISDIR(stStat.st_mode);
@@ -287,7 +287,7 @@ namespace core
 		DIR* pDir = ::opendir(strCurPath.c_str());
 		if( NULL == pDir )
 		{
-			Log_Error("opendir(%s) operation failure, %s", strCurPath.c_str(), strerror(errno));
+			Log_Debug("opendir(%s) operation failure, %s", strCurPath.c_str(), strerror(errno));
 			return NULL;
 		}
 
