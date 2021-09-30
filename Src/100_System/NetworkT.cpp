@@ -35,7 +35,7 @@ namespace core
 
 		if( outInfo.strIP.empty() )
 		{
-			Log_Error(TEXT("Unknown ethernet name[%s]"), strEthName.c_str());
+			Log_Debug(TEXT("Unknown ethernet name[%s]"), strEthName.c_str());
 			return EC_NO_DATA;
 		}
 

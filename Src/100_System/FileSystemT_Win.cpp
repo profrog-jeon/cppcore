@@ -26,7 +26,7 @@ namespace core
 		errno_t tRet = tfopen_s(&pFile, pszPath, pszMode);
 		if( 0 != tRet )
 		{
-			Log_Error(TEXT("_tfopen_s(%s, %s) failure, %u"), pszPath, pszMode, tRet);
+			Log_Debug(TEXT("_tfopen_s(%s, %s) failure, %u"), pszPath, pszMode, tRet);
 			return NULL;
 		}
 
@@ -41,7 +41,7 @@ namespace core
 		UINT uRet = ::GetSystemDirectory(szBuff, tBuffSize);
 		if( 0 == uRet )
 		{
-			Log_Error("GetSystemDirectory calling failure, %u", ::GetLastError());
+			Log_Debug("GetSystemDirectory calling failure, %u", ::GetLastError());
 			return TEXT("C:\\");
 		}
 
@@ -56,7 +56,7 @@ namespace core
 		UINT uRet = ::GetTempPath(tBuffSize, szBuff);
 		if( 0 == uRet )
 		{
-			Log_Error("GetTempPath calling failure, %u", ::GetLastError());
+			Log_Debug("GetTempPath calling failure, %u", ::GetLastError());
 			return TEXT("%TEMP%");
 		}
 
@@ -79,7 +79,7 @@ namespace core
 #endif
 		if( INVALID_FILE_ATTRIBUTES == dwRet )
 		{
-			Log_Error("GetFileAttributes(%s) returned INVALID_FILE_ATTRIBUTES", pszPath);
+			Log_Debug("GetFileAttributes(%s) returned INVALID_FILE_ATTRIBUTES", pszPath);
 			return false;
 		}
 
@@ -161,7 +161,7 @@ std::tstring GetFileName(void)
 		dwWrittenLen = ::GetModuleFileName(NULL, (TCHAR*)strRet.c_str(), dwLength);
 		if( 0 == dwWrittenLen )
 		{
-			Log_Error("GetModuleFileName calling faliure, %u", ::GetLastError());
+			Log_Debug("GetModuleFileName calling faliure, %u", ::GetLastError());
 			return TEXT("");
 		}
 	}	while(ERROR_INSUFFICIENT_BUFFER == ::GetLastError());
@@ -185,7 +185,7 @@ std::tstring GetModuleFileName(HANDLE hModule)
 		dwWrittenLen = ::GetModuleFileName((HINSTANCE)hModule, (TCHAR*)strRet.c_str(), dwLength);
 		if( 0 == dwWrittenLen )
 		{
-			Log_Error("GetModuleFileName faliure, %u", ::GetLastError());
+			Log_Debug("GetModuleFileName faliure, %u", ::GetLastError());
 			return TEXT("");
 		}
 	}	while(ERROR_INSUFFICIENT_BUFFER == ::GetLastError());
@@ -201,7 +201,7 @@ std::tstring GetModuleFileName(HANDLE hModule)
 		DWORD dwRet = ::GetCurrentDirectory(1024, szBuff);
 		if( 0 == dwRet )
 		{
-			Log_Error("GetCurrentDirectroy failure, %u", ::GetLastError());
+			Log_Debug("GetCurrentDirectroy failure, %u", ::GetLastError());
 			return TEXT("");
 		}
 
@@ -213,7 +213,7 @@ std::tstring GetModuleFileName(HANDLE hModule)
 	{
 		if( !::SetCurrentDirectory(pszNewPath) )
 		{
-			Log_Error("SetCurrentDirectory calling failure, %u", ::GetLastError());
+			Log_Debug("SetCurrentDirectory calling failure, %u", ::GetLastError());
 			return false;
 		}
 		return true;

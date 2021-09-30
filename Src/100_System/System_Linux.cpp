@@ -53,7 +53,7 @@ namespace core
 		int nAttrErr = ::pthread_mutexattr_settype(&tMutexAttr, PTHREAD_MUTEX_RECURSIVE);
 		if( nAttrErr )
 		{
-			Log_Error("pthread_mutexattr_settype(&tMutexAttr, PTHREAD_MUTEX_RECURSIVE_NP) failure, %d, %s", nAttrErr, strerror(nAttrErr));
+			Log_Debug("pthread_mutexattr_settype(&tMutexAttr, PTHREAD_MUTEX_RECURSIVE_NP) failure, %d, %s", nAttrErr, strerror(nAttrErr));
 			::pthread_mutex_init(&tMutex, NULL);	// always returns 0
 		}
 		else
@@ -211,7 +211,7 @@ namespace core
 	{
 		if( ::clock_gettime(CLOCK_REALTIME, &outTime) < 0 )
 		{
-			Log_Error("clock_gettime(CLOCK_REALTIME, &ts) failure, %s", strerror(errno));
+			Log_Debug("clock_gettime(CLOCK_REALTIME, &ts) failure, %s", strerror(errno));
 			return errno;
 		}
 

@@ -57,7 +57,7 @@ namespace core
 		ssize_t tRead = ::read(nFile, lpBuffer, nNumberOfBytesToRead);
 		if( tRead < 0 )
 		{
-			Log_Error("read(%d, size:%u) failure, %d(%s)", nFile, nNumberOfBytesToRead, errno, strerror(errno));
+			Log_Debug("read(%d, size:%u) failure, %d(%s)", nFile, nNumberOfBytesToRead, errno, strerror(errno));
 			return false;
 		}
 
@@ -73,7 +73,7 @@ namespace core
 		ssize_t tWritten = ::write(nFile, lpBuffer, nNumberOfBytesToWrite);
 		if( tWritten < 0 )
 		{
-			Log_Error("write(%d, size:%u) failure, %d(%s)", nFile, nNumberOfBytesToWrite, errno, strerror(errno));
+			Log_Debug("write(%d, size:%u) failure, %d(%s)", nFile, nNumberOfBytesToWrite, errno, strerror(errno));
 			return false;
 		}
 
@@ -98,7 +98,7 @@ namespace core
 		off_t tNewOffset = ::lseek(nFile, (off_t)nDistanceToMove, nWhence);
 		if( tNewOffset < 0 )
 		{
-			Log_Error("lseek(%d, %llu, %d) failure, %d(%s)", nFile, nDistanceToMove, nWhence, errno, strerror(errno));
+			Log_Debug("lseek(%d, %llu, %d) failure, %d(%s)", nFile, nDistanceToMove, nWhence, errno, strerror(errno));
 			return -1;
 		}
 
@@ -112,7 +112,7 @@ namespace core
 		struct stat stStat = { 0, };
 		if( ::fstat(nFile, &stStat) < 0 )
 		{
-			Log_Error("fstat(%d) failure, %d(%s).", nFile, errno, strerror(errno));
+			Log_Debug("fstat(%d) failure, %d(%s).", nFile, errno, strerror(errno));
 			return 0;
 		}
 		return stStat.st_size;
@@ -142,7 +142,7 @@ namespace core
 			char szFilePath[PATH_MAX];
 			if( fcntl(nFile, F_GETPATH, szFilePath) < 0 )
 			{
-				Log_Error("fd -> filename has failed.");
+				Log_Debug("fd -> filename has failed.");
 				return false;
 			}
 			strFilePath = szFilePath;
@@ -155,7 +155,7 @@ namespace core
 			char szFileName[1024];
 			if( ::readlink(strLinkPath.c_str(), szFileName, 1024) < 0 )
 			{
-				Log_Error("readlink(%s) has failed.", strLinkPath.c_str());
+				Log_Debug("readlink(%s) has failed.", strLinkPath.c_str());
 				return false;
 			}
 
@@ -281,21 +281,21 @@ namespace core
 			bthAttrInited = true;
 
 			if( nRet = pthread_attr_setschedpolicy(&thAttr, g_PriorityHelper.nPolicy) )
-				Log_Error("pthread_attr_setschedpolicy(SCHED_RR), ret:%d, %s", nRet, strerror(nRet));
+				Log_Debug("pthread_attr_setschedpolicy(SCHED_RR), ret:%d, %s", nRet, strerror(nRet));
 
 			sched_param param = { 0, };
 			param.sched_priority = g_PriorityHelper.Convert(nPriority);
 
 			if( nRet = pthread_attr_setschedparam(&thAttr, &param) )
-				Log_Error("pthread_attr_setschedparam(%d) ret:%d, %s", param.sched_priority, nRet, strerror(nRet));
+				Log_Debug("pthread_attr_setschedparam(%d) ret:%d, %s", param.sched_priority, nRet, strerror(nRet));
 
 			if( nRet = pthread_attr_setinheritsched(&thAttr, PTHREAD_EXPLICIT_SCHED) )
-				Log_Error("pthread_attr_setinheritsched(PTHREAD_EXPLICIT_SCHED) ret:%d", nRet);
+				Log_Debug("pthread_attr_setinheritsched(PTHREAD_EXPLICIT_SCHED) ret:%d", nRet);
 
 			if( nRet = pthread_create(&tThread, &thAttr, ThreadCaller, pData) )
 			{
 				pthread_detach(tThread);
-				Log_Error("pthread_create with priority attr operation failure, ret:%d", nRet);
+				Log_Debug("pthread_create with priority attr operation failure, ret:%d", nRet);
 				if( nRet = pthread_create(&tThread, NULL, ThreadCaller, pData) )
 					throw exception_format("pthread_create operation failure, ret:%d", nRet);
 			}
@@ -306,7 +306,7 @@ namespace core
 		}
 		catch(std::exception& e)
 		{
-			Log_Error("%s, %s", e.what(), strerror(nRet));
+			Log_Debug("%s, %s", e.what(), strerror(nRet));
 			SAFE_DELETE(pData);
 			if( bthAttrInited )
 				pthread_attr_destroy(&thAttr);
@@ -344,7 +344,7 @@ namespace core
 		}
 		catch(std::exception& e)
 		{
-			Log_Error("%s", e.what());
+			Log_Debug("%s", e.what());
 			return WAIT_FAILED_;
 		}
 		return WAIT_OBJECT_0_;
@@ -375,7 +375,7 @@ namespace core
 		int nRet = pthread_getschedparam((pthread_t)hThread, &nPolicy, &stParam);
 		if( nRet )
 		{
-			Log_Error("pthread_getschedparam operation failure, %d", nRet);
+			Log_Debug("pthread_getschedparam operation failure, %d", nRet);
 			return THREAD_PRIORITY_ERROR;
 		}
 
@@ -390,7 +390,7 @@ namespace core
 		int nRet = pthread_setschedparam((pthread_t)hThread, g_PriorityHelper.nPolicy, &stParam);
 		if( nRet )
 		{
-			Log_Error("pthread_setschedparam operation failure, %d", nRet);
+			Log_Debug("pthread_setschedparam operation failure, %d", nRet);
 			return false;
 		}
 
@@ -491,7 +491,7 @@ namespace core
 		}
 		catch(std::exception& e)
 		{
-			Log_Error("%s", e.what());
+			Log_Debug("%s", e.what());
 			if( (pthread_t)-1 != tThread )
 				::pthread_detach(tThread);
 
@@ -556,7 +556,7 @@ namespace core
 			nRet = ::sem_wait(SemHandle->pSem);
 			if( nRet < 0 )
 			{
-				Log_Error("sem_wait failure, %d", errno);
+				Log_Debug("sem_wait failure, %d", errno);
 				return WAIT_FAILED_;
 			}
 		}
@@ -566,7 +566,7 @@ namespace core
 			nRet = CalcDelayedClockTime(dwTimeOut, stTimeout);
 			if( nRet )
 			{
-				Log_Error("CalcDelayedClockTime(%u) failure, %d", dwTimeOut, nRet);
+				Log_Debug("CalcDelayedClockTime(%u) failure, %d", dwTimeOut, nRet);
 				return WAIT_FAILED_;
 			}
 
@@ -575,7 +575,7 @@ namespace core
 			{
 				if( ETIMEDOUT == errno )
 					return WAIT_TIMEOUT_;
-				Log_Error("sem_timedwait failure, %d", errno);
+				Log_Debug("sem_timedwait failure, %d", errno);
 				return WAIT_FAILED_;
 			}
 		}
@@ -644,7 +644,7 @@ namespace core
 		int nAttrErr = pthread_mutexattr_settype(&tMutexAttr, PTHREAD_MUTEX_RECURSIVE_NP);
 		if( nAttrErr )
 		{
-			Log_Error("pthread_mutexattr_settype(&tMutexAttr, PTHREAD_MUTEX_RECURSIVE_NP) failure, %d, %s", nAttrErr, strerror(nAttrErr));
+			Log_Debug("pthread_mutexattr_settype(&tMutexAttr, PTHREAD_MUTEX_RECURSIVE_NP) failure, %d, %s", nAttrErr, strerror(nAttrErr));
 			pthread_mutex_init(hMutex, NULL);	// always returns 0
 		}
 		else
@@ -699,7 +699,7 @@ namespace core
 		}
 		catch(std::exception& e)
 		{
-			Log_Error("%s", e.what());
+			Log_Debug("%s", e.what());
 			return errno;
 		}
 		return EC_SUCCESS;
@@ -752,7 +752,7 @@ namespace core
 		}
 		catch(std::exception &ex)
 		{
-			Log_Error("%s", ex.what());
+			Log_Debug("%s", ex.what());
 			return errno;
 		}
 		return EC_SUCCESS;
@@ -816,7 +816,7 @@ namespace core
 			nRet = ::sem_wait(SemHandle->pSem);
 			if( nRet < 0 )
 			{
-				Log_Error("sem_wait failure, %d", errno);
+				Log_Debug("sem_wait failure, %d", errno);
 				return WAIT_FAILED_;
 			}
 		}
@@ -826,7 +826,7 @@ namespace core
 			nRet = CalcDelayedClockTime(dwTimeOut, stTimeout);
 			if( nRet )
 			{
-				Log_Error("CalcDelayedClockTime(%u) failure, %d", dwTimeOut, nRet);
+				Log_Debug("CalcDelayedClockTime(%u) failure, %d", dwTimeOut, nRet);
 				return WAIT_FAILED_;
 			}
 
@@ -835,7 +835,7 @@ namespace core
 			{
 				if( ETIMEDOUT == errno )
 					return WAIT_TIMEOUT_;
-				Log_Error("sem_timedwait failure, %d", errno);
+				Log_Debug("sem_timedwait failure, %d", errno);
 				return WAIT_FAILED_;
 			}
 		}
@@ -914,7 +914,7 @@ namespace core
 		ECODE nRet = CalcDelayedClockTime(dwTimeOut, tTimeout);
 		if( nRet )
 		{
-			Log_Error("CalcDelayedClockTime(%u) failure, %d", dwTimeOut, nRet);
+			Log_Debug("CalcDelayedClockTime(%u) failure, %d", dwTimeOut, nRet);
 			return WAIT_FAILED_;
 		}
 
@@ -957,7 +957,7 @@ namespace core
 		LPVOID pRet = ::mmap(NULL, qwMaximumSize, nProtectFlag, nShareFlag, nFile, 0);
 		if( MAP_FAILED == pRet )
 		{
-			Log_Error("mmap failure, %d(%s)", errno, strerror(errno));
+			Log_Debug("mmap failure, %d(%s)", errno, strerror(errno));
 			return NULL;
 		}
 
@@ -965,7 +965,7 @@ namespace core
 		if( NULL == pHandle )
 		{
 			SetLastError(EC_NOT_ENOUGH_MEMORY);
-			Log_Error("Internal handle allocation faliure.");
+			Log_Debug("Internal handle allocation faliure.");
 			return NULL;
 		}
 
@@ -993,7 +993,7 @@ namespace core
 		int nSharedMem = ::shmget(tKey, qwMaximumSize, nAccessPriv);
 		if( nSharedMem < 0 )
 		{
-			Log_Error("shmget(%u, %u) failure, %d(%s)", tKey, (DWORD)qwMaximumSize, errno, strerror(errno));
+			Log_Debug("shmget(%u, %u) failure, %d(%s)", tKey, (DWORD)qwMaximumSize, errno, strerror(errno));
 			return NULL;
 		}
 
@@ -1001,7 +1001,7 @@ namespace core
 		if( NULL == pHandle )
 		{
 			SetLastError(EC_NOT_ENOUGH_MEMORY);
-			Log_Error("Internal handle allocation faliure.");
+			Log_Debug("Internal handle allocation faliure.");
 			return NULL;
 		}
 
@@ -1072,7 +1072,7 @@ namespace core
 			LPVOID pRet = ::shmat(pHandle->SharedMem.nSharedMem, 0, pHandle->SharedMem.nProtectFlag);
 			if( (void*)-1 == pRet )
 			{
-				Log_Error("shmat error, %d(%s)", errno, strerror(errno));
+				Log_Debug("shmat error, %d(%s)", errno, strerror(errno));
 				return NULL;
 			}
 
@@ -1090,7 +1090,7 @@ namespace core
 	{
 		if( ::msync((void*)lpBaseAddress, dwNumberOfBytesToFlush, MS_ASYNC) < 0 )
 		{
-			Log_Error("msync failure, %d(%s)", errno, strerror(errno));
+			Log_Debug("msync failure, %d(%s)", errno, strerror(errno));
 			return false;
 		}
 		return true;
@@ -1110,7 +1110,7 @@ namespace core
 		{
 			if( -1 == ::shmdt(lpBaseAddress) )
 			{
-				Log_Error("shmdt(0x%08X failure, %d(%s)", lpBaseAddress, errno, strerror(errno));
+				Log_Debug("shmdt(0x%08X failure, %d(%s)", lpBaseAddress, errno, strerror(errno));
 				return false;
 			}
 			return true;
@@ -1140,17 +1140,17 @@ namespace core
 		if( pHandle->nType == _ST_FILEMAP_HANDLE::SHAREDMEM )
 		{
 			if( -1 == ::shmctl(pHandle->SharedMem.nSharedMem, IPC_RMID, NULL) )
-				Log_Error("shmctl(%d, IPC_RMID, NULL) failure, %d(%s)"
+				Log_Debug("shmctl(%d, IPC_RMID, NULL) failure, %d(%s)"
 				, pHandle->SharedMem.nSharedMem, errno, strerror(errno));
 		}
 
 		if( pHandle->nType == _ST_FILEMAP_HANDLE::FILEMAP )
 		{
 			if( -1 == ::munmap(pHandle->FileMap.pBaseAddress, pHandle->qwLength) )
-				Log_Error("munmap(0x%08X, %llu) failure, %d(%s)"
+				Log_Debug("munmap(0x%08X, %llu) failure, %d(%s)"
 				, pHandle->FileMap.pBaseAddress, pHandle->qwLength, errno, strerror(errno));
 			if( -1 == ::close(pHandle->FileMap.nFile) )
-				Log_Error("close(%u) failure, %d(%s)"
+				Log_Debug("close(%u) failure, %d(%s)"
 				, pHandle->FileMap.nFile, errno, strerror(errno));
 		}
 		Internal()->DestroyFilemapHandle(hFileMapping);

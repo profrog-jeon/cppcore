@@ -49,8 +49,8 @@ namespace core
 			strFileNameA = ExtractDirectory(strFileNameA);
 			nFlag |= O_TMPFILE;
 #else
-			// NEVER!!! uncomment this log. it evokes recursive calling by Log.
-			//Log_Error("This system is not support O_TMPFILE");
+			// NEVER!!! uncomment this log. it invokes recursive calling by Log.
+			//Log_Debug("This system is not support O_TMPFILE");
 #endif
 		}
 
@@ -68,8 +68,8 @@ namespace core
 		int nFile = ::open(strFileNameA.c_str(), nFlag, dwMode);
 		if( nFile < 0 )
 		{
-			// NEVER!!! uncomment this log. it evokes recursive calling by Log.
-			//Log_Error("open failed, %d(%s)", errno, strerror(errno));
+			// NEVER!!! uncomment this log. it invokes recursive calling by Log.
+			//Log_Debug("open failed, %d(%s)", errno, strerror(errno));
 			return NULL;
 		}
 
@@ -125,7 +125,7 @@ namespace core
 					std::string strDirectoryA = MBSFromTCS(pszDirectory);
 					if( ::chdir(strDirectoryA.c_str()) < 0 )
 					{
-						Log_Error("chdir(%s) failure, %s", strDirectoryA.c_str(), strerror(errno));
+						Log_Debug("chdir(%s) failure, %s", strDirectoryA.c_str(), strerror(errno));
 						exit(errno);
 					}
 				}
@@ -133,7 +133,7 @@ namespace core
 				std::string strExePathA = MBSFromTCS(pszFilePath);
 				if( ::execv(strExePathA.c_str(), (char* const*)&vecArgs[0]) < 0 )
 				{
-					Log_Error("execvp operation has failed, %s", strerror(errno));
+					Log_Debug("execvp operation has failed, %s", strerror(errno));
 					exit(errno);
 				}
 			}
@@ -146,7 +146,7 @@ namespace core
 		}
 		catch(std::exception& e)
 		{
-			Log_Error("%s", e.what());
+			Log_Debug("%s", e.what());
 			Log_Info("--------------------------");
 			return NULL;
 		}
@@ -210,7 +210,7 @@ namespace core
 		}
 		catch (std::exception& e)
 		{
-			Log_Error(TEXT("%s"), e.what());
+			Log_Debug(TEXT("%s"), e.what());
 			if (pPipe)
 				::pclose(pPipe);
 			return -1;
@@ -246,7 +246,7 @@ namespace core
 		}
 		catch(std::exception& e)
 		{
-			Log_Error("%s", e.what());
+			Log_Debug("%s", e.what());
 			::unlink(strName.c_str());
 			if( nFile > 0 )
 				::close(nFile);
@@ -284,7 +284,7 @@ namespace core
 		}
 		catch(std::exception& e)
 		{
-			Log_Error("%s", e.what());
+			Log_Debug("%s", e.what());
 			if( nFile > 0 )
 				::close(nFile);
 
@@ -334,7 +334,7 @@ namespace core
 		}
 		catch (std::exception& e)
 		{
-			Log_Error("%s", e.what());
+			Log_Debug("%s", e.what());
 			if( hRet )
 				Internal()->DestroySemHandle(hRet);
 			return NULL;
@@ -367,7 +367,7 @@ namespace core
 		}
 		catch (std::exception& e)
 		{
-			Log_Error("%s", e.what());
+			Log_Debug("%s", e.what());
 			if( hRet )
 				Internal()->DestroySemHandle(hRet);
 			return NULL;
@@ -426,7 +426,7 @@ namespace core
 		}
 		catch (std::exception& e)
 		{
-			Log_Error("%s", e.what());
+			Log_Debug("%s", e.what());
 			if( hRet )
 				Internal()->DestroySemHandle(hRet);
 			return NULL;
@@ -461,7 +461,7 @@ namespace core
 		}
 		catch (std::exception& e)
 		{
-			Log_Error("%s", e.what());
+			Log_Debug("%s", e.what());
 			if( hRet )
 				Internal()->DestroySemHandle(hRet);
 			return NULL;
@@ -480,7 +480,7 @@ namespace core
 		FILE* pFile = fopen(strTempFile.c_str(), "rb");
 		if( NULL == pFile )
 		{
-			Log_Error("Getting ps -e list(%s) has failed.", strCommand.c_str());
+			Log_Debug("Getting ps -e list(%s) has failed.", strCommand.c_str());
 			return 0;
 		}
 

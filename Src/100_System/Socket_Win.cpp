@@ -154,7 +154,7 @@ namespace core
 		}
 		catch (std::exception& e)
 		{
-			Log_Error("%s\n", e.what());
+			Log_Debug("%s\n", e.what());
 			return strDomain;
 		}
 

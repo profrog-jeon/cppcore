@@ -15,7 +15,7 @@ namespace core
 		ECODE dwRet = ParseTZFile(MBSFromTCS(pszFilePath).c_str(), stTZInfo);
 		if( EC_SUCCESS != dwRet )
 		{
-			Log_Error("GetTimeZoneInformation calling failure");
+			Log_Debug("GetTimeZoneInformation calling failure");
 			return TIME_ZONE_ID_INVALID_;
 		}
 

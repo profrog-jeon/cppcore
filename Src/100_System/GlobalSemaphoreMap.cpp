@@ -142,7 +142,7 @@ namespace core
 			_ST_SEM_DATA* pSemData = FindSemData(pHandleData->szName);
 			if( NULL == pSemData )
 			{
-				Log_Error("Sem data called [%s] is not found.", pHandleData->szName);
+				Log_Debug("Sem data called [%s] is not found.", pHandleData->szName);
 				break;
 			}
 
@@ -167,7 +167,7 @@ namespace core
 		_ST_SEM_DATA* pSemData = FindSemData(pHandleData->szName);
 		if( NULL == pSemData )
 		{
-			Log_Error("Sem data called [%s] is not found.", pHandleData->szName);
+			Log_Debug("Sem data called [%s] is not found.", pHandleData->szName);
 			return;
 		}
 
@@ -183,7 +183,7 @@ namespace core
 		_ST_SEM_DATA* pSemData = FindSemData(pHandleData->szName);
 		if( NULL == pSemData )
 		{
-			Log_Error("Sem data called [%s] is not found.", pHandleData->szName);
+			Log_Debug("Sem data called [%s] is not found.", pHandleData->szName);
 			return;
 		}
 
@@ -199,7 +199,7 @@ namespace core
 		_ST_SEM_DATA* pSemData = FindSemData(pHandleData->szName);
 		if( NULL == pSemData )
 		{
-			Log_Error("Sem data called [%s] is not found.", pHandleData->szName);
+			Log_Debug("Sem data called [%s] is not found.", pHandleData->szName);
 			return false;
 		}
 

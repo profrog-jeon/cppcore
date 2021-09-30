@@ -167,7 +167,7 @@ namespace core
 		}
 		catch (std::exception& e)
 		{
-			Log_Error("%s", e.what());
+			Log_Debug("%s", e.what());
 			if( pInfo )
 				delete [] pInfo;
 
@@ -235,7 +235,7 @@ namespace core
 		}
 		catch (std::exception& e)
 		{
-			Log_Error("%s", e.what());
+			Log_Debug("%s", e.what());
 			if( pInfo )
 				delete [] pInfo;
 
@@ -294,7 +294,7 @@ namespace core
 		}
 		catch (std::exception& e)
 		{
-			Log_Error("%s", e.what());
+			Log_Debug("%s", e.what());
 			if( pNetworkParams )
 				delete [] pNetworkParams;
 

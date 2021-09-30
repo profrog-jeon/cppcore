@@ -40,14 +40,14 @@ namespace core
 			/* Recieve response from the kernel */
 			if( (nReadLen = ::recv(nSock, pBuff, nBuffSize - nMsgLen, 0)) < 0 )
 			{
-				Log_Error("Reading route info has failed, %s", strerror(errno));
+				Log_Debug("Reading route info has failed, %s", strerror(errno));
 				return -1;
 			}
 			/* Check if the header is valid */
 			pNLMsgHeader = (struct nlmsghdr*)pBuff;
 			if( (NLMSG_OK(pNLMsgHeader, nReadLen) == 0) || (pNLMsgHeader->nlmsg_type == NLMSG_ERROR) )
 			{
-				Log_Error("Invalid route info data");
+				Log_Debug("Invalid route info data");
 				return -1;
 			}
 
@@ -190,7 +190,7 @@ namespace core
 		}
 		catch (std::exception& e)
 		{
-			Log_Error("%s", e.what());
+			Log_Debug("%s", e.what());
 			if( nSock )
 				close(nSock);
 			return nRet;
@@ -225,7 +225,7 @@ namespace core
 		}
 		catch (std::exception& e)
 		{
-			Log_Error("%s", e.what());
+			Log_Debug("%s", e.what());
 			return nRet;
 		}
 		
@@ -284,7 +284,7 @@ namespace core
 		}
 		catch(std::exception &e)
 		{
-			Log_Error("%s", e.what());
+			Log_Debug("%s", e.what());
 			if (pIFAddr != NULL)
 				freeifaddrs(pIFAddr);
 			return dwRet;

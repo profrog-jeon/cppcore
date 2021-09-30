@@ -60,7 +60,7 @@ namespace core
 		}
 		catch (std::exception& e)
 		{
-			Log_Error("%s", e.what());
+			Log_Debug("%s", e.what());
 			return nRet;
 		}
 		
