@@ -92,6 +92,27 @@ TEST(STLStringTest, RightTest_FalseMaxExceed)
 }
 
 //////////////////////////////////////////////////////////////////////////
+TEST(STLStringTest, LeftTest)
+{
+	std::tstring strContents = TEXT("1234567890");
+	EXPECT_EQ(TEXT("12345"), Left(strContents, 5));
+}
+
+//////////////////////////////////////////////////////////////////////////
+TEST(STLStringTest, LeftTest_FalseNegative)
+{
+	std::tstring strContents = TEXT("1234567890");
+	EXPECT_EQ(TEXT("1234567890"), Left(strContents, -1));
+}
+
+//////////////////////////////////////////////////////////////////////////
+TEST(STLStringTest, LeftTest_FalseMaxExceed)
+{
+	std::tstring strContents = TEXT("1234567890");
+	EXPECT_EQ(TEXT("1234567890"), Left(strContents, 11));
+}
+
+//////////////////////////////////////////////////////////////////////////
 TEST(STLStringTest, RightTest_FalseZero)
 {
 	std::tstring strContents = TEXT("1234567890");

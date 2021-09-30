@@ -325,6 +325,14 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////	
+	std::tstring Left(const std::tstring& strContext, size_t tCount)
+	{
+		size_t tLength = strContext.length();
+		size_t tTryCount = tLength < tCount ? tLength : tCount;
+		return strContext.substr(0, tTryCount);
+	}
+
+	//////////////////////////////////////////////////////////////////////////	
 	std::tstring Right(const std::tstring& strContext, size_t tCount)
 	{
 		size_t tLength = strContext.length();

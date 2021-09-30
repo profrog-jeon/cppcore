@@ -42,6 +42,8 @@ namespace core
 	void Swap(std::wstring& strLeft, std::wstring& strRight);
 	std::string Split(const std::string& strContext, std::string strDelimiter, std::string* pstrBack = NULL);
 	std::wstring Split(const std::wstring& strContext, std::wstring strDelimiter, std::wstring* pstrBack = NULL);
+	std::string Left(const std::string& strContext, size_t tCount);
+	std::wstring Left(const std::wstring& strContext, size_t tCount);
 	std::string Right(const std::string& strContext, size_t tCount);
 	std::wstring Right(const std::wstring& strContext, size_t tCount);
 	bool StrCmpWithWildcard(std::string strContext, std::string strPattern);
