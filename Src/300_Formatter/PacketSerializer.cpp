@@ -24,7 +24,8 @@ namespace fmt_internal
 
 		WORD wLength = (WORD)refValueA.length();
 		channel.OnAccess(&wLength, sizeof(wLength));
-		channel.OnAccess((void*)refValueA.c_str(), wLength);
+		if(0 < wLength)
+			channel.OnAccess((void*)refValueA.c_str(), wLength);
 	}
 
 	//////////////////////////////////////////////////////////////////////////
