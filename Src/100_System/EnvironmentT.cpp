@@ -59,7 +59,7 @@ namespace core
 		}
 
 		// check current year has TZ information
-		if( (0 == pOut->DaylightDate.wMonth) && (0 == pOut->DaylightDate.wMonth)  )
+		if( (0 == pOut->StandardDate.wMonth) && (0 == pOut->DaylightDate.wMonth)  )
 			return TIME_ZONE_ID_UNKNOWN_;
 
 		// convert windows bias type and return

@@ -128,7 +128,15 @@ namespace core
 				DWORD dwWritten = 0;
 				WriteFile(hFile, strOutputMsgA.c_str(), strOutputMsgA.length(), &dwWritten);
 				tCurFileSize = (size_t)SetFilePointer(hFile, 0, FILE_CURRENT_);
+				if (-1 == tCurFileSize)
+					tCurFileSize = (size_t)SetFilePointer(hFile, 0, FILE_END_);
 				CloseFile(hFile);
+
+				if (-1 == tCurFileSize)
+				{
+					printf("CurrentFileSize is not queried.(Err:%d)\n", GetLastError());
+					tCurFileSize = 0;
+				}
 			}
 			else
 			{
