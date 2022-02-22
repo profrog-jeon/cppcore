@@ -31,6 +31,7 @@ namespace core
 
 	class CSyncServer
 	{
+	protected:
 		ST_SYNCSERVER_INIT m_stInit;
 
 		TSyncQueue<CSyncConnection*>	m_queReady;

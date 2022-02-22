@@ -1,10 +1,24 @@
 #pragma once
 
+#ifndef IN_CLASSA
 #define IN_CLASSA(i)            (((LONG)(i) & 0x80000000) == 0)
+#endif
+
+#ifndef IN_CLASSB
 #define IN_CLASSB(i)            (((LONG)(i) & 0xc0000000) == 0x80000000)
+#endif
+
+#ifndef IN_CLASSC
 #define IN_CLASSC(i)            (((LONG)(i) & 0xe0000000) == 0xc0000000)
+#endif
+
+#ifndef IN_CLASSD
 #define IN_CLASSD(i)            (((long)(i) & 0xf0000000) == 0xe0000000)
+#endif
+
+#ifndef IN_MULTICAST
 #define IN_MULTICAST(i)         IN_CLASSD(i)
+#endif
 
 typedef size_t SOCKET;
 

@@ -124,7 +124,6 @@ namespace core
 		int nRet = ::recvfrom(s, buf, len, 0, (sockaddr*)&stAddress, &nLen);
 		if ((SOCKET_ERROR == nRet) && (WSAETIMEDOUT == ::GetLastError()))
 			::SetLastError(EC_TIMEOUT);
-		return nRet;
 
 		if( pSourceInfo )
 		{
