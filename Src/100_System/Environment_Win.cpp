@@ -1,6 +1,6 @@
+#include "stdafx.h"
 #include <Windows.h>
 #include <Lm.h>
-#include "stdafx.h"
 #include "Environment.h"
 #include "KernelObject.h"
 #include "Log.h"

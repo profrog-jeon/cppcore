@@ -10,6 +10,9 @@
     <Filter Include="SEED">
       <UniqueIdentifier>{214a6327-2631-46de-8034-aeb572f2f240}</UniqueIdentifier>
     </Filter>
+    <Filter Include="hash">
+      <UniqueIdentifier>{893bffe4-3865-4370-9d2c-c46ada8c8d69}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ssdeep\edit_dist.cpp">
@@ -53,14 +56,10 @@
     </ClCompile>
     <ClCompile Include="Base64.cpp" />
     <ClCompile Include="CryptoPPSingleton.cpp" />
-    <ClCompile Include="has160.cpp" />
     <ClCompile Include="HashFunction.cpp" />
-    <ClCompile Include="md5.cpp" />
     <ClCompile Include="PubKeyCipherFunction.cpp" />
     <ClCompile Include="PubKeyElGamal.cpp" />
     <ClCompile Include="PubKeyRSA.cpp" />
-    <ClCompile Include="SHA1.cpp" />
-    <ClCompile Include="sha256.cpp" />
     <ClCompile Include="StringFunction.cpp" />
     <ClCompile Include="StringSymCipherFunction.cpp" />
     <ClCompile Include="SymAES.cpp" />
@@ -77,7 +76,22 @@
     <ClCompile Include="SymSeed128.cpp" />
     <ClCompile Include="SymSeed256.cpp" />
     <ClCompile Include="rc4.cpp" />
-    <ClCompile Include="sha512.cpp" />
+    <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="md5.cpp">
+      <Filter>hash</Filter>
+    </ClCompile>
+    <ClCompile Include="has160.cpp">
+      <Filter>hash</Filter>
+    </ClCompile>
+    <ClCompile Include="sha256.cpp">
+      <Filter>hash</Filter>
+    </ClCompile>
+    <ClCompile Include="sha512.cpp">
+      <Filter>hash</Filter>
+    </ClCompile>
+    <ClCompile Include="SHA1.cpp">
+      <Filter>hash</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ssdeep\edit_dist.h">
@@ -113,17 +127,13 @@
     <ClInclude Include="001_Encoder.h" />
     <ClInclude Include="Base64.h" />
     <ClInclude Include="CryptoPPSingleton.h" />
-    <ClInclude Include="has160.h" />
     <ClInclude Include="HashFunction.h" />
     <ClInclude Include="IPubKeyCipher.h" />
     <ClInclude Include="ISymAlgorithm.h" />
     <ClInclude Include="ISymMode.h" />
-    <ClInclude Include="md5.h" />
     <ClInclude Include="PubKeyCipherFunction.h" />
     <ClInclude Include="PubKeyElGamal.h" />
     <ClInclude Include="PubKeyRSA.h" />
-    <ClInclude Include="SHA1.h" />
-    <ClInclude Include="sha256.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="StringFunction.h" />
     <ClInclude Include="StringSymCipherFunction.h" />
@@ -142,7 +152,21 @@
     <ClInclude Include="SymSeed256.h" />
     <ClInclude Include="Type.h" />
     <ClInclude Include="rc4.h" />
-    <ClInclude Include="sha512.h" />
+    <ClInclude Include="md5.h">
+      <Filter>hash</Filter>
+    </ClInclude>
+    <ClInclude Include="has160.h">
+      <Filter>hash</Filter>
+    </ClInclude>
+    <ClInclude Include="sha256.h">
+      <Filter>hash</Filter>
+    </ClInclude>
+    <ClInclude Include="sha512.h">
+      <Filter>hash</Filter>
+    </ClInclude>
+    <ClInclude Include="SHA1.h">
+      <Filter>hash</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="AES\aescrypt.asm">

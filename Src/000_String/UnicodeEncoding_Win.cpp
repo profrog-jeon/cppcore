@@ -1,5 +1,5 @@
-#include <windows.h>
 #include "stdafx.h"
+#include <windows.h>
 #include "UnicodeEncoding.h"
 #include <vector>
 

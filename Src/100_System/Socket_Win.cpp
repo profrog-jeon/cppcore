@@ -1,5 +1,5 @@
-#include <Windows.h>
 #include "stdafx.h"
+#include <Windows.h>
 #include "Socket.h"
 #include "Environment.h"
 #include "Information.h"

@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "SyncServer.h"
+#include "SocketCommon.h"
 
 namespace core
 {

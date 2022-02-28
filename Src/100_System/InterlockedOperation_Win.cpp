@@ -1,6 +1,6 @@
+#include "stdafx.h"
 #include <Windows.h>
 #include <intrin.h>
-#include "stdafx.h"
 #include "InterlockedOperation.h"
 
 namespace core
