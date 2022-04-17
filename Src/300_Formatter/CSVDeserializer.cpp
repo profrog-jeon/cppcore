@@ -56,25 +56,25 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t CCSVDeserializer::BeginDictionaryGrouping(std::tstring& strKey, const size_t tSize, bool bAllowMultiKey)
+	size_t CCSVDeserializer::BeginDictionary(std::tstring& strKey, const size_t tSize, bool bAllowMultiKey)
 	{
 		return m_vecValueTable.size();
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CCSVDeserializer::EndDictionaryGrouping()
+	void CCSVDeserializer::EndDictionary()
 	{
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t CCSVDeserializer::BeginArrayGrouping(std::tstring& strKey, const size_t tSize)
+	size_t CCSVDeserializer::BeginArray(std::tstring& strKey, const size_t tSize)
 	{
 		return m_vecValueTable.size();
 	}
 
 
 	//////////////////////////////////////////////////////////////////////////
-	void CCSVDeserializer::EndArrayGrouping()
+	void CCSVDeserializer::EndArray()
 	{
 	}
 
@@ -93,22 +93,22 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CCSVDeserializer::BeginObjectGrouping(std::tstring& strKey)
+	void CCSVDeserializer::BeginObject(std::tstring& strKey)
 	{
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CCSVDeserializer::EndObjectGrouping()
+	void CCSVDeserializer::EndObject()
 	{
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CCSVDeserializer::BeginRootGrouping()
+	void CCSVDeserializer::BeginRoot()
 	{
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CCSVDeserializer::EndRootGrouping()
+	void CCSVDeserializer::EndRoot()
 	{
 	}
 

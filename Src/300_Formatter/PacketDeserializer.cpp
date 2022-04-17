@@ -34,7 +34,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t CPacketDeserializer::BeginDictionaryGrouping(std::tstring& strKey, const size_t tSize, bool bAllowMultiKey)
+	size_t CPacketDeserializer::BeginDictionary(std::tstring& strKey, const size_t tSize, bool bAllowMultiKey)
 	{
 		DeserializeString(m_Channel, strKey);
 
@@ -46,12 +46,12 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CPacketDeserializer::EndDictionaryGrouping()
+	void CPacketDeserializer::EndDictionary()
 	{
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t CPacketDeserializer::BeginArrayGrouping(std::tstring& strKey, const size_t tSize)
+	size_t CPacketDeserializer::BeginArray(std::tstring& strKey, const size_t tSize)
 	{
 		DeserializeString(m_Channel, strKey);
 
@@ -63,28 +63,28 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CPacketDeserializer::EndArrayGrouping()
+	void CPacketDeserializer::EndArray()
 	{
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CPacketDeserializer::BeginObjectGrouping(std::tstring& strKey)
+	void CPacketDeserializer::BeginObject(std::tstring& strKey)
 	{
 		DeserializeString(m_Channel, strKey);
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CPacketDeserializer::EndObjectGrouping()
+	void CPacketDeserializer::EndObject()
 	{
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CPacketDeserializer::BeginRootGrouping()
+	void CPacketDeserializer::BeginRoot()
 	{
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CPacketDeserializer::EndRootGrouping()
+	void CPacketDeserializer::EndRoot()
 	{
 	}
 

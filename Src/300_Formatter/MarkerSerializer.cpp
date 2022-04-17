@@ -40,7 +40,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t CMarkerSerializer::BeginDictionaryGrouping(std::tstring& strKey, const size_t tSize, bool bAllowMultiKey)
+	size_t CMarkerSerializer::BeginDictionary(std::tstring& strKey, const size_t tSize, bool bAllowMultiKey)
 	{
 		std::tstring strTraverseContext = m_stackTraverse.top() + TEXT(".") + strKey;
 		m_stackTraverse.push(strTraverseContext);
@@ -48,43 +48,43 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CMarkerSerializer::EndDictionaryGrouping()
+	void CMarkerSerializer::EndDictionary()
 	{
 		m_stackTraverse.pop();
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t CMarkerSerializer::BeginArrayGrouping(std::tstring& strKey, const size_t tSize)
+	size_t CMarkerSerializer::BeginArray(std::tstring& strKey, const size_t tSize)
 	{
 		return tSize;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CMarkerSerializer::EndArrayGrouping()
+	void CMarkerSerializer::EndArray()
 	{
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CMarkerSerializer::BeginObjectGrouping(std::tstring& strKey)
+	void CMarkerSerializer::BeginObject(std::tstring& strKey)
 	{
 		std::tstring strTraverseContext = m_stackTraverse.top() + TEXT(".") + strKey;
 		m_stackTraverse.push(strTraverseContext);
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CMarkerSerializer::EndObjectGrouping()
+	void CMarkerSerializer::EndObject()
 	{
 		m_stackTraverse.pop();
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CMarkerSerializer::BeginRootGrouping()
+	void CMarkerSerializer::BeginRoot()
 	{
 		m_stackTraverse.push(TEXT("ROOT"));
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CMarkerSerializer::EndRootGrouping()
+	void CMarkerSerializer::EndRoot()
 	{
 		m_stackTraverse.pop();
 

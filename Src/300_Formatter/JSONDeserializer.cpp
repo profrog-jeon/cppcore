@@ -51,7 +51,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t CJSONDeserializer::BeginDictionaryGrouping(std::tstring& strKey, const size_t tSize, bool bAllowMultiKey)
+	size_t CJSONDeserializer::BeginDictionary(std::tstring& strKey, const size_t tSize, bool bAllowMultiKey)
 	{
 		sGroupingInfo& topGroupInfo = m_GroupingStack.top();
 
@@ -91,14 +91,14 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CJSONDeserializer::EndDictionaryGrouping()
+	void CJSONDeserializer::EndDictionary()
 	{
 		if( m_GroupingStack.top().nType == GT_DICTIONARY )
 			m_GroupingStack.pop();
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t CJSONDeserializer::BeginArrayGrouping(std::tstring& strKey, const size_t tSize)
+	size_t CJSONDeserializer::BeginArray(std::tstring& strKey, const size_t tSize)
 	{
 		sGroupingInfo& topGroupInfo = m_GroupingStack.top();
 
@@ -160,14 +160,14 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CJSONDeserializer::EndArrayGrouping()
+	void CJSONDeserializer::EndArray()
 	{
 		if( m_GroupingStack.top().nType == GT_ARRAY )
 			m_GroupingStack.pop();
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CJSONDeserializer::BeginObjectGrouping(std::tstring& strKey)
+	void CJSONDeserializer::BeginObject(std::tstring& strKey)
 	{
 		sGroupingInfo& topGroupInfo = m_GroupingStack.top();
 
@@ -229,14 +229,14 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CJSONDeserializer::EndObjectGrouping()
+	void CJSONDeserializer::EndObject()
 	{
 		if( m_GroupingStack.top().nType == GT_OBJECT )
 			m_GroupingStack.pop();
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CJSONDeserializer::BeginRootGrouping()
+	void CJSONDeserializer::BeginRoot()
 	{
 		sGroupingInfo newGroupingInfo(GT_ROOT);
 		fmt_internal::Build(m_vecJsonToken, newGroupingInfo.vecChunk);
@@ -244,7 +244,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CJSONDeserializer::EndRootGrouping()
+	void CJSONDeserializer::EndRoot()
 	{
 		if( m_GroupingStack.top().nType == GT_ROOT )
 			m_GroupingStack.pop();

@@ -27,17 +27,17 @@ namespace fmt_internal
 		bool			CheckValidity(std::tstring* pStrErrMsg)		{	if( pStrErrMsg )	*pStrErrMsg = m_strErrMsg;	return m_bValidity;		}
 
 	private:
-		size_t			BeginDictionaryGrouping(std::tstring& strKey, const size_t tSize, bool bAllowMultiKey);
-		void			EndDictionaryGrouping();
+		size_t			BeginDictionary(std::tstring& strKey, const size_t tSize, bool bAllowMultiKey);
+		void			EndDictionary();
 
-		size_t			BeginArrayGrouping(std::tstring& strKey, const size_t tSize);
-		void			EndArrayGrouping();
+		size_t			BeginArray(std::tstring& strKey, const size_t tSize);
+		void			EndArray();
 
-		void			BeginObjectGrouping(std::tstring& strKey);
-		void			EndObjectGrouping();
+		void			BeginObject(std::tstring& strKey);
+		void			EndObject();
 
-		void			BeginRootGrouping();
-		void			EndRootGrouping();
+		void			BeginRoot();
+		void			EndRoot();
 
 		core::IFormatterT& Sync(std::tstring& strKey, std::tstring* pValue);
 		core::IFormatterT& Sync(std::tstring& strKey, std::ntstring* pValue);

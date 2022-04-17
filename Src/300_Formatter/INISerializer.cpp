@@ -22,19 +22,19 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t CINISerializer::BeginDictionaryGrouping(std::tstring& strKey, const size_t tSize, bool bAllowMultiKey)
+	size_t CINISerializer::BeginDictionary(std::tstring& strKey, const size_t tSize, bool bAllowMultiKey)
 	{
 		m_stkSection.push(strKey);
 		return tSize;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CINISerializer::EndDictionaryGrouping()
+	void CINISerializer::EndDictionary()
 	{
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t CINISerializer::BeginArrayGrouping(std::tstring& strKey, const size_t tSize)
+	size_t CINISerializer::BeginArray(std::tstring& strKey, const size_t tSize)
 	{
 		m_bInArray = true;
 		m_dwArrayIndex = 0;
@@ -43,32 +43,32 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CINISerializer::EndArrayGrouping()
+	void CINISerializer::EndArray()
 	{
 		m_bInArray = false;
 		m_stkSection.pop();
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CINISerializer::BeginObjectGrouping(std::tstring& strKey)
+	void CINISerializer::BeginObject(std::tstring& strKey)
 	{
 		m_stkSection.push(strKey);
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CINISerializer::EndObjectGrouping()
+	void CINISerializer::EndObject()
 	{
 		m_stkSection.pop();
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CINISerializer::BeginRootGrouping()
+	void CINISerializer::BeginRoot()
 	{
 		m_stkSection.push(TEXT("DEFAULT"));
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CINISerializer::EndRootGrouping()
+	void CINISerializer::EndRoot()
 	{
 		m_stkSection.pop();
 

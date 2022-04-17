@@ -22,17 +22,17 @@ namespace fmt_internal
 						~CPacketDeserializer(void);
 
 	private:
-		size_t			BeginDictionaryGrouping(std::tstring& strKey, const size_t tSize, bool bAllowMultiKey);
-		void			EndDictionaryGrouping();
+		size_t			BeginDictionary(std::tstring& strKey, const size_t tSize, bool bAllowMultiKey);
+		void			EndDictionary();
 
-		size_t			BeginArrayGrouping(std::tstring& strKey, const size_t tSize);
-		void			EndArrayGrouping();
+		size_t			BeginArray(std::tstring& strKey, const size_t tSize);
+		void			EndArray();
 
-		void			BeginObjectGrouping(std::tstring& strKey);
-		void			EndObjectGrouping();
+		void			BeginObject(std::tstring& strKey);
+		void			EndObject();
 
-		void			BeginRootGrouping();
-		void			EndRootGrouping();
+		void			BeginRoot();
+		void			EndRoot();
 
 		core::IFormatterT& Sync(std::tstring& strKey, std::tstring* pValue);
 		core::IFormatterT& Sync(std::tstring& strKey, std::ntstring* pValue);

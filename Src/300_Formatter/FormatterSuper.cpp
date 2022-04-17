@@ -14,8 +14,8 @@ namespace core
 
 	void CFormatterSuper::Synchronize(IFormatterObject* pObject)
 	{
-		BeginRootGrouping();
+		BeginRoot();
 		pObject->OnSync(*this);
-		EndRootGrouping();
+		EndRoot();
 	}
 }

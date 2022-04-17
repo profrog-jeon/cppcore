@@ -77,7 +77,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t CJSONSerializer::BeginDictionaryGrouping(std::tstring& strKey, const size_t tSize, bool bAllowMultiKey)
+	size_t CJSONSerializer::BeginDictionary(std::tstring& strKey, const size_t tSize, bool bAllowMultiKey)
 	{
 		InsertComma(m_vecObjectCountStack, m_Channel);
 
@@ -95,7 +95,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CJSONSerializer::EndDictionaryGrouping()
+	void CJSONSerializer::EndDictionary()
 	{
 		if( m_vecObjectCountStack.empty() )
 			return;
@@ -105,7 +105,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t CJSONSerializer::BeginArrayGrouping(std::tstring& strKey, const size_t tSize)
+	size_t CJSONSerializer::BeginArray(std::tstring& strKey, const size_t tSize)
 	{
 		InsertComma(m_vecObjectCountStack, m_Channel);
 
@@ -123,7 +123,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CJSONSerializer::EndArrayGrouping()
+	void CJSONSerializer::EndArray()
 	{
 		if( m_vecObjectCountStack.empty() )
 			return;
@@ -133,7 +133,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CJSONSerializer::BeginObjectGrouping(std::tstring& strKey)
+	void CJSONSerializer::BeginObject(std::tstring& strKey)
 	{
 		InsertComma(m_vecObjectCountStack, m_Channel);
 
@@ -150,7 +150,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CJSONSerializer::EndObjectGrouping()
+	void CJSONSerializer::EndObject()
 	{
 		if( m_vecObjectCountStack.empty() )
 			return;
@@ -160,7 +160,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CJSONSerializer::BeginRootGrouping()
+	void CJSONSerializer::BeginRoot()
 	{
 		AddOpeningToken(m_vecObjectCountStack, m_Channel, TEXT('{'));
 
@@ -169,7 +169,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CJSONSerializer::EndRootGrouping()
+	void CJSONSerializer::EndRoot()
 	{
 		if( m_vecObjectCountStack.empty() )
 			return;

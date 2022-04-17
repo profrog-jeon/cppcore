@@ -30,19 +30,19 @@ namespace core
 		}
 
 		// Grouping Notification
-		virtual size_t BeginDictionaryGrouping(std::string& strKey, const size_t tSize, bool bAllowMultiKey) = 0;
-		virtual void EndDictionaryGrouping() = 0;
+		virtual size_t BeginDictionary(std::string& strKey, const size_t tSize, bool bAllowMultiKey) = 0;
+		virtual void EndDictionary() = 0;
 
-		virtual size_t BeginArrayGrouping(std::string& strKey, const size_t tSize) = 0;
+		virtual size_t BeginArray(std::string& strKey, const size_t tSize) = 0;
 		virtual void BeginArrayItem(size_t tIndex, size_t tCount) {}
 		virtual void EndArrayItem(size_t tIndex, size_t tCount) {}
-		virtual void EndArrayGrouping() = 0;
+		virtual void EndArray() = 0;
 
-		virtual void BeginObjectGrouping(std::string& strKey) = 0;
-		virtual void EndObjectGrouping() = 0;
+		virtual void BeginObject(std::string& strKey) = 0;
+		virtual void EndObject() = 0;
 
-		virtual void BeginRootGrouping() = 0;
-		virtual void EndRootGrouping() = 0;
+		virtual void BeginRoot() = 0;
+		virtual void EndRoot() = 0;
 
 		virtual core::CFormatterSuperA& Sync(std::string& strKey, std::string* pValue) = 0;
 		virtual core::CFormatterSuperA& Sync(std::string& strKey, std::wstring* pValue) = 0;
@@ -61,7 +61,7 @@ namespace core
 		template<typename K, typename V>
 		core::CFormatterSuperA& Sync(std::string& strKey, std::map<K, V>* pMapObject)
 		{
-			const size_t tSize = BeginDictionaryGrouping(strKey, pMapObject->size(), false);
+			const size_t tSize = BeginDictionary(strKey, pMapObject->size(), false);
 
 			if (tSize != pMapObject->size())
 			{
@@ -87,14 +87,14 @@ namespace core
 					Sync(strTempKey, &iter->second);
 				}
 			}
-			EndDictionaryGrouping();
+			EndDictionary();
 			return *this;
 		}
 
 		template<typename K, typename V>
 		core::CFormatterSuperA& Sync(std::string& strKey, std::multimap<K, V>* pMapObject)
 		{
-			const size_t tSize = BeginDictionaryGrouping(strKey, pMapObject->size(), true);
+			const size_t tSize = BeginDictionary(strKey, pMapObject->size(), true);
 
 			if (tSize != pMapObject->size())
 			{
@@ -120,14 +120,14 @@ namespace core
 					Sync(strTempKey, &iter->second);
 				}
 			}
-			EndDictionaryGrouping();
+			EndDictionary();
 			return *this;
 		}
 
 		template<typename T>
 		core::CFormatterSuperA& Sync(std::string& strKey, std::list<T>* pListObject)
 		{
-			const size_t tSize = BeginArrayGrouping(strKey, pListObject->size());
+			const size_t tSize = BeginArray(strKey, pListObject->size());
 			pListObject->resize(tSize);
 
 			typename std::list<T>::iterator iter = pListObject->begin();
@@ -139,14 +139,14 @@ namespace core
 				EndArrayItem(i, tSize);
 				iter++;
 			}
-			EndArrayGrouping();
+			EndArray();
 			return *this;
 		}
 
 		template<typename T>
 		core::CFormatterSuperA& Sync(std::string& strKey, std::vector<T>* pVecObject)
 		{
-			const size_t tSize = BeginArrayGrouping(strKey, pVecObject->size());
+			const size_t tSize = BeginArray(strKey, pVecObject->size());
 			pVecObject->resize(tSize);
 
 			size_t i;
@@ -157,14 +157,14 @@ namespace core
 				EndArrayItem(i, tSize);
 			}
 
-			EndArrayGrouping();
+			EndArray();
 			return *this;
 		}
 
 		template<typename T>
 		core::CFormatterSuperA& Sync(std::string& strKey, std::vector<T*>* pVecObject)
 		{
-			const size_t tSize = BeginArrayGrouping(strKey, pVecObject->size());
+			const size_t tSize = BeginArray(strKey, pVecObject->size());
 			pVecObject->resize(tSize);
 
 			size_t i;
@@ -175,14 +175,14 @@ namespace core
 				EndArrayItem(i, tSize);
 			}
 
-			EndArrayGrouping();
+			EndArray();
 			return *this;
 		}
 
 		template<typename T>
 		core::CFormatterSuperA& Sync(std::string& strKey, std::set<T>* pSetObject)
 		{
-			const size_t tSize = BeginArrayGrouping(strKey, pSetObject->size());
+			const size_t tSize = BeginArray(strKey, pSetObject->size());
 			if (tSize != pSetObject->size())
 			{
 				pSetObject->clear();
@@ -209,14 +209,14 @@ namespace core
 					EndArrayItem(i, tSize);
 				}
 			}
-			EndArrayGrouping();
+			EndArray();
 			return *this;
 		}
 
 		template<typename T, typename OP>
 		core::CFormatterSuperA& Sync(std::string& strKey, std::set<T, OP>* pSetObject)
 		{
-			const size_t tSize = BeginArrayGrouping(strKey, pSetObject->size());
+			const size_t tSize = BeginArray(strKey, pSetObject->size());
 			if (pSetObject->empty())
 			{
 				size_t i;
@@ -241,23 +241,23 @@ namespace core
 					EndArrayItem(i, tSize);
 				}
 			}
-			EndArrayGrouping();
+			EndArray();
 			return *this;
 		}
 
 		core::CFormatterSuperA& Sync(std::string& strKey, IFormatterObjectA* pObject)
 		{
-			BeginObjectGrouping(strKey);
+			BeginObject(strKey);
 			pObject->OnSync(*this);
-			EndObjectGrouping();
+			EndObject();
 			return *this;
 		}
 
 		core::CFormatterSuperA& Sync(std::string& strKey, IFormatterObjectA** pObject)
 		{
-			BeginObjectGrouping(strKey);
+			BeginObject(strKey);
 			(*pObject)->OnSync(*this);
-			EndObjectGrouping();
+			EndObject();
 			return *this;
 		}
 	};
@@ -280,19 +280,19 @@ namespace core
 		}
 
 		// Grouping Notification
-		virtual size_t BeginDictionaryGrouping(std::wstring& strKey, const size_t tSize, bool bAllowMultiKey) = 0;
-		virtual void EndDictionaryGrouping() = 0;
+		virtual size_t BeginDictionary(std::wstring& strKey, const size_t tSize, bool bAllowMultiKey) = 0;
+		virtual void EndDictionary() = 0;
 
-		virtual size_t BeginArrayGrouping(std::wstring& strKey, const size_t tSize) = 0;
+		virtual size_t BeginArray(std::wstring& strKey, const size_t tSize) = 0;
 		virtual void BeginArrayItem(size_t tIndex, size_t tCount) {}
 		virtual void EndArrayItem(size_t tIndex, size_t tCount) {}
-		virtual void EndArrayGrouping() = 0;
+		virtual void EndArray() = 0;
 
-		virtual void BeginObjectGrouping(std::wstring& strKey) = 0;
-		virtual void EndObjectGrouping() = 0;
+		virtual void BeginObject(std::wstring& strKey) = 0;
+		virtual void EndObject() = 0;
 
-		virtual void BeginRootGrouping() = 0;
-		virtual void EndRootGrouping() = 0;
+		virtual void BeginRoot() = 0;
+		virtual void EndRoot() = 0;
 
 		// A Value Formatting
 		virtual core::CFormatterSuperW& Sync(std::wstring& strKey, std::wstring* pString) = 0;
@@ -312,7 +312,7 @@ namespace core
 		template<typename K, typename V>
 		core::CFormatterSuperW& Sync(std::wstring& strKey, std::map<K, V>* pMapObject)
 		{
-			const size_t tSize = BeginDictionaryGrouping(strKey, pMapObject->size(), false);
+			const size_t tSize = BeginDictionary(strKey, pMapObject->size(), false);
 
 			if (tSize != pMapObject->size())
 			{
@@ -338,14 +338,14 @@ namespace core
 					Sync(strTempKey, &iter->second);
 				}
 			}
-			EndDictionaryGrouping();
+			EndDictionary();
 			return *this;
 		}
 
 		template<typename K, typename V>
 		core::CFormatterSuperW& Sync(std::wstring& strKey, std::multimap<K, V>* pMapObject)
 		{
-			const size_t tSize = BeginDictionaryGrouping(strKey, pMapObject->size(), true);
+			const size_t tSize = BeginDictionary(strKey, pMapObject->size(), true);
 
 			if (tSize != pMapObject->size())
 			{
@@ -371,14 +371,14 @@ namespace core
 					Sync(strTempKey, &iter->second);
 				}
 			}
-			EndDictionaryGrouping();
+			EndDictionary();
 			return *this;
 		}
 
 		template<typename T>
 		core::CFormatterSuperW& Sync(std::wstring& strKey, std::list<T>* pListObject)
 		{
-			const size_t tSize = BeginArrayGrouping(strKey, pListObject->size());
+			const size_t tSize = BeginArray(strKey, pListObject->size());
 			pListObject->resize(tSize);
 
 			typename std::list<T>::iterator iter = pListObject->begin();
@@ -390,14 +390,14 @@ namespace core
 				EndArrayItem(i, tSize);
 				iter++;
 			}
-			EndArrayGrouping();
+			EndArray();
 			return *this;
 		}
 
 		template<typename T>
 		core::CFormatterSuperW& Sync(std::wstring& strKey, std::vector<T>* pVecObject)
 		{
-			const size_t tSize = BeginArrayGrouping(strKey, pVecObject->size());
+			const size_t tSize = BeginArray(strKey, pVecObject->size());
 			pVecObject->resize(tSize);
 
 			size_t i;
@@ -408,14 +408,14 @@ namespace core
 				EndArrayItem(i, tSize);
 			}
 
-			EndArrayGrouping();
+			EndArray();
 			return *this;
 		}
 
 		template<typename T>
 		core::CFormatterSuperW& Sync(std::wstring& strKey, std::vector<T*>* pVecObject)
 		{
-			const size_t tSize = BeginArrayGrouping(strKey, pVecObject->size());
+			const size_t tSize = BeginArray(strKey, pVecObject->size());
 			pVecObject->resize(tSize);
 
 			size_t i;
@@ -426,14 +426,14 @@ namespace core
 				EndArrayItem(i, tSize);
 			}
 
-			EndArrayGrouping();
+			EndArray();
 			return *this;
 		}
 
 		template<typename T>
 		core::CFormatterSuperW& Sync(std::wstring& strKey, std::set<T>* pSetObject)
 		{
-			const size_t tSize = BeginArrayGrouping(strKey, pSetObject->size());
+			const size_t tSize = BeginArray(strKey, pSetObject->size());
 			if (tSize != pSetObject->size())
 			{
 				pSetObject->clear();
@@ -460,14 +460,14 @@ namespace core
 					EndArrayItem(i, tSize);
 				}
 			}
-			EndArrayGrouping();
+			EndArray();
 			return *this;
 		}
 
 		template<typename T, typename OP>
 		core::CFormatterSuperW& Sync(std::wstring& strKey, std::set<T, OP>* pSetObject)
 		{
-			const size_t tSize = BeginArrayGrouping(strKey, pSetObject->size());
+			const size_t tSize = BeginArray(strKey, pSetObject->size());
 			if (pSetObject->empty())
 			{
 				size_t i;
@@ -492,23 +492,23 @@ namespace core
 					EndArrayItem(i, tSize);
 				}
 			}
-			EndArrayGrouping();
+			EndArray();
 			return *this;
 		}
 
 		core::CFormatterSuperW& Sync(std::wstring& strKey, IFormatterObjectW* pObject)
 		{
-			BeginObjectGrouping(strKey);
+			BeginObject(strKey);
 			pObject->OnSync(*this);
-			EndObjectGrouping();
+			EndObject();
 			return *this;
 		}
 
 		core::CFormatterSuperW& Sync(std::wstring& strKey, IFormatterObjectW** pObject)
 		{
-			BeginObjectGrouping(strKey);
+			BeginObject(strKey);
 			(*pObject)->OnSync(*this);
-			EndObjectGrouping();
+			EndObject();
 			return *this;
 		}
 	};

@@ -19,18 +19,18 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t CCSVSerializer::BeginDictionaryGrouping(std::tstring& strKey, const size_t tSize, bool bAllowMultiKey)
+	size_t CCSVSerializer::BeginDictionary(std::tstring& strKey, const size_t tSize, bool bAllowMultiKey)
 	{
 		return tSize;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CCSVSerializer::EndDictionaryGrouping()
+	void CCSVSerializer::EndDictionary()
 	{
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t CCSVSerializer::BeginArrayGrouping(std::tstring& strKey, const size_t tSize)
+	size_t CCSVSerializer::BeginArray(std::tstring& strKey, const size_t tSize)
 	{
 		return tSize;
 	}
@@ -50,28 +50,28 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CCSVSerializer::EndArrayGrouping()
+	void CCSVSerializer::EndArray()
 	{
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CCSVSerializer::BeginObjectGrouping(std::tstring& strKey)
+	void CCSVSerializer::BeginObject(std::tstring& strKey)
 	{
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CCSVSerializer::EndObjectGrouping()
+	void CCSVSerializer::EndObject()
 	{
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CCSVSerializer::BeginRootGrouping()
+	void CCSVSerializer::BeginRoot()
 	{
 		m_bFirst = true;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CCSVSerializer::EndRootGrouping()
+	void CCSVSerializer::EndRoot()
 	{
 	}	
 

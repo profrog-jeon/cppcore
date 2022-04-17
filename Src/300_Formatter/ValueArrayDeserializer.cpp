@@ -57,24 +57,24 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t CValueArrayDeserializer::BeginDictionaryGrouping(std::tstring& strKey, const size_t tSize, bool bAllowMultiKey)
+	size_t CValueArrayDeserializer::BeginDictionary(std::tstring& strKey, const size_t tSize, bool bAllowMultiKey)
 	{
 		return m_vecValueTable.size();
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CValueArrayDeserializer::EndDictionaryGrouping()
+	void CValueArrayDeserializer::EndDictionary()
 	{
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t CValueArrayDeserializer::BeginArrayGrouping(std::tstring& strKey, const size_t tSize)
+	size_t CValueArrayDeserializer::BeginArray(std::tstring& strKey, const size_t tSize)
 	{
 		return m_vecValueTable.size();
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CValueArrayDeserializer::EndArrayGrouping()
+	void CValueArrayDeserializer::EndArray()
 	{
 	}
 
@@ -93,22 +93,22 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CValueArrayDeserializer::BeginObjectGrouping(std::tstring& strKey)
+	void CValueArrayDeserializer::BeginObject(std::tstring& strKey)
 	{
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CValueArrayDeserializer::EndObjectGrouping()
+	void CValueArrayDeserializer::EndObject()
 	{
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CValueArrayDeserializer::BeginRootGrouping()
+	void CValueArrayDeserializer::BeginRoot()
 	{
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CValueArrayDeserializer::EndRootGrouping()
+	void CValueArrayDeserializer::EndRoot()
 	{
 	}
 

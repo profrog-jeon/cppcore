@@ -46,7 +46,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t CXMLSerializer::BeginDictionaryGrouping(std::tstring& strKey, const size_t tSize, bool bAllowMultiKey)
+	size_t CXMLSerializer::BeginDictionary(std::tstring& strKey, const size_t tSize, bool bAllowMultiKey)
 	{
 		std::tstring strContext = TEXT("<") + strKey + TEXT(">");
 		__WriteXmlThroughChannel(m_stkElement.size(), strContext, m_Channel);
@@ -55,7 +55,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CXMLSerializer::EndDictionaryGrouping()
+	void CXMLSerializer::EndDictionary()
 	{
 		std::tstring strKey = m_stkElement.top();
 		m_stkElement.pop();
@@ -64,18 +64,18 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t CXMLSerializer::BeginArrayGrouping(std::tstring& strKey, const size_t tSize)
+	size_t CXMLSerializer::BeginArray(std::tstring& strKey, const size_t tSize)
 	{
 		return tSize;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CXMLSerializer::EndArrayGrouping()
+	void CXMLSerializer::EndArray()
 	{
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CXMLSerializer::BeginObjectGrouping(std::tstring& strKey)
+	void CXMLSerializer::BeginObject(std::tstring& strKey)
 	{
 		std::tstring strContext = TEXT("<") + strKey + TEXT(">");
 		__WriteXmlThroughChannel(m_stkElement.size(), strContext, m_Channel);
@@ -83,7 +83,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CXMLSerializer::EndObjectGrouping()
+	void CXMLSerializer::EndObject()
 	{
 		std::tstring strKey = m_stkElement.top();
 		m_stkElement.pop();
@@ -92,7 +92,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CXMLSerializer::BeginRootGrouping()
+	void CXMLSerializer::BeginRoot()
 	{
 		LPCTSTR pszEncoding = NULL;
 		switch(m_nBOM)
@@ -119,7 +119,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CXMLSerializer::EndRootGrouping()
+	void CXMLSerializer::EndRoot()
 	{
 		std::tstring strKey = m_stkElement.top();
 		m_stkElement.pop();

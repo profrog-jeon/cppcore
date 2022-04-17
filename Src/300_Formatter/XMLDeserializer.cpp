@@ -37,7 +37,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t CXMLDeserializer::BeginDictionaryGrouping(std::tstring& strKey, const size_t tSize, bool bAllowMultiKey)
+	size_t CXMLDeserializer::BeginDictionary(std::tstring& strKey, const size_t tSize, bool bAllowMultiKey)
 	{
 		ST_XML_NODE* pNode = &m_stDummy;
 
@@ -65,14 +65,14 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CXMLDeserializer::EndDictionaryGrouping()
+	void CXMLDeserializer::EndDictionary()
 	{
 		m_vecObjectCountStack.pop_back();
 		m_stackTraverse.pop();
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t CXMLDeserializer::BeginArrayGrouping(std::tstring& strKey, const size_t tSize)
+	size_t CXMLDeserializer::BeginArray(std::tstring& strKey, const size_t tSize)
 	{
 		size_t tCount = 0;
 		size_t i;
@@ -89,13 +89,13 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CXMLDeserializer::EndArrayGrouping()
+	void CXMLDeserializer::EndArray()
 	{
 		m_vecObjectCountStack.pop_back();
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CXMLDeserializer::BeginObjectGrouping(std::tstring& strKey)
+	void CXMLDeserializer::BeginObject(std::tstring& strKey)
 	{
 		sGroupingData stGroupingData(GT_OBJECT, 0xFFFFFFFF);
 		m_vecObjectCountStack.push_back(stGroupingData);
@@ -139,14 +139,14 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CXMLDeserializer::EndObjectGrouping()
+	void CXMLDeserializer::EndObject()
 	{
 		m_vecObjectCountStack.pop_back();
 		m_stackTraverse.pop();
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CXMLDeserializer::BeginRootGrouping()
+	void CXMLDeserializer::BeginRoot()
 	{
 		sGroupingData stGroupingData(GT_ROOT, 0xFFFFFFFF);
 		m_vecObjectCountStack.push_back(stGroupingData);
@@ -154,7 +154,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CXMLDeserializer::EndRootGrouping()
+	void CXMLDeserializer::EndRoot()
 	{
 		m_vecObjectCountStack.pop_back();
 		m_stackTraverse.pop();

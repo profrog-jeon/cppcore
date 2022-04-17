@@ -52,7 +52,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t CINIDeserializer::BeginDictionaryGrouping(std::tstring& strKey, const size_t tSize, bool bAllowMultiKey)
+	size_t CINIDeserializer::BeginDictionary(std::tstring& strKey, const size_t tSize, bool bAllowMultiKey)
 	{
 		m_mapArrayValues.clear();
 
@@ -72,13 +72,13 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CINIDeserializer::EndDictionaryGrouping()
+	void CINIDeserializer::EndDictionary()
 	{
 		m_stkGroupData.pop();
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t CINIDeserializer::BeginArrayGrouping(std::tstring& strKey, const size_t tSize)
+	size_t CINIDeserializer::BeginArray(std::tstring& strKey, const size_t tSize)
 	{
 		m_mapArrayValues.clear();
 		m_INI.GetSectionValues(strKey.c_str(), m_mapArrayValues);
@@ -88,13 +88,13 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CINIDeserializer::EndArrayGrouping()
+	void CINIDeserializer::EndArray()
 	{
 		m_stkGroupData.pop();
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CINIDeserializer::BeginObjectGrouping(std::tstring& strKey)
+	void CINIDeserializer::BeginObject(std::tstring& strKey)
 	{
 		sGroupingData& refTopGroupingData = m_stkGroupData.top();
 		if( GT_DICTIONARY == refTopGroupingData.nType )
@@ -107,19 +107,19 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CINIDeserializer::EndObjectGrouping()
+	void CINIDeserializer::EndObject()
 	{
 		m_stkGroupData.pop();
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CINIDeserializer::BeginRootGrouping()
+	void CINIDeserializer::BeginRoot()
 	{
 		m_stkGroupData.push(sGroupingData(m_strRootSection.empty()? TEXT("DEFAULT") : m_strRootSection, GT_ROOT, 0));
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CINIDeserializer::EndRootGrouping()
+	void CINIDeserializer::EndRoot()
 	{
 		m_stkGroupData.pop();
 	}

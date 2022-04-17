@@ -57,7 +57,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t CXMLSerializer_V3::BeginDictionaryGrouping(std::tstring& strKey, const size_t tSize, bool bAllowMultiKey)
+	size_t CXMLSerializer_V3::BeginDictionary(std::tstring& strKey, const size_t tSize, bool bAllowMultiKey)
 	{
 		m_stkContext.push(BuildXmlEndContext(m_stkTraverse.size(), strKey));
 		m_stkTraverse.push(ST_INTERNAL_TREE_DATA(strKey));
@@ -65,7 +65,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CXMLSerializer_V3::EndDictionaryGrouping()
+	void CXMLSerializer_V3::EndDictionary()
 	{
 		ST_INTERNAL_TREE_DATA stData = m_stkTraverse.top();
 		m_stkTraverse.pop();
@@ -74,25 +74,25 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t CXMLSerializer_V3::BeginArrayGrouping(std::tstring& strKey, const size_t tSize)
+	size_t CXMLSerializer_V3::BeginArray(std::tstring& strKey, const size_t tSize)
 	{
 		return tSize;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CXMLSerializer_V3::EndArrayGrouping()
+	void CXMLSerializer_V3::EndArray()
 	{
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CXMLSerializer_V3::BeginObjectGrouping(std::tstring& strKey)
+	void CXMLSerializer_V3::BeginObject(std::tstring& strKey)
 	{
 		m_stkContext.push(BuildXmlEndContext(m_stkTraverse.size(), strKey));
 		m_stkTraverse.push(ST_INTERNAL_TREE_DATA(strKey));
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CXMLSerializer_V3::EndObjectGrouping()
+	void CXMLSerializer_V3::EndObject()
 	{
 		ST_INTERNAL_TREE_DATA stData = m_stkTraverse.top();
 		m_stkTraverse.pop();
@@ -101,14 +101,14 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CXMLSerializer_V3::BeginRootGrouping()
+	void CXMLSerializer_V3::BeginRoot()
 	{
 		m_stkContext.push(BuildXmlEndContext(m_stkTraverse.size(), m_strRootTag));
 		m_stkTraverse.push(ST_INTERNAL_TREE_DATA(m_strRootTag));
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CXMLSerializer_V3::EndRootGrouping()
+	void CXMLSerializer_V3::EndRoot()
 	{
 		ST_INTERNAL_TREE_DATA stData = m_stkTraverse.top();
 		m_stkTraverse.pop();

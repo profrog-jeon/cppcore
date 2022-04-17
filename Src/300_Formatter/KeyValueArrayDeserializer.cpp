@@ -48,44 +48,44 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t CKeyValueArrayDeserializer::BeginDictionaryGrouping(std::tstring& strKey, const size_t tSize, bool bAllowMultiKey)
+	size_t CKeyValueArrayDeserializer::BeginDictionary(std::tstring& strKey, const size_t tSize, bool bAllowMultiKey)
 	{
 		return tSize;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CKeyValueArrayDeserializer::EndDictionaryGrouping()
+	void CKeyValueArrayDeserializer::EndDictionary()
 	{
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t CKeyValueArrayDeserializer::BeginArrayGrouping(std::tstring& strKey, const size_t tSize)
+	size_t CKeyValueArrayDeserializer::BeginArray(std::tstring& strKey, const size_t tSize)
 	{
 		return tSize;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CKeyValueArrayDeserializer::EndArrayGrouping()
+	void CKeyValueArrayDeserializer::EndArray()
 	{
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CKeyValueArrayDeserializer::BeginObjectGrouping(std::tstring& strKey)
+	void CKeyValueArrayDeserializer::BeginObject(std::tstring& strKey)
 	{
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CKeyValueArrayDeserializer::EndObjectGrouping()
+	void CKeyValueArrayDeserializer::EndObject()
 	{
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CKeyValueArrayDeserializer::BeginRootGrouping()
+	void CKeyValueArrayDeserializer::BeginRoot()
 	{
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CKeyValueArrayDeserializer::EndRootGrouping()
+	void CKeyValueArrayDeserializer::EndRoot()
 	{
 	}
 
