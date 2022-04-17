@@ -278,7 +278,8 @@
     <ClInclude Include="FileReader.h" />
     <ClInclude Include="FileWritter.h" />
     <ClInclude Include="FmtTypes.h" />
-    <ClInclude Include="FormatterCommon.h" />
+    <ClInclude Include="HelperFunc.h" />
+    <ClInclude Include="FormatterSuper.h" />
     <ClInclude Include="IChannel.h" />
     <ClInclude Include="INIDeserializer.h" />
     <ClInclude Include="INIFormatter.h" />
@@ -326,7 +327,8 @@
     <ClCompile Include="CSVSerializer.cpp" />
     <ClCompile Include="FileReader.cpp" />
     <ClCompile Include="FileWritter.cpp" />
-    <ClCompile Include="FormatterCommon.cpp" />
+    <ClCompile Include="HelperFunc.cpp" />
+    <ClCompile Include="FormatterSuper.cpp" />
     <ClCompile Include="INIDeserializer.cpp" />
     <ClCompile Include="INIFormatter.cpp" />
     <ClCompile Include="INISerializer.cpp" />

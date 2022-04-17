@@ -19,7 +19,7 @@ namespace core
 	public:
 		sValuePtrHolderW(T* pValue) : m_pValue(pValue)	{}
 
-		void VarDispatch(std::wstring strKey, IFormatterW& formatter)
+		void VarDispatch(std::wstring strKey, CFormatterSuperW& formatter)
 		{
 			formatter.Sync(strKey, m_pValue);
 		}
@@ -35,7 +35,7 @@ namespace core
 	public:
 		sValuePtrHolderA(T* pValue) : m_pValue(pValue)	{}
 
-		void VarDispatch(std::string strKey, IFormatterA& formatter)
+		void VarDispatch(std::string strKey, CFormatterSuperA& formatter)
 		{
 			formatter.Sync(strKey, m_pValue);
 		}

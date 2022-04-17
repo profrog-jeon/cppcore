@@ -56,59 +56,59 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t CCSVDeserializer::_BeginDictionaryGrouping(std::tstring& strKey, const size_t tSize, bool bAllowMultiKey)
+	size_t CCSVDeserializer::BeginDictionaryGrouping(std::tstring& strKey, const size_t tSize, bool bAllowMultiKey)
 	{
 		return m_vecValueTable.size();
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CCSVDeserializer::_EndDictionaryGrouping()
+	void CCSVDeserializer::EndDictionaryGrouping()
 	{
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t CCSVDeserializer::_BeginArrayGrouping(std::tstring& strKey, const size_t tSize)
+	size_t CCSVDeserializer::BeginArrayGrouping(std::tstring& strKey, const size_t tSize)
 	{
 		return m_vecValueTable.size();
 	}
 
 
 	//////////////////////////////////////////////////////////////////////////
-	void CCSVDeserializer::_EndArrayGrouping()
+	void CCSVDeserializer::EndArrayGrouping()
 	{
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CCSVDeserializer::_BeginArrayItem(size_t tIndex, size_t tCount)
+	void CCSVDeserializer::BeginArrayItem(size_t tIndex, size_t tCount)
 	{
 		m_tArrayIndex = tIndex;
 		m_tItemIndex = 0;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CCSVDeserializer::_EndArrayItem(size_t tIndex, size_t tCount)
+	void CCSVDeserializer::EndArrayItem(size_t tIndex, size_t tCount)
 	{
 		m_tArrayIndex = tIndex;
 		m_tItemIndex = 0;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CCSVDeserializer::_BeginObjectGrouping(std::tstring& strKey)
+	void CCSVDeserializer::BeginObjectGrouping(std::tstring& strKey)
 	{
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CCSVDeserializer::_EndObjectGrouping()
+	void CCSVDeserializer::EndObjectGrouping()
 	{
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CCSVDeserializer::_BeginRootGrouping()
+	void CCSVDeserializer::BeginRootGrouping()
 	{
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CCSVDeserializer::_EndRootGrouping()
+	void CCSVDeserializer::EndRootGrouping()
 	{
 	}
 

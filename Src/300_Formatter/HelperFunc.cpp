@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "FormatterCommon.h"
+#include "HelperFunc.h"
 
 namespace fmt_internal
 {

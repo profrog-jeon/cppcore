@@ -4,8 +4,8 @@
 
 namespace core
 {
-	struct IFormatterA;
-	struct IFormatterW;
+	class CFormatterSuperA;
+	class CFormatterSuperW;
 
 	//////////////////////////////////////////////////////////////////////////
 	struct sValuePtrHolderSuperA
@@ -13,7 +13,7 @@ namespace core
 		sValuePtrHolderSuperA()		{}
 		virtual		~sValuePtrHolderSuperA()	{}
 
-		virtual void VarDispatch(std::string strKey, IFormatterA& formatter) = 0;
+		virtual void VarDispatch(std::string strKey, CFormatterSuperA& formatter) = 0;
 	};
 
 	//////////////////////////////////////////////////////////////////////////
@@ -22,7 +22,7 @@ namespace core
 		sValuePtrHolderSuperW()		{}
 		virtual		~sValuePtrHolderSuperW()	{}
 
-		virtual void VarDispatch(std::wstring strKey, IFormatterW& formatter) = 0;
+		virtual void VarDispatch(std::wstring strKey, CFormatterSuperW& formatter) = 0;
 	};
 
 	//////////////////////////////////////////////////////////////////////////

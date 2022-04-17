@@ -22,45 +22,45 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t CKeyValueArraySerializer::_BeginDictionaryGrouping(std::tstring& strKey, const size_t tSize, bool bAllowMultiKey)
+	size_t CKeyValueArraySerializer::BeginDictionaryGrouping(std::tstring& strKey, const size_t tSize, bool bAllowMultiKey)
 	{
 		return tSize;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CKeyValueArraySerializer::_EndDictionaryGrouping()
+	void CKeyValueArraySerializer::EndDictionaryGrouping()
 	{
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t CKeyValueArraySerializer::_BeginArrayGrouping(std::tstring& strKey, const size_t tSize)
+	size_t CKeyValueArraySerializer::BeginArrayGrouping(std::tstring& strKey, const size_t tSize)
 	{
 		return tSize;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CKeyValueArraySerializer::_EndArrayGrouping()
+	void CKeyValueArraySerializer::EndArrayGrouping()
 	{
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CKeyValueArraySerializer::_BeginObjectGrouping(std::tstring& strKey)
+	void CKeyValueArraySerializer::BeginObjectGrouping(std::tstring& strKey)
 	{
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CKeyValueArraySerializer::_EndObjectGrouping()
+	void CKeyValueArraySerializer::EndObjectGrouping()
 	{
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CKeyValueArraySerializer::_BeginRootGrouping()
+	void CKeyValueArraySerializer::BeginRootGrouping()
 	{
 		m_bFirst = true;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CKeyValueArraySerializer::_EndRootGrouping()
+	void CKeyValueArraySerializer::EndRootGrouping()
 	{
 	}
 

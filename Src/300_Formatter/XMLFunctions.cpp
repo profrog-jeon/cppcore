@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "XMLFunctions.h"
-#include "FormatterCommon.h"
 
 namespace fmt_internal
 {

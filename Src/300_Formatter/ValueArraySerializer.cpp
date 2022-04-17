@@ -22,29 +22,29 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t CValueArraySerializer::_BeginDictionaryGrouping(std::tstring& strKey, const size_t tSize, bool bAllowMultiKey)
+	size_t CValueArraySerializer::BeginDictionaryGrouping(std::tstring& strKey, const size_t tSize, bool bAllowMultiKey)
 	{
 		return tSize;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CValueArraySerializer::_EndDictionaryGrouping()
+	void CValueArraySerializer::EndDictionaryGrouping()
 	{
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t CValueArraySerializer::_BeginArrayGrouping(std::tstring& strKey, const size_t tSize)
+	size_t CValueArraySerializer::BeginArrayGrouping(std::tstring& strKey, const size_t tSize)
 	{
 		return tSize;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CValueArraySerializer::_BeginArrayItem(size_t tIndex, size_t tCount)
+	void CValueArraySerializer::BeginArrayItem(size_t tIndex, size_t tCount)
 	{
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CValueArraySerializer::_EndArrayItem(size_t tIndex, size_t tCount)
+	void CValueArraySerializer::EndArrayItem(size_t tIndex, size_t tCount)
 	{
 		std::tstring strOutput = TEXT("\n");
 		m_Channel.OnAccess((void*)strOutput.c_str(), strOutput.length() * sizeof(TCHAR));
@@ -53,28 +53,28 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CValueArraySerializer::_EndArrayGrouping()
+	void CValueArraySerializer::EndArrayGrouping()
 	{
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CValueArraySerializer::_BeginObjectGrouping(std::tstring& strKey)
+	void CValueArraySerializer::BeginObjectGrouping(std::tstring& strKey)
 	{
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CValueArraySerializer::_EndObjectGrouping()
+	void CValueArraySerializer::EndObjectGrouping()
 	{
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CValueArraySerializer::_BeginRootGrouping()
+	void CValueArraySerializer::BeginRootGrouping()
 	{
 		m_bFirst = true;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CValueArraySerializer::_EndRootGrouping()
+	void CValueArraySerializer::EndRootGrouping()
 	{
 	}
 

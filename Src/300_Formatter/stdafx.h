@@ -12,7 +12,9 @@
 
 #include "300_Formatter.h"
 #include "FmtTypes.h"
-#include "FormatterCommon.h"
+#include "Interface.h"
+#include "FormatterSuper.h"
+#include "HelperFunc.h"
 
 #include <string.h>
 #include <map>

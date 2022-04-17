@@ -57,58 +57,58 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t CValueArrayDeserializer::_BeginDictionaryGrouping(std::tstring& strKey, const size_t tSize, bool bAllowMultiKey)
+	size_t CValueArrayDeserializer::BeginDictionaryGrouping(std::tstring& strKey, const size_t tSize, bool bAllowMultiKey)
 	{
 		return m_vecValueTable.size();
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CValueArrayDeserializer::_EndDictionaryGrouping()
+	void CValueArrayDeserializer::EndDictionaryGrouping()
 	{
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t CValueArrayDeserializer::_BeginArrayGrouping(std::tstring& strKey, const size_t tSize)
+	size_t CValueArrayDeserializer::BeginArrayGrouping(std::tstring& strKey, const size_t tSize)
 	{
 		return m_vecValueTable.size();
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CValueArrayDeserializer::_EndArrayGrouping()
+	void CValueArrayDeserializer::EndArrayGrouping()
 	{
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CValueArrayDeserializer::_BeginArrayItem(size_t tIndex, size_t tCount)
+	void CValueArrayDeserializer::BeginArrayItem(size_t tIndex, size_t tCount)
 	{
 		m_tArrayIndex = tIndex;
 		m_tItemIndex = 0;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CValueArrayDeserializer::_EndArrayItem(size_t tIndex, size_t tCount)
+	void CValueArrayDeserializer::EndArrayItem(size_t tIndex, size_t tCount)
 	{
 		m_tArrayIndex = tIndex;
 		m_tItemIndex = 0;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CValueArrayDeserializer::_BeginObjectGrouping(std::tstring& strKey)
+	void CValueArrayDeserializer::BeginObjectGrouping(std::tstring& strKey)
 	{
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CValueArrayDeserializer::_EndObjectGrouping()
+	void CValueArrayDeserializer::EndObjectGrouping()
 	{
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CValueArrayDeserializer::_BeginRootGrouping()
+	void CValueArrayDeserializer::BeginRootGrouping()
 	{
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CValueArrayDeserializer::_EndRootGrouping()
+	void CValueArrayDeserializer::EndRootGrouping()
 	{
 	}
 

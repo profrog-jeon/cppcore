@@ -7,7 +7,7 @@
 #include "Pair.h"
 #include "FmtTypes.h"
 #include "IChannel.h"
-#include "FormatterCommon.h"
+#include "HelperFunc.h"
 
 namespace fmt_internal
 {
@@ -22,17 +22,17 @@ namespace fmt_internal
 						~CPacketDeserializer(void);
 
 	private:
-		size_t			_BeginDictionaryGrouping(std::tstring& strKey, const size_t tSize, bool bAllowMultiKey);
-		void			_EndDictionaryGrouping();
+		size_t			BeginDictionaryGrouping(std::tstring& strKey, const size_t tSize, bool bAllowMultiKey);
+		void			EndDictionaryGrouping();
 
-		size_t			_BeginArrayGrouping(std::tstring& strKey, const size_t tSize);
-		void			_EndArrayGrouping();
+		size_t			BeginArrayGrouping(std::tstring& strKey, const size_t tSize);
+		void			EndArrayGrouping();
 
-		void			_BeginObjectGrouping(std::tstring& strKey);
-		void			_EndObjectGrouping();
+		void			BeginObjectGrouping(std::tstring& strKey);
+		void			EndObjectGrouping();
 
-		void			_BeginRootGrouping();
-		void			_EndRootGrouping();
+		void			BeginRootGrouping();
+		void			EndRootGrouping();
 
 		core::IFormatterT& Sync(std::tstring& strKey, std::tstring* pValue);
 		core::IFormatterT& Sync(std::tstring& strKey, std::ntstring* pValue);

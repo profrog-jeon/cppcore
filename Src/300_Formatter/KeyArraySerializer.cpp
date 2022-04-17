@@ -22,57 +22,57 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t CKeyArraySerializer::_BeginDictionaryGrouping(std::tstring& strKey, const size_t tSize, bool bAllowMultiKey)
+	size_t CKeyArraySerializer::BeginDictionaryGrouping(std::tstring& strKey, const size_t tSize, bool bAllowMultiKey)
 	{
 		return tSize;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CKeyArraySerializer::_EndDictionaryGrouping()
+	void CKeyArraySerializer::EndDictionaryGrouping()
 	{
 		m_bWrite = false;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t CKeyArraySerializer::_BeginArrayGrouping(std::tstring& strKey, const size_t tSize)
+	size_t CKeyArraySerializer::BeginArrayGrouping(std::tstring& strKey, const size_t tSize)
 	{
 		return tSize;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CKeyArraySerializer::_BeginArrayItem(size_t tIndex, size_t tCount)
+	void CKeyArraySerializer::BeginArrayItem(size_t tIndex, size_t tCount)
 	{
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CKeyArraySerializer::_EndArrayItem(size_t tIndex, size_t tCount)
+	void CKeyArraySerializer::EndArrayItem(size_t tIndex, size_t tCount)
 	{
 		m_bWrite = false;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CKeyArraySerializer::_EndArrayGrouping()
+	void CKeyArraySerializer::EndArrayGrouping()
 	{
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CKeyArraySerializer::_BeginObjectGrouping(std::tstring& strKey)
+	void CKeyArraySerializer::BeginObjectGrouping(std::tstring& strKey)
 	{
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CKeyArraySerializer::_EndObjectGrouping()
+	void CKeyArraySerializer::EndObjectGrouping()
 	{
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CKeyArraySerializer::_BeginRootGrouping()
+	void CKeyArraySerializer::BeginRootGrouping()
 	{
 		m_bFirst = true;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CKeyArraySerializer::_EndRootGrouping()
+	void CKeyArraySerializer::EndRootGrouping()
 	{
 	}
 

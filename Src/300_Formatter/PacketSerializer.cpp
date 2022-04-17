@@ -29,7 +29,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t CPacketSerializer::_BeginDictionaryGrouping(std::tstring& strKey, const size_t tSize, bool bAllowMultiKey)
+	size_t CPacketSerializer::BeginDictionaryGrouping(std::tstring& strKey, const size_t tSize, bool bAllowMultiKey)
 	{
 		SerializeString(m_Channel, strKey);
 
@@ -39,12 +39,12 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CPacketSerializer::_EndDictionaryGrouping()
+	void CPacketSerializer::EndDictionaryGrouping()
 	{
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t CPacketSerializer::_BeginArrayGrouping(std::tstring& strKey, const size_t tSize)
+	size_t CPacketSerializer::BeginArrayGrouping(std::tstring& strKey, const size_t tSize)
 	{
 		SerializeString(m_Channel, strKey);
 
@@ -54,28 +54,28 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CPacketSerializer::_EndArrayGrouping()
+	void CPacketSerializer::EndArrayGrouping()
 	{
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CPacketSerializer::_BeginObjectGrouping(std::tstring& strKey)
+	void CPacketSerializer::BeginObjectGrouping(std::tstring& strKey)
 	{
 		SerializeString(m_Channel, strKey);
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CPacketSerializer::_EndObjectGrouping()
+	void CPacketSerializer::EndObjectGrouping()
 	{
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CPacketSerializer::_BeginRootGrouping()
+	void CPacketSerializer::BeginRootGrouping()
 	{
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CPacketSerializer::_EndRootGrouping()
+	void CPacketSerializer::EndRootGrouping()
 	{
 	}
 
