@@ -6,6 +6,7 @@
 
 #include "Interface.h"
 #include "PairSuper.h"
+#include "FormatterSuper.h"
 
 namespace core
 {
