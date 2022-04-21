@@ -23,7 +23,7 @@ namespace core
 
 		virtual void Synchronize(IFormatterObjectA* pObject);
 
-		CFormatterSuperA& operator+(core::sPairSuperA& pair)
+		CFormatterSuperA& operator+(core::sPairSuperA const& pair)
 		{
 			pair.pValueHolder->VarDispatch(pair.strKey, *this);
 			return *this;
