@@ -64,109 +64,77 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	std::tstring MakeLower(LPCTSTR pszContext)
+	inline static std::tstring& MakeLowerWorker(std::tstring& strContext)
 	{
-		std::tstring strContext(pszContext);
-
-		size_t i = 0;
-		for (i=0; i<strContext.length(); i++)
+		LPTSTR pContext = (LPTSTR)strContext.c_str();
+		LPTSTR pTarget = pContext + strContext.length();
+		for (; pContext < pTarget; pContext++)
 		{
-			if( strContext[i] < TEXT('A') )
+			if (*pContext < TEXT('A'))
 				continue;
 
-			if( strContext[i] > TEXT('Z') )
+			if (*pContext > TEXT('Z'))
 				continue;
 
-			strContext[i] += (TEXT('a') - TEXT('A'));
+			*pContext += 32;// TEXT('a') - TEXT('A');
 		}
 		return strContext;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	std::tstring MakeLower(std::tstring strContext)
+	inline static std::tstring& MakeUpperWorker(std::tstring& strContext)
 	{
-		size_t i = 0;
-		for (i=0; i<strContext.length(); i++)
+		LPTSTR pContext = (LPTSTR)strContext.c_str();
+		LPTSTR pTarget = pContext + strContext.length();
+		for (; pContext < pTarget; pContext++)
 		{
-			if( strContext[i] < TEXT('A') )
+			if (*pContext < TEXT('a'))
 				continue;
 
-			if( strContext[i] > TEXT('Z') )
+			if (*pContext > TEXT('z'))
 				continue;
 
-			strContext[i] += (TEXT('a') - TEXT('A'));
+			*pContext -= 32;// TEXT('a') - TEXT('A');
 		}
 		return strContext;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	std::tstring MakeLower(LPCTSTR pszContext)
+	{
+		std::tstring strContext(pszContext);
+		return MakeLowerWorker(strContext);
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	std::tstring MakeLower(std::tstring strContext)
+	{
+		return MakeLowerWorker(strContext);
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	std::tstring& BecomeLower(std::tstring& strContext)
+	{
+		return MakeLowerWorker(strContext);
 	}
 
 	//////////////////////////////////////////////////////////////////////////
 	std::tstring MakeUpper(LPCTSTR pszContext)
 	{
 		std::tstring strContext(pszContext);
-
-		size_t i = 0;
-		for (i=0; i<strContext.length(); i++)
-		{
-			if( strContext[i] < TEXT('a') )
-				continue;
-
-			if( strContext[i] > TEXT('z') )
-				continue;
-
-			strContext[i] -= TEXT('a') - TEXT('A');
-		}
-		return strContext;
+		return MakeUpperWorker(strContext);
 	}
 
 	//////////////////////////////////////////////////////////////////////////
 	std::tstring MakeUpper(std::tstring strContext)
 	{
-		size_t i = 0;
-		for (i=0; i<strContext.length(); i++)
-		{
-			if( strContext[i] < TEXT('a') )
-				continue;
-
-			if( strContext[i] > TEXT('z') )
-				continue;
-
-			strContext[i] -= TEXT('a') - TEXT('A');
-		}
-		return strContext;
-	}
-
-	//////////////////////////////////////////////////////////////////////////
-	std::tstring& BecomeLower(std::tstring& strContext)
-	{
-		size_t i = 0;
-		for (i = 0; i<strContext.length(); i++)
-		{
-			if (strContext[i] < TEXT('A'))
-				continue;
-
-			if (strContext[i] > TEXT('Z'))
-				continue;
-
-			strContext[i] += (TEXT('a') - TEXT('A'));
-		}
-		return strContext;
+		return MakeUpperWorker(strContext);
 	}
 
 	//////////////////////////////////////////////////////////////////////////
 	std::tstring& BecomeUpper(std::tstring& strContext)
 	{
-		size_t i = 0;
-		for (i = 0; i<strContext.length(); i++)
-		{
-			if (strContext[i] < TEXT('a'))
-				continue;
-
-			if (strContext[i] > TEXT('z'))
-				continue;
-
-			strContext[i] -= TEXT('a') - TEXT('A');
-		}
-		return strContext;
+		return MakeUpperWorker(strContext);
 	}
 
 	//////////////////////////////////////////////////////////////////////////
