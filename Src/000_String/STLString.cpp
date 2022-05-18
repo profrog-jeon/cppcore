@@ -138,19 +138,29 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	std::tstring Trim(LPCTSTR pszContext, LPCTSTR pszWhiteSpace)
+	inline static std::tstring& TrimLeftWorker(std::tstring& strContext, LPCTSTR pszWhiteSpace)
 	{
-		std::tstring strContext(pszContext);
-		strContext = TrimLeft(strContext, pszWhiteSpace);
-		strContext = TrimRight(strContext, pszWhiteSpace);
+		size_t nPos = 0;
+		nPos = strContext.find_first_not_of(pszWhiteSpace, 0);
+		if (std::string::npos == nPos)
+			strContext.clear();
+		else if(nPos != 0)
+			strContext = strContext.substr(nPos);
+
 		return strContext;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	std::tstring& Trim(std::tstring& strContext, LPCTSTR pszWhiteSpace)
+	inline static std::tstring& TrimRightWorker(std::tstring& strContext, LPCTSTR pszWhiteSpace)
 	{
-		TrimLeft(strContext, pszWhiteSpace);
-		TrimRight(strContext, pszWhiteSpace);
+		const size_t tLength = strContext.length();
+
+		size_t nPos = strContext.find_last_not_of(pszWhiteSpace, tLength);
+		if (std::string::npos == nPos)
+			strContext.clear();
+		else if ((nPos + 1) != tLength)
+			strContext.resize(nPos + 1);
+
 		return strContext;
 	}
 
@@ -158,55 +168,42 @@ namespace core
 	std::tstring TrimLeft(LPCTSTR pszContext, LPCTSTR pszWhiteSpace)
 	{
 		std::tstring strContext(pszContext);
-
-		size_t nPos = 0;
-		nPos = strContext.find_first_not_of(pszWhiteSpace, 0);
-		if( std::string::npos == nPos )
-			strContext.clear();
-		else
-			strContext = strContext.substr(nPos);
-
-		return strContext;
+		return TrimLeftWorker(strContext, pszWhiteSpace);
 	}
 
 	//////////////////////////////////////////////////////////////////////////
 	std::tstring& TrimLeft(std::tstring& strContext, LPCTSTR pszWhiteSpace)
 	{
-		size_t nPos = 0;
-		nPos = strContext.find_first_not_of(pszWhiteSpace, 0);
-		if( std::string::npos == nPos )
-			strContext.clear();
-		else
-			strContext = strContext.substr(nPos);
-
-		return strContext;
+		return TrimLeftWorker(strContext, pszWhiteSpace);
 	}
 
 	//////////////////////////////////////////////////////////////////////////
 	std::tstring TrimRight(LPCTSTR pszContext, LPCTSTR pszWhiteSpace)
 	{
 		std::tstring strContext(pszContext);
-
-		size_t nPos = 0;
-		nPos = strContext.find_last_not_of(pszWhiteSpace, strContext.length());
-		if( std::string::npos == nPos )
-			strContext.clear();
-		else
-			strContext.resize(nPos+1);
-
-		return strContext;
+		return TrimRightWorker(strContext, pszWhiteSpace);
 	}
 
 	//////////////////////////////////////////////////////////////////////////
 	std::tstring& TrimRight(std::tstring& strContext, LPCTSTR pszWhiteSpace)
 	{
-		size_t nPos = 0;
-		nPos = strContext.find_last_not_of(pszWhiteSpace, strContext.length());
-		if( std::string::npos == nPos )
-			strContext.clear();
-		else
-			strContext.resize(nPos+1);
+		return TrimRightWorker(strContext, pszWhiteSpace);
+	}
 
+	//////////////////////////////////////////////////////////////////////////
+	std::tstring Trim(LPCTSTR pszContext, LPCTSTR pszWhiteSpace)
+	{
+		std::tstring strContext(pszContext);
+		strContext = TrimLeftWorker(strContext, pszWhiteSpace);
+		strContext = TrimRightWorker(strContext, pszWhiteSpace);
+		return strContext;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	std::tstring& Trim(std::tstring& strContext, LPCTSTR pszWhiteSpace)
+	{
+		TrimLeftWorker(strContext, pszWhiteSpace);
+		TrimRightWorker(strContext, pszWhiteSpace);
 		return strContext;
 	}
 
@@ -256,6 +253,12 @@ namespace core
 	//////////////////////////////////////////////////////////////////////////
 	size_t TokenizeToArray(std::tstring strContext, std::tstring strDelimiter, std::vector<std::tstring>& outTokens, bool bSkipEmpty)
 	{
+		if (std::tstring::npos == strContext.find(strDelimiter))
+		{
+			outTokens.push_back(Trim(strContext));
+			return outTokens.size();
+		}
+
 		int nOffset = 0;
 
 		do
