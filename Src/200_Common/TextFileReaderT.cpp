@@ -32,7 +32,7 @@ namespace core
 
 		size_t tCharSize = sizeof(T);
 		size_t tReservedSize = 256;
-		vecContext.resize(tReservedSize);
+		vecContext.resize(tReservedSize + 1);
 
 		T cNewLineChar = bBigEndian? ReverseByteOrder((T)'\n') : '\n';
 
@@ -46,7 +46,7 @@ namespace core
 					break;
 
 				tReservedSize *= 2;
-				vecContext.resize(tReservedSize);
+				vecContext.resize(tReservedSize + 1);
 			}
 
 			DWORD dwReadSize = 0;
