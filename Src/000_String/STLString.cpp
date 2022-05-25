@@ -295,6 +295,18 @@ namespace core
 		return strContext.substr(0, nIndex);
 	}
 
+	//////////////////////////////////////////////////////////////////////////
+	std::tstring ReverseSplit(const std::tstring& strContext, std::tstring strDelimiter, std::tstring* pstrValue)
+	{
+		int nIndex = (int)strContext.rfind(strDelimiter);
+		if (nIndex < 0)
+			return strContext;
+
+		if (pstrValue)
+			(*pstrValue) = strContext.substr(nIndex + strDelimiter.length());
+		return strContext.substr(0, nIndex);
+	}
+
 	//////////////////////////////////////////////////////////////////////////	
 	std::tstring Left(const std::tstring& strContext, size_t tCount)
 	{
