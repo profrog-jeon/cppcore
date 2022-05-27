@@ -36,14 +36,15 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	std::tstring Replace(LPCTSTR pszContext, std::tstring strTarget, std::tstring strReplace)
+	static inline std::tstring& ReplaceWorker(std::tstring& strContext, std::tstring strTarget, std::tstring strReplace)
 	{
-		std::tstring strContext(pszContext);
+		if (strTarget.empty())
+			return strContext;
 
 		size_t tPos = 0;
-		while((tPos = strContext.find(strTarget, tPos)) != std::string::npos )
+		while ((tPos = strContext.find(strTarget, tPos)) != std::string::npos)
 		{
-			strContext.replace(tPos, strTarget.length(), strReplace.c_str()); 
+			strContext.replace(tPos, strTarget.length(), strReplace.c_str());
 			tPos += strReplace.length();
 		}
 
@@ -51,16 +52,16 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
+	std::tstring Replace(LPCTSTR pszContext, std::tstring strTarget, std::tstring strReplace)
+	{
+		std::tstring strContext(pszContext);
+		return ReplaceWorker(strContext, strTarget, strReplace);
+	}
+
+	//////////////////////////////////////////////////////////////////////////
 	std::tstring& Replace(std::tstring& strContext, std::tstring strTarget, std::tstring strReplace)
 	{
-		size_t tPos = 0;
-		while((tPos = strContext.find(strTarget, tPos)) != std::string::npos )
-		{
-			strContext.replace(tPos, strTarget.length(), strReplace.c_str()); 
-			tPos += strReplace.length();
-		}
-
-		return strContext;
+		return ReplaceWorker(strContext, strTarget, strReplace);
 	}
 
 	//////////////////////////////////////////////////////////////////////////
