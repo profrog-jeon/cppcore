@@ -16,14 +16,12 @@ namespace core
 		if( !strPath.empty() )
 			CreateDirectory(strPath.c_str());
 
-		ST_LOG_CONTEXT stLogContext;
-		stLogContext.strOutputFile		= WCSFromTCS(strFilePath);
-		stLogContext.strID				= MBSFromTCS(ExtractFileNameWithoutExt(GetFileName()));
-		stLogContext.dwInputFlag		= dwInputFlag;
-		stLogContext.dwOutputFlag		= bEncrypt? LOG_OUTPUT_ENCFILE : LOG_OUTPUT_FILE;
-		stLogContext.dwOutputFlag		|= LOG_OUTPUT_DBGWND;
-		stLogContext.fpCustomOutput		= NULL;
-		InitGlobalLogContext(stLogContext);
+		GlobalLog()->strOutputFile		= WCSFromTCS(strFilePath);
+		GlobalLog()->strID				= MBSFromTCS(ExtractFileNameWithoutExt(GetFileName()));
+		GlobalLog()->dwInputFlag		= dwInputFlag;
+		GlobalLog()->dwOutputFlag		= bEncrypt? LOG_OUTPUT_ENCFILE : LOG_OUTPUT_FILE;
+		GlobalLog()->dwOutputFlag		|= LOG_OUTPUT_DBGWND;
+		GlobalLog()->fpCustomOutput	= NULL;
 	}
 
 	//////////////////////////////////////////////////////////////////////////	
@@ -33,16 +31,14 @@ namespace core
 		if( !strLogDir.empty() )
 			CreateDirectory(strLogDir.c_str());
 
-		ST_LOG_CONTEXT stLogContext;
-		stLogContext.strOutputFile		= WCSFromTCS(stParam.strLogPath)		;
-		stLogContext.strID				= MBSFromTCS(ExtractFileName(stParam.strModulePath));
-		stLogContext.dwInputFlag		= stParam.dwInputFlag					;
-		stLogContext.dwOutputFlag		= stParam.dwOutputFlag					;
-		stLogContext.dwMaxFileSize		= stParam.dwMaxFileSize					;
-		stLogContext.dwMaxFileCount		= stParam.dwMaxFileCount				;
-		stLogContext.nRotationType		= LOG_ROTATION_SIZE						;
-		stLogContext.fpCustomOutput		= stParam.fpCustomOutput				;
-		InitGlobalLogContext(stLogContext);
+		GlobalLog()->strOutputFile		= WCSFromTCS(stParam.strLogPath)		;
+		GlobalLog()->strID				= MBSFromTCS(ExtractFileName(stParam.strModulePath));
+		GlobalLog()->dwInputFlag		= stParam.dwInputFlag					;
+		GlobalLog()->dwOutputFlag		= stParam.dwOutputFlag					;
+		GlobalLog()->dwMaxFileSize		= stParam.dwMaxFileSize					;
+		GlobalLog()->dwMaxFileCount	= stParam.dwMaxFileCount				;
+		GlobalLog()->nRotationType		= LOG_ROTATION_SIZE						;
+		GlobalLog()->fpCustomOutput	= stParam.fpCustomOutput				;
 	}
 
 	//////////////////////////////////////////////////////////////////////////	
@@ -52,16 +48,14 @@ namespace core
 		if (!strLogDir.empty())
 			CreateDirectory(strLogDir.c_str());
 
-		ST_LOG_CONTEXT stLogContext;
-		stLogContext.strOutputFile		= WCSFromTCS(stParam.strLogFile)		;
-		stLogContext.strID				= MBSFromTCS(stParam.strID)				;
-		stLogContext.dwInputFlag		= stParam.dwInputFlag					;
-		stLogContext.dwOutputFlag		= stParam.dwOutputFlag					;
-		stLogContext.dwMaxFileSize		= stParam.dwMaxFileSize					;
-		stLogContext.dwMaxFileCount		= stParam.dwMaxFileCount				;
-		stLogContext.nRotationType		= stParam.nLogRotation					;
-		stLogContext.fpCustomOutput		= stParam.fpCustomOutput				;
-		InitGlobalLogContext(stLogContext);
+		GlobalLog()->strOutputFile		= WCSFromTCS(stParam.strLogFile)		;
+		GlobalLog()->strID				= MBSFromTCS(stParam.strID)				;
+		GlobalLog()->dwInputFlag		= stParam.dwInputFlag					;
+		GlobalLog()->dwOutputFlag		= stParam.dwOutputFlag					;
+		GlobalLog()->dwMaxFileSize		= stParam.dwMaxFileSize					;
+		GlobalLog()->dwMaxFileCount	= stParam.dwMaxFileCount				;
+		GlobalLog()->nRotationType		= stParam.nLogRotation					;
+		GlobalLog()->fpCustomOutput	= stParam.fpCustomOutput				;
 	}
 
 	//////////////////////////////////////////////////////////////////////////

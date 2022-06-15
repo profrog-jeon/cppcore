@@ -11,9 +11,6 @@ namespace core
 	namespace internal
 	{
 		//////////////////////////////////////////////////////////////////////////
-		static ST_LOG_CONTEXT s_stLogContext;
-
-		//////////////////////////////////////////////////////////////////////////
 		ST_LOG_CONTEXT::ST_LOG_CONTEXT(void)
 			: hFileCS(NULL), dwProcessID(0), dwInputFlag(LOG_DEFAULT), dwOutputFlag(LOG_OUTPUT_CONSOLE | LOG_OUTPUT_DBGWND), dwMaxFileSize(10 * 1000 * 1000), dwMaxFileCount(3)
 			, nRotationType(LOG_ROTATION_SIZE), strOutputFile(), strID(), fpCustomOutput(NULL)
@@ -26,6 +23,30 @@ namespace core
 
 		//////////////////////////////////////////////////////////////////////////
 		ST_LOG_CONTEXT::~ST_LOG_CONTEXT(void)
+		{
+		}
+
+		//////////////////////////////////////////////////////////////////////////
+		CGlobalLogContext::CGlobalLogContext(void)
+			: ST_LOG_CONTEXT()
+		{
+			// -----------------------------------------------------------------------
+			// 보기 드문 긴 주석 하나 달겠음. by profrog
+			// -----------------------------------------------------------------------
+			// 이 함수가 불리기 전에 글로벌 로그 컨텍스트에서 hFileCS는 NULL인 채로 유지됨
+			//
+			// 1) 어짜피 디폴트 설정은 파일 출력이 없으므로 문제 될 것이 없고,
+			// 2) 파일 출력하기 위해서는 이 함수를 반드시 호출해야 하므로
+			//
+			// 따라서 이 시점에 FileCS 핸들을 생성하더라도 문제없음
+			// 또한, 글로벌 로그 컨텍스트에서 생성한 CS 객체는 파괴하지 않을 것임
+			// 프로세스 종료 시점에 사용하는 로그 메시지로부터 crash 방지 목적
+			// -----------------------------------------------------------------------
+			hFileCS = InitializeCriticalSection();
+		}
+
+		//////////////////////////////////////////////////////////////////////////
+		CGlobalLogContext::~CGlobalLogContext(void)
 		{
 		}
 
@@ -267,50 +288,27 @@ namespace core
 		}
 
 		//////////////////////////////////////////////////////////////////////////
-		void InitGlobalLogContext(const ST_LOG_CONTEXT& stParam)
-		{
-			// -----------------------------------------------------------------------
-			// 보기 드문 긴 주석 하나 달겠음. by profrog
-			// -----------------------------------------------------------------------
-			// 이 함수가 불리기 전에 글로벌 로그 컨텍스트에서 hFileCS는 NULL인 채로 유지됨
-			//
-			// 1) 어짜피 디폴트 설정은 파일 출력이 없으므로 문제 될 것이 없고,
-			// 2) 파일 출력하기 위해서는 이 함수를 반드시 호출해야 하므로
-			//
-			// 따라서 이 시점에 FileCS 핸들을 생성하더라도 문제없음
-			// 또한, 글로벌 로그 컨텍스트에서 생성한 CS 객체는 파괴하지 않을 것임
-			// 프로세스 종료 시점에 사용하는 로그 메시지로부터 crash 방지 목적
-			// -----------------------------------------------------------------------
-			static HANDLE g_hGlobalFileCS = NULL;
-			if( NULL == g_hGlobalFileCS )
-				g_hGlobalFileCS = InitializeCriticalSection();
-
-			s_stLogContext = stParam;
-			s_stLogContext.hFileCS = g_hGlobalFileCS;
-		}
-
-		//////////////////////////////////////////////////////////////////////////
 		void Log_FormatV(DWORD dwInputType, const char* pszFormat, va_list vaList)
 		{
-			if ((s_stLogContext.dwInputFlag & dwInputType) == 0)
+			if ((GlobalLog()->dwInputFlag & dwInputType) == 0)
 				return;
 
 			const size_t	tBuffLen = 2048;
 			char			szBuff[tBuffLen];
 			SafeSVPrintf(szBuff, tBuffLen, pszFormat, vaList);
-			Internal_LogWorker(&s_stLogContext, dwInputType, szBuff);
+			Internal_LogWorker(GlobalLog(), dwInputType, szBuff);
 		}
 
 		//////////////////////////////////////////////////////////////////////////
 		void Log_FormatV(DWORD dwInputType, const wchar_t* pszFormat, va_list vaList)
 		{
-			if ((s_stLogContext.dwInputFlag & dwInputType) == 0)
+			if ((GlobalLog()->dwInputFlag & dwInputType) == 0)
 				return;
 
 			const size_t	tBuffLen = 2048;
 			wchar_t			szBuff[tBuffLen];
 			SafeSVPrintf(szBuff, tBuffLen, pszFormat, vaList);
-			Internal_LogWorker(&s_stLogContext, dwInputType, MBSFromWCS(szBuff));
+			Internal_LogWorker(GlobalLog(), dwInputType, MBSFromWCS(szBuff));
 		}
 
 		//////////////////////////////////////////////////////////////////////////

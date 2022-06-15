@@ -26,7 +26,21 @@ namespace core
 			~ST_LOG_CONTEXT(void);
 		};
 
-		void InitGlobalLogContext(const ST_LOG_CONTEXT& stParam);
+		class CGlobalLogContext : public ST_LOG_CONTEXT
+		{
+			CGlobalLogContext(void);
+			~CGlobalLogContext(void);
+
+		public:
+			static CGlobalLogContext* GetInstance(void)
+			{
+				static CGlobalLogContext instance;
+				return &instance;
+			}
+		};
+
+		inline CGlobalLogContext* GlobalLog(void)		{	return CGlobalLogContext::GetInstance();	}
+
 		void Log_FormatV(DWORD dwInputType, const char* pszFormat, va_list vaList);
 		void Log_FormatV(DWORD dwInputType, const wchar_t* pszFormat, va_list vaList);
 		void Log_FormatVEx(ST_LOG_CONTEXT* pContext, DWORD dwInputType, const char* pszFormat, va_list vaList);
