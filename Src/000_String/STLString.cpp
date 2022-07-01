@@ -2,6 +2,7 @@
 #include "STLString.h"
 #include "StdString.h"
 #include "StdStringLegacy.h"
+#include <list>
 
 namespace core
 {
@@ -36,19 +37,48 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	static inline std::tstring& ReplaceWorker(std::tstring& strContext, std::tstring strTarget, std::tstring strReplace)
+	static inline std::tstring ReplaceWorker(std::tstring strContext, std::tstring strTarget, std::tstring strReplace)
 	{
 		if (strTarget.empty())
 			return strContext;
 
+		const size_t tContextLen = strContext.length();
+		const int nTargetLen = (int)strTarget.length();
+		const int nReplaceLen = (int)strReplace.length();
+
+		std::list<size_t> listSrcIndex;
 		size_t tPos = 0;
 		while ((tPos = strContext.find(strTarget, tPos)) != std::string::npos)
 		{
-			strContext.replace(tPos, strTarget.length(), strReplace.c_str());
-			tPos += strReplace.length();
+			listSrcIndex.push_back(tPos);
+			tPos += nTargetLen;
 		}
 
-		return strContext;
+		size_t tNewSize = tContextLen - (nTargetLen - nReplaceLen) * listSrcIndex.size();
+		std::tstring strRet;
+		strRet.resize(tNewSize);
+
+		LPCTSTR pszSource = strContext.c_str();
+		LPTSTR pszDest = (LPTSTR)strRet.c_str();
+		LPCTSTR pReplace = strReplace.c_str();
+		size_t tSrcPos = 0;
+		for (size_t tSrcIndex : listSrcIndex)
+		{
+			memcpy(pszDest, pszSource, (tSrcIndex - tSrcPos) * sizeof(TCHAR));
+			pszSource += (tSrcIndex - tSrcPos);
+			pszDest += (tSrcIndex - tSrcPos);
+
+			memcpy(pszDest, pReplace, nReplaceLen * sizeof(TCHAR));
+			pszSource += nTargetLen;
+			pszDest += nReplaceLen;
+
+			tSrcPos = tSrcIndex + nTargetLen;
+		}
+
+		const size_t tRemainedSize = tContextLen - tSrcPos;
+		if (0 < tRemainedSize)
+			memcpy(pszDest, pszSource, tRemainedSize * sizeof(TCHAR));
+		return strRet;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
@@ -61,7 +91,7 @@ namespace core
 	//////////////////////////////////////////////////////////////////////////
 	std::tstring& Replace(std::tstring& strContext, std::tstring strTarget, std::tstring strReplace)
 	{
-		return ReplaceWorker(strContext, strTarget, strReplace);
+		return (strContext = ReplaceWorker(strContext, strTarget, strReplace));
 	}
 
 	//////////////////////////////////////////////////////////////////////////
