@@ -325,7 +325,7 @@ namespace core
 	{	return ExpFrom<float>(strNum.c_str(), strNum.length());	}
 
 	double DoubleFrom(std::tstring strNum)
-	{	return ExpFrom<float>(strNum.c_str(), strNum.length());	}
+	{	return ExpFrom<double>(strNum.c_str(), strNum.length());	}
 
 	//////////////////////////////////////////////////////////////////////////	
 	template<> bool		ValueFrom(std::tstring strNum)
