@@ -7,7 +7,7 @@ TEST(STLStringTest, TokenizeToArrayTest_VarietyDelimiter)
 	std::tstring strContents = TEXT("1,2-3;4 5 6");
 
 	std::vector<std::tstring> vecTokens;
-	EXPECT_EQ(6U, TokenizeToArray(strContents, TEXT(",-; "), vecTokens));
+	ASSERT_EQ(6U, TokenizeToArray(strContents, TEXT(",-; "), vecTokens));
 
 	EXPECT_EQ(TEXT("1"), vecTokens[0]);
 	EXPECT_EQ(TEXT("2"), vecTokens[1]);
@@ -23,7 +23,7 @@ TEST(STLStringTest, TokenizeToArrayTest_EmptyToken_Include)
 	std::tstring strContents = TEXT("1,-;4, 6");
 
 	std::vector<std::tstring> vecTokens;
-	EXPECT_EQ(6U, TokenizeToArray(strContents, TEXT(",-; "), vecTokens));
+	ASSERT_EQ(6U, TokenizeToArray(strContents, TEXT(",-; "), vecTokens));
 
 	EXPECT_EQ(TEXT("1"), vecTokens[0]);
 	EXPECT_EQ(TEXT(""),  vecTokens[1]);
@@ -39,7 +39,7 @@ TEST(STLStringTest, TokenizeToArrayTest_EmptyToken_Exclude)
 	std::tstring strContents = TEXT("1,-;4, 6");
 
 	std::vector<std::tstring> vecTokens;
-	EXPECT_EQ(3U, TokenizeToArray(strContents, TEXT(",-; "), vecTokens, true));
+	ASSERT_EQ(3U, TokenizeToArray(strContents, TEXT(",-; "), vecTokens, true));
 
 	EXPECT_EQ(TEXT("1"), vecTokens[0]);
 	EXPECT_EQ(TEXT("4"), vecTokens[1]);

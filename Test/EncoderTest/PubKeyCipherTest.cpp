@@ -2,7 +2,7 @@
 #include "../../Src/001_Encoder/PubKeyCipherFunction.h"
 
 //////////////////////////////////////////////////////////////////////////
-TEST(PubKeyCipherTest, ElGamalTest)
+TEST(DISABLED_PubKeyCipherTest, ElGamalTest)
 {
 	std::vector<BYTE> vecPriv, vecPub;
 	GenerateCipherKey(PUBKEY_CIPHER_TYPE_ELGAMAL, 2048, "test", vecPriv, vecPub);
@@ -32,7 +32,7 @@ TEST(PubKeyCipherTest, ElGamalTest)
 }
 
 //////////////////////////////////////////////////////////////////////////
-TEST(PubKeyCipherTest, RSATest)
+TEST(DISABLED_PubKeyCipherTest, RSATest)
 {
 	std::vector<BYTE> vecPriv, vecPub;
 	GenerateCipherKey(PUBKEY_CIPHER_TYPE_RSA, 2048, "test", vecPriv, vecPub);

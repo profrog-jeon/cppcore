@@ -1,7 +1,7 @@
 #include "stdafx.h"
 
 //////////////////////////////////////////////////////////////////////////
-TEST(SystemTest, CreateProcess_StdPipeTest)
+TEST(DISABLED_SystemTest, CreateProcess_StdPipeTest)
 {
 	std::vector<std::tstring> vecArgs;
 	vecArgs.push_back(TEXT("output_test"));

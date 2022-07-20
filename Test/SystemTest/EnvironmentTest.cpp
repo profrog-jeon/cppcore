@@ -13,7 +13,7 @@ std::string DateTimeStr(const ST_SYSTEMTIME& stTime)
 }
 
 //////////////////////////////////////////////////////////////////////////
-TEST(SystemTest, LocalTimeTest)
+TEST(DISABLED_SystemTest, LocalTimeTest)
 {
 	ST_SYSTEMTIME stCurrentTime;
 	GetLocalTime(&stCurrentTime);
@@ -51,7 +51,7 @@ TEST(SystemTest, QueryPerformanceTest)
 }
 
 //////////////////////////////////////////////////////////////////////////
-TEST(SystemTest, SystemTimeTest)
+TEST(DISABLED_SystemTest, SystemTimeTest)
 {
 	ST_SYSTEMTIME stCurrentTime;
 	GetSystemTime(&stCurrentTime);

@@ -284,7 +284,7 @@ namespace core
 	//////////////////////////////////////////////////////////////////////////
 	size_t TokenizeToArray(std::tstring strContext, std::tstring strDelimiter, std::vector<std::tstring>& outTokens, bool bSkipEmpty)
 	{
-		if (std::tstring::npos == strContext.find(strDelimiter))
+		if (std::tstring::npos == strContext.find_first_of(strDelimiter))
 		{
 			outTokens.push_back(Trim(strContext));
 			return outTokens.size();

@@ -45,7 +45,7 @@ TEST(SystemTest, FileSystemListingTest)
 }
 
 //////////////////////////////////////////////////////////////////////////
-TEST(SystemTest, CreateSymbolicLink_FileTest)
+TEST(DISABLED_SystemTest, CreateSymbolicLink_FileTest)
 {
 	std::tstring strNewFile = TEXT("somefile.txt");
 	EXPECT_EQ(EC_SUCCESS, WriteFileContents(strNewFile, TEXT("test")));
@@ -61,7 +61,7 @@ TEST(SystemTest, CreateSymbolicLink_FileTest)
 
 #ifdef _MSC_VER		// linux/unix system does not allow link to directory
 //////////////////////////////////////////////////////////////////////////
-TEST(SystemTest, CreateSymbolicLink_DirectoryTest)
+TEST(DISABLED_SystemTest, CreateSymbolicLink_DirectoryTest)
 {
 	std::tstring strNewDirectory = GetCurrentDirectory() + TEXT("/new_dir");
 	EXPECT_TRUE(CreateDirectory(strNewDirectory.c_str()));
