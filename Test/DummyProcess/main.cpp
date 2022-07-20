@@ -24,7 +24,7 @@ int main(int argc, char* argv[])
 		return atoi(argv[2]);
 
 	if( strCommand == "filecheck" )
-		return core::IsFileExistA(argv[2])? 0 : -1;
+		return core::IsFileExist(argv[2])? 0 : -1;
 
 	if( strCommand == "hold" )
 	{
