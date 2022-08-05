@@ -12,7 +12,7 @@ namespace core
 	public:
 		exception_format(const char* pszFormat, ...);
 		exception_format(const wchar_t* pszFormat, ...);
-		~exception_format(void) throw()	{}
+		~exception_format(void) noexcept	{}
 
 		const char*	what(void) const throw()		{		return m_strWhatA.c_str();		}
 		const wchar_t* whatW(void) const throw()	{		return m_strWhatW.c_str();		}

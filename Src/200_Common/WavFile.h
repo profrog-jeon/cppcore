@@ -22,6 +22,10 @@ namespace core
 	{
 		char szChunkID[4];
 		DWORD dwChunkSize;
+		ST_WAV_CHUNK(void)
+			: szChunkID{ 0, }
+			, dwChunkSize(0)
+		{}
 	};
 
 	struct ST_WAV_CHUNK_FMT
@@ -38,6 +42,12 @@ namespace core
 		ST_WAV_CHUNK_FMT(void)
 			: szChunkID{ 'f', 'm', 't', ' ' }
 			, dwChunkSize(16)
+			, wAudioFormat(0)
+			, wNumOfChannel(0)
+			, dwSampleRate(0)
+			, dwByteRate(0)
+			, wBlockAlign(0)
+			, wBitPerSample(0)
 		{}
 	};
 
