@@ -43,7 +43,7 @@ namespace core
 		const size_t tMargin = bBigEndian ? 0 : (tCharSize - 1);	// 0A 00 00 00 의 마지막 3바이트를 위한..
 
 		size_t tCrIndex = -1;
-		for (size_t i = tPos; i < tPos; i++)
+		for (size_t i = tPos; i < tContextSize; i++)
 		{
 			if (pContext[i] != '\n')
 				continue;
