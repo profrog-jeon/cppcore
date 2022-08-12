@@ -3,15 +3,18 @@
 #include <stdio.h>
 #include "../000_String/BOM.h"
 #include "Uncopyable.h"
+#include "MemoryMappedFile.h"
 
 namespace core
 {
 	class CTextFileReader : private Uncopyable
 	{
-		HANDLE		m_hFile;
+		CMemoryMappedFile m_MemMappedFile;
+		LPCBYTE m_pContext;
+
 		E_BOM_TYPE	m_nBOMType;
-		QWORD		m_qwFileSize;
-		std::string m_strUnreadLineBackup;
+		size_t		m_tFileSize;
+		size_t		m_tReadPos;
 
 	public:
 		CTextFileReader(std::string strFileName, E_BOM_TYPE nEncodeType = BOM_UNDEFINED);
@@ -19,12 +22,8 @@ namespace core
 		~CTextFileReader(void);
 
 		bool		IsNotValid(void);
-		int64_t		Tell(void);
-		int64_t		Seek(int64_t nOffset, E_FILE_MOVE_METHOD nOrigin);
+		bool		IsEof(void);
 		ECODE		ReadLine(std::string& strContext);
 		ECODE		ReadLine(std::wstring& strContext);
-
-		ECODE		UnreadLine(const std::string& strContext);
-		ECODE		UnreadLine(const std::wstring& strContext);
 	};
 }

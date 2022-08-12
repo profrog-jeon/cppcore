@@ -7,32 +7,21 @@ namespace core
 	//////////////////////////////////////////////////////////////////////////
 	CTextFileReader::~CTextFileReader(void)
 	{
-		if( m_hFile )
-			CloseFile(m_hFile);
-		m_hFile = NULL;
+		if( m_pContext)
+			m_MemMappedFile.Destroy();
+		m_pContext = NULL;
+		m_tFileSize = 0;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
 	bool CTextFileReader::IsNotValid(void)
 	{
-		return (NULL == m_hFile);
+		return (NULL == m_pContext);
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	int64_t	CTextFileReader::Tell(void)
+	bool CTextFileReader::IsEof(void)
 	{
-		int64_t nCurPos = SetFilePointer(m_hFile, 0, FILE_CURRENT_);
-		if( 0 > nCurPos )
-			return 0;
-		return nCurPos;
-	}
-
-	//////////////////////////////////////////////////////////////////////////
-	int64_t CTextFileReader::Seek(int64_t nOffset, E_FILE_MOVE_METHOD nOrigin)
-	{
-		int64_t nCurPos = SetFilePointer(m_hFile, nOffset, nOrigin);
-		if( 0 > nCurPos )
-			return 0;
-		return nCurPos;
+		return m_tReadPos == m_tFileSize;
 	}
 }

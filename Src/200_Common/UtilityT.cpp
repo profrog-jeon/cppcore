@@ -37,7 +37,7 @@ namespace core
 		if( TextFileReader.IsNotValid() )
 			return EC_NO_FILE;
 
-		while(1)
+		while(!TextFileReader.IsEof())
 		{
 			T strLine;
 			if( EC_SUCCESS != TextFileReader.ReadLine(strLine) )

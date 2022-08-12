@@ -1,7 +1,7 @@
 #include "stdafx.h"
 
 //////////////////////////////////////////////////////////////////////////
-TEST(CommonTest, TextReaderTest_UTF8_16)
+TEST(TextReaderTest, TextReaderTest_UTF8_16)
 {
 	std::tstring strContextA;
 	{
@@ -21,7 +21,7 @@ TEST(CommonTest, TextReaderTest_UTF8_16)
 }
 
 //////////////////////////////////////////////////////////////////////////
-TEST(CommonTest, TextReaderTest_UTF8_32)
+TEST(TextReaderTest, TextReaderTest_UTF8_32)
 {
 	std::tstring strContextA;
 	{
@@ -41,7 +41,7 @@ TEST(CommonTest, TextReaderTest_UTF8_32)
 }
 
 //////////////////////////////////////////////////////////////////////////
-TEST(CommonTest, TextReaderTest_UTF16_32)
+TEST(TextReaderTest, TextReaderTest_UTF16_32)
 {
 	std::tstring strContextA;
 	{
@@ -61,7 +61,7 @@ TEST(CommonTest, TextReaderTest_UTF16_32)
 }
 
 //////////////////////////////////////////////////////////////////////////
-TEST(CommonTest, TextReaderTest_ASCII_UTF8)
+TEST(TextReaderTest, TextReaderTest_ASCII_UTF8)
 {
 	std::tstring strContextA;
 	{
@@ -81,7 +81,7 @@ TEST(CommonTest, TextReaderTest_ASCII_UTF8)
 }
 
 //////////////////////////////////////////////////////////////////////////
-TEST(CommonTest, TextReaderTest_ASCII_UTF16)
+TEST(TextReaderTest, TextReaderTest_ASCII_UTF16)
 {
 	std::tstring strContextA;
 	{
@@ -101,7 +101,7 @@ TEST(CommonTest, TextReaderTest_ASCII_UTF16)
 }
 
 //////////////////////////////////////////////////////////////////////////
-TEST(CommonTest, TextReaderTest_ASCII_UTF32)
+TEST(TextReaderTest, TextReaderTest_ASCII_UTF32)
 {
 	std::tstring strContextA;
 	{
@@ -121,7 +121,7 @@ TEST(CommonTest, TextReaderTest_ASCII_UTF32)
 }
 
 //////////////////////////////////////////////////////////////////////////
-TEST(CommonTest, TextReaderTest_UTF16_BE)
+TEST(TextReaderTest, TextReaderTest_UTF16_BE)
 {
 	std::tstring strContextA;
 	{
@@ -141,7 +141,7 @@ TEST(CommonTest, TextReaderTest_UTF16_BE)
 }
 
 //////////////////////////////////////////////////////////////////////////
-TEST(CommonTest, TextReaderTest_UTF32_BE)
+TEST(TextReaderTest, TextReaderTest_UTF32_BE)
 {
 	std::tstring strContextA;
 	{
@@ -161,7 +161,7 @@ TEST(CommonTest, TextReaderTest_UTF32_BE)
 }
 
 //////////////////////////////////////////////////////////////////////////
-TEST(CommonTest, ReadFileContentsATest)
+TEST(TextReaderTest, ReadFileContentsATest)
 {
 	std::string strContextA;
 	EXPECT_EQ(EC_SUCCESS, ReadFileContentsA(TEXT("../../Build/Test/Unicode/ASCIISample.txt"), strContextA));
@@ -182,7 +182,7 @@ TEST(CommonTest, ReadFileContentsATest)
 }
 
 //////////////////////////////////////////////////////////////////////////
-TEST(CommonTest, ReadFileContentsWTest)
+TEST(TextReaderTest, ReadFileContentsWTest)
 {
 	std::wstring strContextA;
 	EXPECT_EQ(EC_SUCCESS, ReadFileContentsW(TEXT("../../Build/Test/Unicode/ASCIISample.txt"), strContextA));
@@ -204,7 +204,7 @@ TEST(CommonTest, ReadFileContentsWTest)
 
 
 //////////////////////////////////////////////////////////////////////////
-TEST(CommonTest, ReadFileContentsTest_ASCII_UTF32BE)
+TEST(TextReaderTest, ReadFileContentsTest_ASCII_UTF32BE)
 {
 	std::tstring strContextA;
 	EXPECT_EQ(EC_SUCCESS, ReadFileContents(TEXT("../../Build/Test/Unicode/ASCIISample.txt"), strContextA));
@@ -225,7 +225,7 @@ TEST(CommonTest, ReadFileContentsTest_ASCII_UTF32BE)
 }
 
 //////////////////////////////////////////////////////////////////////////
-TEST(CommonTest, ReadFileContentsTest_NonExistFile)
+TEST(TextReaderTest, ReadFileContentsTest_NonExistFile)
 {
 	std::tstring strContextA;
 	EXPECT_NE(EC_SUCCESS, ReadFileContents(TEXT("NonExistFile"), strContextA));
