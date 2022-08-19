@@ -6,8 +6,10 @@
 // for compatiblity,  ASCII -> ANSI
 #define WCSFromASCII				WCSFromANSI
 #define MBSFromASCII				MBSFromANSI
+#define UTF8FromASCII				UTF8FromANSI
 #define ASCIIFromWCS				ANSIFromWCS
 #define ASCIIFromMBS				ANSIFromMBS
+#define ASCIIFromUTF8				ANSIFromUTF8
 #define TCSFromASCII				TCSFromANSI
 #define NTCSFromASCII				NTCSFromANSI
 #define ASCIIFromTCS				ANSIFromTCS
