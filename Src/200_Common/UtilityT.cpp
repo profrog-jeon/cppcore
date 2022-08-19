@@ -28,22 +28,90 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
+	static inline void TextCopyWorker(E_BOM_TYPE nBOMType, LPCBYTE pContext, size_t tFileSize, std::string& strContents)
+	{
+		switch (nBOMType)
+		{
+		case BOM_UTF8:
+			strContents = MBSFromUTF8((LPCSTR)pContext, tFileSize);
+			break;
+
+		case BOM_UTF16:
+			strContents = MBSFromUTF16((const WORD*)pContext, tFileSize / 2);
+			break;
+
+		case BOM_UTF32:
+			strContents = MBSFromUTF32((const DWORD*)pContext, tFileSize / 4);
+			break;
+
+		case BOM_UTF16_BE:
+		case BOM_UTF32_BE:
+			printf("UTF16_BE or UTF32_BE is not implemented yet.\n");
+			break;
+
+		default:
+			if (core::IsInvalidUTF8((LPCSTR)pContext, tFileSize))
+				strContents = MBSFromASCII((LPCSTR)pContext, tFileSize);
+			else
+				strContents = MBSFromUTF8((LPCSTR)pContext, tFileSize);
+			break;
+		}
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	static inline void TextCopyWorker(E_BOM_TYPE nBOMType, LPCBYTE pContext, size_t tFileSize, std::wstring& strContents)
+	{
+		switch (nBOMType)
+		{
+		case BOM_UTF8:
+			strContents = WCSFromUTF8((LPCSTR)pContext, tFileSize);
+			break;
+
+		case BOM_UTF16:
+			strContents = WCSFromUTF16((const WORD*)pContext, tFileSize / 2);
+			break;
+
+		case BOM_UTF32:
+			strContents = WCSFromUTF32((const DWORD*)pContext, tFileSize / 4);
+			break;
+
+		default:
+			if (core::IsInvalidUTF8((LPCSTR)pContext, tFileSize))
+				strContents = WCSFromASCII((LPCSTR)pContext, tFileSize);
+			else
+				strContents = WCSFromUTF8((LPCSTR)pContext, tFileSize);
+			break;
+		}
+	}
+
+	//////////////////////////////////////////////////////////////////////////
 	template <typename T>
 	static inline ECODE ReadFileContentsWorker(LPCTSTR pszFilePath, T& strContents, E_BOM_TYPE nEncodeType)
 	{
-		strContents.clear();
-
-		CTextFileReader TextFileReader(pszFilePath, nEncodeType);
-		if( TextFileReader.IsNotValid() )
-			return EC_NO_FILE;
-
-		while(!TextFileReader.IsEof())
+		CMemoryMappedFile MemMappedFile;
+		ECODE nRet = MemMappedFile.Create(pszFilePath, PAGE_READWRITE_, FILE_MAP_READ_);
+		if (EC_SUCCESS != nRet)
 		{
-			T strLine;
-			if( EC_SUCCESS != TextFileReader.ReadLine(strLine) )
-				break;
-			strContents += strLine;
+			Log_Error(TEXT("MemMappedFile.Create(%s) failure, %d"), pszFilePath, nRet);
+			return nRet;
 		}
+
+		LPCBYTE pContext = MemMappedFile.Ptr();
+		size_t tFileSize = MemMappedFile.Size();
+
+		ST_BOM_INFO stBomInfo;
+		E_BOM_TYPE nBOMType = ReadBOM(pContext, tFileSize, stBomInfo);
+
+		if (BOM_UNDEFINED != nBOMType)
+		{
+			pContext += stBomInfo.tSize;
+			tFileSize -= stBomInfo.tSize;
+		}
+
+		if (BOM_UNDEFINED != nEncodeType)
+			nBOMType = nEncodeType;
+
+		TextCopyWorker(nBOMType, pContext, tFileSize, strContents);
 		return EC_SUCCESS;
 	}
 
@@ -308,7 +376,7 @@ namespace core
 			qwSize -= sizeof(header);
 
 			std::vector<BYTE> vecEncData;
-			vecEncData.resize(qwSize);
+			vecEncData.resize((size_t)qwSize);
 
 			dwReadSize = 0;
 			if( !ReadFile(hFile, (void*)&vecEncData[0], vecEncData.size(), &dwReadSize) || dwReadSize < vecEncData.size() )

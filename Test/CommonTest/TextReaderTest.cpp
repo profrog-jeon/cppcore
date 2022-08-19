@@ -161,7 +161,7 @@ TEST(TextReaderTest, TextReaderTest_UTF32_BE)
 }
 
 //////////////////////////////////////////////////////////////////////////
-TEST(TextReaderTest, ReadFileContentsATest)
+TEST(ReadFileContentTest, ReadFileContentsATest)
 {
 	std::string strContextA;
 	EXPECT_EQ(EC_SUCCESS, ReadFileContentsA(TEXT("../../Build/Test/Unicode/ASCIISample.txt"), strContextA));
@@ -170,7 +170,7 @@ TEST(TextReaderTest, ReadFileContentsATest)
 
 	std::tstring strTempFileName = TEXT("temporate.txt");
 	{
-		CTextFileWriter writer(strTempFileName, BOM_UTF32_BE);
+		CTextFileWriter writer(strTempFileName, BOM_UTF32);
 		writer.WriteLine(strContextA);
 	}
 
@@ -182,7 +182,7 @@ TEST(TextReaderTest, ReadFileContentsATest)
 }
 
 //////////////////////////////////////////////////////////////////////////
-TEST(TextReaderTest, ReadFileContentsWTest)
+TEST(ReadFileContentTest, ReadFileContentsWTest)
 {
 	std::wstring strContextA;
 	EXPECT_EQ(EC_SUCCESS, ReadFileContentsW(TEXT("../../Build/Test/Unicode/ASCIISample.txt"), strContextA));
@@ -191,7 +191,7 @@ TEST(TextReaderTest, ReadFileContentsWTest)
 
 	std::tstring strTempFileName = TEXT("temporate.txt");
 	{
-		CTextFileWriter writer(strTempFileName, BOM_UTF32_BE);
+		CTextFileWriter writer(strTempFileName, BOM_UTF32);
 		writer.WriteLine(strContextA);
 	}
 
@@ -204,7 +204,7 @@ TEST(TextReaderTest, ReadFileContentsWTest)
 
 
 //////////////////////////////////////////////////////////////////////////
-TEST(TextReaderTest, ReadFileContentsTest_ASCII_UTF32BE)
+TEST(ReadFileContentTest, ReadFileContentsTest_ASCII_UTF32)
 {
 	std::tstring strContextA;
 	EXPECT_EQ(EC_SUCCESS, ReadFileContents(TEXT("../../Build/Test/Unicode/ASCIISample.txt"), strContextA));
@@ -213,7 +213,7 @@ TEST(TextReaderTest, ReadFileContentsTest_ASCII_UTF32BE)
 
 	std::tstring strTempFileName = TEXT("temporate.txt");
 	{
-		CTextFileWriter writer(strTempFileName, BOM_UTF32_BE);
+		CTextFileWriter writer(strTempFileName, BOM_UTF32);
 		writer.WriteLine(strContextA);
 	}
 
@@ -225,7 +225,7 @@ TEST(TextReaderTest, ReadFileContentsTest_ASCII_UTF32BE)
 }
 
 //////////////////////////////////////////////////////////////////////////
-TEST(TextReaderTest, ReadFileContentsTest_NonExistFile)
+TEST(ReadFileContentTest, ReadFileContentsTest_NonExistFile)
 {
 	std::tstring strContextA;
 	EXPECT_NE(EC_SUCCESS, ReadFileContents(TEXT("NonExistFile"), strContextA));

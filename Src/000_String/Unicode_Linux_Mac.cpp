@@ -35,6 +35,16 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
+	std::wstring WCSFromUTF8(LPCSTR pszContext, size_t tLength, size_t* ptReadSize)
+	{
+		std::wstring strRet;
+		size_t tRequiredCch = UTF8_TO_UTF32(pszContext, tLength, NULL, 0, ptReadSize);
+		strRet.resize(tRequiredCch);
+		UTF8_TO_UTF32(pszContext, tLength, (DWORD*)strRet.c_str(), tRequiredCch, ptReadSize);
+		return strRet;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
 	std::wstring WCSFromUTF8(std::string strInput, size_t* ptReadSize)
 	{
 		std::wstring strRet;
@@ -64,12 +74,33 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
+	std::wstring WCSFromASCII(LPCSTR pszContext, size_t tLength, size_t* ptReadSize)
+	{
+		std::wstring strRet;
+		size_t tRequiredCch = ASCII_TO_UTF32(pszContext, tLength, NULL, 0);
+		strRet.resize(tRequiredCch);
+		ASCII_TO_UTF32(pszContext, tLength, (DWORD*)strRet.c_str(), tRequiredCch, ptReadSize);
+		return strRet;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
 	std::wstring WCSFromASCII(std::string strInput, size_t* ptReadSize)
 	{
 		std::wstring strRet;
 		size_t tRequiredCch = ASCII_TO_UTF32(strInput.c_str(), strInput.length(), NULL, 0);
 		strRet.resize(tRequiredCch);
 		ASCII_TO_UTF32(strInput.c_str(), strInput.length(), (DWORD*)strRet.c_str(), tRequiredCch, ptReadSize);
+		return strRet;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	std::string MBSFromUTF8(LPCSTR pszContext, size_t tLength, size_t* ptReadSize)
+	{
+		if (ptReadSize)
+			(*ptReadSize) = tLength;
+		std::string strRet;
+		strRet.resize(tLength);
+		memcpy((void*)strRet.c_str(), pszContext, tLength);
 		return strRet;
 	}
 
@@ -98,6 +129,25 @@ namespace core
 		size_t tRequiredCch = UTF32_TO_UTF8(pszInput, tInputCch, NULL, 0);
 		strRet.resize(tRequiredCch);
 		UTF32_TO_UTF8(pszInput, tInputCch, (char*)strRet.c_str(), tRequiredCch);	
+		return strRet;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	std::string MBSFromASCII(LPCSTR pszContext, size_t tLength, size_t* ptReadSize)
+	{
+		std::wstring strUTF16;
+		{
+			size_t tUTF16Len = ASCII_TO_UTF16(pszContext, tLength, NULL, 0, ptReadSize);
+			strUTF16.resize(tUTF16Len);
+			ASCII_TO_UTF16(pszContext, tLength, (WORD*)strUTF16.c_str(), tUTF16Len, ptReadSize);
+		}
+
+		std::string strRet;
+		{
+			size_t tRequiredCch = UTF16_TO_UTF8((const WORD*)strUTF16.c_str(), strUTF16.length(), NULL, 0);
+			strRet.resize(tRequiredCch);
+			UTF16_TO_UTF8((const WORD*)strUTF16.c_str(), strUTF16.length(), (char*)strRet.c_str(), tRequiredCch);
+		}
 		return strRet;
 	}
 

@@ -73,14 +73,18 @@ namespace core
 	std::string		UTF8FromWCS(std::wstring strInput);
 	std::string		UTF8FromMBS(std::string strInput);	
 
+	std::wstring	WCSFromUTF8(LPCSTR pszContext, size_t tLength, size_t* ptReadSize = NULL);
 	std::wstring	WCSFromUTF8(std::string strInput, size_t* ptReadSize = NULL);
 	std::wstring	WCSFromUTF16(const WORD* pszInput, size_t tInputCch);
 	std::wstring	WCSFromUTF32(const DWORD* pszInput, size_t tInputCch);
+	std::wstring	WCSFromASCII(LPCSTR pszContext, size_t tLength, size_t* ptReadSize = NULL);
 	std::wstring	WCSFromASCII(std::string strInput, size_t* ptReadSize = NULL);
 
+	std::string		MBSFromUTF8(LPCSTR pszContext, size_t tLength, size_t* ptReadSize = NULL);
 	std::string		MBSFromUTF8(std::string strInput, size_t* ptReadSize = NULL);
 	std::string		MBSFromUTF16(const WORD* pszInput, size_t tInputCch);
 	std::string		MBSFromUTF32(const DWORD* pszInput, size_t tInputCch);
+	std::string		MBSFromASCII(LPCSTR pszContext, size_t tLength, size_t* ptReadSize = NULL);
 	std::string		MBSFromASCII(std::string strInput, size_t* ptReadSize = NULL);
 
 	std::string		ASCIIFromMBS(std::string strInput);
