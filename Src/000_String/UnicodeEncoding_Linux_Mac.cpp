@@ -133,7 +133,7 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t ASCII_TO_UTF16(const char* pSrc, size_t tSrcCch, WORD* pDest, size_t tDestCch, size_t* ptReadSize)
+	size_t ANSI_TO_UTF16(const char* pSrc, size_t tSrcCch, WORD* pDest, size_t tDestCch, size_t* ptReadSize)
 	{
 		const size_t tCharSize = sizeof(WORD);
 		size_t tRet = 0;
@@ -141,7 +141,7 @@ namespace core
 		size_t tDestSize = tDestCch * tCharSize;
 
 		if( NULL == pDest )
-			return CalcUnicodeCchFromASCII(pSrc, tSrcSize, ptReadSize);
+			return CalcUnicodeCchFromANSI(pSrc, tSrcSize, ptReadSize);
 
 		E_BOM_TYPE nRetType = IconvWorker("CP949", "UTF-16", pSrc, tSrcSize, (char*)pDest, tDestSize, tRet, ptReadSize);
 		if( BOM_UTF16_BE == nRetType )
@@ -158,7 +158,7 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t UTF16_TO_ASCII(const WORD* pSrc, size_t tSrcCch, char* pDest, size_t tDestCch)
+	size_t UTF16_TO_ANSI(const WORD* pSrc, size_t tSrcCch, char* pDest, size_t tDestCch)
 	{
 		const size_t tCharSize = sizeof(char);
 		size_t tRet = 0;
@@ -178,7 +178,7 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t ASCII_TO_UTF32(const char* pSrc, size_t tSrcCch, DWORD* pDest, size_t tDestCch, size_t* ptReadSize)
+	size_t ANSI_TO_UTF32(const char* pSrc, size_t tSrcCch, DWORD* pDest, size_t tDestCch, size_t* ptReadSize)
 	{
 		const size_t tCharSize = sizeof(DWORD);
 		size_t tRet = 0;
@@ -210,7 +210,7 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t UTF32_TO_ASCII(const DWORD* pSrc, size_t tSrcCch, char* pDest, size_t tDestCch)
+	size_t UTF32_TO_ANSI(const DWORD* pSrc, size_t tSrcCch, char* pDest, size_t tDestCch)
 	{
 		const size_t tCharSize = sizeof(char);
 		size_t tRet = 0;

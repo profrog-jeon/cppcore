@@ -51,7 +51,7 @@ namespace core
 
 		default:
 			if (core::IsInvalidUTF8((LPCSTR)pContext, tFileSize))
-				strContents = MBSFromASCII((LPCSTR)pContext, tFileSize);
+				strContents = MBSFromANSI((LPCSTR)pContext, tFileSize);
 			else
 				strContents = MBSFromUTF8((LPCSTR)pContext, tFileSize);
 			break;
@@ -77,7 +77,7 @@ namespace core
 
 		default:
 			if (core::IsInvalidUTF8((LPCSTR)pContext, tFileSize))
-				strContents = WCSFromASCII((LPCSTR)pContext, tFileSize);
+				strContents = WCSFromANSI((LPCSTR)pContext, tFileSize);
 			else
 				strContents = WCSFromUTF8((LPCSTR)pContext, tFileSize);
 			break;

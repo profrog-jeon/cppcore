@@ -2209,7 +2209,7 @@ namespace core
 				/*0x10*/	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			};
 
-			// ASCII
+			// ANSI
 			if (pSrc[i] > 0)
 			{
 				if ((pSrc[i] < 32) && !s_bReadbleCharTable[pSrc[i]])
@@ -2251,7 +2251,7 @@ namespace core
 		size_t i;
 		for (i = 0; i < tSrcSize; i++)
 		{
-			// ASCII
+			// ANSI
 			if (pSrc[i] > 0)
 				continue;
 

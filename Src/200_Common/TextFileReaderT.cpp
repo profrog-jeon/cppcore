@@ -133,7 +133,7 @@ namespace core
 				if (0 < (tReadSize = ReadLineFromFile(vecBuffer, m_pContext, m_tFileSize, m_tReadPos)))
 				{
 					vecBuffer.push_back(0);
-					strContext = TCSFromASCII(&vecBuffer[0]);
+					strContext = TCSFromANSI(&vecBuffer[0]);
 				}
 			}
 			break;

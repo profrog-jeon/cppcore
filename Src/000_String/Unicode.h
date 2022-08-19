@@ -3,29 +3,39 @@
 #include <vector>
 #include <string>
 
+// for compatiblity,  ASCII -> ANSI
+#define WCSFromASCII				WCSFromANSI
+#define MBSFromASCII				MBSFromANSI
+#define ASCIIFromWCS				ANSIFromWCS
+#define ASCIIFromMBS				ANSIFromMBS
+#define TCSFromASCII				TCSFromANSI
+#define NTCSFromASCII				NTCSFromANSI
+#define ASCIIFromTCS				ANSIFromTCS
+#define ASCIIFromNTCS				ANSIFromNTCS
+
 #ifdef UNICODE
 #define TCSFromWCS		WCSFromWCS
 #define TCSFromMBS		WCSFromMBS
-#define TCSFromASCII	WCSFromASCII
+#define TCSFromANSI		WCSFromANSI
 #define TCSFromUTF8		WCSFromUTF8
 #define TCSFromUTF16	WCSFromUTF16
 #define TCSFromUTF32	WCSFromUTF32
 #define NTCSFromWCS		MBSFromWCS
 #define NTCSFromMBS		MBSFromMBS
-#define NTCSFromASCII	MBSFromASCII
+#define NTCSFromANSI	MBSFromANSI
 #define NTCSFromUTF8	MBSFromUTF8
 #define NTCSFromUTF16	MBSFromUTF16
 #define NTCSFromUTF32	MBSFromUTF32
 
 #define WCSFromTCS		WCSFromWCS	
 #define MBSFromTCS		MBSFromWCS
-#define ASCIIFromTCS	ASCIIFromWCS
+#define ANSIFromTCS		ANSIFromWCS
 #define UTF8FromTCS		UTF8FromWCS
 #define UTF16FromTCS	UTF16FromWCS
 #define UTF32FromTCS	UTF32FromWCS
 #define WCSFromNTCS		WCSFromMBS
 #define MBSFromNTCS		MBSFromMBS
-#define ASCIIFromNTCS	ASCIIFromMBS
+#define ANSIFromNTCS	ANSIFromMBS
 #define UTF8FromNTCS	UTF8FromMBS
 #define UTF16FromNTCS	UTF16FromMBS
 #define UTF32FromNTCS	UTF32FromMBS
@@ -35,26 +45,26 @@
 #else
 #define TCSFromWCS		MBSFromWCS		
 #define TCSFromMBS		MBSFromMBS		
-#define TCSFromASCII	MBSFromASCII	
+#define TCSFromANSI		MBSFromANSI	
 #define TCSFromUTF8		MBSFromUTF8		
 #define TCSFromUTF16	MBSFromUTF16	
 #define TCSFromUTF32	MBSFromUTF32	
 #define NTCSFromWCS		WCSFromWCS		
 #define NTCSFromMBS		WCSFromMBS		
-#define NTCSFromASCII	WCSFromASCII	
+#define NTCSFromANSI	WCSFromANSI	
 #define NTCSFromUTF8	WCSFromUTF8	
 #define NTCSFromUTF16	WCSFromUTF16	
 #define NTCSFromUTF32	WCSFromUTF32	
 
 #define WCSFromTCS		WCSFromMBS		
 #define MBSFromTCS		MBSFromMBS		
-#define ASCIIFromTCS	ASCIIFromMBS	
+#define ANSIFromTCS		ANSIFromMBS	
 #define UTF8FromTCS		UTF8FromMBS		
 #define UTF16FromTCS	UTF16FromMBS	
 #define UTF32FromTCS	UTF32FromMBS	
 #define WCSFromNTCS		WCSFromWCS		
 #define MBSFromNTCS		MBSFromWCS		
-#define ASCIIFromNTCS	ASCIIFromWCS	
+#define ANSIFromNTCS	ANSIFromWCS	
 #define UTF8FromNTCS	UTF8FromWCS	
 #define UTF16FromNTCS	UTF16FromWCS	
 #define UTF32FromNTCS	UTF32FromWCS	
@@ -77,21 +87,21 @@ namespace core
 	std::wstring	WCSFromUTF8(std::string strInput, size_t* ptReadSize = NULL);
 	std::wstring	WCSFromUTF16(const WORD* pszInput, size_t tInputCch);
 	std::wstring	WCSFromUTF32(const DWORD* pszInput, size_t tInputCch);
-	std::wstring	WCSFromASCII(LPCSTR pszContext, size_t tLength, size_t* ptReadSize = NULL);
-	std::wstring	WCSFromASCII(std::string strInput, size_t* ptReadSize = NULL);
+	std::wstring	WCSFromANSI(LPCSTR pszContext, size_t tLength, size_t* ptReadSize = NULL);
+	std::wstring	WCSFromANSI(std::string strInput, size_t* ptReadSize = NULL);
 
 	std::string		MBSFromUTF8(LPCSTR pszContext, size_t tLength, size_t* ptReadSize = NULL);
 	std::string		MBSFromUTF8(std::string strInput, size_t* ptReadSize = NULL);
 	std::string		MBSFromUTF16(const WORD* pszInput, size_t tInputCch);
 	std::string		MBSFromUTF32(const DWORD* pszInput, size_t tInputCch);
-	std::string		MBSFromASCII(LPCSTR pszContext, size_t tLength, size_t* ptReadSize = NULL);
-	std::string		MBSFromASCII(std::string strInput, size_t* ptReadSize = NULL);
+	std::string		MBSFromANSI(LPCSTR pszContext, size_t tLength, size_t* ptReadSize = NULL);
+	std::string		MBSFromANSI(std::string strInput, size_t* ptReadSize = NULL);
 
-	std::string		ASCIIFromMBS(std::string strInput);
-	std::string		ASCIIFromWCS(std::wstring strInput);
+	std::string		ANSIFromMBS(std::string strInput);
+	std::string		ANSIFromWCS(std::wstring strInput);
 
-	std::string		ASCIIFromUTF8(std::string strInput, size_t* ptReadSize = NULL);
-	std::string		UTF8FromASCII(std::string strInput, size_t* ptReadSize = NULL);
+	std::string		ANSIFromUTF8(std::string strInput, size_t* ptReadSize = NULL);
+	std::string		UTF8FromANSI(std::string strInput, size_t* ptReadSize = NULL);
 
 	std::vector<WORD>	UTF16FromMBS(std::string strInput);
 	std::vector<WORD>	UTF16FromWCS(std::wstring strInput);

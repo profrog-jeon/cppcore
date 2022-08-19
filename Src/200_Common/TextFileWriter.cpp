@@ -74,7 +74,7 @@ namespace core
 
 			default:
 			{
-				std::string strData = ASCIIFromTCS(strContext);
+				std::string strData = ANSIFromTCS(strContext);
 				WriteFile(m_hFile, strData.c_str(), 1 * strData.size(), &dwWriteSize);
 			}	break;
 			}

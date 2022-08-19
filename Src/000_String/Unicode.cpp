@@ -5,7 +5,7 @@
 namespace core
 {
 	//////////////////////////////////////////////////////////////////////////
-	std::string ASCIIFromUTF8(std::string strInput, size_t* ptReadSize)
+	std::string ANSIFromUTF8(std::string strInput, size_t* ptReadSize)
 	{
 		if( strInput.empty() )
 			return "";
@@ -18,23 +18,23 @@ namespace core
 		}
 		
 		std::string strRet;
-		size_t tRequiredCch = UTF16_TO_ASCII(&vecUTF16[0], vecUTF16.size(), NULL, 0);
+		size_t tRequiredCch = UTF16_TO_ANSI(&vecUTF16[0], vecUTF16.size(), NULL, 0);
 		strRet.resize(tRequiredCch);
-		UTF16_TO_ASCII(&vecUTF16[0], vecUTF16.size(), (char*)strRet.c_str(), tRequiredCch);
+		UTF16_TO_ANSI(&vecUTF16[0], vecUTF16.size(), (char*)strRet.c_str(), tRequiredCch);
 		return strRet;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	std::string UTF8FromASCII(std::string strInput, size_t* ptReadSize)
+	std::string UTF8FromANSI(std::string strInput, size_t* ptReadSize)
 	{
 		if( strInput.empty() )
 			return "";
 
 		std::vector<WORD> vecUTF16;
 		{
-			size_t tRequiredCch = ASCII_TO_UTF16(strInput.c_str(), strInput.length(), NULL, 0);
+			size_t tRequiredCch = ANSI_TO_UTF16(strInput.c_str(), strInput.length(), NULL, 0);
 			vecUTF16.resize(tRequiredCch);
-			ASCII_TO_UTF16(strInput.c_str(), strInput.length(), &vecUTF16[0], tRequiredCch, ptReadSize);
+			ANSI_TO_UTF16(strInput.c_str(), strInput.length(), &vecUTF16[0], tRequiredCch, ptReadSize);
 		}
 
 		std::string strRet;

@@ -17,7 +17,7 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t CalcUnicodeCchFromASCII(LPCSTR pSrc, size_t tSrcCch, size_t* ptSrcReadCch)
+	size_t CalcUnicodeCchFromANSI(LPCSTR pSrc, size_t tSrcCch, size_t* ptSrcReadCch)
 	{
 		size_t tDestLen = 0;
 		size_t tPos = 0;
@@ -51,7 +51,7 @@ namespace core
 		{
 			size_t tRequiredSize = 0;
 
-			// ASCII byte 
+			// ANSI byte 
 			if (0 == (pData[i+0] & 0x80) && IsReadableChar(pData[i]))
 			{
 				tRequiredSize = 1;
@@ -146,7 +146,7 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t ASCII_TO_ASCII(const char* pSrc, size_t tSrcCch, char* pDest, size_t tDestCch)
+	size_t ANSI_TO_ANSI(const char* pSrc, size_t tSrcCch, char* pDest, size_t tDestCch)
 	{
 		if( pDest )
 			memcpy(pDest, pSrc, min(tSrcCch, tDestCch));
@@ -262,7 +262,7 @@ namespace core
 
 		uc = 0x00000000;
 
-		// ASCII byte 
+		// ANSI byte 
 		if( 0 == (UTF8[0] & 0x80) )
 		{
 			uc = UTF8[0];
