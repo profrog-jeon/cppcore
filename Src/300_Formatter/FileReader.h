@@ -24,7 +24,7 @@ namespace fmt_internal
 		bool			CheckValidity(std::tstring& refStrErrMsg);
 
 	private:
-		size_t			OnAccess(void* pData, size_t tDataSize);
+		size_t			Access(void* pData, size_t tDataSize);
 	};
 
 }

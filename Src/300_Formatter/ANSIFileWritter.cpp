@@ -1,10 +1,10 @@
 #include "stdafx.h"
-#include "ASCIIFileWritter.h"
+#include "ANSIFileWritter.h"
 
 namespace fmt_internal
 {
 	//////////////////////////////////////////////////////////////////////////
-	CASCIIFileWritter::CASCIIFileWritter(std::tstring strFilename)
+	CANSIFileWritter::CANSIFileWritter(std::tstring strFilename)
 		: IChannel()
 		, m_strFilename(strFilename)
 		, m_hFile(NULL)
@@ -32,7 +32,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	CASCIIFileWritter::~CASCIIFileWritter(void)
+	CANSIFileWritter::~CANSIFileWritter(void)
 	{
 		if( m_hFile )
 		{
@@ -43,7 +43,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	bool CASCIIFileWritter::CheckValidity(std::tstring& refStrErrMsg)
+	bool CANSIFileWritter::CheckValidity(std::tstring& refStrErrMsg)
 	{
 		if( m_hFile )
 			return true;
@@ -53,7 +53,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t CASCIIFileWritter::OnAccess(void* pData, size_t tDataSize)
+	size_t CANSIFileWritter::Access(void* pData, size_t tDataSize)
 	{
 		if( m_hFile == NULL )
 			return 0;
@@ -63,7 +63,7 @@ namespace fmt_internal
 			std::tstring strContext;
 			strContext.resize(tDataSize / sizeof(TCHAR));
 			memcpy((void*)strContext.c_str(), pData, strContext.size() * sizeof(TCHAR));
-			strContextEuckr = ASCIIFromTCS(strContext);
+			strContextEuckr = ANSIFromTCS(strContext);
 		}
 		
 		DWORD dwWritten = 0;

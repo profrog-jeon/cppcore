@@ -265,11 +265,11 @@
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="ASCIIFileReader.h" />
-    <ClInclude Include="ASCIIFileWritter.h" />
-    <ClInclude Include="ASCIIFormatter.h" />
-    <ClInclude Include="ASCIIStringReader.h" />
-    <ClInclude Include="ASCIIStringWritter.h" />
+    <ClInclude Include="ANSIFileReader.h" />
+    <ClInclude Include="ANSIFileWritter.h" />
+    <ClInclude Include="ANSIFormatter.h" />
+    <ClInclude Include="ANSIStringReader.h" />
+    <ClInclude Include="ANSIStringWritter.h" />
     <ClInclude Include="BytesReader.h" />
     <ClInclude Include="BytesWriter.h" />
     <ClInclude Include="CSVDeserializer.h" />
@@ -316,11 +316,11 @@
     <ClInclude Include="XMLSerializer_V3.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ASCIIFileReader.cpp" />
-    <ClCompile Include="ASCIIFileWritter.cpp" />
-    <ClCompile Include="ASCIIFormatter.cpp" />
-    <ClCompile Include="ASCIIStringReader.cpp" />
-    <ClCompile Include="ASCIIStringWritter.cpp" />
+    <ClCompile Include="ANSIFileReader.cpp" />
+    <ClCompile Include="ANSIFileWritter.cpp" />
+    <ClCompile Include="ANSIFormatter.cpp" />
+    <ClCompile Include="ANSIStringReader.cpp" />
+    <ClCompile Include="ANSIStringWritter.cpp" />
     <ClCompile Include="BytesReader.cpp" />
     <ClCompile Include="BytesWriter.cpp" />
     <ClCompile Include="CSVDeserializer.cpp" />

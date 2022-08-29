@@ -23,7 +23,7 @@ namespace fmt_internal
 		while(1)
 		{
 			strBuff.resize(tBuffLen);
-			tReadSize = m_Channel.OnAccess((void*)strBuff.c_str(), tBuffLen * sizeof(TCHAR));
+			tReadSize = m_Channel.Access((void*)strBuff.c_str(), tBuffLen * sizeof(TCHAR));
 			if( 0 == tReadSize )
 				break;
 

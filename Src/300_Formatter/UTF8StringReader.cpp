@@ -79,7 +79,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t CUTF8StringReader::OnAccess(void* pData, size_t tDataSize)
+	size_t CUTF8StringReader::Access(void* pData, size_t tDataSize)
 	{
 		tDataSize /= sizeof(TCHAR);
 

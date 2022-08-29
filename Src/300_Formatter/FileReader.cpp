@@ -55,7 +55,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t CFileReader::OnAccess(void* pData, size_t tDataSize)
+	size_t CFileReader::Access(void* pData, size_t tDataSize)
 	{
 		if( m_hFile == NULL )
 			return 0;

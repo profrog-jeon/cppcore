@@ -22,7 +22,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t CStringWriter::OnAccess(void* pData, size_t tDataSize)
+	size_t CStringWriter::Access(void* pData, size_t tDataSize)
 	{
 		std::tstring strTemp;
 		strTemp.resize(tDataSize / sizeof(TCHAR));

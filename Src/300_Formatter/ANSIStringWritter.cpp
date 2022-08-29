@@ -1,34 +1,34 @@
 #include "stdafx.h"
-#include "ASCIIStringWritter.h"
+#include "ANSIStringWritter.h"
 
 namespace fmt_internal
 {
 	//////////////////////////////////////////////////////////////////////////
-	CASCIIStringWriter::CASCIIStringWriter(std::string& strOutput)
+	CANSIStringWriter::CANSIStringWriter(std::string& strOutput)
 		: IChannel()
 		, m_strOutput(strOutput)
 	{
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	CASCIIStringWriter::~CASCIIStringWriter(void)
+	CANSIStringWriter::~CANSIStringWriter(void)
 	{
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	bool CASCIIStringWriter::CheckValidity(std::tstring& refStrErrMsg)
+	bool CANSIStringWriter::CheckValidity(std::tstring& refStrErrMsg)
 	{
 		return true;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t CASCIIStringWriter::OnAccess(void* pData, size_t tDataSize)
+	size_t CANSIStringWriter::Access(void* pData, size_t tDataSize)
 	{
 		std::tstring strTemp;
 		strTemp.resize(tDataSize / sizeof(TCHAR));
 		memcpy(&strTemp[0], pData, tDataSize);
 
-		m_strOutput = m_strOutput + ASCIIFromTCS(strTemp);
+		m_strOutput = m_strOutput + ANSIFromTCS(strTemp);
 		return tDataSize;
 	}
 }

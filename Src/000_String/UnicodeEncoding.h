@@ -1,12 +1,12 @@
 #pragma once
 
-// for compatiblity,  ASCII -> ANSI
-#define CalcUnicodeCchFromASCII		CalcUnicodeCchFromANSI
-#define ASCII_TO_ASCII				ANSI_TO_ANSI
-#define ASCII_TO_UTF16				ANSI_TO_UTF16
-#define UTF16_TO_ASCII				UTF16_TO_ANSI
-#define ASCII_TO_UTF32				ANSI_TO_UTF32
-#define UTF32_TO_ASCII				UTF32_TO_ANSI
+// for compatiblity,  ANSI -> ANSI
+#define CalcUnicodeCchFromANSI		CalcUnicodeCchFromANSI
+#define ANSI_TO_ANSI				ANSI_TO_ANSI
+#define ANSI_TO_UTF16				ANSI_TO_UTF16
+#define UTF16_TO_ANSI				UTF16_TO_ANSI
+#define ANSI_TO_UTF32				ANSI_TO_UTF32
+#define UTF32_TO_ANSI				UTF32_TO_ANSI
 
 namespace core
 {

@@ -10,7 +10,7 @@
 ////////////////////////////////////////////////////////////////////////////
 namespace core
 {
-	namespace ASCII
+	namespace ANSI
 	{
 		// JSON
 		bool WriteJsonToFile(const IFormatterObjectW* pObject, std::wstring strFilename, std::wstring* pStrErrMsg = NULL);

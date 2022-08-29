@@ -21,12 +21,12 @@ namespace fmt_internal
 		do
 		{
 			WORD wLength;
-			if (2 != channel.OnAccess(&wLength, 2))
+			if (2 != channel.Access(&wLength, 2))
 				break;
 
 			std::string strTemp;
 			strTemp.resize(wLength);
-			if (wLength != channel.OnAccess((void*)strTemp.c_str(), wLength))
+			if (wLength != channel.Access((void*)strTemp.c_str(), wLength))
 				break;
 
 			refValue = TCSFromUTF8(strTemp);
@@ -39,7 +39,7 @@ namespace fmt_internal
 		DeserializeString(m_Channel, strKey);
 
 		WORD wCount = (WORD)tSize;
-		if (2 != m_Channel.OnAccess(&wCount, 2))
+		if (2 != m_Channel.Access(&wCount, 2))
 			return 0;
 
 		return wCount;
@@ -56,7 +56,7 @@ namespace fmt_internal
 		DeserializeString(m_Channel, strKey);
 
 		WORD wCount = (WORD)tSize;
-		if( 2 != m_Channel.OnAccess(&wCount, 2) )
+		if( 2 != m_Channel.Access(&wCount, 2) )
 			return 0;
 
 		return wCount;
@@ -93,7 +93,7 @@ namespace fmt_internal
 	inline static void PacketDeserializerMetaFunction(IChannel& channel, std::tstring& strKey, T* pValue)
 	{
 		DeserializeString(channel, strKey);
-		channel.OnAccess(pValue, sizeof(T));
+		channel.Access(pValue, sizeof(T));
 	}
 
 	//////////////////////////////////////////////////////////////////////////

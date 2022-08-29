@@ -61,11 +61,11 @@ TEST(TextReaderTest, TextReaderTest_UTF16_32)
 }
 
 //////////////////////////////////////////////////////////////////////////
-TEST(TextReaderTest, TextReaderTest_ASCII_UTF8)
+TEST(TextReaderTest, TextReaderTest_ANSI_UTF8)
 {
 	std::tstring strContextA;
 	{
-		CTextFileReader TextFileReader("../../Build/Test/Unicode/ASCIISample.txt");
+		CTextFileReader TextFileReader("../../Build/Test/Unicode/ANSISample.txt");
 		EXPECT_EQ(EC_SUCCESS, TextFileReader.ReadLine(strContextA));
 		EXPECT_FALSE(strContextA.empty());
 	}
@@ -81,11 +81,11 @@ TEST(TextReaderTest, TextReaderTest_ASCII_UTF8)
 }
 
 //////////////////////////////////////////////////////////////////////////
-TEST(TextReaderTest, TextReaderTest_ASCII_UTF16)
+TEST(TextReaderTest, TextReaderTest_ANSI_UTF16)
 {
 	std::tstring strContextA;
 	{
-		CTextFileReader TextFileReader("../../Build/Test/Unicode/ASCIISample.txt");
+		CTextFileReader TextFileReader("../../Build/Test/Unicode/ANSISample.txt");
 		EXPECT_EQ(EC_SUCCESS, TextFileReader.ReadLine(strContextA));
 		EXPECT_FALSE(strContextA.empty());
 	}
@@ -101,11 +101,11 @@ TEST(TextReaderTest, TextReaderTest_ASCII_UTF16)
 }
 
 //////////////////////////////////////////////////////////////////////////
-TEST(TextReaderTest, TextReaderTest_ASCII_UTF32)
+TEST(TextReaderTest, TextReaderTest_ANSI_UTF32)
 {
 	std::tstring strContextA;
 	{
-		CTextFileReader TextFileReader("../../Build/Test/Unicode/ASCIISample.txt");
+		CTextFileReader TextFileReader("../../Build/Test/Unicode/ANSISample.txt");
 		EXPECT_EQ(EC_SUCCESS, TextFileReader.ReadLine(strContextA));
 		EXPECT_FALSE(strContextA.empty());
 	}
@@ -164,7 +164,7 @@ TEST(TextReaderTest, TextReaderTest_UTF32_BE)
 TEST(ReadFileContentTest, ReadFileContentsATest)
 {
 	std::string strContextA;
-	EXPECT_EQ(EC_SUCCESS, ReadFileContentsA(TEXT("../../Build/Test/Unicode/ASCIISample.txt"), strContextA));
+	EXPECT_EQ(EC_SUCCESS, ReadFileContentsA(TEXT("../../Build/Test/Unicode/ANSISample.txt"), strContextA));
 	strContextA = Trim(strContextA);
 	ASSERT_FALSE(strContextA.empty());
 
@@ -185,7 +185,7 @@ TEST(ReadFileContentTest, ReadFileContentsATest)
 TEST(ReadFileContentTest, ReadFileContentsWTest)
 {
 	std::wstring strContextA;
-	EXPECT_EQ(EC_SUCCESS, ReadFileContentsW(TEXT("../../Build/Test/Unicode/ASCIISample.txt"), strContextA));
+	EXPECT_EQ(EC_SUCCESS, ReadFileContentsW(TEXT("../../Build/Test/Unicode/ANSISample.txt"), strContextA));
 	strContextA = Trim(strContextA);
 	ASSERT_FALSE(strContextA.empty());
 
@@ -204,10 +204,10 @@ TEST(ReadFileContentTest, ReadFileContentsWTest)
 
 
 //////////////////////////////////////////////////////////////////////////
-TEST(ReadFileContentTest, ReadFileContentsTest_ASCII_UTF32)
+TEST(ReadFileContentTest, ReadFileContentsTest_ANSI_UTF32)
 {
 	std::tstring strContextA;
-	EXPECT_EQ(EC_SUCCESS, ReadFileContents(TEXT("../../Build/Test/Unicode/ASCIISample.txt"), strContextA));
+	EXPECT_EQ(EC_SUCCESS, ReadFileContents(TEXT("../../Build/Test/Unicode/ANSISample.txt"), strContextA));
 	strContextA = Trim(strContextA);
 	ASSERT_FALSE(strContextA.empty());
 

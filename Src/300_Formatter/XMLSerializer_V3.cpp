@@ -140,7 +140,7 @@ namespace fmt_internal
 			std::tstring strContext = m_stkContext.top() + TEXT("\n");
 			m_stkContext.pop();
 
-			m_Channel.OnAccess((void*)strContext.c_str(), strContext.length() * sizeof(TCHAR));
+			m_Channel.Access((void*)strContext.c_str(), strContext.length() * sizeof(TCHAR));
 		}
 	}
 

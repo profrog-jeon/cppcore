@@ -22,7 +22,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t CUTF8StringWriter::OnAccess(void* pData, size_t tDataSize)
+	size_t CUTF8StringWriter::Access(void* pData, size_t tDataSize)
 	{
 		std::tstring strTemp;
 		strTemp.resize(tDataSize / sizeof(TCHAR));

@@ -93,7 +93,7 @@ namespace fmt_internal
 		LPBYTE pData = (LPBYTE)m_strSchema.c_str();
 		while(tTotalSent < tLength)
 		{
-			size_t tSent = m_Channel.OnAccess(pData + tTotalSent, tLength - tTotalSent);
+			size_t tSent = m_Channel.Access(pData + tTotalSent, tLength - tTotalSent);
 			tTotalSent += tSent;
 		}
 	}

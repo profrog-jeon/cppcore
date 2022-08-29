@@ -82,7 +82,7 @@ namespace core
 			fmt_internal::CUTF8FileWritter channel(strFilename);
 			fmt_internal::CKeyArraySerializer key_formatter(channel, TEXT(","), TEXT(""));
 			key_formatter.Synchronize(const_cast<IFormatterObject*>(pObject));
-			((IChannel*)&channel)->OnAccess((void*)TEXT("\r\n"), sizeof(TCHAR) * 2);
+			((IChannel*)&channel)->Access((void*)TEXT("\r\n"), sizeof(TCHAR) * 2);
 
 			fmt_internal::CCSVSerializer value_formatter(channel);
 			value_formatter.Synchronize(const_cast<IFormatterObject*>(pObject));
@@ -95,7 +95,7 @@ namespace core
 			fmt_internal::CUTF8FileWritter channel(strFilename, bWriteBOM);
 			fmt_internal::CKeyArraySerializer key_formatter(channel, TEXT(","), TEXT(""));
 			key_formatter.Synchronize(const_cast<IFormatterObject*>(pObject));
-			((IChannel*)&channel)->OnAccess((void*)TEXT("\r\n"), sizeof(TCHAR) * 2);
+			((IChannel*)&channel)->Access((void*)TEXT("\r\n"), sizeof(TCHAR) * 2);
 
 			fmt_internal::CCSVSerializer value_formatter(channel);
 			value_formatter.Synchronize(const_cast<IFormatterObject*>(pObject));
@@ -117,7 +117,7 @@ namespace core
 			fmt_internal::CUTF8StringWriter channel(strOutput);			
 			fmt_internal::CKeyArraySerializer key_formatter(channel, TEXT(","), TEXT(""));
 			key_formatter.Synchronize(const_cast<IFormatterObject*>(pObject));
-			((IChannel*)&channel)->OnAccess((void*)TEXT("\r\n"), sizeof(TCHAR) * 2);
+			((IChannel*)&channel)->Access((void*)TEXT("\r\n"), sizeof(TCHAR) * 2);
 
 			fmt_internal::CCSVSerializer value_formatter(channel);
 			value_formatter.Synchronize(const_cast<IFormatterObject*>(pObject));

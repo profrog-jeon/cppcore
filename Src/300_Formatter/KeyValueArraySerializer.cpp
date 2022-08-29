@@ -77,7 +77,7 @@ namespace fmt_internal
 			bFirst = false;
 		else
 			strOutput = strSeperator + strOutput;
-		channel.OnAccess((void*)strOutput.c_str(), strOutput.length() * sizeof(TCHAR));
+		channel.Access((void*)strOutput.c_str(), strOutput.length() * sizeof(TCHAR));
 	}
 
 	//////////////////////////////////////////////////////////////////////////

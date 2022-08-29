@@ -9,6 +9,6 @@ namespace core
 	{
 		virtual ~IChannel()	{}
 		virtual bool CheckValidity(std::tstring& refStrErrMsg) = 0;
-		virtual size_t OnAccess(void* pData, size_t tDataSize) = 0;
+		virtual size_t Access(void* pData, size_t tDataSize) = 0;
 	};
 }

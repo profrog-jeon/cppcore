@@ -77,7 +77,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t CStringReader::OnAccess(void* pData, size_t tDataSize)
+	size_t CStringReader::Access(void* pData, size_t tDataSize)
 	{
 		tDataSize /= sizeof(TCHAR);
 

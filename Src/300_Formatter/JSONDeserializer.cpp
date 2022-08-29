@@ -20,7 +20,7 @@ namespace fmt_internal
 		{
 			const size_t tTokenSize = 1024;
 			TCHAR szBuff[tTokenSize+1] = { 0, };
-			size_t tReadSize = channel.OnAccess(szBuff, sizeof(TCHAR) * tTokenSize);
+			size_t tReadSize = channel.Access(szBuff, sizeof(TCHAR) * tTokenSize);
 			if( 0 == tReadSize )
 				break;
 

@@ -183,7 +183,7 @@ typedef struct unz_file_info_s
 
 // Possible values of the data_type field
 #define Z_BINARY   0
-#define Z_ASCII    1
+#define Z_ANSI    1
 #define Z_UNKNOWN  2
 
 // The deflate compression method (the only one supported in this version)

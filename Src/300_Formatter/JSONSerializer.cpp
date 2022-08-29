@@ -7,13 +7,13 @@ namespace fmt_internal
 	//////////////////////////////////////////////////////////////////////////
 	inline void AddOpeningToken(std::vector<sGroupingData>& vecObjectCountStack, core::IChannel& channel, TCHAR cToken)
 	{
-		channel.OnAccess(&cToken, sizeof(TCHAR));
+		channel.Access(&cToken, sizeof(TCHAR));
 
 		TCHAR cDelToken;
 		cDelToken = TEXT('\r');
-		channel.OnAccess(&cDelToken, sizeof(TCHAR));
+		channel.Access(&cDelToken, sizeof(TCHAR));
 		cDelToken = TEXT('\n');
-		channel.OnAccess(&cDelToken, sizeof(TCHAR));
+		channel.Access(&cDelToken, sizeof(TCHAR));
 	}
 
 	//////////////////////////////////////////////////////////////////////////
@@ -21,18 +21,18 @@ namespace fmt_internal
 	{
 		TCHAR cDelToken;
 		cDelToken = TEXT('\r');
-		channel.OnAccess(&cDelToken, sizeof(TCHAR));
+		channel.Access(&cDelToken, sizeof(TCHAR));
 		cDelToken = TEXT('\n');
-		channel.OnAccess(&cDelToken, sizeof(TCHAR));
+		channel.Access(&cDelToken, sizeof(TCHAR));
 
 		size_t i;
 		for(i=0; i<vecObjectCountStack.size(); i++)
 		{
 			cDelToken = TEXT('\t');
-			channel.OnAccess(&cDelToken, sizeof(TCHAR));
+			channel.Access(&cDelToken, sizeof(TCHAR));
 		}
 
-		channel.OnAccess(&cToken, sizeof(TCHAR));
+		channel.Access(&cToken, sizeof(TCHAR));
 	}
 
 	//////////////////////////////////////////////////////////////////////////
@@ -46,18 +46,18 @@ namespace fmt_internal
 		{
 			TCHAR cDelToken;
 			cDelToken = TEXT(',');
-			channel.OnAccess(&cDelToken, sizeof(TCHAR));
+			channel.Access(&cDelToken, sizeof(TCHAR));
 			cDelToken = TEXT('\r');
-			channel.OnAccess(&cDelToken, sizeof(TCHAR));
+			channel.Access(&cDelToken, sizeof(TCHAR));
 			cDelToken = TEXT('\n');
-			channel.OnAccess(&cDelToken, sizeof(TCHAR));
+			channel.Access(&cDelToken, sizeof(TCHAR));
 		}
 
 		size_t i;
 		for(i=0; i<vecObjectCountStack.size(); i++)
 		{
 			TCHAR cDelToken = TEXT('\t');
-			channel.OnAccess(&cDelToken, sizeof(TCHAR));
+			channel.Access(&cDelToken, sizeof(TCHAR));
 		}
 		counter.tSequence++;
 	}
@@ -84,7 +84,7 @@ namespace fmt_internal
 		{	// Key
 			std::tstring strToken;
 			strToken = fmt_internal::ConvertToJsonString(strKey) + TEXT(":");
-			m_Channel.OnAccess((void*)strToken.c_str(), sizeof(TCHAR) * strToken.length());
+			m_Channel.Access((void*)strToken.c_str(), sizeof(TCHAR) * strToken.length());
 		}
 
 		AddOpeningToken(m_vecObjectCountStack, m_Channel, TEXT('{'));
@@ -112,7 +112,7 @@ namespace fmt_internal
 		{	// Key
 			std::tstring strToken;
 			strToken = fmt_internal::ConvertToJsonString(strKey) + TEXT(":");
-			m_Channel.OnAccess((void*)strToken.c_str(), sizeof(TCHAR) * strToken.length());
+			m_Channel.Access((void*)strToken.c_str(), sizeof(TCHAR) * strToken.length());
 		}
 
 		AddOpeningToken(m_vecObjectCountStack, m_Channel, TEXT('['));
@@ -141,7 +141,7 @@ namespace fmt_internal
 		{	// Key
 			std::tstring strToken;
 			strToken = fmt_internal::ConvertToJsonString(strKey) + TEXT(":");
-			m_Channel.OnAccess((void*)strToken.c_str(), sizeof(TCHAR) * strToken.length());
+			m_Channel.Access((void*)strToken.c_str(), sizeof(TCHAR) * strToken.length());
 		}
 		AddOpeningToken(m_vecObjectCountStack, m_Channel, TEXT('{'));
 
@@ -187,13 +187,13 @@ namespace fmt_internal
 		{	// Key
 			std::tstring strToken;
 			strToken = fmt_internal::ConvertToJsonString(strKey) + TEXT(':');
-			m_Channel.OnAccess((void*)strToken.c_str(), sizeof(TCHAR) * strToken.length());
+			m_Channel.Access((void*)strToken.c_str(), sizeof(TCHAR) * strToken.length());
 		}
 
 		{	// Value
 			std::tstring strToken;
 			strToken = fmt_internal::ConvertToJsonString(*pString);
-			m_Channel.OnAccess((void*)strToken.c_str(), sizeof(TCHAR) * strToken.length());
+			m_Channel.Access((void*)strToken.c_str(), sizeof(TCHAR) * strToken.length());
 		}
 
 		return *this;
@@ -219,14 +219,14 @@ namespace fmt_internal
 		{
 			std::tstring strToken;
 			strToken = fmt_internal::ConvertToJsonString(strKey) + TEXT(':');
-			m_Channel.OnAccess((void*)strToken.c_str(), sizeof(TCHAR) * strToken.length());
+			m_Channel.Access((void*)strToken.c_str(), sizeof(TCHAR) * strToken.length());
 		}
 
 		// Value
 		{
 			std::tstring strToken;
 			strToken = StringFrom(refValue);
-			m_Channel.OnAccess((void*)strToken.c_str(), sizeof(TCHAR) * strToken.length());
+			m_Channel.Access((void*)strToken.c_str(), sizeof(TCHAR) * strToken.length());
 		}
 	}
 

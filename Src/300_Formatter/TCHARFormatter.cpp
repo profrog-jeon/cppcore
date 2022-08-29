@@ -70,7 +70,7 @@ namespace core
 		fmt_internal::CFileWritter channel(strFilename);
 		fmt_internal::CKeyArraySerializer key_formatter(channel, TEXT(","), TEXT(""));
 		key_formatter.Synchronize(const_cast<IFormatterObject*>(pObject));
-		((IChannel*)&channel)->OnAccess((void*)TEXT("\r\n"), sizeof(TCHAR) * 2);
+		((IChannel*)&channel)->Access((void*)TEXT("\r\n"), sizeof(TCHAR) * 2);
 		fmt_internal::CCSVSerializer value_formatter(channel);
 		value_formatter.Synchronize(const_cast<IFormatterObject*>(pObject));
 		return value_formatter.CheckValidity(pStrErrMsg);
@@ -91,7 +91,7 @@ namespace core
 		fmt_internal::CStringWriter channel(strOutput);			
 		fmt_internal::CKeyArraySerializer key_formatter(channel, TEXT(","), TEXT(""));
 		key_formatter.Synchronize(const_cast<IFormatterObject*>(pObject));
-		((IChannel*)&channel)->OnAccess((void*)TEXT("\r\n"), sizeof(TCHAR) * 2);
+		((IChannel*)&channel)->Access((void*)TEXT("\r\n"), sizeof(TCHAR) * 2);
 		fmt_internal::CCSVSerializer value_formatter(channel);
 		value_formatter.Synchronize(const_cast<IFormatterObject*>(pObject));
 		return value_formatter.CheckValidity(pStrErrMsg);

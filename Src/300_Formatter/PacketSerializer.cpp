@@ -23,9 +23,9 @@ namespace fmt_internal
 		std::string refValueA = UTF8FromTCS(refValue);
 
 		WORD wLength = (WORD)refValueA.length();
-		channel.OnAccess(&wLength, sizeof(wLength));
+		channel.Access(&wLength, sizeof(wLength));
 		if(0 < wLength)
-			channel.OnAccess((void*)refValueA.c_str(), wLength);
+			channel.Access((void*)refValueA.c_str(), wLength);
 	}
 
 	//////////////////////////////////////////////////////////////////////////
@@ -34,7 +34,7 @@ namespace fmt_internal
 		SerializeString(m_Channel, strKey);
 
 		WORD wCount = (WORD)tSize;
-		m_Channel.OnAccess(&wCount, 2);
+		m_Channel.Access(&wCount, 2);
 		return tSize;
 	}
 
@@ -49,7 +49,7 @@ namespace fmt_internal
 		SerializeString(m_Channel, strKey);
 
 		WORD wCount = (WORD)tSize;
-		m_Channel.OnAccess(&wCount, 2);
+		m_Channel.Access(&wCount, 2);
 		return tSize;
 	}
 
@@ -84,7 +84,7 @@ namespace fmt_internal
 	inline static void PacketSerializerMetaFunction(IChannel& channel, std::tstring& strKey, T* pValue)
 	{
 		SerializeString(channel, strKey);
-		channel.OnAccess(pValue, sizeof(T));
+		channel.Access(pValue, sizeof(T));
 	}
 
 	//////////////////////////////////////////////////////////////////////////

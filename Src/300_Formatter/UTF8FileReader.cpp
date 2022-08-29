@@ -57,7 +57,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t CUTF8FileReader::OnAccess(void* pData, size_t tDataSize)
+	size_t CUTF8FileReader::Access(void* pData, size_t tDataSize)
 	{
 		if( m_hFile == NULL )
 			return 0;

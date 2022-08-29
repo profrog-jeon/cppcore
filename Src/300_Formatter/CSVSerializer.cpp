@@ -44,7 +44,7 @@ namespace fmt_internal
 	void CCSVSerializer::EndArrayItem(size_t tIndex, size_t tCount)
 	{
 		std::tstring strOutput = TEXT("\r\n");
-		m_Channel.OnAccess((void*)strOutput.c_str(), strOutput.length() * sizeof(TCHAR));
+		m_Channel.Access((void*)strOutput.c_str(), strOutput.length() * sizeof(TCHAR));
 
 		m_bFirst = true;
 	}
@@ -85,7 +85,7 @@ namespace fmt_internal
 			bFirst = false;
 		else
 			strValue = TEXT(",") + strValue;
-		channel.OnAccess((void*)strValue.c_str(), strValue.length() * sizeof(TCHAR));
+		channel.Access((void*)strValue.c_str(), strValue.length() * sizeof(TCHAR));
 	}
 
 	//////////////////////////////////////////////////////////////////////////

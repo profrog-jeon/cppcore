@@ -43,7 +43,7 @@ namespace fmt_internal
 		// Insert TAB indentation
 		strContext = szIndent + strContext + TEXT("\r\n");
 
-		channel.OnAccess((void*)strContext.c_str(), strContext.length() * sizeof(TCHAR));
+		channel.Access((void*)strContext.c_str(), strContext.length() * sizeof(TCHAR));
 	}
 
 	//////////////////////////////////////////////////////////////////////////
@@ -70,7 +70,7 @@ namespace fmt_internal
 				strContext = Format(TEXT("%s<%s %s=\"%s\">%s</%s>\r\n"), szIndent, refGroupData.strName.c_str(), strFirst.c_str(), strSecond.c_str(), strValue.c_str(), refGroupData.strName.c_str());
 		}
 
-		channel.OnAccess((void*)strContext.c_str(), strContext.length() * sizeof(TCHAR));
+		channel.Access((void*)strContext.c_str(), strContext.length() * sizeof(TCHAR));
 	}
 
 	//////////////////////////////////////////////////////////////////////////

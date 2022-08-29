@@ -24,7 +24,7 @@ static inline void ListFiles(std::tstring strPath)
 	do
 	{
 		ST_SYSTEMTIME stCreateTime = SystemTimeFrom(stFindData.uCreationTime);
-		tprintf(TEXT("%c-%c-%c\t%lu\t%s\t%04u-%02u-%02u %02u:%02u:%02u\n")
+		tprintf(TEXT("%c-%c-%c\t%llu\t%s\t%04u-%02u-%02u %02u:%02u:%02u\n")
 			, stFindData.bIsDirectory? 'o' : 'x'
 			, stFindData.bIsFile? 'o' : 'x'
 			, stFindData.bIsLink? 'o' : 'x'

@@ -104,7 +104,7 @@ typedef unsigned IPos; // A Pos is an index in the character window. Pos is used
 // internal file attribute
 #define UNKNOWN (-1)
 #define BINARY  0
-#define ASCII   1
+#define ANSI   1
 
 #define BEST -1                 // Use best method (deflation or store)
 #define STORE 0                 // Store method
@@ -453,7 +453,7 @@ class TTreeState
   ulg input_len;        // total byte length of input file
   // input_len is for debugging only since we can get it by other means.
 
-  ush *file_type;       // pointer to UNKNOWN, BINARY or ASCII
+  ush *file_type;       // pointer to UNKNOWN, BINARY or ANSI
 //  int *file_method;     // pointer to DEFLATE or STORE
 };
 
@@ -1345,7 +1345,7 @@ void compress_block(TState &state,ct_data *ltree, ct_data *dtree)
 }
 
 /* ===========================================================================
- * Set the file type to ASCII or BINARY, using a crude approximation:
+ * Set the file type to ANSI or BINARY, using a crude approximation:
  * binary if more than 20% of the bytes are <= 6 or >= 128, ascii otherwise.
  * IN assertion: the fields freq of dyn_ltree are set and the total of all
  * frequencies does not exceed 64K (to fit in an int on 16 bit machines).
@@ -1358,7 +1358,7 @@ void set_file_type(TState &state)
     while (n < 7)        bin_freq += state.ts.dyn_ltree[n++].fc.freq;
     while (n < 128)    ascii_freq += state.ts.dyn_ltree[n++].fc.freq;
     while (n < LITERALS) bin_freq += state.ts.dyn_ltree[n++].fc.freq;
-    *state.ts.file_type = (ush)(bin_freq > (ascii_freq >> 2) ? BINARY : ASCII);
+    *state.ts.file_type = (ush)(bin_freq > (ascii_freq >> 2) ? BINARY : ANSI);
 }
 
 

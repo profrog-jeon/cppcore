@@ -1,10 +1,10 @@
 #include "stdafx.h"
-#include "ASCIIStringReader.h"
+#include "ANSIStringReader.h"
 
 namespace fmt_internal
 {
 	//////////////////////////////////////////////////////////////////////////
-	CASCIIStringReader::CASCIIStringReader(LPCBYTE pContext, size_t tSize)
+	CANSIStringReader::CANSIStringReader(LPCBYTE pContext, size_t tSize)
 		: IChannel()
 		, m_tReadPos(0)
 		, m_strContext()
@@ -50,36 +50,36 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	CASCIIStringReader::CASCIIStringReader(const char* pszContext)
+	CANSIStringReader::CANSIStringReader(const char* pszContext)
 		: IChannel()
 		, m_tReadPos(0)
 		, m_strContext()
 	{
-		m_strContext = TCSFromASCII(pszContext);
+		m_strContext = TCSFromANSI(pszContext);
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	CASCIIStringReader::CASCIIStringReader(std::string& strContext)
+	CANSIStringReader::CANSIStringReader(std::string& strContext)
 		: IChannel()
 		, m_tReadPos(0)
 		, m_strContext()
 	{
-		m_strContext = TCSFromASCII(strContext);
+		m_strContext = TCSFromANSI(strContext);
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	CASCIIStringReader::~CASCIIStringReader(void)
+	CANSIStringReader::~CANSIStringReader(void)
 	{
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	bool CASCIIStringReader::CheckValidity(std::tstring& refStrErrMsg)
+	bool CANSIStringReader::CheckValidity(std::tstring& refStrErrMsg)
 	{
 		return true;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t CASCIIStringReader::OnAccess(void* pData, size_t tDataSize)
+	size_t CANSIStringReader::Access(void* pData, size_t tDataSize)
 	{
 		tDataSize /= sizeof(TCHAR);
 

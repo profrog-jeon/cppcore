@@ -10,7 +10,7 @@
 
 namespace fmt_internal
 {
-	class CASCIIFileReader : public core::IChannel
+	class CANSIFileReader : public core::IChannel
 	{
 		std::tstring	m_strFilename	;
 		HANDLE			m_hFile			;
@@ -18,13 +18,13 @@ namespace fmt_internal
 		std::tstring	m_strContext	;
 
 	public:
-						CASCIIFileReader(std::tstring strFilename);
-						~CASCIIFileReader(void);
+						CANSIFileReader(std::tstring strFilename);
+						~CANSIFileReader(void);
 
 		bool			CheckValidity(std::tstring& refStrErrMsg);
 
 	private:
-		size_t			OnAccess(void* pData, size_t tDataSize);
+		size_t			Access(void* pData, size_t tDataSize);
 	};
 
 }

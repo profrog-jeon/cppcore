@@ -1,10 +1,10 @@
 #include "stdafx.h"
-#include "ASCIIFileReader.h"
+#include "ANSIFileReader.h"
 
 namespace fmt_internal
 {
 	//////////////////////////////////////////////////////////////////////////
-	CASCIIFileReader::CASCIIFileReader(std::tstring strFilename)
+	CANSIFileReader::CANSIFileReader(std::tstring strFilename)
 		: IChannel()
 		, m_strFilename(strFilename)
 		, m_hFile(NULL)
@@ -33,7 +33,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	CASCIIFileReader::~CASCIIFileReader(void)
+	CANSIFileReader::~CANSIFileReader(void)
 	{
 		if( m_hFile )
 		{
@@ -43,7 +43,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	bool CASCIIFileReader::CheckValidity(std::tstring& refStrErrMsg)
+	bool CANSIFileReader::CheckValidity(std::tstring& refStrErrMsg)
 	{
 		if( m_hFile == NULL )
 		{
@@ -54,7 +54,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t CASCIIFileReader::OnAccess(void* pData, size_t tDataSize)
+	size_t CANSIFileReader::Access(void* pData, size_t tDataSize)
 	{
 		if( m_hFile == NULL )
 			return 0;
@@ -70,7 +70,7 @@ namespace fmt_internal
 		m_strBuffer += szBuff;
 
 		size_t tReadSize = 0;
-		m_strContext += TCSFromASCII(m_strBuffer, &tReadSize);
+		m_strContext += TCSFromANSI(m_strBuffer, &tReadSize);
 		if( tReadSize < m_strBuffer.size() )
 			m_strBuffer = m_strBuffer.substr(tReadSize);
 		else

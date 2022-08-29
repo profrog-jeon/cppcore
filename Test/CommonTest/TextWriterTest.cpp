@@ -4,7 +4,7 @@
 TEST(CommonTest, WriteFileContentsTest_Plain)
 {
 	std::tstring strContextA;
-	ASSERT_EQ(EC_SUCCESS, ReadFileContents(TEXT("../../Build/Test/Unicode/ASCIISample.txt"), strContextA));
+	ASSERT_EQ(EC_SUCCESS, ReadFileContents(TEXT("../../Build/Test/Unicode/ANSISample.txt"), strContextA));
 	strContextA = Trim(strContextA);
 	ASSERT_FALSE(strContextA.empty());
 
@@ -43,7 +43,7 @@ TEST(CommonTest, WriteFileContentsTest_Binary)
 inline void WriteFileContentsTest_Worker(E_SYM_CIPHER_TYPE nType, E_SYM_CIPHER_MODE nMode)
 {
 	std::tstring strContextA;
-	ASSERT_EQ(EC_SUCCESS, ReadFileContents(TEXT("../../Build/Test/Unicode/ASCIISample.txt"), strContextA));
+	ASSERT_EQ(EC_SUCCESS, ReadFileContents(TEXT("../../Build/Test/Unicode/ANSISample.txt"), strContextA));
 	strContextA = Trim(strContextA);
 	ASSERT_FALSE(strContextA.empty());
 
@@ -143,10 +143,10 @@ bool IsSameFile(std::tstring strFileA, std::tstring strFileB)
 }
 
 //////////////////////////////////////////////////////////////////////////
-TEST(CommonTest, TextWriterTest_ASCII)
+TEST(CommonTest, TextWriterTest_ANSI)
 {
-	std::tstring strOriginalFile = TEXT("../../Build/Test/Unicode/ASCIISample.txt");
-	std::tstring strTempFileName = TEXT("../../Build/Test/Unicode/ASCIItemp.txt");
+	std::tstring strOriginalFile = TEXT("../../Build/Test/Unicode/ANSISample.txt");
+	std::tstring strTempFileName = TEXT("../../Build/Test/Unicode/ANSItemp.txt");
 
 	std::tstring strContext;
 	EXPECT_EQ(EC_SUCCESS, ReadFileContents(strOriginalFile, strContext));

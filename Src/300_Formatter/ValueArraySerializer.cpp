@@ -47,7 +47,7 @@ namespace fmt_internal
 	void CValueArraySerializer::EndArrayItem(size_t tIndex, size_t tCount)
 	{
 		std::tstring strOutput = TEXT("\n");
-		m_Channel.OnAccess((void*)strOutput.c_str(), strOutput.length() * sizeof(TCHAR));
+		m_Channel.Access((void*)strOutput.c_str(), strOutput.length() * sizeof(TCHAR));
 
 		m_bFirst = true;
 	}
@@ -88,7 +88,7 @@ namespace fmt_internal
 			bFirst = false;
 		else
 			strOutput = strSeperator + strOutput;
-		channel.OnAccess((void*)strOutput.c_str(), strOutput.length() * sizeof(TCHAR));
+		channel.Access((void*)strOutput.c_str(), strOutput.length() * sizeof(TCHAR));
 	}
 
 	//////////////////////////////////////////////////////////////////////////

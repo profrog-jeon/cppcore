@@ -56,7 +56,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t CUTF8FileWritter::OnAccess(void* pData, size_t tDataSize)
+	size_t CUTF8FileWritter::Access(void* pData, size_t tDataSize)
 	{
 		if( m_hFile == NULL )
 			return 0;

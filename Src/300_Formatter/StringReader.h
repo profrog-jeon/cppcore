@@ -20,7 +20,7 @@ namespace fmt_internal
 		~CStringReader(void);
 
 		bool CheckValidity(std::tstring& refStrErrMsg);
-		size_t OnAccess(void* pData, size_t tDataSize);
+		size_t Access(void* pData, size_t tDataSize);
 	};
 
 }

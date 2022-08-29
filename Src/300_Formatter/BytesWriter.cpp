@@ -22,7 +22,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t CBytesWriter::OnAccess(void* pData, size_t tDataSize)
+	size_t CBytesWriter::Access(void* pData, size_t tDataSize)
 	{
 		size_t tCurSize = m_vecOutput.size();
 		m_vecOutput.resize(tCurSize + tDataSize);

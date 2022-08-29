@@ -24,7 +24,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t CBytesReader::OnAccess(void* pData, size_t tDataSize)
+	size_t CBytesReader::Access(void* pData, size_t tDataSize)
 	{
 		const size_t tContextSize = m_tBytesSize;
 		const size_t tRemainedSize = tContextSize < m_tReadPos? 0 : tContextSize - m_tReadPos;

@@ -57,7 +57,7 @@ namespace fmt_internal
 			std::tstring strLine = (*iter) + TEXT("\r\n");
 			if( strLine.at(0) == TEXT('[') && (iter!=m_listString.begin()) )
 				strLine = TEXT("\r\n") + strLine;
-			channel.OnAccess((void*)strLine.c_str(), strLine.size() * sizeof(TCHAR));
+			channel.Access((void*)strLine.c_str(), strLine.size() * sizeof(TCHAR));
 		}
 		return EC_SUCCESS;
 	}

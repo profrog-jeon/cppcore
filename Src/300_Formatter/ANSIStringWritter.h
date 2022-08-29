@@ -7,19 +7,19 @@
 
 namespace fmt_internal
 {
-	class CASCIIStringWriter : public core::IChannel
+	class CANSIStringWriter : public core::IChannel
 	{
 	private:
 		std::string& m_strOutput;
 
 	public:
-		CASCIIStringWriter(std::string& strOutput);
-		~CASCIIStringWriter(void);
+		CANSIStringWriter(std::string& strOutput);
+		~CANSIStringWriter(void);
 
 		bool CheckValidity(std::tstring& refStrErrMsg);
 
 	private:
-		size_t OnAccess(void* pData, size_t tDataSize);
+		size_t Access(void* pData, size_t tDataSize);
 	};
 }
 
