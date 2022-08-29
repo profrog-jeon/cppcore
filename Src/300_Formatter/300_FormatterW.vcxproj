@@ -34,6 +34,111 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="300_Formatter.h" />
+    <ClInclude Include="ANSIFileReader.h" />
+    <ClInclude Include="ANSIFileWritter.h" />
+    <ClInclude Include="ANSIFormatter.h" />
+    <ClInclude Include="ANSIStringReader.h" />
+    <ClInclude Include="ANSIStringWritter.h" />
+    <ClInclude Include="BytesReader.h" />
+    <ClInclude Include="BytesWriter.h" />
+    <ClInclude Include="CSVDeserializer.h" />
+    <ClInclude Include="CSVSerializer.h" />
+    <ClInclude Include="FileReader.h" />
+    <ClInclude Include="FileWritter.h" />
+    <ClInclude Include="FmtTypes.h" />
+    <ClInclude Include="FormatterSuper.h" />
+    <ClInclude Include="HelperFunc.h" />
+    <ClInclude Include="IChannel.h" />
+    <ClInclude Include="INIDeserializer.h" />
+    <ClInclude Include="INIFormatter.h" />
+    <ClInclude Include="INISerializer.h" />
+    <ClInclude Include="Interface.h" />
+    <ClInclude Include="JSONDeserializer.h" />
+    <ClInclude Include="JSONFunctions.h" />
+    <ClInclude Include="JSONSerializer.h" />
+    <ClInclude Include="KeyArraySerializer.h" />
+    <ClInclude Include="KeyValueArrayDeserializer.h" />
+    <ClInclude Include="KeyValueArraySerializer.h" />
+    <ClInclude Include="MarkerSerializer.h" />
+    <ClInclude Include="PacketDeserializer.h" />
+    <ClInclude Include="PacketSerializer.h" />
+    <ClInclude Include="Pair.h" />
+    <ClInclude Include="PairSuper.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="StringReader.h" />
+    <ClInclude Include="StringWriter.h" />
+    <ClInclude Include="TCHARFormatter.h" />
+    <ClInclude Include="UTF8FileReader.h" />
+    <ClInclude Include="UTF8FileWritter.h" />
+    <ClInclude Include="UTF8Formatter.h" />
+    <ClInclude Include="UTF8StringReader.h" />
+    <ClInclude Include="UTF8StringWritter.h" />
+    <ClInclude Include="ValueArrayDeserializer.h" />
+    <ClInclude Include="ValueArraySerializer.h" />
+    <ClInclude Include="ValuePtrHolder.h" />
+    <ClInclude Include="XMLDeserializer.h" />
+    <ClInclude Include="XMLDeserializer_V2.h" />
+    <ClInclude Include="XMLFunctions.h" />
+    <ClInclude Include="XMLSerializer.h" />
+    <ClInclude Include="XMLSerializer_V2.h" />
+    <ClInclude Include="XMLSerializer_V3.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="ANSIFileReader.cpp" />
+    <ClCompile Include="ANSIFileWritter.cpp" />
+    <ClCompile Include="ANSIFormatter.cpp" />
+    <ClCompile Include="ANSIStringReader.cpp" />
+    <ClCompile Include="ANSIStringWritter.cpp" />
+    <ClCompile Include="BytesReader.cpp" />
+    <ClCompile Include="BytesWriter.cpp" />
+    <ClCompile Include="CSVDeserializer.cpp" />
+    <ClCompile Include="CSVSerializer.cpp" />
+    <ClCompile Include="FileReader.cpp" />
+    <ClCompile Include="FileWritter.cpp" />
+    <ClCompile Include="FormatterSuper.cpp" />
+    <ClCompile Include="HelperFunc.cpp" />
+    <ClCompile Include="INIDeserializer.cpp" />
+    <ClCompile Include="INIFormatter.cpp" />
+    <ClCompile Include="INISerializer.cpp" />
+    <ClCompile Include="Interface.cpp" />
+    <ClCompile Include="JSONDeserializer.cpp" />
+    <ClCompile Include="JSONFunctions.cpp" />
+    <ClCompile Include="JSONSerializer.cpp" />
+    <ClCompile Include="KeyArraySerializer.cpp" />
+    <ClCompile Include="KeyValueArrayDeserializer.cpp" />
+    <ClCompile Include="KeyValueArraySerializer.cpp" />
+    <ClCompile Include="MarkerSerializer.cpp" />
+    <ClCompile Include="PacketDeserializer.cpp" />
+    <ClCompile Include="PacketSerializer.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='DebugMT|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='DebugMT|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='ReleaseMT|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='ReleaseMT|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="StringReader.cpp" />
+    <ClCompile Include="StringWriter.cpp" />
+    <ClCompile Include="TCHARFormatter.cpp" />
+    <ClCompile Include="UTF8FileReader.cpp" />
+    <ClCompile Include="UTF8FileWritter.cpp" />
+    <ClCompile Include="UTF8Formatter.cpp" />
+    <ClCompile Include="UTF8StringReader.cpp" />
+    <ClCompile Include="UTF8StringWritter.cpp" />
+    <ClCompile Include="ValueArrayDeserializer.cpp" />
+    <ClCompile Include="ValueArraySerializer.cpp" />
+    <ClCompile Include="XMLDeserializer.cpp" />
+    <ClCompile Include="XMLDeserializer_V2.cpp" />
+    <ClCompile Include="XMLFunctions.cpp" />
+    <ClCompile Include="XMLSerializer.cpp" />
+    <ClCompile Include="XMLSerializer_V2.cpp" />
+    <ClCompile Include="XMLSerializer_V3.cpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{939E852F-90DD-4E1A-AE69-EA7E6369A270}</ProjectGuid>
     <RootNamespace>My300_FormatterW</RootNamespace>
