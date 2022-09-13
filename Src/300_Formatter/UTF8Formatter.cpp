@@ -17,11 +17,14 @@
 #include "StringWriter.h"
 #include "StringReader.h"
 #include "BytesReader.h"
+#include "BytesWriter.h"
 #include "KeyValueArraySerializer.h"
 #include "KeyValueArrayDeserializer.h"
 #include "KeyArraySerializer.h"
 #include "ValueArraySerializer.h"
 #include "ValueArrayDeserializer.h"
+#include "PacketSerializer.h"
+#include "PacketDeserializer.h"
 #include "UTF8FileReader.h"
 #include "UTF8FileWritter.h"
 #include "UTF8StringReader.h"
@@ -461,5 +464,24 @@ namespace core
 			return formatter.CheckValidity(pStrErrMsg);
 		}
 
+		//////////////////////////////////////////////////////////////////////////
+		bool WriteBinToPacket(IFormatterObject* pObject, std::vector<BYTE>& vecPacket)
+		{
+			fmt_internal::CBytesWriter channel(vecPacket);
+			fmt_internal::CPacketSerializer formatter(channel);
+			formatter.Synchronize(pObject);
+			std::tstring strErrMsg;
+			return formatter.CheckValidity(&strErrMsg);
+		}
+
+		//////////////////////////////////////////////////////////////////////////
+		bool ReadBinFromPacket(IFormatterObject* pObject, const std::vector<BYTE>& vecPacket)
+		{
+			fmt_internal::CBytesReader channel(vecPacket.data(), vecPacket.size());
+			fmt_internal::CPacketDeserializer formatter(channel);
+			formatter.Synchronize(pObject);
+			std::tstring strErrMsg;
+			return true;
+		}
 	}
 }
