@@ -85,23 +85,23 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	ECODE CSyncTCPSocket::Send(const void * pBuff, size_t tBufSize, DWORD dwTimeOut, size_t* ptSent)
+	inline ECODE SendWorker(SOCKET hSocket, const void* pBuff, size_t tBufSize, DWORD dwTimeOut, int nFlags, size_t* ptSent)
 	{
-		if (INVALID_SOCKET_ == m_hSocket)
+		if (INVALID_SOCKET_ == hSocket)
 			return EC_INVALID_DATA;
 
-		int nRet = core::setsockopt(m_hSocket, SOL_SOCKET_, SO_SNDTIMEO_, (char*)&dwTimeOut, sizeof(dwTimeOut));
+		int nRet = core::setsockopt(hSocket, SOL_SOCKET_, SO_SNDTIMEO_, (char*)&dwTimeOut, sizeof(dwTimeOut));
 		if (SOCKET_ERROR_ == nRet)
 			Log_Error("setsockopt(m_hSocket, SOL_SOCKET_, SO_SNDTIMEO, %u) failure, %s", dwTimeOut, GetErrorStringA(GetLastError()).c_str());
 
-		nRet = core::send(m_hSocket, (const char*)pBuff, tBufSize, 0);
+		nRet = core::send(hSocket, (const char*)pBuff, tBufSize, nFlags);
 		if (SOCKET_ERROR_ == nRet)
 		{
 			nRet = GetLastError();
 			if (EC_TIMEOUT == nRet)
 				return EC_TIMEOUT;
 
-			Log_Error("send(0x%08X, size:%u, timeout:%u) failure, %s", m_hSocket, tBufSize, dwTimeOut, GetErrorStringA(GetLastError()).c_str());
+			Log_Error("send(0x%08X, size:%u, timeout:%u) failure, %s", hSocket, tBufSize, dwTimeOut, GetErrorStringA(GetLastError()).c_str());
 			return nRet;
 		}
 
@@ -111,108 +111,42 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	ECODE CSyncTCPSocket::Recv(void * pBuff, size_t tBufSize, DWORD dwTimeOut, size_t* ptRead)
+	ECODE CSyncTCPSocket::Send(const void * pBuff, size_t tBufSize, DWORD dwTimeOut, size_t* ptSent)
 	{
-		if (INVALID_SOCKET_ == m_hSocket)
-			return EC_INVALID_HANDLE;
-
-		int nRet = core::setsockopt(m_hSocket, SOL_SOCKET_, SO_RCVTIMEO_, (char*)&dwTimeOut, sizeof(dwTimeOut));
-		if (SOCKET_ERROR_ == nRet)
-			Log_Warn("setsockopt(m_hSocket, SOL_SOCKET_, SO_RCVTIMEO_, %d) failure, %s", dwTimeOut, GetErrorStringA(GetLastError()).c_str());
-
-		nRet = core::recv(m_hSocket, (char*)pBuff, tBufSize, 0);
-		if (SOCKET_ERROR_ == nRet)
-		{
-			nRet = GetLastError();
-			if (EC_TIMEOUT == nRet)
-				return EC_TIMEOUT;
-
-			Log_Error("recv(0x%08X, size:%u, timeout:%u) failure, %d(%s)"
-				, m_hSocket, tBufSize, dwTimeOut, GetLastError(), GetErrorStringA(GetLastError()).c_str());
-			return nRet;
-		}
-
-		if (0 == nRet)
-		{
-			nRet = GetLastError();
-			Log_Info("Connection(0x%08X) closed by remote host.", m_hSocket);
-			return nRet;
-		}
-
-		if (ptRead)
-			*ptRead = (size_t)nRet;
-		return EC_SUCCESS;
+		return SendWorker(m_hSocket, pBuff, tBufSize, dwTimeOut, 0, ptSent);
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	ECODE CSyncTCPSocket::Peek(void * pBuff, size_t tBufSize, DWORD dwTimeOut, size_t* ptRead)
+	ECODE CSyncTCPSocket::SendForcely(const void* pBuff, size_t tBufSize, DWORD dwTimeOut)
 	{
-		if (INVALID_SOCKET_ == m_hSocket)
-			return EC_INVALID_DATA;
-
-		int nRet = core::setsockopt(m_hSocket, SOL_SOCKET_, SO_RCVTIMEO_, (char*)&dwTimeOut, sizeof(dwTimeOut));
-		if (SOCKET_ERROR_ == nRet)
-			Log_Error("setsockopt(m_hSocket, SOL_SOCKET_, SO_RCVTIMEO_, %u) failure, %s", dwTimeOut, GetErrorStringA(GetLastError()).c_str());
-
-		nRet = core::recv(m_hSocket, (char*)pBuff, tBufSize, MSG_PEEK_);
-		if (SOCKET_ERROR_ == nRet)
-		{
-			nRet = GetLastError();
-			if (EC_TIMEOUT == nRet)
-				return EC_TIMEOUT;
-
-			// linux 104: Connection reset by peer
-			if (104 == nRet)
-				Log_Info("Connection(0x%08X) reset by remote host.", m_hSocket);
-			else
-				Log_Error("recv(0x%08X, size:%u, timeout:%u, MSG_PEEK_) failure, %d(%s)"
-					, m_hSocket, tBufSize, dwTimeOut, GetLastError(), GetErrorStringA(GetLastError()).c_str());
-			return nRet;
-		}
-
-		if (0 == nRet)
-		{
-			nRet = GetLastError();
-			Log_Info("Connection(0x%08X) closed by remote host.", m_hSocket);
-			return nRet;
-		}
-
-		if (ptRead)
-			*ptRead = (size_t)nRet;
-		return EC_SUCCESS;
-	}
-
-	//////////////////////////////////////////////////////////////////////////
-	ECODE CSyncTCPSocket::SendForcely(const void* pSrc, size_t tLength, DWORD dwTimeOut, DWORD dwMTUSize)
-	{
-		ECODE nRet;
-		LPCBYTE pBuffer = (LPCBYTE)pSrc;
+		ECODE nRet = EC_SUCCESS;
+		LPCBYTE pBuffer = (LPCBYTE)pBuff;
 		const DWORD dwTimeOutFraction = dwTimeOut / 2;
 		try
 		{
 			DWORD dwTimeOutTick = GetTickCount() + dwTimeOut;
 
 			size_t tTotalSent = 0;
-			nRet = Send(pBuffer, MIN(tLength, dwMTUSize), dwTimeOutFraction, &tTotalSent);
+			nRet = SendWorker(m_hSocket, pBuffer, tBufSize, dwTimeOutFraction, 0, &tTotalSent);
 			if (EC_SUCCESS != nRet && EC_TIMEOUT != nRet)
 				throw exception_format(TEXT("Send failure, %d"), nRet);
 
-			while (tTotalSent < tLength)
+			while (tTotalSent < tBufSize)
 			{
 				Sleep(0);
 				if (dwTimeOutTick < GetTickCount())
 					return EC_TIMEOUT;
 
-				size_t tRemained = tLength - tTotalSent;
+				size_t tRemained = tBufSize - tTotalSent;
 				size_t tSent = 0;
-				nRet = Send(pBuffer + tTotalSent, MIN(tRemained, dwMTUSize), dwTimeOutFraction, &tSent);
+				nRet = SendWorker(m_hSocket, pBuffer + tTotalSent, tRemained, dwTimeOutFraction, 0, &tSent);
 				if (EC_SUCCESS != nRet && EC_TIMEOUT != nRet)
 					throw exception_format(TEXT("Send failure, %d"), nRet);
 
 				tTotalSent += tSent;
 			}
 		}
-		catch (std::exception & e)
+		catch (std::exception& e)
 		{
 			Log_Error("%s", e.what());
 			return nRet;
@@ -222,29 +156,79 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	ECODE CSyncTCPSocket::RecvForcely(void* pDest, size_t tLength, DWORD dwTimeOut)
+	inline ECODE RecvWorker(SOCKET hSocket, void* pBuff, size_t tBufSize, DWORD dwTimeOut, int nFlags, size_t* ptRead)
+	{
+		if (INVALID_SOCKET_ == hSocket)
+			return EC_INVALID_DATA;
+
+		int nRet = core::setsockopt(hSocket, SOL_SOCKET_, SO_RCVTIMEO_, (char*)&dwTimeOut, sizeof(dwTimeOut));
+		if (SOCKET_ERROR_ == nRet)
+			Log_Error("setsockopt(m_hSocket, SOL_SOCKET_, SO_RCVTIMEO_, %u) failure, %s", dwTimeOut, GetErrorStringA(GetLastError()).c_str());
+
+		nRet = core::recv(hSocket, (char*)pBuff, tBufSize, nFlags);
+		if (SOCKET_ERROR_ == nRet)
+		{
+			nRet = GetLastError();
+			if (EC_TIMEOUT == nRet)
+				return EC_TIMEOUT;
+
+			// linux 104: Connection reset by peer
+			if (104 == nRet)
+				Log_Info("Connection(0x%08X) reset by remote host.", hSocket);
+			else
+				Log_Error("recv(0x%08X, size:%u, timeout:%u, MSG_PEEK_) failure, %d(%s)"
+					, hSocket, tBufSize, dwTimeOut, GetLastError(), GetErrorStringA(GetLastError()).c_str());
+			return nRet;
+		}
+
+		if (0 == nRet)
+		{
+			nRet = GetLastError();
+			Log_Info("Connection(0x%08X) closed by remote host.", hSocket);
+			return nRet;
+		}
+
+		if (ptRead)
+			*ptRead = (size_t)nRet;
+		return EC_SUCCESS;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	ECODE CSyncTCPSocket::Recv(void * pBuff, size_t tBufSize, DWORD dwTimeOut, size_t* ptRead)
+	{
+		return RecvWorker(m_hSocket, pBuff, tBufSize, dwTimeOut, 0, ptRead);
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	ECODE CSyncTCPSocket::Peek(void * pBuff, size_t tBufSize, DWORD dwTimeOut, size_t* ptRead)
+	{
+		return RecvWorker(m_hSocket, pBuff, tBufSize, dwTimeOut, MSG_PEEK_, ptRead);
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	ECODE CSyncTCPSocket::RecvForcely(void* pBuff, size_t tBufSize, DWORD dwTimeOut)
 	{
 		ECODE nRet;
-		LPBYTE pBuffer = (LPBYTE)pDest;
+		LPBYTE pBuffer = (LPBYTE)pBuff;
 		const DWORD dwTimeOutFraction = dwTimeOut / 2;
 		try
 		{
 			DWORD dwTimeOutTick = GetTickCount() + dwTimeOut;
 
 			size_t tTotalRecved = 0;
-			nRet = Recv(pBuffer, tLength, dwTimeOutFraction, &tTotalRecved);
+			nRet = RecvWorker(m_hSocket, pBuffer, tBufSize, dwTimeOutFraction, 0, &tTotalRecved);
 			if (EC_SUCCESS != nRet && EC_TIMEOUT != nRet)
 				throw exception_format(TEXT("Recv failure, %d"), nRet);
 
-			while (tTotalRecved < tLength)
+			while (tTotalRecved < tBufSize)
 			{
 				Sleep(0);
 				if (dwTimeOutTick < GetTickCount())
 					return EC_TIMEOUT;
 
-				size_t tRemained = tLength - tTotalRecved;
+				size_t tRemained = tBufSize - tTotalRecved;
 				size_t tRecved = 0;
-				nRet = Recv(pBuffer + tTotalRecved, tRemained, dwTimeOutFraction, &tRecved);
+				nRet = RecvWorker(m_hSocket, pBuffer + tTotalRecved, tRemained, dwTimeOutFraction, 0, &tRecved);
 				if (EC_SUCCESS != nRet && EC_TIMEOUT != nRet)
 					throw exception_format(TEXT("Recv failure, %d"), nRet);
 
