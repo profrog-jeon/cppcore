@@ -87,11 +87,12 @@ const int SD_BOTH_ = SD_BOTH;
 */
 const int SOMAXCONN_ = 5;
 
-const int MSG_OOB_ = MSG_OOB;              /* process out-of-band data */
-const int MSG_PEEK_ = MSG_PEEK;            /* peek at incoming message */
-const int MSG_DONTROUTE_ = MSG_DONTROUTE;         /* send without using routing tables */
+const int MSG_OOB_ = MSG_OOB;               /* process out-of-band data */
+const int MSG_PEEK_ = MSG_PEEK;             /* peek at incoming message */
+const int MSG_DONTROUTE_ = MSG_DONTROUTE;   /* send without using routing tables */
+const int MSG_WAITALL_ = MSG_WAITALL;		/* do not complete until packet is completely filled */
 const int MSG_MAXIOVLEN_ = MSG_MAXIOVLEN;
-const int MSG_PARTIAL_ = MSG_PARTIAL;        /* partial send or recv for message xport */
+const int MSG_PARTIAL_ = MSG_PARTIAL;       /* partial send or recv for message xport */
 
 /*
 * Protocols

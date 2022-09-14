@@ -109,6 +109,7 @@ extern const int SOMAXCONN_;
 extern const int MSG_OOB_;              /* process out-of-band data */
 extern const int MSG_PEEK_;            /* peek at incoming message */
 extern const int MSG_DONTROUTE_;         /* send without using routing tables */
+extern const int MSG_WAITALL_;         /* send without using routing tables */
 extern const int MSG_MAXIOVLEN_;
 extern const int MSG_PARTIAL_;        /* partial send or recv for message xport */
 
