@@ -57,6 +57,7 @@ namespace core
 		virtual core::CFormatterSuperA& Sync(std::string& strKey, QWORD* pValue) = 0;
 		virtual core::CFormatterSuperA& Sync(std::string& strKey, float* pValue) = 0;
 		virtual core::CFormatterSuperA& Sync(std::string& strKey, double* pValue) = 0;
+		virtual core::CFormatterSuperA& Sync(std::string& strKey, BYTE* pData, size_t tLen) = 0;
 
 		template<typename K, typename V>
 		core::CFormatterSuperA& Sync(std::string& strKey, std::map<K, V>* pMapObject)
@@ -146,6 +147,16 @@ namespace core
 		template<typename T>
 		core::CFormatterSuperA& Sync(std::string& strKey, std::vector<T>* pVecObject)
 		{
+			if (1 == sizeof(T))
+			{
+				DWORD dwLength = pVecObject->size();
+				Sync(strKey, &dwLength);
+				pVecObject->resize(dwLength);
+				if (0 < dwLength)
+					Sync(strKey, (BYTE*)pVecObject->data(), pVecObject->size());
+				return *this;
+			}
+
 			const size_t tSize = BeginArray(strKey, pVecObject->size());
 			pVecObject->resize(tSize);
 
@@ -308,6 +319,7 @@ namespace core
 		virtual core::CFormatterSuperW& Sync(std::wstring& strKey, QWORD* pValue) = 0;
 		virtual core::CFormatterSuperW& Sync(std::wstring& strKey, float* pValue) = 0;
 		virtual core::CFormatterSuperW& Sync(std::wstring& strKey, double* pValue) = 0;
+		virtual core::CFormatterSuperW& Sync(std::wstring& strKey, BYTE* pData, size_t tLen) = 0;
 
 		template<typename K, typename V>
 		core::CFormatterSuperW& Sync(std::wstring& strKey, std::map<K, V>* pMapObject)
@@ -397,6 +409,16 @@ namespace core
 		template<typename T>
 		core::CFormatterSuperW& Sync(std::wstring& strKey, std::vector<T>* pVecObject)
 		{
+			if (1 == sizeof(T))
+			{
+				DWORD dwLength = pVecObject->size();
+				Sync(strKey, &dwLength);
+				pVecObject->resize(dwLength);
+				if(0 < dwLength)
+					Sync(strKey, (BYTE*)pVecObject->data(), pVecObject->size());
+				return *this;
+			}
+
 			const size_t tSize = BeginArray(strKey, pVecObject->size());
 			pVecObject->resize(tSize);
 

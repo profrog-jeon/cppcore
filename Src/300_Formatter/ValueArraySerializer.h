@@ -55,5 +55,6 @@ namespace fmt_internal
 		core::IFormatterT& Sync(std::tstring& strKey, QWORD* pValue);
 		core::IFormatterT& Sync(std::tstring& strKey, float* pValue);
 		core::IFormatterT& Sync(std::tstring& strKey, double* pValue);
+		core::IFormatterT& Sync(std::tstring& strKey, BYTE* pData, size_t tLen);
 	};
 }

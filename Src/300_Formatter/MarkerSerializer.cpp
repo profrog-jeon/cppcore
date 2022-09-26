@@ -215,4 +215,11 @@ namespace fmt_internal
 		HTMLSerializerMetaSync(m_Channel, m_strSchema, m_stackTraverse.top(), m_setMarker, strKey, *pValue);
 		return *this;
 	}
+
+	//////////////////////////////////////////////////////////////////////////
+	core::IFormatterT& CMarkerSerializer::Sync(std::tstring& strKey, BYTE* pData, size_t tLen)
+	{
+		// Ignore
+		return *this;
+	}
 }

@@ -213,4 +213,11 @@ namespace fmt_internal
 		__ValueArrayDeserializerMetaFunction(m_vecValueTable[m_tArrayIndex], m_strQuotation, m_tItemIndex, pValue);
 		return *this;
 	}
+
+	//////////////////////////////////////////////////////////////////////////
+	core::IFormatterT& CValueArrayDeserializer::Sync(std::tstring& strKey, BYTE* pData, size_t tLen)
+	{
+		// Ignore
+		return *this;
+	}
 }

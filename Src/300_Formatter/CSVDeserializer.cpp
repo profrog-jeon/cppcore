@@ -212,5 +212,12 @@ namespace fmt_internal
 		CSVDeserializerMetaFunction(m_vecValueTable[m_tArrayIndex], m_tItemIndex, pValue);
 		return *this;
 	}
+
+	//////////////////////////////////////////////////////////////////////////
+	core::IFormatterT& CCSVDeserializer::Sync(std::tstring& strKey, BYTE* pData, size_t tLen)
+	{
+		// Ignore
+		return *this;
+	}
 }
 

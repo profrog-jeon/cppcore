@@ -180,4 +180,11 @@ namespace fmt_internal
 		__KeySerializerMetaFunction(m_Channel, m_strSeperator, m_strQuotator, strKey, m_bWrite, m_bFirst);
 		return *this;
 	}
+
+	//////////////////////////////////////////////////////////////////////////
+	core::IFormatterT& CKeyArraySerializer::Sync(std::tstring& strKey, BYTE* pData, size_t tLen)
+	{
+		// Ignore
+		return *this;
+	}
 }

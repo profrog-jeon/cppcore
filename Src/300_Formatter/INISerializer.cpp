@@ -184,5 +184,12 @@ namespace fmt_internal
 		__INISerializerMetaFunction(m_INI, m_stkSection.top(), strKey, pValue, m_bInArray, m_dwArrayIndex);
 		return *this;
 	}
+
+	//////////////////////////////////////////////////////////////////////////
+	core::IFormatterT& CINISerializer::Sync(std::tstring& strKey, BYTE* pData, size_t tLen)
+	{
+		// Ignore
+		return *this;
+	}
 }
 

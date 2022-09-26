@@ -1,0 +1,251 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Formatter">
+      <UniqueIdentifier>{0d036bdf-24d0-44bb-8b68-03d2717cc21d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Channel">
+      <UniqueIdentifier>{4289bccd-e727-40ab-bfa3-7bfdd7d0e727}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="CSVDeserializer.cpp">
+      <Filter>Formatter</Filter>
+    </ClCompile>
+    <ClCompile Include="CSVSerializer.cpp">
+      <Filter>Formatter</Filter>
+    </ClCompile>
+    <ClCompile Include="INIDeserializer.cpp">
+      <Filter>Formatter</Filter>
+    </ClCompile>
+    <ClCompile Include="INISerializer.cpp">
+      <Filter>Formatter</Filter>
+    </ClCompile>
+    <ClCompile Include="JSONDeserializer.cpp">
+      <Filter>Formatter</Filter>
+    </ClCompile>
+    <ClCompile Include="JSONFunctions.cpp">
+      <Filter>Formatter</Filter>
+    </ClCompile>
+    <ClCompile Include="JSONSerializer.cpp">
+      <Filter>Formatter</Filter>
+    </ClCompile>
+    <ClCompile Include="KeyValueArrayDeserializer.cpp">
+      <Filter>Formatter</Filter>
+    </ClCompile>
+    <ClCompile Include="KeyValueArraySerializer.cpp">
+      <Filter>Formatter</Filter>
+    </ClCompile>
+    <ClCompile Include="MarkerSerializer.cpp">
+      <Filter>Formatter</Filter>
+    </ClCompile>
+    <ClCompile Include="KeyArraySerializer.cpp">
+      <Filter>Formatter</Filter>
+    </ClCompile>
+    <ClCompile Include="PacketDeserializer.cpp">
+      <Filter>Formatter</Filter>
+    </ClCompile>
+    <ClCompile Include="PacketSerializer.cpp">
+      <Filter>Formatter</Filter>
+    </ClCompile>
+    <ClCompile Include="ValueArrayDeserializer.cpp">
+      <Filter>Formatter</Filter>
+    </ClCompile>
+    <ClCompile Include="ValueArraySerializer.cpp">
+      <Filter>Formatter</Filter>
+    </ClCompile>
+    <ClCompile Include="XMLDeserializer.cpp">
+      <Filter>Formatter</Filter>
+    </ClCompile>
+    <ClCompile Include="XMLDeserializer_V2.cpp">
+      <Filter>Formatter</Filter>
+    </ClCompile>
+    <ClCompile Include="XMLFunctions.cpp">
+      <Filter>Formatter</Filter>
+    </ClCompile>
+    <ClCompile Include="XMLSerializer.cpp">
+      <Filter>Formatter</Filter>
+    </ClCompile>
+    <ClCompile Include="XMLSerializer_V2.cpp">
+      <Filter>Formatter</Filter>
+    </ClCompile>
+    <ClCompile Include="XMLSerializer_V3.cpp">
+      <Filter>Formatter</Filter>
+    </ClCompile>
+    <ClCompile Include="ANSIFileReader.cpp">
+      <Filter>Channel</Filter>
+    </ClCompile>
+    <ClCompile Include="ANSIFileWritter.cpp">
+      <Filter>Channel</Filter>
+    </ClCompile>
+    <ClCompile Include="ANSIStringReader.cpp">
+      <Filter>Channel</Filter>
+    </ClCompile>
+    <ClCompile Include="ANSIStringWritter.cpp">
+      <Filter>Channel</Filter>
+    </ClCompile>
+    <ClCompile Include="BytesReader.cpp">
+      <Filter>Channel</Filter>
+    </ClCompile>
+    <ClCompile Include="BytesWriter.cpp">
+      <Filter>Channel</Filter>
+    </ClCompile>
+    <ClCompile Include="FileReader.cpp">
+      <Filter>Channel</Filter>
+    </ClCompile>
+    <ClCompile Include="FileWritter.cpp">
+      <Filter>Channel</Filter>
+    </ClCompile>
+    <ClCompile Include="StringReader.cpp">
+      <Filter>Channel</Filter>
+    </ClCompile>
+    <ClCompile Include="StringWriter.cpp">
+      <Filter>Channel</Filter>
+    </ClCompile>
+    <ClCompile Include="UTF8FileReader.cpp">
+      <Filter>Channel</Filter>
+    </ClCompile>
+    <ClCompile Include="UTF8FileWritter.cpp">
+      <Filter>Channel</Filter>
+    </ClCompile>
+    <ClCompile Include="UTF8Formatter.cpp">
+      <Filter>Channel</Filter>
+    </ClCompile>
+    <ClCompile Include="UTF8StringReader.cpp">
+      <Filter>Channel</Filter>
+    </ClCompile>
+    <ClCompile Include="UTF8StringWritter.cpp">
+      <Filter>Channel</Filter>
+    </ClCompile>
+    <ClCompile Include="ANSIFormatter.cpp" />
+    <ClCompile Include="FormatterSuper.cpp" />
+    <ClCompile Include="HelperFunc.cpp" />
+    <ClCompile Include="INIFormatter.cpp" />
+    <ClCompile Include="Interface.cpp" />
+    <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="TCHARFormatter.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CSVDeserializer.h">
+      <Filter>Formatter</Filter>
+    </ClInclude>
+    <ClInclude Include="CSVSerializer.h">
+      <Filter>Formatter</Filter>
+    </ClInclude>
+    <ClInclude Include="INIDeserializer.h">
+      <Filter>Formatter</Filter>
+    </ClInclude>
+    <ClInclude Include="INISerializer.h">
+      <Filter>Formatter</Filter>
+    </ClInclude>
+    <ClInclude Include="JSONDeserializer.h">
+      <Filter>Formatter</Filter>
+    </ClInclude>
+    <ClInclude Include="JSONFunctions.h">
+      <Filter>Formatter</Filter>
+    </ClInclude>
+    <ClInclude Include="JSONSerializer.h">
+      <Filter>Formatter</Filter>
+    </ClInclude>
+    <ClInclude Include="MarkerSerializer.h">
+      <Filter>Formatter</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyArraySerializer.h">
+      <Filter>Formatter</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyValueArrayDeserializer.h">
+      <Filter>Formatter</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyValueArraySerializer.h">
+      <Filter>Formatter</Filter>
+    </ClInclude>
+    <ClInclude Include="PacketDeserializer.h">
+      <Filter>Formatter</Filter>
+    </ClInclude>
+    <ClInclude Include="PacketSerializer.h">
+      <Filter>Formatter</Filter>
+    </ClInclude>
+    <ClInclude Include="ValueArrayDeserializer.h">
+      <Filter>Formatter</Filter>
+    </ClInclude>
+    <ClInclude Include="ValueArraySerializer.h">
+      <Filter>Formatter</Filter>
+    </ClInclude>
+    <ClInclude Include="XMLDeserializer.h">
+      <Filter>Formatter</Filter>
+    </ClInclude>
+    <ClInclude Include="XMLDeserializer_V2.h">
+      <Filter>Formatter</Filter>
+    </ClInclude>
+    <ClInclude Include="XMLFunctions.h">
+      <Filter>Formatter</Filter>
+    </ClInclude>
+    <ClInclude Include="XMLSerializer.h">
+      <Filter>Formatter</Filter>
+    </ClInclude>
+    <ClInclude Include="XMLSerializer_V2.h">
+      <Filter>Formatter</Filter>
+    </ClInclude>
+    <ClInclude Include="XMLSerializer_V3.h">
+      <Filter>Formatter</Filter>
+    </ClInclude>
+    <ClInclude Include="ANSIFileReader.h">
+      <Filter>Channel</Filter>
+    </ClInclude>
+    <ClInclude Include="ANSIFileWritter.h">
+      <Filter>Channel</Filter>
+    </ClInclude>
+    <ClInclude Include="ANSIStringReader.h">
+      <Filter>Channel</Filter>
+    </ClInclude>
+    <ClInclude Include="ANSIStringWritter.h">
+      <Filter>Channel</Filter>
+    </ClInclude>
+    <ClInclude Include="BytesReader.h">
+      <Filter>Channel</Filter>
+    </ClInclude>
+    <ClInclude Include="BytesWriter.h">
+      <Filter>Channel</Filter>
+    </ClInclude>
+    <ClInclude Include="FileReader.h">
+      <Filter>Channel</Filter>
+    </ClInclude>
+    <ClInclude Include="FileWritter.h">
+      <Filter>Channel</Filter>
+    </ClInclude>
+    <ClInclude Include="StringReader.h">
+      <Filter>Channel</Filter>
+    </ClInclude>
+    <ClInclude Include="StringWriter.h">
+      <Filter>Channel</Filter>
+    </ClInclude>
+    <ClInclude Include="UTF8FileReader.h">
+      <Filter>Channel</Filter>
+    </ClInclude>
+    <ClInclude Include="UTF8FileWritter.h">
+      <Filter>Channel</Filter>
+    </ClInclude>
+    <ClInclude Include="UTF8Formatter.h">
+      <Filter>Channel</Filter>
+    </ClInclude>
+    <ClInclude Include="UTF8StringReader.h">
+      <Filter>Channel</Filter>
+    </ClInclude>
+    <ClInclude Include="UTF8StringWritter.h">
+      <Filter>Channel</Filter>
+    </ClInclude>
+    <ClInclude Include="300_Formatter.h" />
+    <ClInclude Include="ANSIFormatter.h" />
+    <ClInclude Include="FmtTypes.h" />
+    <ClInclude Include="FormatterSuper.h" />
+    <ClInclude Include="HelperFunc.h" />
+    <ClInclude Include="IChannel.h" />
+    <ClInclude Include="INIFormatter.h" />
+    <ClInclude Include="Interface.h" />
+    <ClInclude Include="Pair.h" />
+    <ClInclude Include="PairSuper.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="TCHARFormatter.h" />
+    <ClInclude Include="ValuePtrHolder.h" />
+  </ItemGroup>
+</Project>

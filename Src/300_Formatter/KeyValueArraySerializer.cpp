@@ -170,4 +170,11 @@ namespace fmt_internal
 		KeyValueArraySerializerMetaFunction(m_Channel, m_strSeperator, m_strSchema, strKey, pValue, m_bFirst, m_bUseHex);
 		return *this;
 	}
+
+	//////////////////////////////////////////////////////////////////////////
+	core::IFormatterT& CKeyValueArraySerializer::Sync(std::tstring& strKey, BYTE* pData, size_t tLen)
+	{
+		// Ignore
+		return *this;
+	}
 }

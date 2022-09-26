@@ -180,4 +180,12 @@ namespace fmt_internal
 		PacketSerializerMetaFunction(m_Channel, strKey, pValue);
 		return *this;
 	}
+
+	//////////////////////////////////////////////////////////////////////////
+	core::IFormatterT& CPacketSerializer::Sync(std::tstring& strKey, BYTE* pData, size_t tLen)
+	{
+		SerializeString(m_Channel, strKey);
+		m_Channel.Access(pData, tLen);
+		return *this;
+	}
 }

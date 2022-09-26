@@ -55,3 +55,32 @@ TEST(FormatterTest, Simpletest)
 
 	EXPECT_EQ(2U, stStatusRestored.mapPatternStatus.size());
 }
+
+struct ST_BIN_PACKET : public core::IFormatterObject
+{
+	std::vector<BYTE> vecFileBinary;
+
+	void OnSync(core::IFormatter& formatter)
+	{
+		formatter
+			+ core::sPair(TEXT("FileBinary"), vecFileBinary)
+			;
+	}
+};
+
+TEST(FormatterTest, BinPacketTest)
+{
+	ST_BIN_PACKET stBinPacket;
+	stBinPacket.vecFileBinary.resize(100, 5);
+
+	std::vector<BYTE> packet;
+	UTF8::WriteBinToPacket(&stBinPacket, packet);
+
+	ST_BIN_PACKET stBinPacketRestored;
+	UTF8::ReadBinFromPacket(&stBinPacketRestored, packet);
+
+	ASSERT_EQ(stBinPacket.vecFileBinary.size(), stBinPacketRestored.vecFileBinary.size());
+	EXPECT_EQ(0, memcmp(stBinPacket.vecFileBinary.data(), stBinPacketRestored.vecFileBinary.data(), stBinPacket.vecFileBinary.size()));
+
+	int a = 123;
+}

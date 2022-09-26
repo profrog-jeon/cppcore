@@ -234,4 +234,11 @@ namespace fmt_internal
 		__INIDeserializerMetaFunction(m_INI, m_stkGroupData.top(), strKey, pValue, m_mapArrayValues);
 		return *this;
 	}
+
+	//////////////////////////////////////////////////////////////////////////
+	core::IFormatterT& CINIDeserializer::Sync(std::tstring& strKey, BYTE* pData, size_t tLen)
+	{
+		// Ignore
+		return *this;
+	}
 }

@@ -35,57 +35,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="300_Formatter.h" />
-    <ClInclude Include="ANSIFileReader.h" />
-    <ClInclude Include="ANSIFileWritter.h" />
-    <ClInclude Include="ANSIFormatter.h" />
-    <ClInclude Include="ANSIStringReader.h" />
-    <ClInclude Include="ANSIStringWritter.h" />
-    <ClInclude Include="BytesReader.h" />
-    <ClInclude Include="BytesWriter.h" />
-    <ClInclude Include="CSVDeserializer.h" />
-    <ClInclude Include="CSVSerializer.h" />
-    <ClInclude Include="FileReader.h" />
-    <ClInclude Include="FileWritter.h" />
-    <ClInclude Include="FmtTypes.h" />
-    <ClInclude Include="FormatterSuper.h" />
-    <ClInclude Include="HelperFunc.h" />
-    <ClInclude Include="IChannel.h" />
-    <ClInclude Include="INIDeserializer.h" />
-    <ClInclude Include="INIFormatter.h" />
-    <ClInclude Include="INISerializer.h" />
-    <ClInclude Include="Interface.h" />
-    <ClInclude Include="JSONDeserializer.h" />
-    <ClInclude Include="JSONFunctions.h" />
-    <ClInclude Include="JSONSerializer.h" />
-    <ClInclude Include="KeyArraySerializer.h" />
-    <ClInclude Include="KeyValueArrayDeserializer.h" />
-    <ClInclude Include="KeyValueArraySerializer.h" />
-    <ClInclude Include="MarkerSerializer.h" />
-    <ClInclude Include="PacketDeserializer.h" />
-    <ClInclude Include="PacketSerializer.h" />
-    <ClInclude Include="Pair.h" />
-    <ClInclude Include="PairSuper.h" />
-    <ClInclude Include="stdafx.h" />
-    <ClInclude Include="StringReader.h" />
-    <ClInclude Include="StringWriter.h" />
-    <ClInclude Include="TCHARFormatter.h" />
-    <ClInclude Include="UTF8FileReader.h" />
-    <ClInclude Include="UTF8FileWritter.h" />
-    <ClInclude Include="UTF8Formatter.h" />
-    <ClInclude Include="UTF8StringReader.h" />
-    <ClInclude Include="UTF8StringWritter.h" />
-    <ClInclude Include="ValueArrayDeserializer.h" />
-    <ClInclude Include="ValueArraySerializer.h" />
-    <ClInclude Include="ValuePtrHolder.h" />
-    <ClInclude Include="XMLDeserializer.h" />
-    <ClInclude Include="XMLDeserializer_V2.h" />
-    <ClInclude Include="XMLFunctions.h" />
-    <ClInclude Include="XMLSerializer.h" />
-    <ClInclude Include="XMLSerializer_V2.h" />
-    <ClInclude Include="XMLSerializer_V3.h" />
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="ANSIFileReader.cpp" />
     <ClCompile Include="ANSIFileWritter.cpp" />
     <ClCompile Include="ANSIFormatter.cpp" />
@@ -138,6 +87,57 @@
     <ClCompile Include="XMLSerializer.cpp" />
     <ClCompile Include="XMLSerializer_V2.cpp" />
     <ClCompile Include="XMLSerializer_V3.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="300_Formatter.h" />
+    <ClInclude Include="ANSIFileReader.h" />
+    <ClInclude Include="ANSIFileWritter.h" />
+    <ClInclude Include="ANSIFormatter.h" />
+    <ClInclude Include="ANSIStringReader.h" />
+    <ClInclude Include="ANSIStringWritter.h" />
+    <ClInclude Include="BytesReader.h" />
+    <ClInclude Include="BytesWriter.h" />
+    <ClInclude Include="CSVDeserializer.h" />
+    <ClInclude Include="CSVSerializer.h" />
+    <ClInclude Include="FileReader.h" />
+    <ClInclude Include="FileWritter.h" />
+    <ClInclude Include="FmtTypes.h" />
+    <ClInclude Include="FormatterSuper.h" />
+    <ClInclude Include="HelperFunc.h" />
+    <ClInclude Include="IChannel.h" />
+    <ClInclude Include="INIDeserializer.h" />
+    <ClInclude Include="INIFormatter.h" />
+    <ClInclude Include="INISerializer.h" />
+    <ClInclude Include="Interface.h" />
+    <ClInclude Include="JSONDeserializer.h" />
+    <ClInclude Include="JSONFunctions.h" />
+    <ClInclude Include="JSONSerializer.h" />
+    <ClInclude Include="KeyArraySerializer.h" />
+    <ClInclude Include="KeyValueArrayDeserializer.h" />
+    <ClInclude Include="KeyValueArraySerializer.h" />
+    <ClInclude Include="MarkerSerializer.h" />
+    <ClInclude Include="PacketDeserializer.h" />
+    <ClInclude Include="PacketSerializer.h" />
+    <ClInclude Include="Pair.h" />
+    <ClInclude Include="PairSuper.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="StringReader.h" />
+    <ClInclude Include="StringWriter.h" />
+    <ClInclude Include="TCHARFormatter.h" />
+    <ClInclude Include="UTF8FileReader.h" />
+    <ClInclude Include="UTF8FileWritter.h" />
+    <ClInclude Include="UTF8Formatter.h" />
+    <ClInclude Include="UTF8StringReader.h" />
+    <ClInclude Include="UTF8StringWritter.h" />
+    <ClInclude Include="ValueArrayDeserializer.h" />
+    <ClInclude Include="ValueArraySerializer.h" />
+    <ClInclude Include="ValuePtrHolder.h" />
+    <ClInclude Include="XMLDeserializer.h" />
+    <ClInclude Include="XMLDeserializer_V2.h" />
+    <ClInclude Include="XMLFunctions.h" />
+    <ClInclude Include="XMLSerializer.h" />
+    <ClInclude Include="XMLSerializer_V2.h" />
+    <ClInclude Include="XMLSerializer_V3.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{939E852F-90DD-4E1A-AE69-EA7E6369A270}</ProjectGuid>

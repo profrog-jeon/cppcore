@@ -315,4 +315,11 @@ namespace fmt_internal
 		__XMLDeserializerSync(m_stackTraverse, m_vecObjectCountStack, strKey, pValue);
 		return *this;
 	}
+
+	//////////////////////////////////////////////////////////////////////////
+	core::IFormatterT& CXMLDeserializer_V2::Sync(std::tstring& strKey, BYTE* pData, size_t tLen)
+	{
+		// Ignore
+		return *this;
+	}
 }

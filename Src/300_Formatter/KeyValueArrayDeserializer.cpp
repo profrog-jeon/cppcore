@@ -190,4 +190,11 @@ namespace fmt_internal
 		__KeyValueArrayDeserializerMetaFunction(m_mapValue, strKey, pValue);
 		return *this;
 	}
+
+	//////////////////////////////////////////////////////////////////////////
+	core::IFormatterT& CKeyValueArrayDeserializer::Sync(std::tstring& strKey, BYTE* pData, size_t tLen)
+	{
+		// Ignore
+		return *this;
+	}
 }

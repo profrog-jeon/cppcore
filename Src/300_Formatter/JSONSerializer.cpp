@@ -286,4 +286,9 @@ namespace fmt_internal
 		JSONSerializerMetaSync(m_vecObjectCountStack, m_Channel, strKey, *pValue);
 		return *this;
 	}
+	core::IFormatterT& CJSONSerializer::Sync(std::tstring& strKey, BYTE* pData, size_t tLen)
+	{
+		// Ignore
+		return *this;
+	}
 }

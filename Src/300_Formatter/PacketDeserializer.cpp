@@ -189,4 +189,12 @@ namespace fmt_internal
 		PacketDeserializerMetaFunction(m_Channel, strKey, pValue);
 		return *this;
 	}
+
+	//////////////////////////////////////////////////////////////////////////
+	core::IFormatterT& CPacketDeserializer::Sync(std::tstring& strKey, BYTE* pData, size_t tLen)
+	{
+		DeserializeString(m_Channel, strKey);
+		m_Channel.Access(pData, tLen);
+		return *this;
+	}
 }

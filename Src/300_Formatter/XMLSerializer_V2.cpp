@@ -261,5 +261,12 @@ namespace fmt_internal
 		__WriteXmlThroughChannel(m_stkElement.size(), m_stkGroupingData.top(), strKey, strValue, m_Channel);
 		return *this;
 	}
+
+	//////////////////////////////////////////////////////////////////////////
+	core::IFormatterT& CXMLSerializer_V2::Sync(std::tstring& strKey, BYTE* pData, size_t tLen)
+	{
+		// Ignore
+		return *this;
+	}
 }
 

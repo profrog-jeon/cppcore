@@ -178,4 +178,11 @@ namespace fmt_internal
 		__CSVSerializerMetaFunction(m_Channel, pValue, m_bFirst);
 		return *this;
 	}
+
+	//////////////////////////////////////////////////////////////////////////
+	core::IFormatterT& CCSVSerializer::Sync(std::tstring& strKey, BYTE* pData, size_t tLen)
+	{
+		// Ignore
+		return *this;
+	}
 }

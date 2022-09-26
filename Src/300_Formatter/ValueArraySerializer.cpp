@@ -181,4 +181,11 @@ namespace fmt_internal
 		ValueArraySerializerMetaFunction(m_Channel, m_strSeperator, m_strQuotator, pValue, m_bFirst, m_bUseHexValue);
 		return *this;
 	}
+
+	//////////////////////////////////////////////////////////////////////////
+	core::IFormatterT& CValueArraySerializer::Sync(std::tstring& strKey, BYTE* pData, size_t tLen)
+	{
+		// Ignore
+		return *this;
+	}
 }
