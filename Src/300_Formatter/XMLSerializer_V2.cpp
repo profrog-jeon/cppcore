@@ -263,7 +263,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CXMLSerializer_V2::Sync(std::tstring& strKey, BYTE* pData, size_t tLen)
+	core::IFormatterT& CXMLSerializer_V2::Sync(std::tstring& strKey, std::vector<BYTE>* pvecData)
 	{
 		// Ignore
 		return *this;

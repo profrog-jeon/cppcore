@@ -58,7 +58,7 @@ TEST(FormatterTest, Simpletest)
 
 struct ST_BIN_PACKET : public core::IFormatterObject
 {
-	std::vector<BYTE> vecFileBinary;
+	std::vector<char> vecFileBinary;
 
 	void OnSync(core::IFormatter& formatter)
 	{
@@ -81,6 +81,4 @@ TEST(FormatterTest, BinPacketTest)
 
 	ASSERT_EQ(stBinPacket.vecFileBinary.size(), stBinPacketRestored.vecFileBinary.size());
 	EXPECT_EQ(0, memcmp(stBinPacket.vecFileBinary.data(), stBinPacketRestored.vecFileBinary.data(), stBinPacket.vecFileBinary.size()));
-
-	int a = 123;
 }

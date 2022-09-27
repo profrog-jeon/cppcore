@@ -191,10 +191,13 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CPacketDeserializer::Sync(std::tstring& strKey, BYTE* pData, size_t tLen)
+	core::IFormatterT& CPacketDeserializer::Sync(std::tstring& strKey, std::vector<BYTE>* pvecData)
 	{
 		DeserializeString(m_Channel, strKey);
-		m_Channel.Access(pData, tLen);
+		DWORD dwLength;
+		m_Channel.Access(&dwLength, sizeof(dwLength));
+		pvecData->resize(dwLength);
+		m_Channel.Access((void*)pvecData->data(), dwLength);
 		return *this;
 	}
 }

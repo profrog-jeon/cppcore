@@ -182,7 +182,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CKeyArraySerializer::Sync(std::tstring& strKey, BYTE* pData, size_t tLen)
+	core::IFormatterT& CKeyArraySerializer::Sync(std::tstring& strKey, std::vector<BYTE>* pvecData)
 	{
 		// Ignore
 		return *this;

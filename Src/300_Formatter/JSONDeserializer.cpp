@@ -435,7 +435,7 @@ namespace fmt_internal
 		JSONDeserializerMetaSync(m_GroupingStack, strKey, *pValue);
 		return *this;
 	}
-	core::IFormatterT& CJSONDeserializer::Sync(std::tstring& strKey, BYTE* pData, size_t tLen)
+	core::IFormatterT& CJSONDeserializer::Sync(std::tstring& strKey, std::vector<BYTE>* pvecData)
 	{
 		// Ignore
 		return *this;
