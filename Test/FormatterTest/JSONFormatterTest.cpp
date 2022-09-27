@@ -58,11 +58,15 @@ TEST(FormatterTest, Simpletest)
 
 struct ST_BIN_PACKET : public core::IFormatterObject
 {
+	int nValue;
+	std::tstring strValue;
 	std::vector<char> vecFileBinary;
 
 	void OnSync(core::IFormatter& formatter)
 	{
 		formatter
+			+ core::sPair(TEXT("nValue"), nValue)
+			+ core::sPair(TEXT("strValue"), strValue)
 			+ core::sPair(TEXT("FileBinary"), vecFileBinary)
 			;
 	}
@@ -71,14 +75,18 @@ struct ST_BIN_PACKET : public core::IFormatterObject
 TEST(FormatterTest, BinPacketTest)
 {
 	ST_BIN_PACKET stBinPacket;
+	stBinPacket.nValue = 1005;
+	stBinPacket.strValue = TEXT("10020");
 	stBinPacket.vecFileBinary.resize(100, 5);
 
 	std::vector<BYTE> packet;
 	UTF8::WriteBinToPacket(&stBinPacket, packet);
 
-	ST_BIN_PACKET stBinPacketRestored;
-	UTF8::ReadBinFromPacket(&stBinPacketRestored, packet);
+	ST_BIN_PACKET stRestored;
+	UTF8::ReadBinFromPacket(&stRestored, packet);
 
-	ASSERT_EQ(stBinPacket.vecFileBinary.size(), stBinPacketRestored.vecFileBinary.size());
-	EXPECT_EQ(0, memcmp(stBinPacket.vecFileBinary.data(), stBinPacketRestored.vecFileBinary.data(), stBinPacket.vecFileBinary.size()));
+	ASSERT_EQ(stBinPacket.vecFileBinary.size(), stRestored.vecFileBinary.size());
+	EXPECT_EQ(stBinPacket.nValue, stRestored.nValue);
+	EXPECT_EQ(stBinPacket.strValue, stRestored.strValue);
+	EXPECT_EQ(0, memcmp(stBinPacket.vecFileBinary.data(), stRestored.vecFileBinary.data(), stBinPacket.vecFileBinary.size()));
 }

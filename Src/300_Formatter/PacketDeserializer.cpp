@@ -18,31 +18,22 @@ namespace fmt_internal
 	//////////////////////////////////////////////////////////////////////////
 	inline static void DeserializeString(IChannel& channel, std::tstring& refValue)
 	{
-		do
-		{
-			WORD wLength;
-			if (2 != channel.Access(&wLength, 2))
-				break;
+		DWORD dwLength;
+		channel.Access(&dwLength, sizeof(dwLength));
 
-			std::string strTemp;
-			strTemp.resize(wLength);
-			if (wLength != channel.Access((void*)strTemp.c_str(), wLength))
-				break;
+		std::string strTemp;
+		strTemp.resize(dwLength);
+		channel.Access((void*)strTemp.c_str(), dwLength);
 
-			refValue = TCSFromUTF8(strTemp);
-		} while (0);
+		refValue = TCSFromUTF8(strTemp);
 	}
 
 	//////////////////////////////////////////////////////////////////////////
 	size_t CPacketDeserializer::BeginDictionary(std::tstring& strKey, const size_t tSize, bool bAllowMultiKey)
 	{
-		DeserializeString(m_Channel, strKey);
-
-		WORD wCount = (WORD)tSize;
-		if (2 != m_Channel.Access(&wCount, 2))
-			return 0;
-
-		return wCount;
+		// Not supported for unknown-key
+		assert(false);
+		return 0;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
@@ -53,13 +44,11 @@ namespace fmt_internal
 	//////////////////////////////////////////////////////////////////////////
 	size_t CPacketDeserializer::BeginArray(std::tstring& strKey, const size_t tSize)
 	{
-		DeserializeString(m_Channel, strKey);
+		//DeserializeString(m_Channel, strKey);
 
-		WORD wCount = (WORD)tSize;
-		if( 2 != m_Channel.Access(&wCount, 2) )
-			return 0;
-
-		return wCount;
+		DWORD dwCount = (WORD)tSize;
+		m_Channel.Access(&dwCount, sizeof(dwCount));
+		return dwCount;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
@@ -70,7 +59,7 @@ namespace fmt_internal
 	//////////////////////////////////////////////////////////////////////////
 	void CPacketDeserializer::BeginObject(std::tstring& strKey)
 	{
-		DeserializeString(m_Channel, strKey);
+		//DeserializeString(m_Channel, strKey);
 	}
 
 	//////////////////////////////////////////////////////////////////////////
@@ -92,14 +81,14 @@ namespace fmt_internal
 	template<typename T>
 	inline static void PacketDeserializerMetaFunction(IChannel& channel, std::tstring& strKey, T* pValue)
 	{
-		DeserializeString(channel, strKey);
+		//DeserializeString(channel, strKey);
 		channel.Access(pValue, sizeof(T));
 	}
 
 	//////////////////////////////////////////////////////////////////////////
 	core::IFormatterT& CPacketDeserializer::Sync(std::tstring& strKey, std::tstring* pValue)
 	{
-		DeserializeString(m_Channel, strKey);
+		//DeserializeString(m_Channel, strKey);
 		DeserializeString(m_Channel, *pValue);
 		return *this;
 	}
@@ -193,7 +182,7 @@ namespace fmt_internal
 	//////////////////////////////////////////////////////////////////////////
 	core::IFormatterT& CPacketDeserializer::Sync(std::tstring& strKey, std::vector<BYTE>* pvecData)
 	{
-		DeserializeString(m_Channel, strKey);
+		//DeserializeString(m_Channel, strKey);
 		DWORD dwLength;
 		m_Channel.Access(&dwLength, sizeof(dwLength));
 		pvecData->resize(dwLength);

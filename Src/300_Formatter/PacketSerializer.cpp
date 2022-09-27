@@ -22,20 +22,18 @@ namespace fmt_internal
 	{
 		std::string refValueA = UTF8FromTCS(refValue);
 
-		WORD wLength = (WORD)refValueA.length();
-		channel.Access(&wLength, sizeof(wLength));
-		if(0 < wLength)
-			channel.Access((void*)refValueA.c_str(), wLength);
+		DWORD dwLength = (DWORD)refValueA.length();
+		channel.Access(&dwLength, sizeof(dwLength));
+		if(0 < dwLength)
+			channel.Access((void*)refValueA.c_str(), dwLength);
 	}
 
 	//////////////////////////////////////////////////////////////////////////
 	size_t CPacketSerializer::BeginDictionary(std::tstring& strKey, const size_t tSize, bool bAllowMultiKey)
 	{
-		SerializeString(m_Channel, strKey);
-
-		WORD wCount = (WORD)tSize;
-		m_Channel.Access(&wCount, 2);
-		return tSize;
+		// Not supported for unknown-key
+		assert(false);
+		return 0;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
@@ -46,10 +44,10 @@ namespace fmt_internal
 	//////////////////////////////////////////////////////////////////////////
 	size_t CPacketSerializer::BeginArray(std::tstring& strKey, const size_t tSize)
 	{
-		SerializeString(m_Channel, strKey);
+		//SerializeString(m_Channel, strKey);
 
-		WORD wCount = (WORD)tSize;
-		m_Channel.Access(&wCount, 2);
+		DWORD dwCount = (DWORD)tSize;
+		m_Channel.Access(&dwCount, sizeof(dwCount));
 		return tSize;
 	}
 
@@ -61,7 +59,7 @@ namespace fmt_internal
 	//////////////////////////////////////////////////////////////////////////
 	void CPacketSerializer::BeginObject(std::tstring& strKey)
 	{
-		SerializeString(m_Channel, strKey);
+		//SerializeString(m_Channel, strKey);
 	}
 
 	//////////////////////////////////////////////////////////////////////////
@@ -83,14 +81,14 @@ namespace fmt_internal
 	template<typename T>
 	inline static void PacketSerializerMetaFunction(IChannel& channel, std::tstring& strKey, T* pValue)
 	{
-		SerializeString(channel, strKey);
+		//SerializeString(channel, strKey);
 		channel.Access(pValue, sizeof(T));
 	}
 
 	//////////////////////////////////////////////////////////////////////////
 	core::IFormatterT& CPacketSerializer::Sync(std::tstring& strKey, std::tstring* pValue)
 	{
-		SerializeString(m_Channel, strKey);
+		//SerializeString(m_Channel, strKey);
 		SerializeString(m_Channel, *pValue);
 		return *this;
 	}
@@ -184,7 +182,7 @@ namespace fmt_internal
 	//////////////////////////////////////////////////////////////////////////
 	core::IFormatterT& CPacketSerializer::Sync(std::tstring& strKey, std::vector<BYTE>* pvecData)
 	{
-		SerializeString(m_Channel, strKey);
+		//SerializeString(m_Channel, strKey);
 		DWORD dwLength = pvecData->size();
 		m_Channel.Access(&dwLength, sizeof(dwLength));
 		m_Channel.Access((void*)pvecData->data(), dwLength);
