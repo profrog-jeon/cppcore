@@ -302,6 +302,7 @@
     <ClCompile Include="DuplicatedProcChecker.cpp" />
     <ClCompile Include="FileUtility.cpp" />
     <ClCompile Include="HashFunction.cpp" />
+    <ClCompile Include="HashFunctionT.cpp" />
     <ClCompile Include="INIParser.cpp" />
     <ClCompile Include="INIParserFunc.cpp" />
     <ClCompile Include="MemoryMappedFile.cpp" />
