@@ -37,7 +37,7 @@ namespace core
 	{
 	public:
 		template<typename T>
-		ECODE Send(T* pPacket, DWORD dwTimeOut = 60000)
+		ECODE SendPacket(T* pPacket, DWORD dwTimeOut = 60000)
 		{
 			ECODE nRet = EC_SUCCESS;
 			try
@@ -61,7 +61,7 @@ namespace core
 		}
 
 		template<typename T>
-		bool Recv(T* pPacket, DWORD dwTimeOut = 60000)
+		ECODE RecvPacket(T* pPacket, DWORD dwTimeOut = 60000)
 		{
 			ECODE nRet = EC_SUCCESS;
 			try
@@ -75,9 +75,7 @@ namespace core
 
 				std::vector<BYTE> vecBody;
 				vecBody.resize(header.dwLen + sizeof(ST_PACKET_HEADER));
-				nRet = Recv(&vecBody[0], vecBody.size(), dwTimeOut);
-
-				nRet = EC_READ_FAILURE;
+				nRet = this->Recv(&vecBody[0], vecBody.size(), dwTimeOut);
 				if (nRet < 0)
 					throw core::exception_format(TEXT("Body Recving failure, %d"), nRet);
 

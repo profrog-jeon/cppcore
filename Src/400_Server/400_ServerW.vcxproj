@@ -266,6 +266,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="400_Server.h" />
+    <ClInclude Include="Packetizer.h" />
     <ClInclude Include="SocketCommon.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="SyncConnection.h" />
@@ -274,6 +275,7 @@
     <ClInclude Include="SyncUDPSocket.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Packetizer.cpp" />
     <ClCompile Include="SocketCommon.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
