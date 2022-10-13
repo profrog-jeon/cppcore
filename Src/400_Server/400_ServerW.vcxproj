@@ -266,8 +266,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="400_Server.h" />
-    <ClInclude Include="ISocket.h" />
-    <ClInclude Include="ISyncSocket.h" />
     <ClInclude Include="SocketCommon.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="SyncConnection.h" />

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ISyncSocket.h"
+#include "SyncTCPSocket.h"
 
 namespace core
 {
@@ -9,16 +9,15 @@ namespace core
 		friend class CSyncServer;
 
 	protected:
-		ISyncSocket*	m_pSocket;
+		CSyncTCPSocket*	m_pSocket;
 		std::string		m_strClientIP;
 
 	public:
-						CSyncConnection(ISyncSocket* pSocket);
+						CSyncConnection(CSyncTCPSocket* pSocket);
 		virtual			~CSyncConnection();
 
-		virtual ECODE	Accept(SOCKET hNewSocket)	{	return m_pSocket->Accept(hNewSocket);		}
-		virtual ECODE	Accept(ISyncSocket* pSocket);
-		virtual ISyncSocket* Raw(void)				{	return m_pSocket;					}
+		virtual ECODE	SetAcceptedSocket(SOCKET hNewSocket)	{	return m_pSocket->Assign(hNewSocket);		}
+		virtual CSyncTCPSocket* Raw(void)				{	return m_pSocket;					}
 
 		virtual void	OnConnect(void) = 0;
 		virtual void	OnClose(void) = 0;
