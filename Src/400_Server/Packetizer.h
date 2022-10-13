@@ -37,7 +37,7 @@ namespace core
 	{
 	public:
 		template<typename T>
-		ECODE Send(T* pPacket)
+		ECODE Send(T* pPacket, DWORD dwTimeOut = 60000)
 		{
 			ECODE nRet = EC_SUCCESS;
 			try
@@ -47,7 +47,7 @@ namespace core
 				if (EC_SUCCESS != nRet)
 					throw exception_format(TEXT("Packetize failure, %d"), nRet);
 
-				nRet = Send(vecPacket.data(), vecPacket.size(), SOCKET_TIMEOUT);
+				nRet = Send(vecPacket.data(), vecPacket.size(), dwTimeOut);
 				if (EC_SUCCESS != nRet)
 					throw exception_format(TEXT("Packet sending failure, %d"), nRet);
 			}
@@ -61,27 +61,27 @@ namespace core
 		}
 
 		template<typename T>
-		bool Recv(T* pPacket)
+		bool Recv(T* pPacket, DWORD dwTimeOut = 60000)
 		{
 			ECODE nRet = EC_SUCCESS;
 			try
 			{
 				ST_PACKET_HEADER header;
-				int nRet = Peek(&header, sizeof(ST_PACKET_HEADER), SOCKET_TIMEOUT);
+				int nRet = Peek(&header, sizeof(ST_PACKET_HEADER), dwTimeOut);
 
 				nRet = EC_READ_FAILURE;
 				if (nRet < 0)
 					throw core::exception_format(TEXT("Header Peeking faliure, %d"), nRet);
 
-				std::vector<BYTE> vecPacket;
+				std::vector<BYTE> vecBody;
 				vecBody.resize(header.dwLen + sizeof(ST_PACKET_HEADER));
-				nRet = Recv(&vecBody[0], vecBody.size(), SOCKET_TIMEOUT);
+				nRet = Recv(&vecBody[0], vecBody.size(), dwTimeOut);
 
 				nRet = EC_READ_FAILURE;
 				if (nRet < 0)
 					throw core::exception_format(TEXT("Body Recving failure, %d"), nRet);
 
-				nRet = Unpacketize(vecPacket, T::ID, pPacket);
+				nRet = Unpacketize(vecBody, T::ID, pPacket);
 				if(EC_SUCCESS != nRet)
 					throw core::exception_format(TEXT("Unpacketize failure, %d"), nRet);
 			}
