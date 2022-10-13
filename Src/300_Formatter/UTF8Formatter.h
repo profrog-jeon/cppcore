@@ -116,8 +116,8 @@ namespace core
 		bool ReadValueArrayFromFile(IFormatterObjectA* pObject, std::string strSep, std::string strQuo, std::string strFilename, std::string* pStrErrMsg = NULL);
 
 		// Packet
-		bool WriteBinToPacket(IFormatterObjectW* pObject, std::vector<BYTE>& vecPacket);
-		bool WriteBinToPacket(IFormatterObjectA* pObject, std::vector<BYTE>& vecPacket);
+		bool WriteBinToPacket(const IFormatterObjectW* pObject, std::vector<BYTE>& vecPacket);
+		bool WriteBinToPacket(const IFormatterObjectA* pObject, std::vector<BYTE>& vecPacket);
 		bool ReadBinFromPacket(IFormatterObjectW* pObject, const std::vector<BYTE>& vecPacket);
 		bool ReadBinFromPacket(IFormatterObjectA* pObject, const std::vector<BYTE>& vecPacket);
 	}

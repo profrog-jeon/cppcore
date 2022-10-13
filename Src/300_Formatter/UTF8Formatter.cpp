@@ -465,11 +465,11 @@ namespace core
 		}
 
 		//////////////////////////////////////////////////////////////////////////
-		bool WriteBinToPacket(IFormatterObject* pObject, std::vector<BYTE>& vecPacket)
+		bool WriteBinToPacket(const IFormatterObject* pObject, std::vector<BYTE>& vecPacket)
 		{
 			fmt_internal::CBytesWriter channel(vecPacket);
 			fmt_internal::CPacketSerializer formatter(channel);
-			formatter.Synchronize(pObject);
+			formatter.Synchronize(const_cast<IFormatterObject*>(pObject));
 			std::tstring strErrMsg;
 			return formatter.CheckValidity(&strErrMsg);
 		}
