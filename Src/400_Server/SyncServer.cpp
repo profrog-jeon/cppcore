@@ -207,7 +207,7 @@ namespace core
 				}
 
 				pNewConnection->m_strClientIP = IPAddressFromA(stAcceptInfo.dwIP);
-				nRet = pNewConnection->Accept(hNewConnection);
+				nRet = pNewConnection->SetAcceptedSocket(hNewConnection);
 				if (EC_SUCCESS != nRet)
 				{
 					Log_Error("Accept failure, %d", nRet);

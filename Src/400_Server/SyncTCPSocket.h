@@ -1,25 +1,25 @@
 #pragma once
 
-#include "ISyncSocket.h"
-
 namespace core
 {
-	class CSyncTCPSocket : public ISyncSocket
+	class CSyncTCPSocket
 	{
+		friend class CSyncServer;
+		friend class CSyncConnection;
+
+		SOCKET m_hSocket;
+
 	public:
 		CSyncTCPSocket(void);
 		~CSyncTCPSocket();
 
-		ECODE Accept(SOCKET hAcceptedSocket);
+		ECODE Assign(SOCKET hAcceptedSocket);
 		ECODE Connect(const char* pszIP, WORD wPort, DWORD dwTimeOut);
 		void Close(void);
 
-		ECODE Send(const void* pBuff, size_t tBufSize, DWORD dwTimeOut, size_t* ptSent = NULL);
-		ECODE Recv(void* pBuff, size_t tBufSize, DWORD dwTimeOut, size_t* ptRead = NULL);
+		ECODE Send(const void* pBuff, size_t tBufSize, DWORD dwTimeOut);
+		ECODE Recv(void* pBuff, size_t tBufSize, DWORD dwTimeOut);
 		ECODE Peek(void* pBuff, size_t tBufSize, DWORD dwTimeOut, size_t* ptRead = NULL);
-
-		ECODE SendForcely(const void* pBuff, size_t tBufSize, DWORD dwTimeOut);
-		ECODE RecvForcely(void* pDest, size_t tLength, DWORD dwTimeOut);
 	};
 
 }

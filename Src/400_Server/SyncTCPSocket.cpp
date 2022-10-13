@@ -15,7 +15,7 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	ECODE CSyncTCPSocket::Accept(SOCKET hAcceptedSocket)
+	ECODE CSyncTCPSocket::Assign(SOCKET hAcceptedSocket)
 	{
 		m_hSocket = hAcceptedSocket;
 
@@ -111,13 +111,7 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	ECODE CSyncTCPSocket::Send(const void * pBuff, size_t tBufSize, DWORD dwTimeOut, size_t* ptSent)
-	{
-		return SendWorker(m_hSocket, pBuff, tBufSize, dwTimeOut, 0, ptSent);
-	}
-
-	//////////////////////////////////////////////////////////////////////////
-	ECODE CSyncTCPSocket::SendForcely(const void* pBuff, size_t tBufSize, DWORD dwTimeOut)
+	ECODE CSyncTCPSocket::Send(const void * pBuff, size_t tBufSize, DWORD dwTimeOut)
 	{
 		ECODE nRet = EC_SUCCESS;
 		LPCBYTE pBuffer = (LPCBYTE)pBuff;
@@ -194,19 +188,7 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	ECODE CSyncTCPSocket::Recv(void * pBuff, size_t tBufSize, DWORD dwTimeOut, size_t* ptRead)
-	{
-		return RecvWorker(m_hSocket, pBuff, tBufSize, dwTimeOut, 0, ptRead);
-	}
-
-	//////////////////////////////////////////////////////////////////////////
-	ECODE CSyncTCPSocket::Peek(void * pBuff, size_t tBufSize, DWORD dwTimeOut, size_t* ptRead)
-	{
-		return RecvWorker(m_hSocket, pBuff, tBufSize, dwTimeOut, MSG_PEEK_, ptRead);
-	}
-
-	//////////////////////////////////////////////////////////////////////////
-	ECODE CSyncTCPSocket::RecvForcely(void* pBuff, size_t tBufSize, DWORD dwTimeOut)
+	ECODE CSyncTCPSocket::Recv(void * pBuff, size_t tBufSize, DWORD dwTimeOut)
 	{
 		ECODE nRet;
 		LPBYTE pBuffer = (LPBYTE)pBuff;
@@ -235,13 +217,19 @@ namespace core
 				tTotalRecved += tRecved;
 			}
 		}
-		catch (std::exception & e)
+		catch (std::exception& e)
 		{
 			Log_Error("%s", e.what());
 			return nRet;
 		}
 
 		return EC_SUCCESS;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	ECODE CSyncTCPSocket::Peek(void * pBuff, size_t tBufSize, DWORD dwTimeOut, size_t* ptRead)
+	{
+		return RecvWorker(m_hSocket, pBuff, tBufSize, dwTimeOut, MSG_PEEK_, ptRead);
 	}
 }
 
