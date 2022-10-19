@@ -21,6 +21,9 @@ namespace core
 	bool RemoveDirectoryRecursively(const char* pszPath);
 	bool RemoveDirectoryRecursively(const wchar_t* pszPath);
 
+	bool RemoveDirectoryForcely(std::string strPath);
+	bool RemoveDirectoryForcely(std::wstring strPath);
+
 	ECODE EnumFile(std::string strDir, std::string strPattern, FP_FILETRAVERSE_CALLBACKA fpCallback, void* pCallbackContext);
 	ECODE EnumFile(std::wstring strDir, std::wstring strPattern, FP_FILETRAVERSE_CALLBACKW fpCallback, void* pCallbackContext);
 	ECODE TraverseDirectory(std::string strDir, std::string strPattern, FP_FILETRAVERSE_CALLBACKA fpCallback, void* pCallbackContext);

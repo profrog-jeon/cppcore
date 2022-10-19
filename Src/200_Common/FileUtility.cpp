@@ -110,6 +110,18 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
+	bool RemoveDirectoryForcely(std::tstring strPath)
+	{
+		std::vector<std::tstring> vecFiles;
+		GrepFilesRecursively(strPath, TEXT("*"), vecFiles);
+
+		for (size_t i = 0; i < vecFiles.size(); i++)
+			DeleteFile(vecFiles[i].c_str());
+
+		return RemoveDirectoryRecursively(strPath);
+	}
+
+	//////////////////////////////////////////////////////////////////////////
 #ifdef UNICODE
 #define __internal_ST_TRAVERSE_FILE_DATA __internal_ST_TRAVERSE_FILE_DATAW
 #else
