@@ -32,6 +32,7 @@ typedef int						ECODE;
 #define EC_MORE_DATA			20026
 #define EC_NOT_CONNECTED		20027
 #define EC_OPEN_FAILURE			20028
+#define EC_COPY_FAILURE			20029
 
 #define EC_ALREADY_INUSE		20040
 #define EC_SYSTEM_ERROR			20041
