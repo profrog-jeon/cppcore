@@ -35,6 +35,8 @@ namespace core
 		bool WriteCSVToString(const IFormatterObjectA* pObject, std::string& strOutput, std::string* pStrErrMsg = NULL);
 		bool ReadCSVFromString(IFormatterObjectW* pObject, std::string strInput, std::wstring* pStrErrMsg = NULL);
 		bool ReadCSVFromString(IFormatterObjectA* pObject, std::string strInput, std::string* pStrErrMsg = NULL);
+		bool ReadCSVFromString(IFormatterObjectW* pObject, std::string strInput, bool bSkipTitle, std::wstring* pStrErrMsg = NULL);
+		bool ReadCSVFromString(IFormatterObjectA* pObject, std::string strInput, bool bSkipTitle, std::string* pStrErrMsg = NULL);
 
 		// XML
 		bool WriteXmlToFile(const IFormatterObjectW* pObject, std::wstring strFilename, LPCWSTR pszRootTag = L"root", std::map<std::wstring, std::wstring>* pRootAttr = NULL);

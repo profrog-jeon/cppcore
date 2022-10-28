@@ -107,6 +107,15 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
+	bool ReadCSVFromString(IFormatterObject* pObject, std::tstring strInput, bool bSkipTitle, std::tstring* pStrErrMsg)
+	{
+		fmt_internal::CStringReader channel(strInput);
+		fmt_internal::CCSVDeserializer formatter(channel, bSkipTitle);
+		formatter.Synchronize(pObject);
+		return formatter.CheckValidity(pStrErrMsg);
+	}
+
+	//////////////////////////////////////////////////////////////////////////
 	bool WriteXmlToFile(const IFormatterObject* pObject, std::tstring strFilename, LPCTSTR pszRootTag, std::map<std::tstring, std::tstring>* pRootAttr)
 	{
 		fmt_internal::CFileWritter channel(strFilename);
