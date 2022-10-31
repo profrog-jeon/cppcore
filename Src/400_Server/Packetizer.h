@@ -67,20 +67,18 @@ namespace core
 			try
 			{
 				ST_PACKET_HEADER header;
-				int nRet = Peek(&header, sizeof(ST_PACKET_HEADER), dwTimeOut);
-
-				nRet = EC_READ_FAILURE;
-				if (nRet < 0)
+				nRet = Peek(&header, sizeof(ST_PACKET_HEADER), dwTimeOut);
+				if (EC_SUCCESS != nRet)
 					throw core::exception_format(TEXT("Header Peeking faliure, %d"), nRet);
 
 				std::vector<BYTE> vecBody;
 				vecBody.resize(header.dwLen + sizeof(ST_PACKET_HEADER));
 				nRet = this->Recv(&vecBody[0], vecBody.size(), dwTimeOut);
-				if (nRet < 0)
+				if (EC_SUCCESS != nRet)
 					throw core::exception_format(TEXT("Body Recving failure, %d"), nRet);
 
 				nRet = Unpacketize(vecBody, T::ID, pPacket);
-				if(EC_SUCCESS != nRet)
+				if (EC_SUCCESS != nRet)
 					throw core::exception_format(TEXT("Unpacketize failure, %d"), nRet);
 			}
 			catch (core::exception_format& e)
