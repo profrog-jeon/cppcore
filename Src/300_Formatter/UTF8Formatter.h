@@ -78,8 +78,8 @@ namespace core
 		// INI
 		bool WriteIniToFile(const IFormatterObjectW* pObject, std::wstring strFilename, std::wstring* pStrErrMsg = NULL);
 		bool WriteIniToFile(const IFormatterObjectA* pObject, std::string strFilename, std::string* pStrErrMsg = NULL);
-		bool WriteIniToFile(const IFormatterObjectW* pObject, std::wstring strFilename, std::wstring* pStrErrMsg, bool bWriteBOM);
-		bool WriteIniToFile(const IFormatterObjectA* pObject, std::string strFilename, std::string* pStrErrMsg, bool bWriteBOM);
+		bool WriteIniToFile(const IFormatterObjectW* pObject, std::wstring strFilename, bool bWriteBOM);
+		bool WriteIniToFile(const IFormatterObjectA* pObject, std::string strFilename, bool bWriteBOM);
 		bool ReadIniFromFile(IFormatterObjectW* pObject, std::wstring strFilename, std::wstring* pStrErrMsg = NULL);
 		bool ReadIniFromFile(IFormatterObjectA* pObject, std::string strFilename, std::string* pStrErrMsg = NULL);
 		bool WriteIniToString(const IFormatterObjectW* pObject, std::string& strOutput, std::wstring* pStrErrMsg = NULL);
