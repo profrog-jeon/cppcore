@@ -78,8 +78,6 @@ namespace fmt_internal
 			m_strErrMsg = Format(TEXT("INI.Flush operating failure, %d"), errRet);
 			m_bValidity = false;
 		}
-		else
-			m_bValidity = true;
 	}
 
 
