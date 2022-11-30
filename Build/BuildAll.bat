@@ -1,6 +1,6 @@
 @ECHO OFF
 
-SET MSBUILD="C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\MSBuild\Current\Bin\MSBuild.exe"
+SET MSBUILD="C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\MSBuild.exe"
 SET SLNFILE=..\Src\_BuildAll.sln
 
 RD /S /Q .\Win32Debug
