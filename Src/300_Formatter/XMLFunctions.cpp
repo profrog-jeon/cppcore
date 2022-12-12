@@ -34,20 +34,20 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	inline std::tstring __EliminateXmlComment(const std::tstring& strContext, LPCTSTR pszStartTag, LPCTSTR pszEndTag)
+	inline std::tstring __EliminateXmlComment(const std::tstring& strContext, std::tstring strStartTag, std::tstring strEndTag)
 	{
 		std::tstring strRet;
 
 		size_t tPos = 0;
 		size_t tIndex = 0;
-		while(std::tstring::npos != (tIndex = strContext.find(pszStartTag, tPos)) )
+		while(std::tstring::npos != (tIndex = strContext.find(strStartTag, tPos)) )
 		{
-			size_t tEnd = strContext.find(pszEndTag, tIndex + 4);
+			size_t tEnd = strContext.find(strEndTag, tIndex + strStartTag.length());
 			if( std::tstring::npos == tEnd )
 				return strRet;
 
 			strRet += strContext.substr(tPos, tIndex - tPos);
-			tPos = tEnd + 3;
+			tPos = tEnd + strEndTag.length();
 		}
 
 		if( tPos < strContext.length() )
