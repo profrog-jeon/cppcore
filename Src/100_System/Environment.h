@@ -168,4 +168,7 @@ namespace core
 	ST_SYSTEMTIME	SystemTimeFrom_NativeAPI(UINT64 tUnixTime);
 
 	bool			MakeAbsoluteTZTime(WORD wYear, const ST_SYSTEMTIME& stTZTime, ST_SYSTEMTIME& outAbsTime);
+
+	bool			IpFromDomain(std::string strDomain, WORD wPort, std::string& out);
+	bool			IpFromDomain(std::wstring strDomain, WORD wPort, std::string& out);
 }

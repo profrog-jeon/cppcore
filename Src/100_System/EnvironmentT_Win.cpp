@@ -5,6 +5,7 @@
 #undef TEXT
 #undef GetTimeZoneInformation
 #include <Windows.h>
+#include <WS2tcpip.h>
 #pragma comment(lib, "version.lib")
 
 namespace core
@@ -272,5 +273,42 @@ namespace core
 		if( qwTargetTime < qwDaylightTime )
 			return TIME_ZONE_ID_STANDARD_;
 		return TIME_ZONE_ID_DAYLIGHT_;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	bool IpFromDomain(std::tstring strDomain, WORD wPort, std::string& out)
+	{
+		try
+		{
+			addrinfo* result = NULL;
+			addrinfo* ptr = NULL;
+			addrinfo hints;
+			memset(&hints, 0, sizeof(hints));
+			sockaddr_in* sockaddr_ipv4;
+			hints.ai_family = AF_UNSPEC;
+			hints.ai_socktype = SOCK_STREAM;
+			hints.ai_protocol = IPPROTO_TCP;
+
+			DWORD dwRes = ::getaddrinfo(MBSFromTCS(strDomain).c_str(), std::to_string(wPort).c_str(), &hints, &result);
+			if (dwRes != 0)
+				throw core::exception_format(TEXT("Get IP Address Failed, %d"), core::GetLastError());
+
+			for (ptr = result; ptr != NULL; ptr = ptr->ai_next)
+			{
+				if (ptr->ai_family != AF_INET)
+					continue;
+
+				sockaddr_ipv4 = (sockaddr_in*)ptr->ai_addr;
+				out = core::IPAddressFromA(*(DWORD*)&sockaddr_ipv4->sin_addr);
+			}
+
+			::freeaddrinfo(result);
+			return true;
+		}
+		catch (std::exception& e)
+		{
+			Log_Error("%s", e.what());
+			return false;
+		}
 	}
 }
