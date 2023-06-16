@@ -4,9 +4,10 @@
 #include "Information.h"
 #undef TEXT
 #undef GetTimeZoneInformation
-#include <Windows.h>
 #include <WS2tcpip.h>
+#include <Windows.h>
 #pragma comment(lib, "version.lib")
+#pragma comment(lib, "ws2_32.lib")
 
 namespace core
 {
