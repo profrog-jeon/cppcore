@@ -464,6 +464,28 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
+	std::tstring MakeRelativePath(std::tstring strFullDirectory, std::tstring strDefaultDirectory)
+	{
+		std::tstring strDest = MakeFormalPath(strFullDirectory);
+		std::tstring strPrev = MakeFormalPath(strDefaultDirectory);
+
+		if (strDest.length() > strPrev.length())
+		{
+			strDest = strDest.substr(strPrev.length());
+		}
+		else
+		{
+			strDest = TEXT("");
+		}
+
+		std::tstring strTemp = TEXT("/");
+		while (strDest.at(0) == strTemp.at(0))
+			strDest = strDest.substr(1);
+
+		return strDest;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
 	static inline std::tstring& MakeAbsolutePathWorker(std::tstring strParentPath, std::tstring& strRelativePath)
 	{
 		Trim(strRelativePath);

@@ -57,7 +57,9 @@ namespace core
 	ECODE ReadFileContents(std::wstring strFilePath, std::wstring& strContents, std::string strKey, E_SYM_CIPHER_TYPE* pOutType = NULL, E_SYM_CIPHER_MODE* pOutMode = NULL);
 	ECODE WriteFileContents(std::string strFilePath, const std::string strContents, E_SYM_CIPHER_TYPE nType, E_SYM_CIPHER_MODE nMode, std::string strKey);
 	ECODE WriteFileContents(std::wstring strFilePath, const std::wstring strContents, E_SYM_CIPHER_TYPE nType, E_SYM_CIPHER_MODE nMode, std::string strKey);
-
+	
+	std::tstring MakeRelativePath(std::tstring strFullDirectory, std::tstring strDefaultDirectory);
+	
 	std::string&  MakeAbsolutePath(std::string strParentPath, std::string& strRelativePath);
 	std::wstring& MakeAbsolutePath(std::wstring strParentPath, std::wstring& strRelativePath);
 	std::string   MakeAbsolutePath(LPCSTR pszParentPath, LPCSTR pszRelativePath);
