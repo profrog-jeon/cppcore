@@ -11,7 +11,7 @@ namespace core
 
 	public:
 		CSyncTCPSocket(void);
-		~CSyncTCPSocket();
+		virtual ~CSyncTCPSocket();
 
 		ECODE Assign(SOCKET hAcceptedSocket);
 		ECODE Connect(const char* pszIP, WORD wPort, DWORD dwTimeOut);
