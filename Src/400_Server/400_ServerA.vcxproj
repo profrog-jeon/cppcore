@@ -49,6 +49,7 @@
     <ClCompile Include="Packetizer.cpp" />
     <ClCompile Include="SocketCommon.cpp" />
     <ClCompile Include="SocketForProtocol.cpp" />
+    <ClCompile Include="SocketForProtocolT.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='DebugMT|Win32'">Create</PrecompiledHeader>

@@ -42,7 +42,11 @@ namespace core
 		return EC_SUCCESS;
 	}
 
-	ECODE Unpacketize(const std::vector<BYTE>& inPacket, ST_PACKET_HEADER* pHeader)
+#ifdef UNICODE
+	ECODE UnpacketizeW(const std::vector<BYTE>& inPacket, ST_PACKET_HEADER* pHeader)
+#else
+	ECODE UnpacketizeA(const std::vector<BYTE>& inPacket, ST_PACKET_HEADER* pHeader)
+#endif
 	{
 		ST_PACKET_METADATA metaPacket;
 

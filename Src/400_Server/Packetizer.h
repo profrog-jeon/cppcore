@@ -11,7 +11,10 @@ namespace core
 		DWORD dwLen;
 	};
 
-	ECODE Packetize(DWORD dwPacketID, IFormatterObject* pPacket, std::vector<BYTE>& outPacket);
-	ECODE Unpacketize(const std::vector<BYTE>& inPacket, ST_PACKET_HEADER* pHeader);
-	ECODE Unpacketize(const std::vector<BYTE>& inPacket, DWORD dwPacketID, IFormatterObject* pOutPacket);
+	ECODE Packetize(DWORD dwPacketID, IFormatterObjectA* pPacket, std::vector<BYTE>& outPacket);
+	ECODE Packetize(DWORD dwPacketID, IFormatterObjectW* pPacket, std::vector<BYTE>& outPacket);
+	ECODE UnpacketizeA(const std::vector<BYTE>& inPacket, ST_PACKET_HEADER* pHeader);
+	ECODE UnpacketizeW(const std::vector<BYTE>& inPacket, ST_PACKET_HEADER* pHeader);
+	ECODE Unpacketize(const std::vector<BYTE>& inPacket, DWORD dwPacketID, IFormatterObjectA* pOutPacket);
+	ECODE Unpacketize(const std::vector<BYTE>& inPacket, DWORD dwPacketID, IFormatterObjectW* pOutPacket);
 }

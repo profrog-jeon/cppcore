@@ -32,10 +32,13 @@ namespace core
 		virtual ~CSocketForProtocol(void);
 
 		virtual ECODE Connect(std::string strIP, WORD wPort, DWORD dwTimeOut);
+		virtual ECODE Connect(std::wstring strIP, WORD wPort, DWORD dwTimeOut);
 		virtual void Close(void);
 
-		virtual ECODE SendPacket(DWORD dwID, core::IFormatterObject* pPacket, DWORD dwTimeOut = 60000);
-		virtual ECODE RecvPacket(DWORD dwID, core::IFormatterObject* pPacket, DWORD dwTimeOut = 60000);
+		virtual ECODE SendPacket(DWORD dwID, core::IFormatterObjectA* pPacket, DWORD dwTimeOut = 60000);
+		virtual ECODE SendPacket(DWORD dwID, core::IFormatterObjectW* pPacket, DWORD dwTimeOut = 60000);
+		virtual ECODE RecvPacket(DWORD dwID, core::IFormatterObjectA* pPacket, DWORD dwTimeOut = 60000);
+		virtual ECODE RecvPacket(DWORD dwID, core::IFormatterObjectW* pPacket, DWORD dwTimeOut = 60000);
 
 		template<typename T>
 		ECODE SendPacket(T* pPacket, DWORD dwTimeOut = 60000)
