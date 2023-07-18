@@ -292,7 +292,7 @@ namespace core
 		}
 
 		if( pOutExitCode )
-			*pOutExitCode = (signed char)(dwExitCode & 0x000000FF);
+			*pOutExitCode = (int)dwExitCode;// (signed char)(dwExitCode & 0x000000FF);
 
 		return WAIT_OBJECT_0_;
 	}
