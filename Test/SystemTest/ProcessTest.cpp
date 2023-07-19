@@ -219,6 +219,20 @@ void TestExitCode(int nTryExitCode, int nExpectExitCode)
 //////////////////////////////////////////////////////////////////////////
 TEST(SystemTest, CreateProcessTest_ExceptionalExitCodeTest)
 {
+#ifdef _MSC_VER
+	TestExitCode(127, 127);
+	TestExitCode(128, 128);
+	TestExitCode(255, 255);
+	TestExitCode(-1, -1);
+	TestExitCode(256, 256);
+	TestExitCode(0x0000FF00, 0x0000FF00);
+	TestExitCode(0x00FF0000, 0x00FF0000);
+	TestExitCode(0x7FFFFFFE, 0x7FFFFFFE);
+	TestExitCode(0x7FFFFFFF, 0x7FFFFFFF);
+	TestExitCode(0x80000000, 0);	// do-not use exit-code over 0x80000000
+	TestExitCode(0xc0000005, 0);	// do-not use exit-code over 0x80000000
+	TestExitCode(0xFF000000, 0);	// do-not use exit-code over 0x80000000
+#else
 	TestExitCode(127, 127);
 	TestExitCode(128, -128);
 	TestExitCode(255, -1);
@@ -231,4 +245,5 @@ TEST(SystemTest, CreateProcessTest_ExceptionalExitCodeTest)
 	//TestExitCode(0x80000000, 0);	// do-not use exit-code over 0x80000000
 	//TestExitCode(0xc0000005, 5);	// do-not use exit-code over 0x80000000
 	//TestExitCode(0xFF000000, 0);	// do-not use exit-code over 0x80000000
+#endif
 }
