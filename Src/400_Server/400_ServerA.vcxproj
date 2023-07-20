@@ -36,9 +36,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="400_Server.h" />
+    <ClInclude Include="BinProtocol.h" />
+    <ClInclude Include="JsonProtocol.h" />
     <ClInclude Include="Packetizer.h" />
+    <ClInclude Include="ProtocolSuper.h" />
     <ClInclude Include="SocketCommon.h" />
-    <ClInclude Include="SocketForProtocol.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="SyncConnection.h" />
     <ClInclude Include="SyncServer.h" />
@@ -46,10 +48,11 @@
     <ClInclude Include="SyncUDPSocket.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BinProtocol.cpp" />
+    <ClCompile Include="JsonProtocol.cpp" />
     <ClCompile Include="Packetizer.cpp" />
+    <ClCompile Include="ProtocolSuper.cpp" />
     <ClCompile Include="SocketCommon.cpp" />
-    <ClCompile Include="SocketForProtocol.cpp" />
-    <ClCompile Include="SocketForProtocolT.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='DebugMT|Win32'">Create</PrecompiledHeader>

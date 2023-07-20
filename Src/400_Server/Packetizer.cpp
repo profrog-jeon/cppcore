@@ -1,21 +1,32 @@
 #include "stdafx.h"
 #include "Packetizer.h"
 
+#ifdef UNICODE
+#define ST_BIN_PACKET_METADATA		ST_BIN_PACKET_METADATAW
+#define ST_STRING_PACKET_METADATA	ST_STRING_PACKET_METADATAW
+#else
+#define ST_BIN_PACKET_METADATA		ST_BIN_PACKET_METADATAA
+#define ST_STRING_PACKET_METADATA	ST_STRING_PACKET_METADATAA
+#endif
+
 namespace core
 {
-	struct ST_PACKET_METADATA : public IFormatterObject
+	///////////////////////////////////////////////////////////////////////////////////
+	// BIN PACKETIZER
+	///////////////////////////////////////////////////////////////////////////////////
+	static struct ST_BIN_PACKET_METADATA : public IFormatterObject
 	{
 		ST_PACKET_HEADER header;
 		IFormatterObject* pPacket;
 
-		ST_PACKET_METADATA(void)
+		ST_BIN_PACKET_METADATA(void)
 			: pPacket(nullptr)
 		{}
 
 		void OnSync(IFormatter& formatter)
 		{
 			formatter
-				+ sPair(TEXT("Type"), header.dwType)
+				+ sPair(TEXT("ID"), header.dwID)
 				+ sPair(TEXT("Len"), header.dwLen)
 				;
 
@@ -26,7 +37,7 @@ namespace core
 
 	ECODE Packetize(DWORD dwPacketID, IFormatterObject* pPacket, std::vector<BYTE>& outPacket)
 	{
-		ST_PACKET_METADATA metaPacket;
+		ST_BIN_PACKET_METADATA metaPacket;
 		metaPacket.pPacket = pPacket;
 
 		if (!core::UTF8::WriteBinToPacket(&metaPacket, outPacket))
@@ -48,7 +59,7 @@ namespace core
 	ECODE UnpacketizeA(const std::vector<BYTE>& inPacket, ST_PACKET_HEADER* pHeader)
 #endif
 	{
-		ST_PACKET_METADATA metaPacket;
+		ST_BIN_PACKET_METADATA metaPacket;
 
 		if (!core::UTF8::ReadBinFromPacket(&metaPacket, inPacket))
 			return EC_READ_FAILURE;
@@ -59,13 +70,13 @@ namespace core
 
 	ECODE Unpacketize(const std::vector<BYTE>& inPacket, DWORD dwPacketID, IFormatterObject* pOutPacket)
 	{
-		ST_PACKET_METADATA metaPacket;
+		ST_BIN_PACKET_METADATA metaPacket;
 		metaPacket.pPacket = pOutPacket;
 
 		if (!core::UTF8::ReadBinFromPacket(&metaPacket, inPacket))
 			return EC_READ_FAILURE;
 
-		if (dwPacketID != metaPacket.header.dwType)
+		if (dwPacketID != metaPacket.header.dwID)
 			return EC_INVALID_DATA;
 
 		return EC_SUCCESS;

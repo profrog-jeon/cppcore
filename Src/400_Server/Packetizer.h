@@ -7,10 +7,11 @@ namespace core
 {
 	struct ST_PACKET_HEADER
 	{
-		DWORD dwType;
+		DWORD dwID;
 		DWORD dwLen;
 	};
 
+	// BIN type
 	ECODE Packetize(DWORD dwPacketID, IFormatterObjectA* pPacket, std::vector<BYTE>& outPacket);
 	ECODE Packetize(DWORD dwPacketID, IFormatterObjectW* pPacket, std::vector<BYTE>& outPacket);
 	ECODE UnpacketizeA(const std::vector<BYTE>& inPacket, ST_PACKET_HEADER* pHeader);

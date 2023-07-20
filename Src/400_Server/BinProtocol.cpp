@@ -1,25 +1,20 @@
 #include "stdafx.h"
-#include "SocketForProtocol.h"
+#include "BinProtocol.h"
 #include "Packetizer.h"
 
 namespace core
 {
-	ECODE CSocketForProtocol::Connect(std::tstring strIP, WORD wPort, DWORD dwTimeOut)
-	{
-		return m_pSocket->Connect(MBSFromTCS(strIP).c_str(), wPort, dwTimeOut);
-	}
-
-	ECODE CSocketForProtocol::SendPacket(DWORD dwID, core::IFormatterObject* pPacket, DWORD dwTimeOut)
+	ECODE CBinProtocol::SendPacket(DWORD dwID, core::IFormatterObject* pPacket, DWORD dwTimeOut)
 	{
 		ECODE nRet = EC_SUCCESS;
 		try
 		{
-			std::vector<BYTE> vecPacket;
-			nRet = Packetize(dwID, pPacket, vecPacket);
+			std::vector<BYTE> vecBody;
+			nRet = Packetize(dwID, pPacket, vecBody);
 			if (EC_SUCCESS != nRet)
 				throw exception_format(TEXT("Packetize failure, %d"), nRet);
 
-			nRet = m_pSocket->Send(vecPacket.data(), vecPacket.size(), dwTimeOut);
+			nRet = m_pSocket->Send(vecBody.data(), vecBody.size(), dwTimeOut);
 			if (EC_SUCCESS != nRet)
 				throw exception_format(TEXT("Packet sending failure, %d"), nRet);
 		}
@@ -32,7 +27,7 @@ namespace core
 		return EC_SUCCESS;
 	}
 
-	ECODE CSocketForProtocol::RecvPacket(DWORD dwID, core::IFormatterObject* pPacket, DWORD dwTimeOut)
+	ECODE CBinProtocol::RecvPacket(DWORD dwID, core::IFormatterObject* pPacket, DWORD dwTimeOut)
 	{
 		ECODE nRet = EC_SUCCESS;
 		try
@@ -60,5 +55,4 @@ namespace core
 
 		return EC_SUCCESS;
 	}
-
 }

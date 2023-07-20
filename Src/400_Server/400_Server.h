@@ -5,4 +5,5 @@
 #include "SyncTCPSocket.h"
 #include "SyncUDPSocket.h"
 #include "Packetizer.h"
-#include "SocketForProtocol.h"
+#include "BinProtocol.h"
+#include "JsonProtocol.h"

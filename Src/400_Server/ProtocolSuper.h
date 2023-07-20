@@ -1,5 +1,6 @@
 #pragma once
 
+#include "SyncTCPSocket.h"
 #include "Packetizer.h"
 
 namespace core
@@ -23,22 +24,20 @@ namespace core
 	//			}
 	//		};
 	/////////////////////////////////////////////////////////////////////
-	class CSocketForProtocol
+
+	class CProtocolSuper
 	{
+	protected:
 		core::CSyncTCPSocket* m_pSocket;
 
 	public:
-		CSocketForProtocol(core::CSyncTCPSocket* pSocket);
-		virtual ~CSocketForProtocol(void);
+		CProtocolSuper(core::CSyncTCPSocket* pSocket);
+		virtual ~CProtocolSuper(void);
 
 		virtual ECODE Connect(std::string strIP, WORD wPort, DWORD dwTimeOut);
-		virtual ECODE Connect(std::wstring strIP, WORD wPort, DWORD dwTimeOut);
 		virtual void Close(void);
 
-		virtual ECODE SendPacket(DWORD dwID, core::IFormatterObjectA* pPacket, DWORD dwTimeOut = 60000);
-		virtual ECODE SendPacket(DWORD dwID, core::IFormatterObjectW* pPacket, DWORD dwTimeOut = 60000);
-		virtual ECODE RecvPacket(DWORD dwID, core::IFormatterObjectA* pPacket, DWORD dwTimeOut = 60000);
-		virtual ECODE RecvPacket(DWORD dwID, core::IFormatterObjectW* pPacket, DWORD dwTimeOut = 60000);
+		virtual ECODE PeekHeader(ST_PACKET_HEADER& header, DWORD dwTimeOut = 60000);
 
 		template<typename T>
 		ECODE SendPacket(T* pPacket, DWORD dwTimeOut = 60000)
@@ -51,5 +50,11 @@ namespace core
 		{
 			return RecvPacket(T::ID, pPacket, dwTimeOut);
 		}
+
+	protected:
+		virtual ECODE SendPacket(DWORD dwID, core::IFormatterObjectA* pPacket, DWORD dwTimeOut) = 0;
+		virtual ECODE SendPacket(DWORD dwID, core::IFormatterObjectW* pPacket, DWORD dwTimeOut) = 0;
+		virtual ECODE RecvPacket(DWORD dwID, core::IFormatterObjectA* pPacket, DWORD dwTimeOut) = 0;
+		virtual ECODE RecvPacket(DWORD dwID, core::IFormatterObjectW* pPacket, DWORD dwTimeOut) = 0;
 	};
 }
