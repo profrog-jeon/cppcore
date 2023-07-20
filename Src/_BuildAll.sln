@@ -27,6 +27,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "400_ServerA", "400_Server\4
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "400_ServerW", "400_Server\400_ServerW.vcxproj", "{68C8C2E6-D1F1-41AA-862F-5997FD33A492}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "999_Cppcore", "999_Cppcore\999_Cppcore.vcxproj", "{815A047C-A1A7-49A4-9992-40627EC6A776}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -231,6 +233,22 @@ Global
 		{68C8C2E6-D1F1-41AA-862F-5997FD33A492}.ReleaseMT|Win32.Build.0 = ReleaseMT|Win32
 		{68C8C2E6-D1F1-41AA-862F-5997FD33A492}.ReleaseMT|x64.ActiveCfg = ReleaseMT|x64
 		{68C8C2E6-D1F1-41AA-862F-5997FD33A492}.ReleaseMT|x64.Build.0 = ReleaseMT|x64
+		{815A047C-A1A7-49A4-9992-40627EC6A776}.Debug|Win32.ActiveCfg = Debug|Win32
+		{815A047C-A1A7-49A4-9992-40627EC6A776}.Debug|Win32.Build.0 = Debug|Win32
+		{815A047C-A1A7-49A4-9992-40627EC6A776}.Debug|x64.ActiveCfg = Debug|x64
+		{815A047C-A1A7-49A4-9992-40627EC6A776}.Debug|x64.Build.0 = Debug|x64
+		{815A047C-A1A7-49A4-9992-40627EC6A776}.DebugMT|Win32.ActiveCfg = DebugMT|Win32
+		{815A047C-A1A7-49A4-9992-40627EC6A776}.DebugMT|Win32.Build.0 = DebugMT|Win32
+		{815A047C-A1A7-49A4-9992-40627EC6A776}.DebugMT|x64.ActiveCfg = DebugMT|x64
+		{815A047C-A1A7-49A4-9992-40627EC6A776}.DebugMT|x64.Build.0 = DebugMT|x64
+		{815A047C-A1A7-49A4-9992-40627EC6A776}.Release|Win32.ActiveCfg = Release|Win32
+		{815A047C-A1A7-49A4-9992-40627EC6A776}.Release|Win32.Build.0 = Release|Win32
+		{815A047C-A1A7-49A4-9992-40627EC6A776}.Release|x64.ActiveCfg = Release|x64
+		{815A047C-A1A7-49A4-9992-40627EC6A776}.Release|x64.Build.0 = Release|x64
+		{815A047C-A1A7-49A4-9992-40627EC6A776}.ReleaseMT|Win32.ActiveCfg = ReleaseMT|Win32
+		{815A047C-A1A7-49A4-9992-40627EC6A776}.ReleaseMT|Win32.Build.0 = ReleaseMT|Win32
+		{815A047C-A1A7-49A4-9992-40627EC6A776}.ReleaseMT|x64.ActiveCfg = ReleaseMT|x64
+		{815A047C-A1A7-49A4-9992-40627EC6A776}.ReleaseMT|x64.Build.0 = ReleaseMT|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
