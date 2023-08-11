@@ -190,7 +190,7 @@ namespace core
 #else
 			if( !::CreateProcessA(NULL, (LPTSTR)strCmdLine.c_str(), NULL, NULL, TRUE, 0, NULL, pszDirectory, &stStartupInfo, &stProcessInfo) )
 #endif
-				throw exception_format(TEXT("CreateProcess calling failure, CmdLine:%s"), strCmdLine.c_str());
+				throw exception_format(TEXT("CreateProcess calling failure, CmdLine:%s, %d"), strCmdLine.c_str(), GetLastError());
 
 			Log_Info("Finished calling CreateProcess.");
 
@@ -204,7 +204,7 @@ namespace core
 		}
 		catch (std::exception& e)
 		{
-			Log_Debug("%s", e.what());
+			Log_Error("%s", e.what());
 			Log_Info("--------------------------");
 			return NULL;
 		}
