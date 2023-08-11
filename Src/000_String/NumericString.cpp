@@ -382,4 +382,75 @@ namespace core
 		size_t tPos = 0;
 		return NaturalNumFrom<DWORD>(strNum.c_str(), strNum.length(), nBase, tPos);
 	}
+
+
+	//////////////////////////////////////////////////////////////////////////
+	static TCHAR g_cHexCharTable[0x10] = { '0', '1', '2', '3', '4', '5', '6', '7',
+		'8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
+
+	//////////////////////////////////////////////////////////////////////////
+	std::tstring StringFromHex(const unsigned char* pData, size_t tDataSize)
+	{
+		std::tstring strResult;
+		strResult.resize(tDataSize * 2);
+		TCHAR* pDest = (TCHAR*)strResult.c_str();
+
+		size_t i;
+		for (i = 0; i < tDataSize; i++)
+		{
+			*(pDest++) = g_cHexCharTable[(pData[i] >> 4) & 0x0F];
+			*(pDest++) = g_cHexCharTable[(pData[i] >> 0) & 0x0F];
+		}
+
+		return strResult;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	std::tstring StringFromHex(const unsigned int* pData, size_t tDataSize)
+	{
+		std::tstring strResult;
+		strResult.resize(tDataSize * 8);
+		TCHAR* pDest = (TCHAR*)strResult.c_str();
+
+		size_t i;
+		for (i = 0; i < tDataSize; i++)
+		{
+			*(pDest++) = g_cHexCharTable[(pData[i] >> 28) & 0x0F];
+			*(pDest++) = g_cHexCharTable[(pData[i] >> 24) & 0x0F];
+			*(pDest++) = g_cHexCharTable[(pData[i] >> 20) & 0x0F];
+			*(pDest++) = g_cHexCharTable[(pData[i] >> 16) & 0x0F];
+			*(pDest++) = g_cHexCharTable[(pData[i] >> 12) & 0x0F];
+			*(pDest++) = g_cHexCharTable[(pData[i] >> 8) & 0x0F];
+			*(pDest++) = g_cHexCharTable[(pData[i] >> 4) & 0x0F];
+			*(pDest++) = g_cHexCharTable[(pData[i] >> 0) & 0x0F];
+		}
+
+		return strResult;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	ECODE HexFromString(LPBYTE pDest, size_t tDestSize, std::tstring strContext)
+	{
+		size_t i;
+		for (i = 0; (i * 2 + 1) < strContext.length() && i < tDestSize; i++)
+		{
+			DWORD cFront = strContext.at(i * 2);
+			DWORD cBack = strContext.at(i * 2 + 1);
+			if (cFront > 0xFF)
+				return EC_INVALID_DATA;
+			if (cBack > 0xFF)
+				return EC_INVALID_DATA;
+
+			BYTE btFrontValue = g_cDigitTable[cFront];
+			BYTE btBackValue = g_cDigitTable[cBack];
+			if (btFrontValue == 0xFF)
+				return EC_INVALID_DATA;
+			if (btBackValue == 0xFF)
+				return EC_INVALID_DATA;
+
+			pDest[i] = (btFrontValue << 4) | (btBackValue << 0);
+		}
+
+		return EC_SUCCESS;
+	}
 }

@@ -5,9 +5,11 @@
 #ifdef UNICODE
 #define StringFrom		StringFromW
 #define HexFrom			HexFromW
+#define StringFromHex	StringFromHexW
 #else
 #define StringFrom		StringFromA
 #define HexFrom			HexFromA
+#define StringFromHex	StringFromHexA
 #endif
 
 namespace core
@@ -103,4 +105,12 @@ namespace core
 
 	DWORD		DWORDFromBase(std::string strNum, int nBase);
 	DWORD		DWORDFromBase(std::wstring strNum, int nBase);
+
+	std::string StringFromHexA(const unsigned char* pData, size_t tDataSize);
+	std::string StringFromHexA(const unsigned int* pData, size_t tDataSize);
+	std::wstring StringFromHexW(const unsigned char* pData, size_t tDataSize);
+	std::wstring StringFromHexW(const unsigned int* pData, size_t tDataSize);
+	ECODE		HexFromString(LPBYTE pDest, size_t tDestSize, std::string strContext);
+	ECODE		HexFromString(LPBYTE pDest, size_t tDestSize, std::wstring strContext);
+
 }
