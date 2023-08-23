@@ -7,12 +7,18 @@
 	#ifndef _T
 	#define _T(x) L##x
 	#endif
+	#ifndef TMAIN
+	#define TMAIN wmain
+	#endif
 #else
 	#ifndef TEXT
 	#define TEXT(x) x
 	#endif
 	#ifndef _T
 	#define _T(x) x
+	#endif
+	#ifndef TMAIN
+	#define TMAIN main
 	#endif
 #endif
 
