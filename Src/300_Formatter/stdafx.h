@@ -31,10 +31,12 @@ using namespace core;
 #define CChunkVec	std::vector<sChunkW>
 #define CTokenVec	std::vector<sTokenW>
 #define CJSONDeserializer	CJSONDeserializerW
+#define CUBJSONDeserializer	CUBJSONDeserializerW
 #else
 #define sToken		sTokenA				
 #define sChunk		sChunkA				
 #define CTokenVec	std::vector<sTokenA>
 #define CChunkVec	std::vector<sChunkA>
 #define CJSONDeserializer	CJSONDeserializerA
+#define CUBJSONDeserializer	CUBJSONDeserializerA
 #endif

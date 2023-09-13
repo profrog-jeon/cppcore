@@ -74,6 +74,9 @@
     <ClCompile Include="StringReader.cpp" />
     <ClCompile Include="StringWriter.cpp" />
     <ClCompile Include="TCHARFormatter.cpp" />
+    <ClCompile Include="UBJSONDeserializer.cpp" />
+    <ClCompile Include="UBJSONFunctions.cpp" />
+    <ClCompile Include="UBJSONSerializer.cpp" />
     <ClCompile Include="UTF8FileReader.cpp" />
     <ClCompile Include="UTF8FileWritter.cpp" />
     <ClCompile Include="UTF8Formatter.cpp" />
@@ -124,6 +127,9 @@
     <ClInclude Include="StringReader.h" />
     <ClInclude Include="StringWriter.h" />
     <ClInclude Include="TCHARFormatter.h" />
+    <ClInclude Include="UBJSONDeserializer.h" />
+    <ClInclude Include="UBJSONFunctions.h" />
+    <ClInclude Include="UBJSONSerializer.h" />
     <ClInclude Include="UTF8FileReader.h" />
     <ClInclude Include="UTF8FileWritter.h" />
     <ClInclude Include="UTF8Formatter.h" />

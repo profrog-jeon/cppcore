@@ -108,9 +108,6 @@
     <ClCompile Include="UTF8FileWritter.cpp">
       <Filter>Channel</Filter>
     </ClCompile>
-    <ClCompile Include="UTF8Formatter.cpp">
-      <Filter>Channel</Filter>
-    </ClCompile>
     <ClCompile Include="UTF8StringReader.cpp">
       <Filter>Channel</Filter>
     </ClCompile>
@@ -124,6 +121,16 @@
     <ClCompile Include="Interface.cpp" />
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="TCHARFormatter.cpp" />
+    <ClCompile Include="UBJSONDeserializer.cpp">
+      <Filter>Formatter</Filter>
+    </ClCompile>
+    <ClCompile Include="UBJSONFunctions.cpp">
+      <Filter>Formatter</Filter>
+    </ClCompile>
+    <ClCompile Include="UBJSONSerializer.cpp">
+      <Filter>Formatter</Filter>
+    </ClCompile>
+    <ClCompile Include="UTF8Formatter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CSVDeserializer.h">
@@ -225,9 +232,6 @@
     <ClInclude Include="UTF8FileWritter.h">
       <Filter>Channel</Filter>
     </ClInclude>
-    <ClInclude Include="UTF8Formatter.h">
-      <Filter>Channel</Filter>
-    </ClInclude>
     <ClInclude Include="UTF8StringReader.h">
       <Filter>Channel</Filter>
     </ClInclude>
@@ -247,5 +251,15 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="TCHARFormatter.h" />
     <ClInclude Include="ValuePtrHolder.h" />
+    <ClInclude Include="UBJSONDeserializer.h">
+      <Filter>Formatter</Filter>
+    </ClInclude>
+    <ClInclude Include="UBJSONFunctions.h">
+      <Filter>Formatter</Filter>
+    </ClInclude>
+    <ClInclude Include="UBJSONSerializer.h">
+      <Filter>Formatter</Filter>
+    </ClInclude>
+    <ClInclude Include="UTF8Formatter.h" />
   </ItemGroup>
 </Project>

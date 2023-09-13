@@ -25,6 +25,8 @@
 #include "ValueArraySerializer.h"
 #include "PacketSerializer.h"
 #include "PacketDeserializer.h"
+#include "UBJSONSerializer.h"
+#include "UBJSONDeserializer.h"
 
 namespace core
 {
@@ -433,6 +435,26 @@ namespace core
 	{
 		fmt_internal::CBytesReader channel(vecPacket.data(), vecPacket.size());
 		fmt_internal::CJSONDeserializer formatter(channel);
+		formatter.Synchronize(pObject);
+		std::tstring strErrMsg;
+		return true;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	bool WriteUBJsonToPacket(const IFormatterObject* pObject, std::vector<BYTE>& vecPacket)
+	{
+		fmt_internal::CBytesWriter channel(vecPacket);
+		fmt_internal::CUBJSONSerializer formatter(channel);
+		formatter.Synchronize(const_cast<IFormatterObject*>(pObject));
+		std::tstring strErrMsg;
+		return formatter.CheckValidity(&strErrMsg);
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	bool ReadUBJsonFromPacket(IFormatterObject* pObject, const std::vector<BYTE>& vecPacket)
+	{
+		fmt_internal::CBytesReader channel(vecPacket.data(), vecPacket.size());
+		fmt_internal::CUBJSONDeserializer formatter(channel);
 		formatter.Synchronize(pObject);
 		std::tstring strErrMsg;
 		return true;
