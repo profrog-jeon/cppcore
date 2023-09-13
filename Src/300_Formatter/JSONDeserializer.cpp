@@ -435,61 +435,9 @@ namespace fmt_internal
 		return *this;
 	}
 
-	inline void MakeBinaryFromJsonChunk(std::vector<BYTE>* pvecData, sChunk& jsonChunk)
-	{
-		RestoreFromJsonString(jsonChunk.vecToken[0], *pvecData);
-	}
-
 	core::IFormatterT& CJSONDeserializer::Sync(std::tstring& strKey, std::vector<BYTE>* pvecData)
 	{
-		if (!m_GroupingStack.empty())
-		{
-			sGroupingInfo& topGroupingInfo = m_GroupingStack.top();
-			if (topGroupingInfo.nType == GT_ARRAY)
-			{
-				if (topGroupingInfo.tReadPos < topGroupingInfo.vecChunk.size())
-				{
-					sChunk& jsonChunk = topGroupingInfo.vecChunk[topGroupingInfo.tReadPos++];
-					MakeBinaryFromJsonChunk(pvecData, jsonChunk);
-				}
-				return *this;
-			}
-			if (topGroupingInfo.nType == GT_DICTIONARY)
-			{
-				if (topGroupingInfo.tReadPos < topGroupingInfo.vecChunk.size())
-				{
-					sChunk& jsonChunk = topGroupingInfo.vecChunk[topGroupingInfo.tReadPos++];
-					strKey = jsonChunk.strKey;
-					MakeBinaryFromJsonChunk(pvecData, jsonChunk);
-				}
-				return *this;
-			}
-			if (topGroupingInfo.nType == GT_OBJECT)
-			{
-				size_t i;
-				for (i = 0; i < topGroupingInfo.vecChunk.size(); i++)
-				{
-					sChunk& jsonChunk = topGroupingInfo.vecChunk[i];
-					if (jsonChunk.strKey != strKey)
-						continue;
-
-					strKey = jsonChunk.strKey;
-					MakeBinaryFromJsonChunk(pvecData, jsonChunk);
-					break;
-				}
-				return *this;
-			}
-
-			size_t i;
-			for (i = 0; i < topGroupingInfo.vecChunk.size(); i++)
-			{
-				if (topGroupingInfo.vecChunk[i].strKey != strKey)
-					continue;
-
-				MakeBinaryFromJsonChunk(pvecData, topGroupingInfo.vecChunk[i]);
-			}
-		}
-
+		// ignored, use UBJSON instead
 		return *this;
 	}
 }

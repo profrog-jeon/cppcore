@@ -19,11 +19,6 @@ namespace fmt_internal
 	std::string RestoreFromJsonString(const std::string& strValue);
 	std::wstring RestoreFromJsonString(const std::wstring& strValue);
 
-	void ConvertToJsonString(const std::vector<BYTE>& vecValue, std::string& outJsonStr);
-	void ConvertToJsonString(const std::vector<BYTE>& vecValue, std::wstring& outJsonStr);
-	void RestoreFromJsonString(const std::string& strValue, std::vector<BYTE>& outValue);
-	void RestoreFromJsonString(const std::wstring& strValue, std::vector<BYTE>& outValue);
-
 	//////////////////////////////////////////////////////////////////////////
 	size_t Scan(const char* pszContext, std::vector<std::string>& vecToken);
 	size_t Scan(const wchar_t* pszContext, std::vector<std::wstring>& vecToken);

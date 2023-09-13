@@ -24,14 +24,14 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	// C -> JSON string
 	struct sSpecialCharPosInfo { int nIndex; size_t tPos; size_t tEndPos; size_t tLen; };
 	const TCHAR* g_pszOrgSpecialCharArr[] = { TEXT("\""),   TEXT("\\"),   TEXT("/"),   TEXT("\b"),  TEXT("\f"),  TEXT("\n"),  TEXT("\r"),  TEXT("\t") };
 	const TCHAR* g_pszJsonSpecialCharArr[] = { TEXT("\\\""), TEXT("\\\\"), TEXT("\\/"), TEXT("\\b"), TEXT("\\f"), TEXT("\\n"), TEXT("\\r"), TEXT("\\t") };
 	const size_t g_tSpecialCharCount = sizeof(g_pszOrgSpecialCharArr) / sizeof(g_pszOrgSpecialCharArr[0]);
 
 	//////////////////////////////////////////////////////////////////////////
-	inline std::tstring ConvertToJsonStringWorker(const std::tstring& strValue)
+	// C -> JSON string
+	std::tstring ConvertToJsonString(const std::tstring& strValue)
 	{
 		std::map<size_t, sSpecialCharPosInfo> mapSpecialCharPos;
 
@@ -98,7 +98,7 @@ namespace fmt_internal
 
 	//////////////////////////////////////////////////////////////////////////
 	// JSON -> C string
-	inline std::tstring RestoreFromJsonStringWorker(const std::tstring& strValue)
+	std::tstring RestoreFromJsonString(const std::tstring& strValue)
 	{
 		// Checking outter quotation marker.
 		if (strValue.length() < 2 ||
@@ -169,70 +169,6 @@ namespace fmt_internal
 			TEXT('\"') == strResult[strResult.length() - 1])
 			strResult = strResult.substr(1, strResult.length() - 2);
 		return strResult;
-	}
-
-	//////////////////////////////////////////////////////////////////////////
-	std::tstring ConvertToJsonString(const std::tstring& strValue)
-	{
-		return ConvertToJsonStringWorker(strValue.data());
-	}
-
-	//////////////////////////////////////////////////////////////////////////
-	std::tstring RestoreFromJsonString(const std::tstring& strValue)
-	{
-		return RestoreFromJsonStringWorker(strValue);
-	}
-
-	//////////////////////////////////////////////////////////////////////////
-	static const size_t g_tTCharSize = sizeof(TCHAR);
-	void ConvertToJsonString(const std::vector<BYTE>& vecValue, std::tstring& outJsonStr)
-	{
-		if (vecValue.empty())
-		{
-			outJsonStr = TEXT("null");
-			return;
-		}
-
-		const size_t tContentSize = 1 + vecValue.size();	// H + C
-		const size_t tLength = (((tContentSize + 1) / g_tTCharSize) * g_tTCharSize) / g_tTCharSize;
-
-		std::tstring strContext;
-		strContext.resize(tLength);
-		{
-			char* pszContent = (char*)strContext.data();
-			pszContent[0] = vecValue.size() & 0x01 ? 'o' : 'e';
-			memcpy(&pszContent[1], vecValue.data(), vecValue.size());
-		}
-		
-		outJsonStr = ConvertToJsonStringWorker(strContext);
-	}
-
-	//////////////////////////////////////////////////////////////////////////
-	void RestoreFromJsonString(const std::tstring& strValue, std::vector<BYTE>& outValue)
-	{
-		outValue.clear();
-		if (TEXT("null") == strValue)
-			return;
-
-		std::tstring strContext = RestoreFromJsonStringWorker(strValue);
-		if (strContext.empty())
-			return;
-
-		const size_t tLength = strContext.length();
-		const char* pszContents = (const char*)strContext.data();
-		size_t tContentsSize = tLength * g_tTCharSize;
-		if ('o' == pszContents[0])
-			tContentsSize -= 1;
-		else if ('e' == pszContents[0])
-			tContentsSize -= 0;
-		else
-		{
-			Log_Error(TEXT("INVALID JSON Binary, header is not `o` nor `e`"));
-			return;
-		}
-
-		outValue.resize(tContentsSize);
-		memcpy((void*)outValue.data(), pszContents + 1, tContentsSize);
 	}
 
 	//////////////////////////////////////////////////////////////////////////
