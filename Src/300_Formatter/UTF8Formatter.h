@@ -116,17 +116,6 @@ namespace core
 		bool ReadValueArrayFromString(IFormatterObjectA* pObject, std::string strSep, std::string strQuo, std::string strContext, std::string* pStrErrMsg = NULL);
 		bool ReadValueArrayFromFile(IFormatterObjectW* pObject, std::wstring strSep, std::wstring strQuo, std::wstring strFilename, std::wstring* pStrErrMsg = NULL);
 		bool ReadValueArrayFromFile(IFormatterObjectA* pObject, std::string strSep, std::string strQuo, std::string strFilename, std::string* pStrErrMsg = NULL);
-
-		// Packet
-		bool WriteBinToPacket(const IFormatterObjectW* pObject, std::vector<BYTE>& vecPacket);
-		bool WriteBinToPacket(const IFormatterObjectA* pObject, std::vector<BYTE>& vecPacket);
-		bool ReadBinFromPacket(IFormatterObjectW* pObject, const std::vector<BYTE>& vecPacket);
-		bool ReadBinFromPacket(IFormatterObjectA* pObject, const std::vector<BYTE>& vecPacket);
-
-		bool WriteJsonToPacket(const IFormatterObjectW* pObject, std::vector<BYTE>& vecPacket);
-		bool WriteJsonToPacket(const IFormatterObjectA* pObject, std::vector<BYTE>& vecPacket);
-		bool ReadJsonFromPacket(IFormatterObjectW* pObject, const std::vector<BYTE>& vecPacket);
-		bool ReadJsonFromPacket(IFormatterObjectA* pObject, const std::vector<BYTE>& vecPacket);
 	}
 }
 

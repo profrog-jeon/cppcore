@@ -9,8 +9,8 @@ struct ST_BIN_PACKET : public core::IFormatterObject
 	void OnSync(core::IFormatter& formatter)
 	{
 		formatter
-			+ core::sPair(TEXT("nValue"), nValue)
-			+ core::sPair(TEXT("strValue"), strValue)
+			+ core::sPair(TEXT("Value"), nValue)
+			+ core::sPair(TEXT("Value"), strValue)
 			+ core::sPair(TEXT("FileBinary"), vecFileBinary)
 			;
 	}
@@ -25,10 +25,10 @@ TEST(PacketFormatterTest, JsonPacketTest2)
 	stBinPacket.vecFileBinary[0] = '\"';
 
 	std::vector<BYTE> packet;
-	UTF8::WriteJsonToPacket(&stBinPacket, packet);
+	WriteJsonToPacket(&stBinPacket, packet);
 
 	ST_BIN_PACKET stRestored;
-	UTF8::ReadJsonFromPacket(&stRestored, packet);
+	ReadJsonFromPacket(&stRestored, packet);
 
 	ASSERT_EQ(stBinPacket.vecFileBinary.size(), stRestored.vecFileBinary.size());
 	EXPECT_EQ(stBinPacket.nValue, stRestored.nValue);
@@ -44,10 +44,10 @@ TEST(PacketFormatterTest, BinPacketTest)
 	stBinPacket.vecFileBinary.resize(100, 5);
 
 	std::vector<BYTE> packet;
-	UTF8::WriteBinToPacket(&stBinPacket, packet);
+	WriteBinToPacket(&stBinPacket, packet);
 
 	ST_BIN_PACKET stRestored;
-	UTF8::ReadBinFromPacket(&stRestored, packet);
+	ReadBinFromPacket(&stRestored, packet);
 
 	ASSERT_EQ(stBinPacket.vecFileBinary.size(), stRestored.vecFileBinary.size());
 	EXPECT_EQ(stBinPacket.nValue, stRestored.nValue);
@@ -63,10 +63,10 @@ TEST(PacketFormatterTest, JsonPacketTest1)
 	stBinPacket.vecFileBinary.resize(99, 5);
 
 	std::vector<BYTE> packet;
-	UTF8::WriteJsonToPacket(&stBinPacket, packet);
+	WriteJsonToPacket(&stBinPacket, packet);
 
 	ST_BIN_PACKET stRestored;
-	UTF8::ReadJsonFromPacket(&stRestored, packet);
+	ReadJsonFromPacket(&stRestored, packet);
 
 	ASSERT_EQ(stBinPacket.vecFileBinary.size(), stRestored.vecFileBinary.size());
 	EXPECT_EQ(stBinPacket.nValue, stRestored.nValue);
@@ -83,10 +83,10 @@ TEST(PacketFormatterTest, JsonPacketTest3)
 	stBinPacket.vecFileBinary[0] = '\"';
 
 	std::vector<BYTE> packet;
-	UTF8::WriteJsonToPacket(&stBinPacket, packet);
+	WriteJsonToPacket(&stBinPacket, packet);
 
 	ST_BIN_PACKET stRestored;
-	UTF8::ReadJsonFromPacket(&stRestored, packet);
+	ReadJsonFromPacket(&stRestored, packet);
 
 	ASSERT_EQ(stBinPacket.vecFileBinary.size(), stRestored.vecFileBinary.size());
 	EXPECT_EQ(stBinPacket.nValue, stRestored.nValue);
@@ -102,10 +102,10 @@ TEST(PacketFormatterTest, JsonPacketTest4)
 	stBinPacket.vecFileBinary.clear();
 
 	std::vector<BYTE> packet;
-	UTF8::WriteJsonToPacket(&stBinPacket, packet);
+	WriteJsonToPacket(&stBinPacket, packet);
 
 	ST_BIN_PACKET stRestored;
-	UTF8::ReadJsonFromPacket(&stRestored, packet);
+	ReadJsonFromPacket(&stRestored, packet);
 
 	ASSERT_EQ(stBinPacket.vecFileBinary.size(), stRestored.vecFileBinary.size());
 	EXPECT_EQ(stBinPacket.nValue, stRestored.nValue);

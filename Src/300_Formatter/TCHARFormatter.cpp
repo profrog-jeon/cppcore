@@ -397,4 +397,44 @@ namespace core
 		formatter.Synchronize(const_cast<IFormatterObject*>(pObject));
 		return channel.CheckValidity(*pStrErrMsg);
 	}
+
+	//////////////////////////////////////////////////////////////////////////
+	bool WriteBinToPacket(const IFormatterObject* pObject, std::vector<BYTE>& vecPacket)
+	{
+		fmt_internal::CBytesWriter channel(vecPacket);
+		fmt_internal::CPacketSerializer formatter(channel);
+		formatter.Synchronize(const_cast<IFormatterObject*>(pObject));
+		std::tstring strErrMsg;
+		return formatter.CheckValidity(&strErrMsg);
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	bool ReadBinFromPacket(IFormatterObject* pObject, const std::vector<BYTE>& vecPacket)
+	{
+		fmt_internal::CBytesReader channel(vecPacket.data(), vecPacket.size());
+		fmt_internal::CPacketDeserializer formatter(channel);
+		formatter.Synchronize(pObject);
+		std::tstring strErrMsg;
+		return true;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	bool WriteJsonToPacket(const IFormatterObject* pObject, std::vector<BYTE>& vecPacket)
+	{
+		fmt_internal::CBytesWriter channel(vecPacket);
+		fmt_internal::CJSONSerializer formatter(channel);
+		formatter.Synchronize(const_cast<IFormatterObject*>(pObject));
+		std::tstring strErrMsg;
+		return formatter.CheckValidity(&strErrMsg);
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	bool ReadJsonFromPacket(IFormatterObject* pObject, const std::vector<BYTE>& vecPacket)
+	{
+		fmt_internal::CBytesReader channel(vecPacket.data(), vecPacket.size());
+		fmt_internal::CJSONDeserializer formatter(channel);
+		formatter.Synchronize(pObject);
+		std::tstring strErrMsg;
+		return true;
+	}
 }
