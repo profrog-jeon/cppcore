@@ -288,7 +288,20 @@ namespace fmt_internal
 	}
 	core::IFormatterT& CJSONSerializer::Sync(std::tstring& strKey, std::vector<BYTE>* pvecData)
 	{
-		// Ignore
+		InsertComma(m_vecObjectCountStack, m_Channel);
+
+		if (GT_ARRAY != m_vecObjectCountStack.back().nType)
+		{	// Key
+			std::tstring strToken;
+			strToken = fmt_internal::ConvertToJsonString(strKey) + TEXT(':');
+			m_Channel.Access((void*)strToken.c_str(), sizeof(TCHAR) * strToken.length());
+		}
+
+		{	// Value
+			std::tstring strToken;
+			ConvertToJsonString(*pvecData, strToken);
+			m_Channel.Access((void*)strToken.c_str(), sizeof(TCHAR) * strToken.length());
+		}
 		return *this;
 	}
 }

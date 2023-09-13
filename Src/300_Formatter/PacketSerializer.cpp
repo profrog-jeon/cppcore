@@ -183,7 +183,7 @@ namespace fmt_internal
 	core::IFormatterT& CPacketSerializer::Sync(std::tstring& strKey, std::vector<BYTE>* pvecData)
 	{
 		//SerializeString(m_Channel, strKey);
-		DWORD dwLength = pvecData->size();
+		DWORD dwLength = (DWORD)pvecData->size();
 		m_Channel.Access(&dwLength, sizeof(dwLength));
 		m_Channel.Access((void*)pvecData->data(), dwLength);
 		return *this;

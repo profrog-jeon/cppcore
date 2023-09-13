@@ -122,6 +122,11 @@ namespace core
 		bool WriteBinToPacket(const IFormatterObjectA* pObject, std::vector<BYTE>& vecPacket);
 		bool ReadBinFromPacket(IFormatterObjectW* pObject, const std::vector<BYTE>& vecPacket);
 		bool ReadBinFromPacket(IFormatterObjectA* pObject, const std::vector<BYTE>& vecPacket);
+
+		bool WriteJsonToPacket(const IFormatterObjectW* pObject, std::vector<BYTE>& vecPacket);
+		bool WriteJsonToPacket(const IFormatterObjectA* pObject, std::vector<BYTE>& vecPacket);
+		bool ReadJsonFromPacket(IFormatterObjectW* pObject, const std::vector<BYTE>& vecPacket);
+		bool ReadJsonFromPacket(IFormatterObjectA* pObject, const std::vector<BYTE>& vecPacket);
 	}
 }
 

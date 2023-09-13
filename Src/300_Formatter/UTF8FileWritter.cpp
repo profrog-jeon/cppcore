@@ -70,7 +70,7 @@ namespace fmt_internal
 		}
 		
 		DWORD dwWrittenSize = 0;
-		WriteFile(m_hFile, strContextU8.c_str(), strContextU8.size(), &dwWrittenSize);
+		WriteFile(m_hFile, strContextU8.c_str(), (DWORD)strContextU8.size(), &dwWrittenSize);
 		return dwWrittenSize;
 	}
 }

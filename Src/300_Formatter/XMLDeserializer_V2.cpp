@@ -28,7 +28,7 @@ namespace fmt_internal
 			strContext += szBuff;
 		}
 
-		m_bValidity = fmt_internal::ParseXmlContext(strContext, m_stRoot, m_strErrMsg);
+		m_bValidity = ParseXmlContext(strContext, m_stRoot, m_strErrMsg);
 	}
 
 	//////////////////////////////////////////////////////////////////////////

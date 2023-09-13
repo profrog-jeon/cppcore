@@ -8,7 +8,7 @@ namespace fmt_internal
 	//////////////////////////////////////////////////////////////////////////
 	const TCHAR* GetTokenTypeString(eTokenType nType)
 	{
-		switch(nType)
+		switch (nType)
 		{
 			CASE_TO_STR(TT_UNKNOWN);
 			CASE_TO_STR(TT_BRACE_OPEN);
@@ -25,13 +25,13 @@ namespace fmt_internal
 
 	//////////////////////////////////////////////////////////////////////////
 	// C -> JSON string
-	struct sSpecialCharPosInfo	{ int nIndex; size_t tPos; size_t tEndPos; size_t tLen; };
-	const TCHAR* g_pszOrgSpecialCharArr[] =     {TEXT("\""),   TEXT("\\"),   TEXT("/"),   TEXT("\b"),  TEXT("\f"),  TEXT("\n"),  TEXT("\r"),  TEXT("\t")		};
-	const TCHAR* g_pszJsonSpecialCharArr[] = {TEXT("\\\""), TEXT("\\\\"), TEXT("\\/"), TEXT("\\b"), TEXT("\\f"), TEXT("\\n"), TEXT("\\r"), TEXT("\\t")	};
+	struct sSpecialCharPosInfo { int nIndex; size_t tPos; size_t tEndPos; size_t tLen; };
+	const TCHAR* g_pszOrgSpecialCharArr[] = { TEXT("\""),   TEXT("\\"),   TEXT("/"),   TEXT("\b"),  TEXT("\f"),  TEXT("\n"),  TEXT("\r"),  TEXT("\t") };
+	const TCHAR* g_pszJsonSpecialCharArr[] = { TEXT("\\\""), TEXT("\\\\"), TEXT("\\/"), TEXT("\\b"), TEXT("\\f"), TEXT("\\n"), TEXT("\\r"), TEXT("\\t") };
 	const size_t g_tSpecialCharCount = sizeof(g_pszOrgSpecialCharArr) / sizeof(g_pszOrgSpecialCharArr[0]);
 
 	//////////////////////////////////////////////////////////////////////////
-	std::tstring ConvertToJsonString(const std::tstring& strValue)
+	inline std::tstring ConvertToJsonStringWorker(const std::tstring& strValue)
 	{
 		std::map<size_t, sSpecialCharPosInfo> mapSpecialCharPos;
 
@@ -57,9 +57,8 @@ namespace fmt_internal
 		}
 
 		// Marking a JSON string START marker.
-		std::tstring strResult = std::tstring(TEXT("\""));
-
-		if( mapSpecialCharPos.empty() )
+		std::tstring strResult = TEXT("\"");
+		if (mapSpecialCharPos.empty())
 		{
 			strResult += strValue;
 		}
@@ -78,13 +77,13 @@ namespace fmt_internal
 			}
 
 			// Adding a next text and replaced token with JSON special character.
-			for(; iter!=mapSpecialCharPos.end(); iter++)
+			for (; iter != mapSpecialCharPos.end(); iter++)
 			{
 				sSpecialCharPosInfo posInfo = iter->second;
-				
+
 				std::tstring strSubString = strValue.substr(prePosInfo.tEndPos, posInfo.tPos - prePosInfo.tEndPos);
 				strResult += strSubString + g_pszJsonSpecialCharArr[posInfo.nIndex];
-				
+
 				prePosInfo = posInfo;
 			}
 
@@ -99,15 +98,15 @@ namespace fmt_internal
 
 	//////////////////////////////////////////////////////////////////////////
 	// JSON -> C string
-	std::tstring RestoreFromJsonString(const std::tstring& strValue)
+	inline std::tstring RestoreFromJsonStringWorker(const std::tstring& strValue)
 	{
 		// Checking outter quotation marker.
-		if( strValue.length() < 2 ||  
+		if (strValue.length() < 2 ||
 			TEXT('\"') != strValue[0] ||
-			TEXT('\"') != strValue[strValue.length()-1] )
+			TEXT('\"') != strValue[strValue.length() - 1])
 		{
 			// check null string and convert it to empty string
-			if( strValue == TEXT("null") )
+			if (strValue == TEXT("null"))
 				return TEXT("");
 			else
 				return strValue;
@@ -119,15 +118,15 @@ namespace fmt_internal
 
 		// Finding JSON special charactor position.
 		int i;
-		for(i=0; i<(int)strValue.length()-1; i++)
+		for (i = 0; i < (int)strValue.length() - 1; i++)
 		{
-			if( strValue[i] != TEXT('\\') )
+			if (strValue[i] != TEXT('\\'))
 				continue;
 
 			int j;
-			for(j=0; j<nJsonSpecialChar; j++)
+			for (j = 0; j < nJsonSpecialChar; j++)
 			{
-				if( strValue[i+1] != g_pszJsonSpecialCharArr[j][1] )
+				if (strValue[i + 1] != g_pszJsonSpecialCharArr[j][1])
 					continue;
 
 				mapSpecialCharPos.insert(std::make_pair(i++, j));
@@ -135,7 +134,7 @@ namespace fmt_internal
 			}
 		}
 
-		if( mapSpecialCharPos.empty() )
+		if (mapSpecialCharPos.empty())
 		{
 			strResult = strValue;
 		}
@@ -151,25 +150,89 @@ namespace fmt_internal
 			iter++;
 
 			// Adding a NEXT text and replaced JSON special character with c++ token.
-			for(; iter!=mapSpecialCharPos.end(); iter++)
+			for (; iter != mapSpecialCharPos.end(); iter++)
 			{
 				size_t tCurPos = iter->first;
 				int nCharIndex = iter->second;
-				std::tstring strSubString = strValue.substr(tPrePos+2, tCurPos - tPrePos - 2);
+				std::tstring strSubString = strValue.substr(tPrePos + 2, tCurPos - tPrePos - 2);
 				strResult += strSubString + g_pszOrgSpecialCharArr[nCharIndex];
 				tPrePos = tCurPos;
 			}
 
 			// Adding a LAST text.
-			strResult += strValue.substr(tPrePos+2);
+			strResult += strValue.substr(tPrePos + 2);
 		}
-		
+
 		// Eleminating outter quotation mark
-		if( strResult.length() > 1 && 
-			TEXT('\"') == strResult[0] && 
-			TEXT('\"') == strResult[strResult.length()-1] )
+		if (strResult.length() > 1 &&
+			TEXT('\"') == strResult[0] &&
+			TEXT('\"') == strResult[strResult.length() - 1])
 			strResult = strResult.substr(1, strResult.length() - 2);
 		return strResult;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	std::tstring ConvertToJsonString(const std::tstring& strValue)
+	{
+		return ConvertToJsonStringWorker(strValue.data());
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	std::tstring RestoreFromJsonString(const std::tstring& strValue)
+	{
+		return RestoreFromJsonStringWorker(strValue);
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	static const size_t g_tTCharSize = sizeof(TCHAR);
+	void ConvertToJsonString(const std::vector<BYTE>& vecValue, std::tstring& outJsonStr)
+	{
+		if (vecValue.empty())
+		{
+			outJsonStr = TEXT("null");
+			return;
+		}
+
+		const size_t tContentSize = 1 + vecValue.size();	// H + C
+		const size_t tLength = (((tContentSize + 1) / g_tTCharSize) * g_tTCharSize) / g_tTCharSize;
+
+		std::tstring strContext;
+		strContext.resize(tLength);
+		{
+			char* pszContent = (char*)strContext.data();
+			pszContent[0] = vecValue.size() & 0x01 ? 'o' : 'e';
+			memcpy(&pszContent[1], vecValue.data(), vecValue.size());
+		}
+		
+		outJsonStr = ConvertToJsonStringWorker(strContext);
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	void RestoreFromJsonString(const std::tstring& strValue, std::vector<BYTE>& outValue)
+	{
+		outValue.clear();
+		if (TEXT("null") == strValue)
+			return;
+
+		std::tstring strContext = RestoreFromJsonStringWorker(strValue);
+		if (strContext.empty())
+			return;
+
+		const size_t tLength = strContext.length();
+		const char* pszContents = (const char*)strContext.data();
+		size_t tContentsSize = tLength * g_tTCharSize;
+		if ('o' == pszContents[0])
+			tContentsSize -= 1;
+		else if ('e' == pszContents[0])
+			tContentsSize -= 0;
+		else
+		{
+			Log_Error(TEXT("INVALID JSON Binary, header is not `o` nor `e`"));
+			return;
+		}
+
+		outValue.resize(tContentsSize);
+		memcpy((void*)outValue.data(), pszContents + 1, tContentsSize);
 	}
 
 	//////////////////////////////////////////////////////////////////////////
@@ -183,23 +246,23 @@ namespace fmt_internal
 	//////////////////////////////////////////////////////////////////////////
 	inline int FindFirstOfQuotation(std::tstring& strContext, int nOffset)
 	{
-		if( nOffset < 0 )
+		if (nOffset < 0)
 			return -1;
 
-		if( (int)strContext.length() <= nOffset )
+		if ((int)strContext.length() <= nOffset)
 			return -1;
 
 		int i;
-		for(i=nOffset; i<(int)strContext.length(); i++)
+		for (i = nOffset; i < (int)strContext.length(); i++)
 		{
 			// Jump a JSON special charactor
-			if( strContext[i] == TEXT('\\') )
+			if (strContext[i] == TEXT('\\'))
 			{
 				i++;
 				continue;
 			}
 
-			if( strContext[i] == TEXT('\"') )
+			if (strContext[i] == TEXT('\"'))
 				return i;
 		}
 		return -1;
@@ -215,94 +278,94 @@ namespace fmt_internal
 			// Find seperators and building index vector
 			std::vector<int> vecSeperatorPos;
 			size_t i;
-			for(i=0; i<strContext.size(); i++)
+			for (i = 0; i < strContext.size(); i++)
 			{
-				if( strContext.at(i) == TEXT('\"') )
+				if (strContext.at(i) == TEXT('\"'))
 				{
-					if( i == 0 || strContext.at(i-1) != TEXT('\\') )
+					if (i == 0 || strContext.at(i - 1) != TEXT('\\'))
 						vecSeperatorPos.push_back((int)i);
 					continue;
 				}
 
 				int nDelemeterIndex = (int)strSeperator.find_first_of(strContext.at(i));
-				if( nDelemeterIndex < 0 )
+				if (nDelemeterIndex < 0)
 					continue;
 				vecSeperatorPos.push_back((int)i);
-				vecSeperatorPos.push_back((int)i+1);
+				vecSeperatorPos.push_back((int)i + 1);
 			}
 
 			// Reserve a quotation ATOMIC
 			int nPos = 0;
 			size_t tLastSepIndex = 0;
-			while(true)
+			while (true)
 			{
 				int nStartIndex = FindFirstOfQuotation(strContext, nPos);
-				if( nStartIndex < 0 )
+				if (nStartIndex < 0)
 					break;
-				int nEndIndex = FindFirstOfQuotation(strContext, nStartIndex+1);
-				if( nEndIndex < 0 )
+				int nEndIndex = FindFirstOfQuotation(strContext, nStartIndex + 1);
+				if (nEndIndex < 0)
 					break;
 
-				for(tLastSepIndex; tLastSepIndex<vecSeperatorPos.size(); tLastSepIndex++)
+				for (tLastSepIndex; tLastSepIndex < vecSeperatorPos.size(); tLastSepIndex++)
 				{
-					if( vecSeperatorPos[tLastSepIndex] <= nStartIndex )
+					if (vecSeperatorPos[tLastSepIndex] <= nStartIndex)
 						continue;
-					if( vecSeperatorPos[tLastSepIndex] > nEndIndex )
+					if (vecSeperatorPos[tLastSepIndex] > nEndIndex)
 						break;
 					vecSeperatorPos[tLastSepIndex] = -1;
 				}
-				nPos = nEndIndex+1;
+				nPos = nEndIndex + 1;
 			}
 
-			
+
 			{	// Remove duplicated value
 				int nPrePos = -1;
-				for(i=0; i<vecSeperatorPos.size(); i++)
+				for (i = 0; i < vecSeperatorPos.size(); i++)
 				{
-					if( vecSeperatorPos[i] < 0 )
+					if (vecSeperatorPos[i] < 0)
 						continue;
 
-					if( vecSeperatorPos[i] == nPrePos )
+					if (vecSeperatorPos[i] == nPrePos)
 						vecSeperatorPos[i] = -1;
 					nPrePos = vecSeperatorPos[i];
 				}
 			}
 
 			// If there is no seperater included in context, bypasses the one but do `trim`.
-			if( vecSeperatorPos.empty() )
+			if (vecSeperatorPos.empty())
 			{
 				std::tstring strTemp = strContext = Trim(strContext);
-				if( !strTemp.empty() )
+				if (!strTemp.empty())
 					vecToken.push_back(strTemp);
 				return vecToken.size();
 			}
 
 			// Tokenize context string on based seperator position.
 			int nPrePos = -1;
-			for(i=0; i<vecSeperatorPos.size(); i++)
+			for (i = 0; i < vecSeperatorPos.size(); i++)
 			{
 				int nCurPos = vecSeperatorPos[i];
-				if( nCurPos < 0 )
+				if (nCurPos < 0)
 					continue;
 
-				if( nPrePos < 0 )
+				if (nPrePos < 0)
 				{
 					nPrePos = nCurPos;
 					std::tstring strToken = Trim(strContext.substr(0, nCurPos).c_str());
-					if( !strToken.empty() )
+					if (!strToken.empty())
 						vecToken.push_back(strToken);
 
 					continue;
 				}
 
-				std::tstring strToken = Trim(strContext.substr(nPrePos, nCurPos-nPrePos).c_str());
-				if( !strToken.empty() )
+				std::tstring strToken = Trim(strContext.substr(nPrePos, nCurPos - nPrePos).c_str());
+				if (!strToken.empty())
 					vecToken.push_back(strToken);
 				nPrePos = nCurPos;
 			}
 			{
 				std::tstring strToken = Trim(strContext.substr(nPrePos).c_str());
-				if( !strToken.empty() )
+				if (!strToken.empty())
 					vecToken.push_back(strToken);
 			}
 
@@ -312,7 +375,7 @@ namespace fmt_internal
 			// Unexpected error has been occurred!!
 			assert(false);
 		}
-		
+
 		return vecToken.size();
 	}
 
@@ -324,7 +387,7 @@ namespace fmt_internal
 		size_t tLastParsingTokenIndex = 0;
 		try
 		{
-			if( vecToken.empty() )
+			if (vecToken.empty())
 				throw exception_format(TEXT("There is no contents."));
 
 			size_t tStartIndex = 0;
@@ -333,7 +396,7 @@ namespace fmt_internal
 				// good
 				// do nothing...
 			}
-			else if (vecToken.size() >= 3 && vecToken[1] == TEXT(":") && (vecToken[2] == TEXT("{") || (vecToken[2] == TEXT("["))) )
+			else if (vecToken.size() >= 3 && vecToken[1] == TEXT(":") && (vecToken[2] == TEXT("{") || (vecToken[2] == TEXT("["))))
 			{
 				// In this case JSON start with a key ex) Feedback : {...}
 				tStartIndex = 2;
@@ -344,7 +407,7 @@ namespace fmt_internal
 			}
 
 			size_t i;
-			for(i=tStartIndex; i<vecToken.size(); i++)
+			for (i = tStartIndex; i < vecToken.size(); i++)
 			{
 				tLastParsingTokenIndex = i;
 				std::tstring strTemp = vecToken[i];
@@ -352,94 +415,94 @@ namespace fmt_internal
 				sToken tempToken(TT_UNKNOWN, strTemp);
 				{	// Building parsing stack string for debug
 					int i;
-					for(i=0; i<(int)parsingStack.size(); i++)
+					for (i = 0; i < (int)parsingStack.size(); i++)
 						tempToken.strParsingStack += parsingStack[i];
 				}
 
 #ifdef USE_JSON_PARSER_LOG
 				{
 					int i;
-					for(i=0; i<(int)parsingStack.size(); i++)
+					for (i = 0; i < (int)parsingStack.size(); i++)
 						std_cout << parsingStack[i];
 					std_cout << "\t" << strTemp << std::endl;
 				}
 #endif
 
-				if( vecToken[i] == TEXT("{") )
+				if (vecToken[i] == TEXT("{"))
 				{
-					if( !parsingStack.empty() && parsingStack.back() == TEXT(',') )
+					if (!parsingStack.empty() && parsingStack.back() == TEXT(','))
 						parsingStack.pop_back();
 
 					tempToken.nType = TT_BRACE_OPEN;
 					parsingStack.push_back('}');
 				}
-				else if( vecToken[i] == TEXT("[") )
+				else if (vecToken[i] == TEXT("["))
 				{
-					if( !parsingStack.empty() && parsingStack.back() == TEXT(',') )
+					if (!parsingStack.empty() && parsingStack.back() == TEXT(','))
 						parsingStack.pop_back();
 
 					tempToken.nType = TT_SQURE_BRACKET_OPEN;
 					parsingStack.push_back(TEXT(']'));
 				}
-				else if( vecToken[i] == TEXT("}") )
+				else if (vecToken[i] == TEXT("}"))
 				{
 					tempToken.nType = TT_BRACE_CLOSE;
-					if( parsingStack.empty() )
+					if (parsingStack.empty())
 						throw exception_format(TEXT("Unnesessary `}` found!!"));
-					if( parsingStack.back() != TEXT('}') )
+					if (parsingStack.back() != TEXT('}'))
 						throw exception_format(TEXT("A token `%c` is needed in here."), parsingStack.back());
 					parsingStack.pop_back();
 
-					if( !parsingStack.empty() && parsingStack.back() == TEXT(':') )
+					if (!parsingStack.empty() && parsingStack.back() == TEXT(':'))
 						parsingStack.pop_back();
 				}
-				else if( vecToken[i] == TEXT("]") )
+				else if (vecToken[i] == TEXT("]"))
 				{
 					tempToken.nType = TT_SQURE_BRACKET_CLOSE;
-					if( parsingStack.empty() )
+					if (parsingStack.empty())
 						throw exception_format(TEXT("Unnesessary `]` found!!"));
-					if( parsingStack.back() != TEXT(']') )
+					if (parsingStack.back() != TEXT(']'))
 						throw exception_format(TEXT("Unmatched `]` found!!"));
 					parsingStack.pop_back();
 
-					if( !parsingStack.empty() && parsingStack.back() == TEXT(':') )
+					if (!parsingStack.empty() && parsingStack.back() == TEXT(':'))
 						parsingStack.pop_back();
 				}
-				else if( vecToken[i] == TEXT(":") )
+				else if (vecToken[i] == TEXT(":"))
 				{
 					tempToken.nType = TT_COLON;
 					parsingStack.push_back(':');
 				}
-				else if( vecToken[i] == TEXT(",") )
+				else if (vecToken[i] == TEXT(","))
 				{
 					tempToken.nType = TT_COMMA;
 					parsingStack.push_back(',');
 				}
 				else
 				{
-					if( !vecJsonToken.empty() )
+					if (!vecJsonToken.empty())
 					{
-						if( vecJsonToken.back().nType == TT_VALUE )
+						if (vecJsonToken.back().nType == TT_VALUE)
 							throw exception_format(TEXT("VALUE seperator `,` is required!!"));
-						if( vecJsonToken.back().nType == TT_KEY )
+						if (vecJsonToken.back().nType == TT_KEY)
 							throw exception_format(TEXT("KEY-VALUE seperator `:` is required!!"));
 					}
 
-					if( !parsingStack.empty() && parsingStack.back() == TEXT(',') )
+					if (!parsingStack.empty() && parsingStack.back() == TEXT(','))
 						parsingStack.pop_back();
 
 					std::tstring strNextToken;
-					if( i+1 < vecToken.size() )
-						strNextToken = vecToken[i+1];
+					if (i + 1 < vecToken.size())
+						strNextToken = vecToken[i + 1];
 
-					if( strNextToken == TEXT(":") )
+					if (strNextToken == TEXT(":"))
 					{
 						tempToken.nType = TT_KEY;
 					}
 					else
 					{
 						tempToken.nType = TT_VALUE;
-						if( !parsingStack.empty() && parsingStack.back() == TEXT(':') )
+						if (!parsingStack.empty() && parsingStack.back() == TEXT(':'))
 							parsingStack.pop_back();
 					}
 				}
@@ -447,24 +510,24 @@ namespace fmt_internal
 				vecJsonToken.push_back(tempToken);
 			}
 
-			if( !parsingStack.empty() )
+			if (!parsingStack.empty())
 			{
 				std::tstring strErrMsg;
 
 				int i;
-				for(i=(int)parsingStack.size() - 1; i>=0; i--)
+				for (i = (int)parsingStack.size() - 1; i >= 0; i--)
 				{
-					std::tstring strTemp = parsingStack[i] == TEXT(':')? TEXT("VALUE") : Format(TEXT("%c"), parsingStack[i]);
+					std::tstring strTemp = parsingStack[i] == TEXT(':') ? TEXT("VALUE") : Format(TEXT("%c"), parsingStack[i]);
 					strErrMsg += Format(TEXT("`%s` is not found!!\r\n"), strTemp.c_str());
 					break;
 				}
 				throw exception_format(TEXT("%s"), strErrMsg.c_str());
 			}
 		}
-		catch(std::exception& e)
+		catch (std::exception& e)
 		{
 			size_t i;
-			for(i=0; i<tLastParsingTokenIndex+1 && i<vecToken.size(); i++)
+			for (i = 0; i < tLastParsingTokenIndex + 1 && i < vecToken.size(); i++)
 				strErrMsgDump += vecToken[i] + TEXT("\r\n");
 
 			strErrMsgDump += TCSFromMBS(e.what());
@@ -476,7 +539,7 @@ namespace fmt_internal
 			assert(false);
 
 			size_t i;
-			for(i=0; i<tLastParsingTokenIndex+1 && i<vecToken.size(); i++)
+			for (i = 0; i < tLastParsingTokenIndex + 1 && i < vecToken.size(); i++)
 				strErrMsgDump += vecToken[i] + TEXT("\r\n");
 
 			strErrMsgDump += std::tstring(TEXT("Unexpected error has found!!\r\n"));
@@ -484,7 +547,7 @@ namespace fmt_internal
 		}
 		return true;
 	}
-
+	
 	//////////////////////////////////////////////////////////////////////////
 	size_t Build(CTokenVec& vecJsonToken, CChunkVec& vecJsonChunk)
 	{
@@ -494,31 +557,31 @@ namespace fmt_internal
 			std::tstring strPreParsingStack;
 
 			size_t i;
-			for(i=0; i<vecJsonToken.size(); i++)
+			for (i = 0; i < vecJsonToken.size(); i++)
 			{
 				sToken& token = vecJsonToken[i];
 
-				if( token.strParsingStack == TEXT("}") && TT_KEY == token.nType )
+				if (token.strParsingStack == TEXT("}") && TT_KEY == token.nType)
 					tempJsonChunk.strKey = RestoreFromJsonString(token.strValue);
-				else if( token.strParsingStack == TEXT("},") && TT_KEY == token.nType )
+				else if (token.strParsingStack == TEXT("},") && TT_KEY == token.nType)
 					tempJsonChunk.strKey = RestoreFromJsonString(token.strValue);
-				else if( token.strParsingStack.size() >= 2 && token.strParsingStack[0] == TEXT('}') && token.strParsingStack[1] == TEXT(':') )
+				else if (token.strParsingStack.size() >= 2 && token.strParsingStack[0] == TEXT('}') && token.strParsingStack[1] == TEXT(':'))
 					tempJsonChunk.vecToken.push_back(token.strValue);
-				else if( token.strParsingStack == TEXT("}") && strPreParsingStack.size() >= 2 && strPreParsingStack[0] == TEXT('}') && strPreParsingStack[1] == TEXT(':') )
+				else if (token.strParsingStack == TEXT("}") && strPreParsingStack.size() >= 2 && strPreParsingStack[0] == TEXT('}') && strPreParsingStack[1] == TEXT(':'))
 				{
 					vecJsonChunk.push_back(tempJsonChunk);
 					tempJsonChunk.Clear();
 				}
-				else if( token.strParsingStack.empty() && TT_VALUE == token.nType )
+				else if (token.strParsingStack.empty() && TT_VALUE == token.nType)
 				{
 					tempJsonChunk.vecToken.push_back(token.strValue);
 					vecJsonChunk.push_back(tempJsonChunk);
 					tempJsonChunk.Clear();
 				}
-				else if( !token.strParsingStack.empty() && token.strParsingStack[0] == TEXT(']') )
+				else if (!token.strParsingStack.empty() && token.strParsingStack[0] == TEXT(']'))
 				{
-					if( ((token.strParsingStack.length() == 1) && (TT_VALUE == token.nType)) ||
-						((token.strParsingStack.length() == 2) && (token.strParsingStack.at(1) == TEXT(',')) && (TT_VALUE == token.nType)) )
+					if (((token.strParsingStack.length() == 1) && (TT_VALUE == token.nType)) ||
+						((token.strParsingStack.length() == 2) && (token.strParsingStack.at(1) == TEXT(',')) && (TT_VALUE == token.nType)))
 					{
 						tempJsonChunk.vecToken.push_back(token.strValue);
 						vecJsonChunk.push_back(tempJsonChunk);
@@ -526,17 +589,17 @@ namespace fmt_internal
 					}
 					else
 					{
-						if( TT_BRACE_OPEN == token.nType )
+						if (TT_BRACE_OPEN == token.nType)
 						{
-							if( token.strParsingStack.length()	== 1
-							||  token.strParsingStack			== TEXT("],")    )
+							if (token.strParsingStack.length() == 1
+								|| token.strParsingStack == TEXT("],"))
 								tempJsonChunk.vecToken.push_back(token.strValue);
 						}
-						if( token.strParsingStack.length() > 1 && token.strParsingStack.at(1) == TEXT('}') )
+						if (token.strParsingStack.length() > 1 && token.strParsingStack.at(1) == TEXT('}'))
 						{
 							tempJsonChunk.vecToken.push_back(token.strValue);
 						}
-						if( token.strParsingStack.length() == 2 && TT_BRACE_CLOSE == token.nType )
+						if (token.strParsingStack.length() == 2 && TT_BRACE_CLOSE == token.nType)
 						{
 							vecJsonChunk.push_back(tempJsonChunk);
 							tempJsonChunk.Clear();
@@ -551,7 +614,7 @@ namespace fmt_internal
 			// Unexpected error has been occurred!!
 			assert(false);
 		}
-		
+
 		return vecJsonChunk.size();
 	}
 
@@ -561,7 +624,7 @@ namespace fmt_internal
 		std::tstring strErrMsg;
 
 		CTokenVec vecTempJsonToken;
-		if( !Parse(vecJsonChunk[tIndex].vecToken, vecTempJsonToken, strErrMsg) )
+		if (!Parse(vecJsonChunk[tIndex].vecToken, vecTempJsonToken, strErrMsg))
 		{
 			Log_Error(TEXT("Expanding failure, %s"), strErrMsg.c_str());
 			return 0;
@@ -571,7 +634,7 @@ namespace fmt_internal
 
 		CChunkVec vecTempChunkVec;
 		size_t tRet = fmt_internal::Build(vecTempJsonToken, vecTempChunkVec);
-		if( 0 == tRet )
+		if (0 == tRet)
 			return 0;
 
 		size_t tPushCount = tRet - 1;
@@ -583,19 +646,19 @@ namespace fmt_internal
 			vecJsonChunk.resize(tNewCount);
 			tLastIndex = tNewCount - 1;
 		}
-		
+
 		// by reverse order for preserving data
 		size_t i;
-		for(i=0; i<tPushCount; i++)
+		for (i = 0; i < tPushCount; i++)
 		{
 			vecJsonChunk[tLastIndex - i] = vecJsonChunk[tLastIndex - i - tPushCount];
 		}
 
 		// assign new chunks
-		for(i=0; i<tRet; i++)
+		for (i = 0; i < tRet; i++)
 		{
-			vecJsonChunk[tIndex+i] = vecTempChunkVec[i];
-			vecJsonChunk[tIndex+i].strKey = strKey;
+			vecJsonChunk[tIndex + i] = vecTempChunkVec[i];
+			vecJsonChunk[tIndex + i].strKey = strKey;
 		}
 
 		return tRet;

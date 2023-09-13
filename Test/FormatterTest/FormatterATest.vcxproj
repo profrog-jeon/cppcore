@@ -344,6 +344,7 @@
     <ClCompile Include="..\..\Inc\gtest-all.cc" />
     <ClCompile Include="..\..\Inc\gtest_main.cc" />
     <ClCompile Include="JSONFormatterTest.cpp" />
+    <ClCompile Include="PacketFormatterTest.cpp" />
     <ClCompile Include="XmlFormatterTest.cpp" />
   </ItemGroup>
   <ItemGroup>

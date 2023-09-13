@@ -10,55 +10,29 @@
 namespace fmt_internal
 {
 	//////////////////////////////////////////////////////////////////////////
-	enum eTokenType
-	{
-		TT_UNKNOWN,
-		TT_BRACE_OPEN,
-		TT_BRACE_CLOSE,
-		TT_SQURE_BRACKET_OPEN,
-		TT_SQURE_BRACKET_CLOSE,
-		TT_COMMA,
-		TT_COLON,
-		TT_KEY,
-		TT_VALUE
-	};
+	const char* GetTokenTypeStringA(eTokenType nType);
+	const wchar_t* GetTokenTypeStringW(eTokenType nType);
 
 	//////////////////////////////////////////////////////////////////////////
-	const TCHAR* GetTokenTypeString(eTokenType nType);
+	std::string ConvertToJsonString(const std::string& strValue);
+	std::wstring ConvertToJsonString(const std::wstring& strValue);
+	std::string RestoreFromJsonString(const std::string& strValue);
+	std::wstring RestoreFromJsonString(const std::wstring& strValue);
+
+	void ConvertToJsonString(const std::vector<BYTE>& vecValue, std::string& outJsonStr);
+	void ConvertToJsonString(const std::vector<BYTE>& vecValue, std::wstring& outJsonStr);
+	void RestoreFromJsonString(const std::string& strValue, std::vector<BYTE>& outValue);
+	void RestoreFromJsonString(const std::wstring& strValue, std::vector<BYTE>& outValue);
 
 	//////////////////////////////////////////////////////////////////////////
-	struct sToken
-	{
-		eTokenType nType;
-		std::tstring strValue;
-		std::tstring strParsingStack;
-
-		sToken(std::tstring strInValue) : nType(TT_UNKNOWN), strValue(strInValue)	{}
-		sToken(eTokenType nInType, std::tstring strInValue) : nType(nInType), strValue(strInValue)	{}
-	};
-	typedef std::vector<sToken>  CTokenVec;
-
-	//////////////////////////////////////////////////////////////////////////
-	struct sChunk
-	{
-		std::tstring strKey;
-		CTStringVec vecToken;
-		void Clear()
-		{
-			strKey.clear();
-			vecToken.clear();
-		}
-	};
-	typedef std::vector<sChunk>  CChunkVec;
-
-	//////////////////////////////////////////////////////////////////////////
-	std::tstring ConvertToJsonString(const std::tstring& strValue);
-	std::tstring RestoreFromJsonString(const std::tstring& strValue);
-
-	//////////////////////////////////////////////////////////////////////////
-	size_t Scan(const TCHAR* pszContext, CTStringVec& vecToken);
-	size_t Scan(std::tstring& strContext, CTStringVec& vecToken);
-	bool Parse(CTStringVec& vecToken, CTokenVec& vecJsonToken, std::tstring& strErrMsgDump);
-	size_t Build(CTokenVec& vecJsonToken, CChunkVec& vecJsonChunk);
-	size_t ExpandArray(size_t tIndex, CChunkVec& vecJsonChunk);
+	size_t Scan(const char* pszContext, std::vector<std::string>& vecToken);
+	size_t Scan(const wchar_t* pszContext, std::vector<std::wstring>& vecToken);
+	size_t Scan(std::string& strContext, std::vector<std::string>& vecToken);
+	size_t Scan(std::wstring& strContext, std::vector<std::wstring>& vecToken);
+	bool Parse(std::vector<std::string>& vecToken, std::vector<sTokenA>& vecJsonToken, std::string& strErrMsgDump);
+	bool Parse(std::vector<std::wstring>& vecToken, std::vector<sTokenW>& vecJsonToken, std::wstring& strErrMsgDump);
+	size_t Build(std::vector<sTokenA>& vecJsonToken, std::vector<sChunkA>& vecJsonChunk);
+	size_t Build(std::vector<sTokenW>& vecJsonToken, std::vector<sChunkW>& vecJsonChunk);
+	size_t ExpandArray(size_t tIndex, std::vector<sChunkA>& vecJsonChunk);
+	size_t ExpandArray(size_t tIndex, std::vector<sChunkW>& vecJsonChunk);
 }

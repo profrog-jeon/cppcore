@@ -27,22 +27,21 @@ namespace fmt_internal
 			m_strContext += szBuff;
 		}
 
-		CTStringVec vecToken;
-		fmt_internal::Scan(m_strContext, vecToken);
-
-		m_bValidity = fmt_internal::Parse(vecToken, m_vecJsonToken, m_strErrMsg);
+		std::vector<std::tstring> vecToken;
+		Scan(m_strContext, vecToken);
+		m_bValidity = Parse(vecToken, m_vecJsonToken, m_strErrMsg);
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	CJSONDeserializer::CJSONDeserializer(core::IChannel& channel, CTStringVec& vecChunk)
-		: IFormatter(channel)
+	CJSONDeserializer::CJSONDeserializer(core::IChannel& channel, std::vector<std::tstring>& vecChunk)
+		: core::IFormatterT(channel)
 		, m_GroupingStack()
 		, m_bValidity(false)
 		, m_strContext()
 		, m_vecJsonToken()
 		, m_strErrMsg()
 	{
-		m_bValidity = fmt_internal::Parse(vecChunk, m_vecJsonToken, m_strErrMsg);
+		m_bValidity = Parse(vecChunk, m_vecJsonToken, m_strErrMsg);
 	}
 
 	//////////////////////////////////////////////////////////////////////////
@@ -67,9 +66,9 @@ namespace fmt_internal
 
 			sGroupingInfo newGroupingInfo(GT_DICTIONARY);
 
-			fmt_internal::CTokenVec vecJsonToken;
-			m_bValidity = fmt_internal::Parse(topGroupInfo.vecChunk[i].vecToken, vecJsonToken, m_strErrMsg);
-			fmt_internal::Build(vecJsonToken, newGroupingInfo.vecChunk);
+			std::vector<sToken> vecJsonToken;
+			m_bValidity = Parse(topGroupInfo.vecChunk[i].vecToken, vecJsonToken, m_strErrMsg);
+			Build(vecJsonToken, newGroupingInfo.vecChunk);
 
 			if( bAllowMultiKey )
 			{
@@ -133,9 +132,9 @@ namespace fmt_internal
 		// context has multiple(array) item
 		else
 		{
-			fmt_internal::CTokenVec vecJsonToken;
-			m_bValidity = fmt_internal::Parse(topGroupInfo.vecChunk[i].vecToken, vecJsonToken, m_strErrMsg);
-			fmt_internal::Build(vecJsonToken, newGroupingInfo.vecChunk);
+			CTokenVec vecJsonToken;
+			m_bValidity = Parse(topGroupInfo.vecChunk[i].vecToken, vecJsonToken, m_strErrMsg);
+			Build(vecJsonToken, newGroupingInfo.vecChunk);
 
 			size_t j;
 			for(j=0; j<newGroupingInfo.vecChunk.size(); j++)
@@ -180,9 +179,9 @@ namespace fmt_internal
 			if( tIndex < topGroupInfo.vecChunk.size() )
 			{
 				sGroupingInfo newGroupingInfo(GT_OBJECT);
-				fmt_internal::CTokenVec vecJsonToken;
-				m_bValidity = fmt_internal::Parse(topGroupInfo.vecChunk[tIndex].vecToken, vecJsonToken, m_strErrMsg);
-				fmt_internal::Build(vecJsonToken, newGroupingInfo.vecChunk);
+				CTokenVec vecJsonToken;
+				m_bValidity = Parse(topGroupInfo.vecChunk[tIndex].vecToken, vecJsonToken, m_strErrMsg);
+				Build(vecJsonToken, newGroupingInfo.vecChunk);
 
 				m_GroupingStack.push(newGroupingInfo);
 				return;
@@ -198,9 +197,9 @@ namespace fmt_internal
 			if( tIndex < topGroupInfo.vecChunk.size() )
 			{
 				sGroupingInfo newGroupingInfo(GT_OBJECT);
-				fmt_internal::CTokenVec vecJsonToken;
-				m_bValidity = fmt_internal::Parse(topGroupInfo.vecChunk[tIndex].vecToken, vecJsonToken, m_strErrMsg);
-				fmt_internal::Build(vecJsonToken, newGroupingInfo.vecChunk);
+				CTokenVec vecJsonToken;
+				m_bValidity = Parse(topGroupInfo.vecChunk[tIndex].vecToken, vecJsonToken, m_strErrMsg);
+				Build(vecJsonToken, newGroupingInfo.vecChunk);
 
 				strKey = topGroupInfo.vecChunk[tIndex].strKey;
 				m_GroupingStack.push(newGroupingInfo);
@@ -216,9 +215,9 @@ namespace fmt_internal
 				continue;
 
 			sGroupingInfo newGroupingInfo(GT_OBJECT);
-			fmt_internal::CTokenVec vecJsonToken;
-			m_bValidity = fmt_internal::Parse(topGroupInfo.vecChunk[i].vecToken, vecJsonToken, m_strErrMsg);
-			fmt_internal::Build(vecJsonToken, newGroupingInfo.vecChunk);
+			CTokenVec vecJsonToken;
+			m_bValidity = Parse(topGroupInfo.vecChunk[i].vecToken, vecJsonToken, m_strErrMsg);
+			Build(vecJsonToken, newGroupingInfo.vecChunk);
 
 			m_GroupingStack.push(newGroupingInfo);
 			return;
@@ -239,7 +238,7 @@ namespace fmt_internal
 	void CJSONDeserializer::BeginRoot()
 	{
 		sGroupingInfo newGroupingInfo(GT_ROOT);
-		fmt_internal::Build(m_vecJsonToken, newGroupingInfo.vecChunk);
+		Build(m_vecJsonToken, newGroupingInfo.vecChunk);
 		m_GroupingStack.push(newGroupingInfo);
 	}
 
@@ -251,11 +250,11 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	inline void MakeValueStringFromJsonChunk(std::tstring* pString, fmt_internal::sChunk& jsonChunk)
+	inline void MakeValueStringFromJsonChunk(std::tstring* pString, sChunk& jsonChunk)
 	{
 		if( jsonChunk.vecToken.size() == 1 )
 		{
-			*pString = fmt_internal::RestoreFromJsonString(jsonChunk.vecToken[0]);
+			*pString = RestoreFromJsonString(jsonChunk.vecToken[0]);
 		}
 		else
 		{
@@ -276,7 +275,7 @@ namespace fmt_internal
 			{
 				if( topGroupingInfo.tReadPos < topGroupingInfo.vecChunk.size() )
 				{
-					fmt_internal::sChunk& jsonChunk = topGroupingInfo.vecChunk[topGroupingInfo.tReadPos++];
+					sChunk& jsonChunk = topGroupingInfo.vecChunk[topGroupingInfo.tReadPos++];
 					MakeValueStringFromJsonChunk(pValue, jsonChunk);
 				}
 				return *this;
@@ -285,7 +284,7 @@ namespace fmt_internal
 			{
 				if( topGroupingInfo.tReadPos < topGroupingInfo.vecChunk.size() )
 				{
-					fmt_internal::sChunk& jsonChunk = topGroupingInfo.vecChunk[topGroupingInfo.tReadPos++];
+					sChunk& jsonChunk = topGroupingInfo.vecChunk[topGroupingInfo.tReadPos++];
 					strKey = jsonChunk.strKey;
 					MakeValueStringFromJsonChunk(pValue, jsonChunk);
 				}
@@ -296,7 +295,7 @@ namespace fmt_internal
 				size_t i;
 				for(i=0; i<topGroupingInfo.vecChunk.size(); i++)
 				{
-					fmt_internal::sChunk& jsonChunk = topGroupingInfo.vecChunk[i];
+					sChunk& jsonChunk = topGroupingInfo.vecChunk[i];
 					if( jsonChunk.strKey != strKey )
 						continue;
 
@@ -345,13 +344,13 @@ namespace fmt_internal
 			{
 				if( topGroupingInfo.tReadPos < topGroupingInfo.vecChunk.size() )
 				{
-					fmt_internal::sChunk& jsonChunk = topGroupingInfo.vecChunk[topGroupingInfo.tReadPos++];
+					sChunk& jsonChunk = topGroupingInfo.vecChunk[topGroupingInfo.tReadPos++];
 					if( jsonChunk.vecToken.empty() )
 						throw exception_format(TEXT("Empty chunk has been found!"));
 
 					strKey = jsonChunk.strKey;
 					{
-						std::tstring strValue =  fmt_internal::RestoreFromJsonString(jsonChunk.vecToken[0]);
+						std::tstring strValue =  RestoreFromJsonString(jsonChunk.vecToken[0]);
 						refValue = ValueFrom<T>(strValue);
 					}		
 				}
@@ -361,14 +360,14 @@ namespace fmt_internal
 				size_t i;
 				for(i=0; i<topGroupingInfo.vecChunk.size(); i++)
 				{
-					fmt_internal::sChunk& jsonChunk = topGroupingInfo.vecChunk[i];
+					sChunk& jsonChunk = topGroupingInfo.vecChunk[i];
 					if( strKey != jsonChunk.strKey )
 						continue;
 
 					if( jsonChunk.vecToken.empty() )
 						throw exception_format(TEXT("Empty chunk has been found!"));
 
-					std::tstring strValue =  fmt_internal::RestoreFromJsonString(jsonChunk.vecToken[0]);
+					std::tstring strValue =  RestoreFromJsonString(jsonChunk.vecToken[0]);
 					refValue = ValueFrom<T>(strValue);
 				}
 			}
@@ -435,9 +434,62 @@ namespace fmt_internal
 		JSONDeserializerMetaSync(m_GroupingStack, strKey, *pValue);
 		return *this;
 	}
+
+	inline void MakeBinaryFromJsonChunk(std::vector<BYTE>* pvecData, sChunk& jsonChunk)
+	{
+		RestoreFromJsonString(jsonChunk.vecToken[0], *pvecData);
+	}
+
 	core::IFormatterT& CJSONDeserializer::Sync(std::tstring& strKey, std::vector<BYTE>* pvecData)
 	{
-		// Ignore
+		if (!m_GroupingStack.empty())
+		{
+			sGroupingInfo& topGroupingInfo = m_GroupingStack.top();
+			if (topGroupingInfo.nType == GT_ARRAY)
+			{
+				if (topGroupingInfo.tReadPos < topGroupingInfo.vecChunk.size())
+				{
+					sChunk& jsonChunk = topGroupingInfo.vecChunk[topGroupingInfo.tReadPos++];
+					MakeBinaryFromJsonChunk(pvecData, jsonChunk);
+				}
+				return *this;
+			}
+			if (topGroupingInfo.nType == GT_DICTIONARY)
+			{
+				if (topGroupingInfo.tReadPos < topGroupingInfo.vecChunk.size())
+				{
+					sChunk& jsonChunk = topGroupingInfo.vecChunk[topGroupingInfo.tReadPos++];
+					strKey = jsonChunk.strKey;
+					MakeBinaryFromJsonChunk(pvecData, jsonChunk);
+				}
+				return *this;
+			}
+			if (topGroupingInfo.nType == GT_OBJECT)
+			{
+				size_t i;
+				for (i = 0; i < topGroupingInfo.vecChunk.size(); i++)
+				{
+					sChunk& jsonChunk = topGroupingInfo.vecChunk[i];
+					if (jsonChunk.strKey != strKey)
+						continue;
+
+					strKey = jsonChunk.strKey;
+					MakeBinaryFromJsonChunk(pvecData, jsonChunk);
+					break;
+				}
+				return *this;
+			}
+
+			size_t i;
+			for (i = 0; i < topGroupingInfo.vecChunk.size(); i++)
+			{
+				if (topGroupingInfo.vecChunk[i].strKey != strKey)
+					continue;
+
+				MakeBinaryFromJsonChunk(pvecData, topGroupingInfo.vecChunk[i]);
+			}
+		}
+
 		return *this;
 	}
 }
