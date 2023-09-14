@@ -40,7 +40,7 @@ namespace core
 		ST_BIN_PACKET_METADATA metaPacket;
 		metaPacket.pPacket = pPacket;
 
-		if (!core::UTF8::WriteBinToPacket(&metaPacket, outPacket))
+		if (!core::WriteBinToPacket(&metaPacket, outPacket))
 			return EC_WRITE_FAILURE;
 
 		if(outPacket.size() < 8)
@@ -49,7 +49,7 @@ namespace core
 		DWORD* pType = (DWORD*)&outPacket[0];
 		DWORD* pLen = (DWORD*)&outPacket[4];
 		*pType = dwPacketID;
-		*pLen = outPacket.size() - 8;
+		*pLen = (DWORD)outPacket.size() - 8;
 		return EC_SUCCESS;
 	}
 
@@ -61,7 +61,7 @@ namespace core
 	{
 		ST_BIN_PACKET_METADATA metaPacket;
 
-		if (!core::UTF8::ReadBinFromPacket(&metaPacket, inPacket))
+		if (!core::ReadBinFromPacket(&metaPacket, inPacket))
 			return EC_READ_FAILURE;
 
 		*pHeader = metaPacket.header;
@@ -73,7 +73,7 @@ namespace core
 		ST_BIN_PACKET_METADATA metaPacket;
 		metaPacket.pPacket = pOutPacket;
 
-		if (!core::UTF8::ReadBinFromPacket(&metaPacket, inPacket))
+		if (!core::ReadBinFromPacket(&metaPacket, inPacket))
 			return EC_READ_FAILURE;
 
 		if (dwPacketID != metaPacket.header.dwID)

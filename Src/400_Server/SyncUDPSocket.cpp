@@ -124,7 +124,7 @@ namespace core
 		if (SOCKET_ERROR_ == nRet)
 			Log_Error("setsockopt(m_hSocket, SOL_SOCKET_, SO_SNDTIMEO, %u) failure, %s", dwTimeOut, GetErrorStringA(GetLastError()).c_str());
 
-		nRet = sendto(m_hSocket, (const char*)pBuff, tBufSize, 0, pSourceInfo.dwIP, pSourceInfo.wPort);
+		nRet = sendto(m_hSocket, (const char*)pBuff, (int)tBufSize, 0, pSourceInfo.dwIP, pSourceInfo.wPort);
 		if (SOCKET_ERROR_ == nRet)
 		{
 			nRet = GetLastError();
@@ -159,7 +159,7 @@ if (nRet < 0)
 }
 
 		ST_SOURCE_INFO stSourceInfo;
-		nRet = recvfrom(m_hSocket, (char*)pBuff, tBufSize, 0, &stSourceInfo);
+		nRet = recvfrom(m_hSocket, (char*)pBuff, (int)tBufSize, 0, &stSourceInfo);
 		if (SOCKET_ERROR_ == nRet)
 		{
 			nRet = GetLastError();

@@ -94,7 +94,7 @@ namespace core
 		if (SOCKET_ERROR_ == nRet)
 			Log_Error("setsockopt(m_hSocket, SOL_SOCKET_, SO_SNDTIMEO, %u) failure, %s", dwTimeOut, GetErrorStringA(GetLastError()).c_str());
 
-		nRet = core::send(hSocket, (const char*)pBuff, tBufSize, 0);
+		nRet = core::send(hSocket, (const char*)pBuff, (int)tBufSize, 0);
 		if (SOCKET_ERROR_ == nRet)
 		{
 			nRet = GetLastError();
@@ -159,7 +159,7 @@ namespace core
 		if (SOCKET_ERROR_ == nRet)
 			Log_Error("setsockopt(m_hSocket, SOL_SOCKET_, SO_RCVTIMEO_, %u) failure, %s", dwTimeOut, GetErrorStringA(GetLastError()).c_str());
 
-		nRet = core::recv(hSocket, (char*)pBuff, tBufSize, 0);
+		nRet = core::recv(hSocket, (char*)pBuff, (int)tBufSize, 0);
 		if (SOCKET_ERROR_ == nRet)
 		{
 			nRet = GetLastError();
@@ -236,7 +236,7 @@ namespace core
 		if (SOCKET_ERROR_ == nRet)
 			Log_Error("setsockopt(m_hSocket, SOL_SOCKET_, SO_RCVTIMEO_, %u) failure, %s", dwTimeOut, GetErrorStringA(GetLastError()).c_str());
 
-		nRet = core::recv(hSocket, (char*)pBuff, tBufSize, MSG_PEEK_);
+		nRet = core::recv(hSocket, (char*)pBuff, (int)tBufSize, MSG_PEEK_);
 		if (SOCKET_ERROR_ == nRet)
 		{
 			nRet = GetLastError();

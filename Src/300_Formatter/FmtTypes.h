@@ -5,6 +5,12 @@
 #include <string>
 #include <vector>
 
+#ifdef UNICODE
+#define fmt_internal	fmt_internalW
+#else
+#define fmt_internal	fmt_internalA
+#endif
+
 namespace fmt_internal
 {
 	//////////////////////////////////////////////////////////////////////////

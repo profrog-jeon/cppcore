@@ -21,8 +21,8 @@ namespace fmt_internal
 	void WriteUBJsonKey(core::IChannel& Channel, const std::wstring& refKey);
 	void WriteUBJsonValue(core::IChannel& Channel, const char& refValue);
 	void WriteUBJsonValue(core::IChannel& Channel, const short& refValue);
-	void WriteUBJsonValue(core::IChannel& Channel, const int& refValue);
-	void WriteUBJsonValue(core::IChannel& Channel, const long long& refValue);
+	void WriteUBJsonValue(core::IChannel& Channel, const int32_t& refValue);
+	void WriteUBJsonValue(core::IChannel& Channel, const int64_t& refValue);
 	void WriteUBJsonValue(core::IChannel& Channel, const BYTE& refValue);
 	void WriteUBJsonValue(core::IChannel& Channel, const WORD& refValue);
 	void WriteUBJsonValue(core::IChannel& Channel, const DWORD& refValue);

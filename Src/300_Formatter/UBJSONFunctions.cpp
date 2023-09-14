@@ -32,13 +32,13 @@ namespace fmt_internal
 		Channel.Access((void*)&refValue, sizeof(refValue));
 	}
 
-	void WriteUBJsonValue(core::IChannel& Channel, const int& refValue)
+	void WriteUBJsonValue(core::IChannel& Channel, const int32_t& refValue)
 	{
 		Channel.Access((void*)"l", 1);
 		Channel.Access((void*)&refValue, sizeof(refValue));
 	}
 
-	void WriteUBJsonValue(core::IChannel& Channel, const long long& refValue)
+	void WriteUBJsonValue(core::IChannel& Channel, const int64_t& refValue)
 	{
 		Channel.Access((void*)"L", 1);
 		Channel.Access((void*)&refValue, sizeof(refValue));
@@ -151,7 +151,7 @@ namespace fmt_internal
 		case 'i':	strRet = StringFromA(ReadUBJConst<char>(Channel));			break;
 		case 'I':	strRet = StringFromA(ReadUBJConst<short>(Channel));			break;
 		case 'l':	strRet = StringFromA(ReadUBJConst<int>(Channel));			break;
-		case 'L':	strRet = StringFromA(ReadUBJConst<long long>(Channel));		break;
+		case 'L':	strRet = StringFromA(ReadUBJConst<int64_t>(Channel));		break;
 		case 'd':	strRet = StringFromA(ReadUBJConst<float>(Channel));			break;
 		case 'D':	strRet = StringFromA(ReadUBJConst<double>(Channel));		break;
 		case 'S':
