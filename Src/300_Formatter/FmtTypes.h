@@ -17,7 +17,7 @@ namespace fmt_internal
 	};
 
 	//////////////////////////////////////////////////////////////////////////
-	enum eTokenType
+	enum E_TOKEN_TYPE
 	{
 		TT_UNKNOWN,
 		TT_BRACE_OPEN,
@@ -31,40 +31,21 @@ namespace fmt_internal
 	};
 
 	//////////////////////////////////////////////////////////////////////////
-	struct sTokenA
+	struct ST_JSON_CHUNK
 	{
-		eTokenType nType;
-		std::string strValue;
-		std::string strParsingStack;
+		E_TOKEN_TYPE nType;
+		std::tstring strValue;
+		std::tstring strParsingStack;
 
-		sTokenA(std::string strInValue) : nType(TT_UNKNOWN), strValue(strInValue) {}
-		sTokenA(eTokenType nInType, std::string strInValue) : nType(nInType), strValue(strInValue) {}
-	};
-	struct sTokenW
-	{
-		eTokenType nType;
-		std::wstring strValue;
-		std::wstring strParsingStack;
-
-		sTokenW(std::wstring strInValue) : nType(TT_UNKNOWN), strValue(strInValue) {}
-		sTokenW(eTokenType nInType, std::wstring strInValue) : nType(nInType), strValue(strInValue) {}
+		ST_JSON_CHUNK(std::tstring strInValue) : nType(TT_UNKNOWN), strValue(strInValue) {}
+		ST_JSON_CHUNK(E_TOKEN_TYPE nInType, std::tstring strInValue) : nType(nInType), strValue(strInValue) {}
 	};
 
 	//////////////////////////////////////////////////////////////////////////
-	struct sChunkA
+	struct ST_JSON_TOKEN
 	{
-		std::string strKey;
-		std::vector<std::string> vecToken;
-		void Clear()
-		{
-			strKey.clear();
-			vecToken.clear();
-		}
-	};
-	struct sChunkW
-	{
-		std::wstring strKey;
-		std::vector<std::wstring> vecToken;
+		std::tstring strKey;
+		std::vector<std::tstring> vecToken;
 		void Clear()
 		{
 			strKey.clear();
@@ -73,9 +54,7 @@ namespace fmt_internal
 	};
 
 	//////////////////////////////////////////////////////////////////////////
-	typedef std::vector<sTokenA>  CTokenVecA;
-	typedef std::vector<sTokenW>  CTokenVecW;
-	typedef std::vector<sChunkA>  CChunkVecA;
-	typedef std::vector<sChunkW>  CChunkVecW;
+	typedef std::vector<ST_JSON_CHUNK>  CTokenVec;
+	typedef std::vector<ST_JSON_TOKEN>  CChunkVec;
 	typedef std::vector<std::tstring>	CTStringVec;
 }

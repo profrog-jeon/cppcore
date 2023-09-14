@@ -6,7 +6,7 @@
 namespace fmt_internal
 {
 	//////////////////////////////////////////////////////////////////////////
-	const TCHAR* GetTokenTypeString(eTokenType nType)
+	const TCHAR* GetTokenTypeString(E_TOKEN_TYPE nType)
 	{
 		switch (nType)
 		{
@@ -348,7 +348,7 @@ namespace fmt_internal
 				tLastParsingTokenIndex = i;
 				std::tstring strTemp = vecToken[i];
 
-				sToken tempToken(TT_UNKNOWN, strTemp);
+				ST_JSON_CHUNK tempToken(TT_UNKNOWN, strTemp);
 				{	// Building parsing stack string for debug
 					int i;
 					for (i = 0; i < (int)parsingStack.size(); i++)
@@ -489,13 +489,13 @@ namespace fmt_internal
 	{
 		try
 		{
-			sChunk tempJsonChunk;
+			ST_JSON_TOKEN tempJsonChunk;
 			std::tstring strPreParsingStack;
 
 			size_t i;
 			for (i = 0; i < vecJsonToken.size(); i++)
 			{
-				sToken& token = vecJsonToken[i];
+				ST_JSON_CHUNK& token = vecJsonToken[i];
 
 				if (token.strParsingStack == TEXT("}") && TT_KEY == token.nType)
 					tempJsonChunk.strKey = RestoreFromJsonString(token.strValue);

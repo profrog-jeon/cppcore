@@ -66,7 +66,7 @@ namespace fmt_internal
 
 			sGroupingInfo newGroupingInfo(GT_DICTIONARY);
 
-			std::vector<sToken> vecJsonToken;
+			std::vector<ST_JSON_CHUNK> vecJsonToken;
 			m_bValidity = Parse(topGroupInfo.vecChunk[i].vecToken, vecJsonToken, m_strErrMsg);
 			Build(vecJsonToken, newGroupingInfo.vecChunk);
 
@@ -250,7 +250,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	inline void MakeValueStringFromJsonChunk(std::tstring* pString, sChunk& jsonChunk)
+	inline void MakeValueStringFromJsonChunk(std::tstring* pString, ST_JSON_TOKEN& jsonChunk)
 	{
 		if( jsonChunk.vecToken.size() == 1 )
 		{
@@ -275,7 +275,7 @@ namespace fmt_internal
 			{
 				if( topGroupingInfo.tReadPos < topGroupingInfo.vecChunk.size() )
 				{
-					sChunk& jsonChunk = topGroupingInfo.vecChunk[topGroupingInfo.tReadPos++];
+					ST_JSON_TOKEN& jsonChunk = topGroupingInfo.vecChunk[topGroupingInfo.tReadPos++];
 					MakeValueStringFromJsonChunk(pValue, jsonChunk);
 				}
 				return *this;
@@ -284,7 +284,7 @@ namespace fmt_internal
 			{
 				if( topGroupingInfo.tReadPos < topGroupingInfo.vecChunk.size() )
 				{
-					sChunk& jsonChunk = topGroupingInfo.vecChunk[topGroupingInfo.tReadPos++];
+					ST_JSON_TOKEN& jsonChunk = topGroupingInfo.vecChunk[topGroupingInfo.tReadPos++];
 					strKey = jsonChunk.strKey;
 					MakeValueStringFromJsonChunk(pValue, jsonChunk);
 				}
@@ -295,7 +295,7 @@ namespace fmt_internal
 				size_t i;
 				for(i=0; i<topGroupingInfo.vecChunk.size(); i++)
 				{
-					sChunk& jsonChunk = topGroupingInfo.vecChunk[i];
+					ST_JSON_TOKEN& jsonChunk = topGroupingInfo.vecChunk[i];
 					if( jsonChunk.strKey != strKey )
 						continue;
 
@@ -339,12 +339,12 @@ namespace fmt_internal
 
 			CJSONDeserializer::sGroupingInfo& topGroupingInfo = refGroupingStack.top();
 
-			if( topGroupingInfo.nType == CJSONDeserializer::GT_ARRAY
-			||  topGroupingInfo.nType == CJSONDeserializer::GT_DICTIONARY )
+			if( topGroupingInfo.nType == GT_ARRAY
+			||  topGroupingInfo.nType == GT_DICTIONARY )
 			{
 				if( topGroupingInfo.tReadPos < topGroupingInfo.vecChunk.size() )
 				{
-					sChunk& jsonChunk = topGroupingInfo.vecChunk[topGroupingInfo.tReadPos++];
+					ST_JSON_TOKEN& jsonChunk = topGroupingInfo.vecChunk[topGroupingInfo.tReadPos++];
 					if( jsonChunk.vecToken.empty() )
 						throw exception_format(TEXT("Empty chunk has been found!"));
 
@@ -360,7 +360,7 @@ namespace fmt_internal
 				size_t i;
 				for(i=0; i<topGroupingInfo.vecChunk.size(); i++)
 				{
-					sChunk& jsonChunk = topGroupingInfo.vecChunk[i];
+					ST_JSON_TOKEN& jsonChunk = topGroupingInfo.vecChunk[i];
 					if( strKey != jsonChunk.strKey )
 						continue;
 

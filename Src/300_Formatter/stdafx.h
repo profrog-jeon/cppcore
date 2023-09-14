@@ -21,20 +21,4 @@
 #include <list>
 #include <stack>
 
-static const size_t g_tSecTokenLeng = 1024*1024;
-
 using namespace core;
-
-#ifdef UNICODE
-#define sToken		sTokenW				
-#define sChunk		sChunkW				
-#define CChunkVec	std::vector<sChunkW>
-#define CTokenVec	std::vector<sTokenW>
-#define CJSONDeserializer	CJSONDeserializerW
-#else
-#define sToken		sTokenA				
-#define sChunk		sChunkA				
-#define CTokenVec	std::vector<sTokenA>
-#define CChunkVec	std::vector<sChunkA>
-#define CJSONDeserializer	CJSONDeserializerA
-#endif
