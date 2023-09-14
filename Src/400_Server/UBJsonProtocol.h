@@ -5,10 +5,10 @@
 
 namespace core
 {
-	class CJsonProtocol : public CProtocolSuper
+	class CUBJsonProtocol : public CProtocolSuper
 	{
 	public:
-		CJsonProtocol(core::CSyncTCPSocket* pSocket)
+		CUBJsonProtocol(core::CSyncTCPSocket* pSocket)
 			: CProtocolSuper(pSocket)
 		{}
 

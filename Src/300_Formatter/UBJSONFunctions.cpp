@@ -88,7 +88,8 @@ namespace fmt_internal
 		Channel.Access((void*)"S", 1);
 		Channel.Access((void*)"l", 1);
 		Channel.Access((void*)&dwLength, sizeof(dwLength));
-		Channel.Access((void*)strValueU8.c_str(), strValueU8.length());
+		if (dwLength)
+			Channel.Access((void*)strValueU8.c_str(), dwLength);
 	}
 
 	void WriteUBJsonValue(core::IChannel& Channel, const std::wstring& refValue)
@@ -99,7 +100,8 @@ namespace fmt_internal
 		Channel.Access((void*)"S", 1);
 		Channel.Access((void*)"l", 1);
 		Channel.Access((void*)&dwLength, sizeof(dwLength));
-		Channel.Access((void*)strValueU8.c_str(), strValueU8.length());
+		if (dwLength)
+			Channel.Access((void*)strValueU8.c_str(), dwLength);
 	}
 
 	void WriteUBJsonValue(core::IChannel& Channel, const std::vector<BYTE>& refValue)

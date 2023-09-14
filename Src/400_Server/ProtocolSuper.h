@@ -38,9 +38,6 @@ namespace core
 		virtual void Close(void);
 
 		virtual ECODE PeekHeader(ST_PACKET_HEADER& header, DWORD dwTimeOut = 60000);
-		virtual ECODE SendBinary(DWORD dwID, const std::vector<BYTE>& vecData, DWORD dwTimeOut = 60000);
-		virtual ECODE SendBinary(DWORD dwID, LPCVOID pData, size_t tDataSize, DWORD dwTimeOut = 60000);
-		virtual ECODE RecvBinary(DWORD dwID, std::vector<BYTE>& vecData, DWORD dwTimeOut = 60000);
 
 		template<typename T>
 		ECODE SendPacket(T* pPacket, DWORD dwTimeOut = 60000)

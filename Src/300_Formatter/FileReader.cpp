@@ -61,7 +61,7 @@ namespace fmt_internal
 			return 0;
 
 		DWORD dwReadSize = 0;
-		if (!ReadFile(m_hFile, pData, tDataSize, &dwReadSize))
+		if (!ReadFile(m_hFile, pData, (DWORD)tDataSize, &dwReadSize))
 			return 0;
 
 		return dwReadSize;

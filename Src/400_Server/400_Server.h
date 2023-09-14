@@ -7,3 +7,4 @@
 #include "Packetizer.h"
 #include "BinProtocol.h"
 #include "JsonProtocol.h"
+#include "UBJsonProtocol.h"

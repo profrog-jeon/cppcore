@@ -59,7 +59,7 @@ namespace fmt_internal
 			return 0;
 
 		DWORD dwWrittenSize = 0;
-		if (!WriteFile(m_hFile, pData, tDataSize, &dwWrittenSize))
+		if (!WriteFile(m_hFile, pData, (DWORD)tDataSize, &dwWrittenSize))
 			return 0;
 
 		return dwWrittenSize;

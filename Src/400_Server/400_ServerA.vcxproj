@@ -46,6 +46,7 @@
     <ClInclude Include="SyncServer.h" />
     <ClInclude Include="SyncTCPSocket.h" />
     <ClInclude Include="SyncUDPSocket.h" />
+    <ClInclude Include="UBJsonProtocol.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BinProtocol.cpp" />
@@ -67,6 +68,7 @@
     <ClCompile Include="SyncServer.cpp" />
     <ClCompile Include="SyncTCPSocket.cpp" />
     <ClCompile Include="SyncUDPSocket.cpp" />
+    <ClCompile Include="UBJsonProtocol.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{51B5478C-1B02-41DF-9916-BAF407470132}</ProjectGuid>

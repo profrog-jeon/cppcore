@@ -114,19 +114,19 @@ namespace core
 	bool UnpacketizeFromBytes(LPCBYTE pData, size_t tDataSize, core::IFormatterObjectA* pObject, std::string* pStrErrMsg = NULL);
 	bool UnpacketizeFromBytes(LPCBYTE pData, size_t tDataSize, core::IFormatterObjectW* pObject, std::wstring* pStrErrMsg = NULL);
 
-	bool WriteBinToPacket(const IFormatterObjectW* pObject, std::vector<BYTE>& vecPacket);
-	bool WriteBinToPacket(const IFormatterObjectA* pObject, std::vector<BYTE>& vecPacket);
+	bool WriteBinToPacket(const IFormatterObjectW* pObject, std::vector<BYTE>& vecPacket, std::wstring* pStrErrMsg = NULL);
+	bool WriteBinToPacket(const IFormatterObjectA* pObject, std::vector<BYTE>& vecPacket, std::string* pStrErrMsg = NULL);
 	bool ReadBinFromPacket(IFormatterObjectW* pObject, const std::vector<BYTE>& vecPacket);
 	bool ReadBinFromPacket(IFormatterObjectA* pObject, const std::vector<BYTE>& vecPacket);
 
-	bool WriteJsonToPacket(const IFormatterObjectW* pObject, std::vector<BYTE>& vecPacket);
-	bool WriteJsonToPacket(const IFormatterObjectA* pObject, std::vector<BYTE>& vecPacket);
-	bool ReadJsonFromPacket(IFormatterObjectW* pObject, const std::vector<BYTE>& vecPacket);
-	bool ReadJsonFromPacket(IFormatterObjectA* pObject, const std::vector<BYTE>& vecPacket);
+	bool WriteJsonToPacket(const IFormatterObjectW* pObject, std::vector<BYTE>& vecPacket, std::wstring* pStrErrMsg = NULL);
+	bool WriteJsonToPacket(const IFormatterObjectA* pObject, std::vector<BYTE>& vecPacket, std::string* pStrErrMsg = NULL);
+	bool ReadJsonFromPacket(IFormatterObjectW* pObject, const std::vector<BYTE>& vecPacket, std::wstring* pStrErrMsg = NULL);
+	bool ReadJsonFromPacket(IFormatterObjectA* pObject, const std::vector<BYTE>& vecPacket, std::string* pStrErrMsg = NULL);
 
-	bool WriteUBJsonToPacket(const IFormatterObjectW* pObject, std::vector<BYTE>& vecPacket);
-	bool WriteUBJsonToPacket(const IFormatterObjectA* pObject, std::vector<BYTE>& vecPacket);
-	bool ReadUBJsonFromPacket(IFormatterObjectW* pObject, const std::vector<BYTE>& vecPacket);
-	bool ReadUBJsonFromPacket(IFormatterObjectA* pObject, const std::vector<BYTE>& vecPacket);
+	bool WriteUBJsonToPacket(const IFormatterObjectW* pObject, std::vector<BYTE>& vecPacket, std::wstring* pStrErrMsg = NULL);
+	bool WriteUBJsonToPacket(const IFormatterObjectA* pObject, std::vector<BYTE>& vecPacket, std::string* pStrErrMsg = NULL);
+	bool ReadUBJsonFromPacket(IFormatterObjectW* pObject, const std::vector<BYTE>& vecPacket, std::wstring* pStrErrMsg = NULL);
+	bool ReadUBJsonFromPacket(IFormatterObjectA* pObject, const std::vector<BYTE>& vecPacket, std::string* pStrErrMsg = NULL);
 }
 
