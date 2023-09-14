@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "UBJSONDeserializer.h"
-#include "JSONFunctions.h"
+#include "UBJSONFunctions.h"
 
 namespace fmt_internal
 {
@@ -9,39 +9,17 @@ namespace fmt_internal
 		: core::IFormatterT(channel)
 		, m_GroupingStack()
 		, m_bValidity(false)
-		, m_strContext()
-		, m_vecJsonToken()
 		, m_strErrMsg()
 	{
 		if( !(m_bValidity = channel.CheckValidity(m_strErrMsg)) )
 			return;
 
-		while(1)
+		ECODE nRet = ParseUBJson(channel, m_RootNode, m_strErrMsg);
+		if (EC_SUCCESS != nRet)
 		{
-			const size_t tTokenSize = 1024;
-			TCHAR szBuff[tTokenSize+1] = { 0, };
-			size_t tReadSize = channel.Access(szBuff, sizeof(TCHAR) * tTokenSize);
-			if( 0 == tReadSize )
-				break;
-
-			m_strContext += szBuff;
+			Log_Error(TEXT("ParseUBJson failure, %d(%s)"), nRet, m_strErrMsg.c_str());
+			m_bValidity = false;
 		}
-
-		std::vector<std::tstring> vecToken;
-		Scan(m_strContext, vecToken);
-		m_bValidity = Parse(vecToken, m_vecJsonToken, m_strErrMsg);
-	}
-
-	//////////////////////////////////////////////////////////////////////////
-	CUBJSONDeserializer::CUBJSONDeserializer(core::IChannel& channel, std::vector<std::tstring>& vecChunk)
-		: core::IFormatterT(channel)
-		, m_GroupingStack()
-		, m_bValidity(false)
-		, m_strContext()
-		, m_vecJsonToken()
-		, m_strErrMsg()
-	{
-		m_bValidity = Parse(vecChunk, m_vecJsonToken, m_strErrMsg);
 	}
 
 	//////////////////////////////////////////////////////////////////////////
@@ -50,42 +28,35 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
+	void CUBJSONDeserializer::BeginRoot()
+	{
+		sGroupingInfo newGroupingInfo(GT_ROOT, &m_RootNode);
+		m_GroupingStack.push(newGroupingInfo);
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	void CUBJSONDeserializer::EndRoot()
+	{
+		if (m_GroupingStack.top().nType == GT_ROOT)
+			m_GroupingStack.pop();
+	}
+
+	//////////////////////////////////////////////////////////////////////////
 	size_t CUBJSONDeserializer::BeginDictionary(std::tstring& strKey, const size_t tSize, bool bAllowMultiKey)
 	{
-		sGroupingInfo& topGroupInfo = m_GroupingStack.top();
+		std::string strKeyU8 = UTF8FromTCS(strKey);
 
-		size_t tIndex = 0;
-		size_t i;
-		for(i=0; i<topGroupInfo.vecChunk.size(); i++)
+		sGroupingInfo* pParent = &m_GroupingStack.top();
+		for (ST_UBJ_NODE& child : pParent->pNode->Children)
 		{
-			if( topGroupInfo.vecChunk[i].strKey != strKey )
+			if (child.strKey != strKeyU8)
 				continue;
 
-			if( tIndex++ < topGroupInfo.tReadPos )
-				continue;
-
-			sGroupingInfo newGroupingInfo(GT_DICTIONARY);
-
-			std::vector<sToken> vecJsonToken;
-			m_bValidity = Parse(topGroupInfo.vecChunk[i].vecToken, vecJsonToken, m_strErrMsg);
-			Build(vecJsonToken, newGroupingInfo.vecChunk);
-
-			if( bAllowMultiKey )
-			{
-				size_t j;
-				for(j=0; j<newGroupingInfo.vecChunk.size(); j++)
-				{
-					if( newGroupingInfo.vecChunk[j].vecToken.size() > 1 )
-						ExpandArray(j, newGroupingInfo.vecChunk);
-				}
-			}
-
-			m_GroupingStack.push(newGroupingInfo);
-
-			return newGroupingInfo.vecChunk.size();
+			m_GroupingStack.push(sGroupingInfo(GT_DICTIONARY, &child));
+			return child.Children.size();
 		}
-		
-		m_GroupingStack.push(sGroupingInfo(GT_DICTIONARY));
+
+		m_GroupingStack.push(sGroupingInfo(GT_DICTIONARY, pParent->pNode));
 		return 0;
 	}
 
@@ -99,51 +70,20 @@ namespace fmt_internal
 	//////////////////////////////////////////////////////////////////////////
 	size_t CUBJSONDeserializer::BeginArray(std::tstring& strKey, const size_t tSize)
 	{
-		sGroupingInfo& topGroupInfo = m_GroupingStack.top();
+		std::string strKeyU8 = UTF8FromTCS(strKey);
 
-		size_t i;
-		if( GT_DICTIONARY == topGroupInfo.nType )
+		sGroupingInfo* pParent = &m_GroupingStack.top();
+		for (ST_UBJ_NODE& child : pParent->pNode->Children)
 		{
-			i = topGroupInfo.tReadPos++;
-			strKey = topGroupInfo.vecChunk[i].strKey;
-		}
-
-		for(i=0; i<topGroupInfo.vecChunk.size(); i++)
-		{
-			if( topGroupInfo.vecChunk[i].strKey != strKey )
+			if (child.strKey != strKeyU8)
 				continue;
 
-			break;
+			m_GroupingStack.push(sGroupingInfo(GT_ARRAY, &child));
+			return child.Children.size();
 		}
 
-		if( i >= topGroupInfo.vecChunk.size() )
-		{
-			m_GroupingStack.push(sGroupingInfo(GT_ARRAY));
-			return 0;
-		}
-
-		sGroupingInfo newGroupingInfo(GT_ARRAY);
-
-		// context has single item
-		if( topGroupInfo.vecChunk[i].vecToken.size() == 1 )
-		{
-			newGroupingInfo.vecChunk.push_back(topGroupInfo.vecChunk[i]);
-		}
-		// context has multiple(array) item
-		else
-		{
-			CTokenVec vecJsonToken;
-			m_bValidity = Parse(topGroupInfo.vecChunk[i].vecToken, vecJsonToken, m_strErrMsg);
-			Build(vecJsonToken, newGroupingInfo.vecChunk);
-
-			size_t j;
-			for(j=0; j<newGroupingInfo.vecChunk.size(); j++)
-				newGroupingInfo.vecChunk[j].strKey = topGroupInfo.vecChunk[i].strKey;
-		}
-
-		m_GroupingStack.push(newGroupingInfo);
-
-		return newGroupingInfo.vecChunk.size();
+		m_GroupingStack.push(sGroupingInfo(GT_ARRAY, pParent->pNode));
+		return 0;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
@@ -151,11 +91,15 @@ namespace fmt_internal
 	{
 		sGroupingInfo& topGroupInfo = m_GroupingStack.top();
 		topGroupInfo.tReadPos = tIndex;
+
+		m_GroupingStack.push(sGroupingInfo(GT_OBJECT, &topGroupInfo.pNode->Children[tIndex]));
 	}
 
 	//////////////////////////////////////////////////////////////////////////
 	void CUBJSONDeserializer::EndArrayItem(size_t tIndex, size_t tCount)
 	{
+		if (m_GroupingStack.top().nType == GT_OBJECT)
+			m_GroupingStack.pop();
 	}
 
 	//////////////////////////////////////////////////////////////////////////
@@ -168,63 +112,48 @@ namespace fmt_internal
 	//////////////////////////////////////////////////////////////////////////
 	void CUBJSONDeserializer::BeginObject(std::tstring& strKey)
 	{
-		sGroupingInfo& topGroupInfo = m_GroupingStack.top();
+		std::string strKeyU8 = UTF8FromTCS(strKey);
+
+		sGroupingInfo* pParent = &m_GroupingStack.top();
 
 		// find a array sequenctial token
-		if( GT_ARRAY == topGroupInfo.nType )
+		if (GT_ARRAY == pParent->nType)
 		{
-			size_t tIndex = topGroupInfo.tReadPos;
-			topGroupInfo.tReadPos++;
+			size_t tIndex = pParent->tReadPos;
+			pParent->tReadPos++;
 
-			if( tIndex < topGroupInfo.vecChunk.size() )
+			if (tIndex < pParent->pNode->Children.size())
 			{
-				sGroupingInfo newGroupingInfo(GT_OBJECT);
-				CTokenVec vecJsonToken;
-				m_bValidity = Parse(topGroupInfo.vecChunk[tIndex].vecToken, vecJsonToken, m_strErrMsg);
-				Build(vecJsonToken, newGroupingInfo.vecChunk);
-
-				m_GroupingStack.push(newGroupingInfo);
+				strKey = TCSFromUTF8(pParent->pNode->Children[tIndex].strKey);
+				m_GroupingStack.push(sGroupingInfo(GT_OBJECT, &pParent->pNode->Children[tIndex]));
 				return;
-			}				
+			}
 		}
 
 		// find a array sequenctial token
-		if( GT_DICTIONARY == topGroupInfo.nType )
+		if (GT_DICTIONARY == pParent->nType)
 		{
-			size_t tIndex = topGroupInfo.tReadPos;
-			topGroupInfo.tReadPos++;
+			size_t tIndex = pParent->tReadPos;
+			pParent->tReadPos++;
 
-			if( tIndex < topGroupInfo.vecChunk.size() )
+			if (tIndex < pParent->pNode->Children.size())
 			{
-				sGroupingInfo newGroupingInfo(GT_OBJECT);
-				CTokenVec vecJsonToken;
-				m_bValidity = Parse(topGroupInfo.vecChunk[tIndex].vecToken, vecJsonToken, m_strErrMsg);
-				Build(vecJsonToken, newGroupingInfo.vecChunk);
-
-				strKey = topGroupInfo.vecChunk[tIndex].strKey;
-				m_GroupingStack.push(newGroupingInfo);
+				strKey = TCSFromUTF8(pParent->pNode->Children[tIndex].strKey);
+				m_GroupingStack.push(sGroupingInfo(GT_OBJECT, &pParent->pNode->Children[tIndex]));
 				return;
-			}				
+			}
 		}
 
-		// find a key matched token
-		size_t i;
-		for(i=0; i<topGroupInfo.vecChunk.size(); i++)
+		for (ST_UBJ_NODE& child : pParent->pNode->Children)
 		{
-			if( topGroupInfo.vecChunk[i].strKey != strKey )
+			if (child.strKey != strKeyU8)
 				continue;
 
-			sGroupingInfo newGroupingInfo(GT_OBJECT);
-			CTokenVec vecJsonToken;
-			m_bValidity = Parse(topGroupInfo.vecChunk[i].vecToken, vecJsonToken, m_strErrMsg);
-			Build(vecJsonToken, newGroupingInfo.vecChunk);
-
-			m_GroupingStack.push(newGroupingInfo);
+			m_GroupingStack.push(sGroupingInfo(GT_OBJECT, &child));
 			return;
 		}
 
-		// Add dummy group info
-		m_GroupingStack.push(sGroupingInfo(GT_OBJECT));
+		m_GroupingStack.push(sGroupingInfo(GT_OBJECT, pParent->pNode));
 	}
 
 	//////////////////////////////////////////////////////////////////////////
@@ -235,87 +164,63 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CUBJSONDeserializer::BeginRoot()
-	{
-		sGroupingInfo newGroupingInfo(GT_ROOT);
-		Build(m_vecJsonToken, newGroupingInfo.vecChunk);
-		m_GroupingStack.push(newGroupingInfo);
-	}
-
-	//////////////////////////////////////////////////////////////////////////
-	void CUBJSONDeserializer::EndRoot()
-	{
-		if( m_GroupingStack.top().nType == GT_ROOT )
-			m_GroupingStack.pop();
-	}
-
-	//////////////////////////////////////////////////////////////////////////
-	inline void MakeValueStringFromJsonChunk(std::tstring* pString, sChunk& jsonChunk)
-	{
-		if( jsonChunk.vecToken.size() == 1 )
-		{
-			*pString = RestoreFromJsonString(jsonChunk.vecToken[0]);
-		}
-		else
-		{
-			
-			size_t i;
-			for(i=0; i<jsonChunk.vecToken.size(); i++)
-				*pString += jsonChunk.vecToken[i];
-		}
-	}
-
-	//////////////////////////////////////////////////////////////////////////
 	core::IFormatterT& CUBJSONDeserializer::Sync(std::tstring& strKey, std::tstring* pValue)
 	{
-		if( !m_GroupingStack.empty() )
-		{
-			sGroupingInfo& topGroupingInfo = m_GroupingStack.top();
-			if( topGroupingInfo.nType == GT_ARRAY )
-			{
-				if( topGroupingInfo.tReadPos < topGroupingInfo.vecChunk.size() )
-				{
-					sChunk& jsonChunk = topGroupingInfo.vecChunk[topGroupingInfo.tReadPos++];
-					MakeValueStringFromJsonChunk(pValue, jsonChunk);
-				}
-				return *this;
-			}
-			if( topGroupingInfo.nType == GT_DICTIONARY )
-			{
-				if( topGroupingInfo.tReadPos < topGroupingInfo.vecChunk.size() )
-				{
-					sChunk& jsonChunk = topGroupingInfo.vecChunk[topGroupingInfo.tReadPos++];
-					strKey = jsonChunk.strKey;
-					MakeValueStringFromJsonChunk(pValue, jsonChunk);
-				}
-				return *this;
-			}
-			if( topGroupingInfo.nType == GT_OBJECT)
-			{
-				size_t i;
-				for(i=0; i<topGroupingInfo.vecChunk.size(); i++)
-				{
-					sChunk& jsonChunk = topGroupingInfo.vecChunk[i];
-					if( jsonChunk.strKey != strKey )
-						continue;
+		std::string strKeyU8 = UTF8FromTCS(strKey);
 
-					strKey = jsonChunk.strKey;
-					MakeValueStringFromJsonChunk(pValue, jsonChunk);
-					break;
-				}
-				return *this;
+		if (m_GroupingStack.empty())
+			return *this;
+
+		sGroupingInfo& topGroupingInfo = m_GroupingStack.top();
+		if( topGroupingInfo.nType == GT_ARRAY )
+		{
+			if( topGroupingInfo.tReadPos < topGroupingInfo.pNode->Children.size() )
+			{
+				ST_UBJ_NODE& stNode = topGroupingInfo.pNode->Children[topGroupingInfo.tReadPos++];
+				*pValue = TCSFromUTF8(stNode.strValue);
+			}
+			return *this;
+		}
+		if( topGroupingInfo.nType == GT_DICTIONARY )
+		{
+			if (topGroupingInfo.tReadPos < topGroupingInfo.pNode->Children.size())
+			{
+				ST_UBJ_NODE& stNode = topGroupingInfo.pNode->Children[topGroupingInfo.tReadPos++];
+				*pValue = TCSFromUTF8(stNode.strValue);
+			}
+			return *this;
+		}
+		if( topGroupingInfo.nType == GT_OBJECT)
+		{
+			if (topGroupingInfo.tReadPos < topGroupingInfo.pNode->Children.size())
+			{
+				ST_UBJ_NODE& stNode = topGroupingInfo.pNode->Children[topGroupingInfo.tReadPos++];
+				*pValue = TCSFromUTF8(stNode.strValue);
 			}
 
 			size_t i;
-			for(i=0; i<topGroupingInfo.vecChunk.size(); i++)
+			for(i=0; i< topGroupingInfo.pNode->Children.size(); i++)
 			{
-				if( topGroupingInfo.vecChunk[i].strKey != strKey )
+				ST_UBJ_NODE& curNode = topGroupingInfo.pNode->Children[i];
+				if(curNode.strKey != strKeyU8)
 					continue;
 
-				MakeValueStringFromJsonChunk(pValue, topGroupingInfo.vecChunk[i]);
+				strKey = TCSFromUTF8(curNode.strKey);
+				*pValue = TCSFromUTF8(curNode.strValue);
+				break;
 			}
+			return *this;
 		}
 
+		size_t i;
+		for (i = 0; i < topGroupingInfo.pNode->Children.size(); i++)
+		{
+			ST_UBJ_NODE& curNode = topGroupingInfo.pNode->Children[i];
+			if (curNode.strKey != strKeyU8)
+				continue;
+
+			*pValue = TCSFromUTF8(curNode.strValue);
+		}
 		return *this;
 	}
 
@@ -330,113 +235,114 @@ namespace fmt_internal
 
 	//////////////////////////////////////////////////////////////////////////
 	template<typename T>
-	inline void JSONDeserializerMetaSync(std::stack<CUBJSONDeserializer::sGroupingInfo>& refGroupingStack, std::tstring& strKey, T& refValue)
+	inline void UBJSONDeserializerMetaSync(std::stack<CUBJSONDeserializer::sGroupingInfo>& refGroupingStack, std::tstring& strKey, T& refValue)
 	{
-		try
+		if( refGroupingStack.empty() )
+			return;
+
+		CUBJSONDeserializer::sGroupingInfo& topGroupingInfo = refGroupingStack.top();
+
+		if( topGroupingInfo.nType == GT_ARRAY
+		||  topGroupingInfo.nType == GT_DICTIONARY )
 		{
-			if( refGroupingStack.empty() )
-				throw exception_format(TEXT("GroupStack is ZERO!"));
-
-			CUBJSONDeserializer::sGroupingInfo& topGroupingInfo = refGroupingStack.top();
-
-			if( topGroupingInfo.nType == CUBJSONDeserializer::GT_ARRAY
-			||  topGroupingInfo.nType == CUBJSONDeserializer::GT_DICTIONARY )
+			if( topGroupingInfo.tReadPos < topGroupingInfo.pNode->Children.size() )
 			{
-				if( topGroupingInfo.tReadPos < topGroupingInfo.vecChunk.size() )
-				{
-					sChunk& jsonChunk = topGroupingInfo.vecChunk[topGroupingInfo.tReadPos++];
-					if( jsonChunk.vecToken.empty() )
-						throw exception_format(TEXT("Empty chunk has been found!"));
-
-					strKey = jsonChunk.strKey;
-					{
-						std::tstring strValue =  RestoreFromJsonString(jsonChunk.vecToken[0]);
-						refValue = ValueFrom<T>(strValue);
-					}		
-				}
-			}
-			else
-			{
-				size_t i;
-				for(i=0; i<topGroupingInfo.vecChunk.size(); i++)
-				{
-					sChunk& jsonChunk = topGroupingInfo.vecChunk[i];
-					if( strKey != jsonChunk.strKey )
-						continue;
-
-					if( jsonChunk.vecToken.empty() )
-						throw exception_format(TEXT("Empty chunk has been found!"));
-
-					std::tstring strValue =  RestoreFromJsonString(jsonChunk.vecToken[0]);
-					refValue = ValueFrom<T>(strValue);
-				}
+				ST_UBJ_NODE& stNode = topGroupingInfo.pNode->Children[topGroupingInfo.tReadPos++];
+				strKey = TCSFromUTF8(stNode.strKey);
+				refValue = ValueFrom<T>(TCSFromUTF8(stNode.strValue));
 			}
 		}
-		catch(std::exception& e)
+		else
 		{
-			Log_Error("%s - %s", __FUNCTION__, e.what());
+			std::string strKeyU8 = UTF8FromTCS(strKey);
+			
+			size_t i;
+			for(i=0; i<topGroupingInfo.pNode->Children.size(); i++)
+			{
+				ST_UBJ_NODE& stNode = topGroupingInfo.pNode->Children[i];
+				if(strKeyU8 != stNode.strKey )
+					continue;
+
+				refValue = ValueFrom<T>(TCSFromUTF8(stNode.strValue));
+				return;
+			}
 		}
 	}
 
 	//////////////////////////////////////////////////////////////////////////
 	core::IFormatterT& CUBJSONDeserializer::Sync(std::tstring& strKey, bool* pValue)
 	{
-		JSONDeserializerMetaSync(m_GroupingStack, strKey, *pValue);
+		UBJSONDeserializerMetaSync(m_GroupingStack, strKey, *pValue);
 		return *this;
 	}
 	core::IFormatterT& CUBJSONDeserializer::Sync(std::tstring& strKey, char* pValue)
 	{
-		JSONDeserializerMetaSync(m_GroupingStack, strKey, *pValue);
+		UBJSONDeserializerMetaSync(m_GroupingStack, strKey, *pValue);
 		return *this;
 	}
 	core::IFormatterT& CUBJSONDeserializer::Sync(std::tstring& strKey, short* pValue)
 	{
-		JSONDeserializerMetaSync(m_GroupingStack, strKey, *pValue);
+		UBJSONDeserializerMetaSync(m_GroupingStack, strKey, *pValue);
 		return *this;
 	}
 	core::IFormatterT& CUBJSONDeserializer::Sync(std::tstring& strKey, int32_t* pValue)
 	{
-		JSONDeserializerMetaSync(m_GroupingStack, strKey, *pValue);
+		UBJSONDeserializerMetaSync(m_GroupingStack, strKey, *pValue);
 		return *this;
 	}
 	core::IFormatterT& CUBJSONDeserializer::Sync(std::tstring& strKey, int64_t* pValue)
 	{
-		JSONDeserializerMetaSync(m_GroupingStack, strKey, *pValue);
+		UBJSONDeserializerMetaSync(m_GroupingStack, strKey, *pValue);
 		return *this;
 	}
 	core::IFormatterT& CUBJSONDeserializer::Sync(std::tstring& strKey, BYTE* pValue)
 	{
-		JSONDeserializerMetaSync(m_GroupingStack, strKey, *pValue);
+		UBJSONDeserializerMetaSync(m_GroupingStack, strKey, *pValue);
 		return *this;
 	}
 	core::IFormatterT& CUBJSONDeserializer::Sync(std::tstring& strKey, WORD* pValue)
 	{
-		JSONDeserializerMetaSync(m_GroupingStack, strKey, *pValue);
+		UBJSONDeserializerMetaSync(m_GroupingStack, strKey, *pValue);
 		return *this;
 	}
 	core::IFormatterT& CUBJSONDeserializer::Sync(std::tstring& strKey, DWORD* pValue)
 	{
-		JSONDeserializerMetaSync(m_GroupingStack, strKey, *pValue);
+		UBJSONDeserializerMetaSync(m_GroupingStack, strKey, *pValue);
 		return *this;
 	}
 	core::IFormatterT& CUBJSONDeserializer::Sync(std::tstring& strKey, QWORD* pValue)
 	{
-		JSONDeserializerMetaSync(m_GroupingStack, strKey, *pValue);
+		UBJSONDeserializerMetaSync(m_GroupingStack, strKey, *pValue);
 		return *this;
 	}
 	core::IFormatterT& CUBJSONDeserializer::Sync(std::tstring& strKey, float* pValue)
 	{
-		JSONDeserializerMetaSync(m_GroupingStack, strKey, *pValue);
+		UBJSONDeserializerMetaSync(m_GroupingStack, strKey, *pValue);
 		return *this;
 	}
 	core::IFormatterT& CUBJSONDeserializer::Sync(std::tstring& strKey, double* pValue)
 	{
-		JSONDeserializerMetaSync(m_GroupingStack, strKey, *pValue);
+		UBJSONDeserializerMetaSync(m_GroupingStack, strKey, *pValue);
 		return *this;
 	}
 
 	core::IFormatterT& CUBJSONDeserializer::Sync(std::tstring& strKey, std::vector<BYTE>* pvecData)
 	{
+		auto& GroupInfo = m_GroupingStack.top();
+
+		std::string strKeyU8 = UTF8FromTCS(strKey);
+		for (ST_UBJ_NODE& node : GroupInfo.pNode->Children)
+		{
+			if (strKeyU8 != node.strKey)
+				continue;
+
+			if (!node.strValue.empty())
+			{
+				pvecData->resize(node.strValue.size());
+				memcpy(pvecData->data(), node.strValue.c_str(), node.strValue.size());
+			}
+			break;
+		}
 		return *this;
 	}
 }

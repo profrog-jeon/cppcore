@@ -10,6 +10,13 @@
 //////////////////////////////////////////////////////////////////////////
 namespace fmt_internal
 {
+	struct ST_UBJ_NODE
+	{
+		std::string strKey;		// UTF8
+		std::string strValue;	// UTF8
+		std::vector<ST_UBJ_NODE> Children;
+	};
+
 	void WriteUBJsonKey(core::IChannel& Channel, const std::string& refKey);
 	void WriteUBJsonKey(core::IChannel& Channel, const std::wstring& refKey);
 	void WriteUBJsonValue(core::IChannel& Channel, const char& refValue);
@@ -27,4 +34,7 @@ namespace fmt_internal
 	void WriteUBJsonValue(core::IChannel& Channel, const std::vector<BYTE>& refValue);
 	void WriteUBJsonConst(core::IChannel& Channel, std::string strValue);
 	void WriteUBJsonConst(core::IChannel& Channel, std::wstring strValue);
+
+	ECODE ParseUBJson(core::IChannel& Channel, ST_UBJ_NODE& outRoot, std::string& outErrMsg);
+	ECODE ParseUBJson(core::IChannel& Channel, ST_UBJ_NODE& outRoot, std::wstring& outErrMsg);
 }

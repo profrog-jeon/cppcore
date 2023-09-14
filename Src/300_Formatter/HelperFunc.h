@@ -2,11 +2,10 @@
 
 #include <string>
 #include <vector>
+#include "FmtTypes.h"
 
 namespace fmt_internal
 {
-	enum E_GROUPING_TYPE	{	GT_ROOT, GT_DICTIONARY, GT_ARRAY, GT_OBJECT	};
-
 	struct sGroupingData
 	{
 		std::tstring strName;

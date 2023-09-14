@@ -10,7 +10,6 @@ namespace fmt_internal
 		Channel.Access((void*)"i", 1);
 		Channel.Access((void*)&cKeyLen, sizeof(cKeyLen));
 		WriteUBJsonConst(Channel, refKey);
-		Channel.Access((void*)":", 1);
 	}
 
 	void WriteUBJsonKey(core::IChannel& Channel, const std::wstring& refKey)
@@ -19,7 +18,6 @@ namespace fmt_internal
 		Channel.Access((void*)"i", 1);
 		Channel.Access((void*)&cKeyLen, sizeof(cKeyLen));
 		WriteUBJsonConst(Channel, refKey);
-		Channel.Access((void*)":", 1);
 	}
 
 	void WriteUBJsonValue(core::IChannel& Channel, const char& refValue)
@@ -125,5 +123,137 @@ namespace fmt_internal
 	{
 		std::string strValueU8 = UTF8FromWCS(strValue);
 		Channel.Access((void*)strValueU8.c_str(), strValueU8.length());
+	}
+
+	inline void ReadUBJConst(core::IChannel& Channel, void* pDest, size_t tDestSize)
+	{
+		size_t tReadSize = Channel.Access(pDest, tDestSize);
+		if (tReadSize != tDestSize)
+			throw exception_format(TEXT("Reading data failure"));
+	}
+
+	template<typename T>
+	inline T ReadUBJConst(core::IChannel& Channel)
+	{
+		T ret;
+		ReadUBJConst(Channel, &ret, sizeof(ret));
+		return ret;
+	}
+	
+	inline std::string ReadUBJValue(core::IChannel& Channel)
+	{
+		std::string strRet;
+
+		char cType = ReadUBJConst<char>(Channel);
+		switch (cType)
+		{
+		case 'U':	strRet = StringFromA(ReadUBJConst<BYTE>(Channel));			break;
+		case 'i':	strRet = StringFromA(ReadUBJConst<char>(Channel));			break;
+		case 'I':	strRet = StringFromA(ReadUBJConst<short>(Channel));			break;
+		case 'l':	strRet = StringFromA(ReadUBJConst<int>(Channel));			break;
+		case 'L':	strRet = StringFromA(ReadUBJConst<long long>(Channel));		break;
+		case 'd':	strRet = StringFromA(ReadUBJConst<float>(Channel));			break;
+		case 'D':	strRet = StringFromA(ReadUBJConst<double>(Channel));		break;
+		case 'S':
+		{
+			std::string strLength = ReadUBJValue(Channel);
+			int nLength = IntFrom(strLength);
+			if (nLength < 0)
+				throw exception_format(TEXT("Invalid STRING length found, %s(%d)"), strLength.c_str(), nLength);
+
+			strRet.resize(nLength);
+			if (nLength)
+				ReadUBJConst(Channel, (void*)strRet.c_str(), nLength);
+		}	break;
+
+		case 'B':
+		{
+			std::string strLength = ReadUBJValue(Channel);
+			int nLength = IntFrom(strLength);
+			if (nLength < 0)
+				throw exception_format(TEXT("Invalid BINARY length found, %s(%d)"), strLength.c_str(), nLength);
+
+			strRet.resize(nLength);
+			if (nLength)
+				ReadUBJConst(Channel, (void*)strRet.c_str(), nLength);
+		}	break;
+
+		case '[':
+			strRet = "[";
+			break;
+
+		case '{':
+			strRet = "{";
+			break;
+
+		default:
+			throw exception_format(TEXT("Unexpected VALUE type found, %c"), cType);
+		}
+
+		return strRet;
+	}
+
+	ECODE ParseUBJson(core::IChannel& Channel, ST_UBJ_NODE& outRoot, std::tstring& outErrMsg)
+	{
+		std::stack<ST_UBJ_NODE*> stackNode;
+		try
+		{
+			if ('{' != ReadUBJConst<char>(Channel))
+				throw exception_format(TEXT("UBJson start char is not `{`"));
+
+			stackNode.push(&outRoot);
+
+			while (!stackNode.empty())
+			{
+				ST_UBJ_NODE* pCurNode = stackNode.top();
+
+				const char cType = ReadUBJConst<char>(Channel);
+				switch (cType)
+				{
+				case 'i':
+				{
+					ST_UBJ_NODE child;
+					BYTE len = ReadUBJConst<BYTE>(Channel);
+					if (0 == len)
+						throw exception_format(TEXT("KEY LEN is Zero"));
+
+					child.strKey.resize(len);
+					ReadUBJConst(Channel, (void*)child.strKey.data(), len);
+
+					child.strValue = ReadUBJValue(Channel);
+					pCurNode->Children.push_back(child);
+
+					if ("{" == child.strValue)
+						stackNode.push(&pCurNode->Children.back());
+
+					if ("[" == child.strValue)
+						stackNode.push(&pCurNode->Children.back());
+				}	break;
+
+				case '{':
+					pCurNode->Children.push_back(ST_UBJ_NODE());
+					stackNode.push(&pCurNode->Children.back());
+					break;
+
+				case '}':
+					stackNode.pop();
+					break;
+
+				case ']':
+					stackNode.pop();
+					break;
+
+				default:
+					throw exception_format(TEXT("Unexpected char `%c` found"), cType);
+				}
+			}
+		}
+		catch (const std::exception& e)
+		{
+			Log_Error("%s", e.what());
+			outErrMsg = TCSFromMBS(e.what());
+			return EC_INVALID_DATA;
+		}
+		return EC_SUCCESS;
 	}
 }
