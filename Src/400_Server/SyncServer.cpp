@@ -278,7 +278,7 @@ namespace core
 			nRet = pConnection->Raw()->Peek(&szTest, 1, 1000);
 
 			DWORD dwElapsedTick = GetTickCount() - dwLastRecvTick;
-			if (dwElapsedTick > m_stInit.dwRecvTimeOut)
+			if (m_stInit.dwRecvTimeOut < dwElapsedTick)
 			{
 				Log_Warn(TEXT("[%p] Connection closed by recv timeout:%u(ms) elapsed:%u(ms)")
 					, pConnection, m_stInit.dwRecvTimeOut, dwElapsedTick);
