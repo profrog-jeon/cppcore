@@ -277,33 +277,32 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	bool IpFromDomain(std::tstring strDomain, WORD wPort, std::string& out)
+	bool IpFromDomain(std::tstring strDomain, WORD wPort, std::string& outIPAddr)
 	{
 		try
 		{
-			addrinfo* result = NULL;
-			addrinfo* ptr = NULL;
 			addrinfo hints;
 			memset(&hints, 0, sizeof(hints));
-			sockaddr_in* sockaddr_ipv4;
+			sockaddr_in* pSockAddr;
 			hints.ai_family = AF_UNSPEC;
 			hints.ai_socktype = SOCK_STREAM;
 			hints.ai_protocol = IPPROTO_TCP;
 
-			DWORD dwRes = ::getaddrinfo(MBSFromTCS(strDomain).c_str(), std::to_string(wPort).c_str(), &hints, &result);
-			if (dwRes != 0)
+			addrinfo* pResult = NULL;
+			DWORD dwRet = ::getaddrinfo(MBSFromTCS(strDomain).c_str(), std::to_string(wPort).c_str(), &hints, &pResult);
+			if (dwRet != 0)
 				throw core::exception_format(TEXT("Get IP Address Failed, %d"), core::GetLastError());
 
-			for (ptr = result; ptr != NULL; ptr = ptr->ai_next)
+			for (addrinfo* pCur = pResult; pCur != NULL; pCur = pCur->ai_next)
 			{
-				if (ptr->ai_family != AF_INET)
+				if (pCur->ai_family != AF_INET)
 					continue;
 
-				sockaddr_ipv4 = (sockaddr_in*)ptr->ai_addr;
-				out = core::IPAddressFromA(*(DWORD*)&sockaddr_ipv4->sin_addr);
+				pSockAddr = (sockaddr_in*)pCur->ai_addr;
+				outIPAddr = core::IPAddressFromA(*(DWORD*)&pSockAddr->sin_addr);
 			}
 
-			::freeaddrinfo(result);
+			::freeaddrinfo(pResult);
 			return true;
 		}
 		catch (std::exception& e)
