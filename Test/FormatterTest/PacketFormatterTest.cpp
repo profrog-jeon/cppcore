@@ -185,3 +185,36 @@ TEST(PacketFormatterTest, JsonPacketTest2)
 		}
 	}
 }
+
+
+struct ST_FILE_LIST : public core::IFormatterObject
+{
+	static const int ID = 2;
+
+	std::vector<std::tstring> vecFiles;
+
+	void OnSync(core::IFormatter& formatter)
+	{
+		formatter
+			+ core::sPair(TEXT("Files"), vecFiles)
+			;
+	}
+};
+
+TEST(PacketFormatterTest, UBJsonArrayTest)
+{
+	ST_FILE_LIST stOriginal;
+	stOriginal.vecFiles.push_back(TEXT("hello.txt"));
+
+	std::vector<BYTE> packet;
+	WriteUBJsonToPacket(&stOriginal, packet);
+
+	ST_FILE_LIST stRestored;
+	ReadUBJsonFromPacket(&stRestored, packet);
+
+	ASSERT_EQ(stOriginal.vecFiles.size(), stRestored.vecFiles.size());
+	for (size_t i = 0; i < stOriginal.vecFiles.size(); i++)
+	{
+		EXPECT_EQ(stOriginal.vecFiles[i], stRestored.vecFiles[i]);
+	}
+}

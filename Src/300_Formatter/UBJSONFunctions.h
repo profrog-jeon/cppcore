@@ -35,6 +35,9 @@ namespace fmt_internal
 	void WriteUBJsonConst(core::IChannel& Channel, std::string strValue);
 	void WriteUBJsonConst(core::IChannel& Channel, std::wstring strValue);
 
+	std::string ReadUBJValue(core::IChannel& Channel);
+	std::string ReadUBJValue(core::IChannel& Channel, char cType);
+
 	ECODE ParseUBJson(core::IChannel& Channel, ST_UBJ_NODE& outRoot, std::string& outErrMsg);
 	ECODE ParseUBJson(core::IChannel& Channel, ST_UBJ_NODE& outRoot, std::wstring& outErrMsg);
 }

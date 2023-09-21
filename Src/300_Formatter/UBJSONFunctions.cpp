@@ -141,12 +141,11 @@ namespace fmt_internal
 		ReadUBJConst(Channel, &ret, sizeof(ret));
 		return ret;
 	}
-	
-	inline std::string ReadUBJValue(core::IChannel& Channel)
+
+	inline std::string ReadUBJValueWorker(core::IChannel& Channel, char cType)
 	{
 		std::string strRet;
 
-		char cType = ReadUBJConst<char>(Channel);
 		switch (cType)
 		{
 		case 'U':	strRet = StringFromA(ReadUBJConst<BYTE>(Channel));			break;
@@ -193,6 +192,17 @@ namespace fmt_internal
 		}
 
 		return strRet;
+	}
+
+	std::string ReadUBJValue(core::IChannel& Channel)
+	{
+		char cType = ReadUBJConst<char>(Channel);
+		return ReadUBJValueWorker(Channel, cType);
+	}
+
+	std::string ReadUBJValue(core::IChannel& Channel, char cType)
+	{
+		return ReadUBJValueWorker(Channel, cType);
 	}
 
 	ECODE ParseUBJson(core::IChannel& Channel, ST_UBJ_NODE& outRoot, std::tstring& outErrMsg)
@@ -245,8 +255,11 @@ namespace fmt_internal
 					stackNode.pop();
 					break;
 
-				default:
-					throw exception_format(TEXT("Unexpected char `%c` found"), cType);
+				default: {
+					ST_UBJ_NODE child;
+					child.strValue = ReadUBJValue(Channel, cType);
+					pCurNode->Children.push_back(child);
+				}	break;
 				}
 			}
 		}

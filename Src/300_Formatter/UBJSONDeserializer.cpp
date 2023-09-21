@@ -91,15 +91,11 @@ namespace fmt_internal
 	{
 		sGroupingInfo& topGroupInfo = m_GroupingStack.top();
 		topGroupInfo.tReadPos = tIndex;
-
-		m_GroupingStack.push(sGroupingInfo(GT_OBJECT, &topGroupInfo.pNode->Children[tIndex]));
 	}
 
 	//////////////////////////////////////////////////////////////////////////
 	void CUBJSONDeserializer::EndArrayItem(size_t tIndex, size_t tCount)
 	{
-		if (m_GroupingStack.top().nType == GT_OBJECT)
-			m_GroupingStack.pop();
 	}
 
 	//////////////////////////////////////////////////////////////////////////
