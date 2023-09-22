@@ -204,7 +204,9 @@ struct ST_FILE_LIST : public core::IFormatterObject
 TEST(PacketFormatterTest, UBJsonArrayTest)
 {
 	ST_FILE_LIST stOriginal;
-	stOriginal.vecFiles.push_back(TEXT("hello.txt"));
+	stOriginal.vecFiles.push_back(TEXT("hello1.txt"));
+	stOriginal.vecFiles.push_back(TEXT("hello2.txt"));
+	stOriginal.vecFiles.push_back(TEXT("hello3.txt"));
 
 	std::vector<BYTE> packet;
 	WriteUBJsonToPacket(&stOriginal, packet);

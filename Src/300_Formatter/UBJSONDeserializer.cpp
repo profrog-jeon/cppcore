@@ -173,6 +173,7 @@ namespace fmt_internal
 			if( topGroupingInfo.tReadPos < topGroupingInfo.pNode->Children.size() )
 			{
 				ST_UBJ_NODE& stNode = topGroupingInfo.pNode->Children[topGroupingInfo.tReadPos++];
+				strKey = TCSFromUTF8(stNode.strKey);
 				*pValue = TCSFromUTF8(stNode.strValue);
 			}
 			return *this;
@@ -182,6 +183,7 @@ namespace fmt_internal
 			if (topGroupingInfo.tReadPos < topGroupingInfo.pNode->Children.size())
 			{
 				ST_UBJ_NODE& stNode = topGroupingInfo.pNode->Children[topGroupingInfo.tReadPos++];
+				strKey = TCSFromUTF8(stNode.strKey);
 				*pValue = TCSFromUTF8(stNode.strValue);
 			}
 			return *this;
@@ -191,6 +193,7 @@ namespace fmt_internal
 			if (topGroupingInfo.tReadPos < topGroupingInfo.pNode->Children.size())
 			{
 				ST_UBJ_NODE& stNode = topGroupingInfo.pNode->Children[topGroupingInfo.tReadPos++];
+				strKey = TCSFromUTF8(stNode.strKey);
 				*pValue = TCSFromUTF8(stNode.strValue);
 			}
 
