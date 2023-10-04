@@ -41,13 +41,15 @@ namespace core
 		else
 			tRevSlashIndex = 0;
 
-		size_t tColonIndex = strFilename.rfind(TEXT(':'));
-		if( std::tstring::npos != tColonIndex )
-			tColonIndex ++;
-		else
-			tColonIndex = 0;
+		size_t tDirIndex = MAX(tSlashIndex, tRevSlashIndex);
+		if (tDirIndex)
+			return tDirIndex;
 
-		return MAX(tColonIndex, MAX(tSlashIndex, tRevSlashIndex));
+		size_t tColonIndex = strFilename.rfind(TEXT(':'));
+		if (std::tstring::npos != tColonIndex)
+			return tColonIndex + 1;
+
+		return 0;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
