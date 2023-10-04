@@ -72,7 +72,16 @@ namespace core
 
 		std::tstring strDir = ExtractDirectory(strExistFile);
 		std::tstring strFileName = ExtractFileName(strExistFile);
+		if (MAX_PATH < strDir.length())
+			return false;
+		
+		if (MAX_PATH < strFileName.length())
+			return false;
+
 		CCurrentDirectorySettter CurDir(strDir);
+		if (!CurDir.DirChanged())
+			return false;
+
 		return ::PathFileExists(strFileName.c_str()) != FALSE;
 	}
 

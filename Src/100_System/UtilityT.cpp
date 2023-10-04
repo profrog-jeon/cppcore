@@ -8,6 +8,6 @@ namespace core
 		: m_strOriginalDir()
 	{
 		m_strOriginalDir = GetCurrentDirectoryW();
-		core::SetCurrentDirectory(strWorkingDir.c_str());
+		m_bDirChanged = SetCurrentDirectory(strWorkingDir.c_str());
 	}
 }
