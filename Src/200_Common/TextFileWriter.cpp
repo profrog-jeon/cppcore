@@ -39,19 +39,19 @@ namespace core
 			case BOM_UTF8:
 			{
 				std::string strData = UTF8FromTCS(strContext);
-				WriteFile(m_hFile, strData.c_str(), 1 * strData.size(), &dwWriteSize);
+				WriteFile(m_hFile, strData.c_str(), 1 * (DWORD)strData.size(), &dwWriteSize);
 			}	break;
 
 			case BOM_UTF16:
 			{
 				std::vector<WORD> strData = UTF16FromTCS(strContext);
-				WriteFile(m_hFile, &strData[0], 2 * strData.size(), &dwWriteSize);
+				WriteFile(m_hFile, &strData[0], 2 * (DWORD)strData.size(), &dwWriteSize);
 			}	break;
 
 			case BOM_UTF32:
 			{
 				std::vector<DWORD> strData = UTF32FromTCS(strContext);
-				WriteFile(m_hFile, &strData[0], 4 * strData.size(), &dwWriteSize);
+				WriteFile(m_hFile, &strData[0], 4 * (DWORD)strData.size(), &dwWriteSize);
 			}	break;
 
 			case BOM_UTF16_BE:
@@ -60,7 +60,7 @@ namespace core
 				size_t i;
 				for(i=0; i<strData.size(); i++)
 					strData[i] = ReverseByteOrder(strData[i]);
-				WriteFile(m_hFile, &strData[0], 2 * strData.size(), &dwWriteSize);
+				WriteFile(m_hFile, &strData[0], 2 * (DWORD)strData.size(), &dwWriteSize);
 			}	break;
 
 			case BOM_UTF32_BE:
@@ -69,13 +69,13 @@ namespace core
 				size_t i;
 				for(i=0; i<strData.size(); i++)
 					strData[i] = ReverseByteOrder(strData[i]);
-				WriteFile(m_hFile, &strData[0], 4 * strData.size(), &dwWriteSize);
+				WriteFile(m_hFile, &strData[0], 4 * (DWORD)strData.size(), &dwWriteSize);
 			}	break;
 
 			default:
 			{
 				std::string strData = ANSIFromTCS(strContext);
-				WriteFile(m_hFile, strData.c_str(), 1 * strData.size(), &dwWriteSize);
+				WriteFile(m_hFile, strData.c_str(), 1 * (DWORD)strData.size(), &dwWriteSize);
 			}	break;
 			}
 		}
