@@ -13,3 +13,4 @@
 #include "SocketDefine.h"
 #include "InterlockedOperation.h"
 #include "Network.h"
+#include "Utility.h"

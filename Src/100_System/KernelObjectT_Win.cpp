@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "KernelObject.h" 
 #include "Log.h"
+#include "FileSystem.h"
+#include "Utility.h"
 #undef TEXT
 #undef EnumProcesses
 #include "System_Win.h"
@@ -22,9 +24,17 @@ namespace core
 		HANDLE hFile = ::CreateFile(lpFileName, dwDesiredAccess, FILE_SHARE_WRITE|FILE_SHARE_READ, NULL, (DWORD)nDisposition, dwFlagsAndAttributes, hTemplateFile);
 		if( INVALID_HANDLE_VALUE == hFile )
 		{
-			// NEVER!!! uncomment this log. it invokes recursive calling by Log.
-			//Log_Debug(TEXT("CreateFile(%s) has failed"), lpFileName);
-			return NULL;
+			DWORD dwErr = ::GetLastError();
+			if (ERROR_PATH_NOT_FOUND != dwErr)
+				return NULL;
+
+			std::tstring strDir = ExtractDirectory(lpFileName);
+			std::tstring strFileName = ExtractFileName(lpFileName);
+			CCurrentDirectorySettter stWorkingDir(strDir);
+
+			hFile = ::CreateFile(strFileName.c_str(), dwDesiredAccess, FILE_SHARE_WRITE | FILE_SHARE_READ, NULL, (DWORD)nDisposition, dwFlagsAndAttributes, hTemplateFile);
+			if (INVALID_HANDLE_VALUE == hFile)
+				return NULL;
 		}
 		return hFile;
 	}

@@ -50,8 +50,8 @@ namespace core
 	std::string		GetTempPathA(void);		// c:\User\Local\Temp  or  /etc/local
 	std::wstring	GetTempPathW(void);
 	
-	bool			PathFileExistsA(const char* pszExistFile);
-	bool			PathFileExistsW(const wchar_t* pszExistFile);
+	bool			PathFileExistsA(std::string strExistFile);
+	bool			PathFileExistsW(std::wstring strExistFile);
 	bool			IsDirectoryA(const char* pszPath);
 	bool			IsDirectoryW(const wchar_t* pszPath);
 

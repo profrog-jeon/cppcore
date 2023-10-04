@@ -2,6 +2,7 @@
 #include "FileSystem.h"
 #include "Environment.h"
 #include "Log.h"
+#include "Utility.h"
 #undef TEXT
 #include "System_Win.h"
 #include <Windows.h>
@@ -64,9 +65,15 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	bool PathFileExists(LPCTSTR pszExistFile)
+	bool PathFileExists(std::tstring strExistFile)
 	{
-		return ::PathFileExists(pszExistFile) != FALSE;
+		if (strExistFile.length() < MAX_PATH)
+			return ::PathFileExists(strExistFile.c_str()) != FALSE;
+
+		std::tstring strDir = ExtractDirectory(strExistFile);
+		std::tstring strFileName = ExtractFileName(strExistFile);
+		CCurrentDirectorySettter CurDir(strDir);
+		return ::PathFileExists(strFileName.c_str()) != FALSE;
 	}
 
 	//////////////////////////////////////////////////////////////////////////	

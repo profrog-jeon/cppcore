@@ -287,6 +287,7 @@
     <ClInclude Include="100_System.h" />
     <ClInclude Include="System_Win.h" />
     <ClInclude Include="TZFileParser.h" />
+    <ClInclude Include="Utility.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ELFParser.cpp" />
@@ -322,6 +323,8 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="TZFileParser.cpp" />
+    <ClCompile Include="Utility.cpp" />
+    <ClCompile Include="UtilityT.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
