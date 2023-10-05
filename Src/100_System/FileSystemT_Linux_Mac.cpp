@@ -49,10 +49,10 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	bool PathFileExists(LPCTSTR pszExistFile)
+	bool PathFileExists(std::tstring strExistFile)
 	{
 		struct stat stStat = { 0, };
-		if( ::stat(MBSFromTCS(pszExistFile).c_str(), &stStat) < 0 )
+		if( ::stat(MBSFromTCS(strExistFile).c_str(), &stStat) < 0 )
 			return false;
 
 		return (S_ISDIR(stStat.st_mode) || S_ISREG(stStat.st_mode));
