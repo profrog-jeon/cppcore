@@ -59,8 +59,20 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	static inline void TextCopyWorker(E_BOM_TYPE nBOMType, LPCBYTE pContext, size_t tFileSize, std::wstring& strContents)
+	static inline void TextCopyWorker(E_BOM_TYPE nEncodeType, LPCBYTE pContext, size_t tFileSize, std::wstring& strContents)
 	{
+		ST_BOM_INFO stBomInfo;
+		E_BOM_TYPE nBOMType = ReadBOM(pContext, tFileSize, stBomInfo);
+
+		if (BOM_UNDEFINED != nBOMType)
+		{
+			pContext += stBomInfo.tSize;
+			tFileSize -= stBomInfo.tSize;
+		}
+
+		if (BOM_UNDEFINED != nEncodeType)
+			nBOMType = nEncodeType;
+
 		switch (nBOMType)
 		{
 		case BOM_UTF8:
@@ -86,32 +98,70 @@ namespace core
 
 	//////////////////////////////////////////////////////////////////////////
 	template <typename T>
+	static inline ECODE ReadFileContents2Worker(LPCTSTR pszFilePath, T& strContents, E_BOM_TYPE nEncodeType)
+	{
+		ECODE nRet = EC_SUCCESS;
+		HANDLE hFile = NULL;
+
+		try
+		{
+			hFile = CreateFile(pszFilePath, GENERIC_READ_, OPEN_EXISTING_, 0);
+			if (NULL == hFile)
+			{
+				nRet = GetLastError();
+				throw exception_format(TEXT("CreateFile(%s, GENERIC_READ_, OPEN_EXISTING_, 0) failure, %d"), pszFilePath, nRet);
+			}
+
+			const QWORD qwSize = GetFileSize(hFile);
+			if (500 * 1024 * 1024 < qwSize)
+			{
+				nRet = EC_NOT_ENOUGH_MEMORY;
+				throw exception_format(TEXT("%s size:%lu is too big"), pszFilePath, qwSize);
+			}
+
+			std::vector<BYTE> vecContext;
+			vecContext.resize(qwSize);
+
+			DWORD dwTotalReadSize = 0;
+			while (dwTotalReadSize < qwSize)
+			{
+				const DWORD dwRemainedSize = (DWORD)qwSize - dwTotalReadSize;
+				const DWORD dwTryReadSize = std::min<DWORD>(dwRemainedSize, 1024 * 1024);
+
+				DWORD dwReadSize = 0;
+				if (!ReadFile(hFile, vecContext.data() + dwTotalReadSize, dwTryReadSize, &dwReadSize))
+					throw exception_format(TEXT("ReadFile(%s) failure at pos:%u"), pszFilePath, dwTotalReadSize);
+
+				dwTotalReadSize += dwReadSize;
+			}
+
+			CloseFile(hFile);
+
+			TextCopyWorker(nEncodeType, vecContext.data(), vecContext.size(), strContents);
+		}
+		catch (const std::exception& e)
+		{
+			Log_Debug("%s", e.what());
+			if (hFile)
+				CloseFile(hFile);
+			if (EC_SUCCESS != nRet)
+				return nRet;
+			return EC_READ_FAILURE;
+		}
+
+		return EC_SUCCESS;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	template <typename T>
 	static inline ECODE ReadFileContentsWorker(LPCTSTR pszFilePath, T& strContents, E_BOM_TYPE nEncodeType)
 	{
 		CMemoryMappedFile MemMappedFile;
-		ECODE nRet = MemMappedFile.Create(pszFilePath, PAGE_READWRITE_, FILE_MAP_READ_);
+		ECODE nRet = MemMappedFile.Create(pszFilePath, PAGE_READONLY_, FILE_MAP_READ_);
 		if (EC_SUCCESS != nRet)
-		{
-			Log_Error(TEXT("MemMappedFile.Create(%s) failure, %d"), pszFilePath, nRet);
 			return nRet;
-		}
 
-		LPCBYTE pContext = MemMappedFile.Ptr();
-		size_t tFileSize = MemMappedFile.Size();
-
-		ST_BOM_INFO stBomInfo;
-		E_BOM_TYPE nBOMType = ReadBOM(pContext, tFileSize, stBomInfo);
-
-		if (BOM_UNDEFINED != nBOMType)
-		{
-			pContext += stBomInfo.tSize;
-			tFileSize -= stBomInfo.tSize;
-		}
-
-		if (BOM_UNDEFINED != nEncodeType)
-			nBOMType = nEncodeType;
-
-		TextCopyWorker(nBOMType, pContext, tFileSize, strContents);
+		TextCopyWorker(nEncodeType, MemMappedFile.Ptr(), MemMappedFile.Size(), strContents);
 		return EC_SUCCESS;
 	}
 
@@ -217,11 +267,11 @@ namespace core
 
 			DWORD dwWritten = 0;
 			DWORD dwTotalWritten = 0;
-			size_t tCharSize = sizeof(strContents.at(0));
-			size_t tTotalSize = strContents.length() * tCharSize;
-			while(dwTotalWritten < tTotalSize)
+			DWORD dwCharSize = sizeof(strContents.at(0));
+			DWORD dwTotalSize = (DWORD)strContents.length() * dwCharSize;
+			while(dwTotalWritten < dwTotalSize)
 			{
-				DWORD dwRemainedSize = tTotalSize - dwTotalWritten;
+				DWORD dwRemainedSize = dwTotalSize - dwTotalWritten;
 				if( !WriteFile(hFile, strContents.c_str() + dwTotalWritten, dwRemainedSize, &dwWritten) )
 				{
 					nRet = GetLastError();
@@ -271,7 +321,7 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	static inline ECODE WriteFileContentsBinWorker(std::tstring strFilePath, const void* pContents, size_t tContentsSize)
+	static inline ECODE WriteFileContentsBinWorker(std::tstring strFilePath, const void* pContents, DWORD dwContentsSize)
 	{
 		ECODE nRet = EC_SUCCESS;
 		HANDLE hFile = NULL;
@@ -286,14 +336,14 @@ namespace core
 
 			LPCBYTE pContentsPos = (LPCBYTE)pContents;
 			DWORD dwTotalWrittenSize = 0;
-			while (dwTotalWrittenSize < tContentsSize)
+			while (dwTotalWrittenSize < dwContentsSize)
 			{
 				DWORD dwWrittenSize = 0;
-				bool bRet = WriteFile(hFile, &pContentsPos[dwTotalWrittenSize], tContentsSize - dwTotalWrittenSize, &dwWrittenSize);
+				bool bRet = WriteFile(hFile, &pContentsPos[dwTotalWrittenSize], dwContentsSize - dwTotalWrittenSize, &dwWrittenSize);
 
 				nRet = GetLastError();
 				if( !bRet )
-					throw exception_format("WriteFile failure, try:%u, written:%u", tContentsSize - dwTotalWrittenSize, dwWrittenSize);
+					throw exception_format("WriteFile failure, try:%u, written:%u", dwContentsSize - dwTotalWrittenSize, dwWrittenSize);
 
 				dwTotalWrittenSize += dwWrittenSize;
 			}
@@ -317,13 +367,13 @@ namespace core
 	{
 		if( vecContents.empty() )
 			return EC_NO_DATA;
-		return WriteFileContentsBinWorker(strFilePath, &vecContents[0], vecContents.size());
+		return WriteFileContentsBinWorker(strFilePath, &vecContents[0], (DWORD)vecContents.size());
 	}
 
 	//////////////////////////////////////////////////////////////////////////
 	ECODE WriteFileContents(std::tstring strFilePath, const void* pContents, size_t tContentsSize)
 	{
-		return WriteFileContentsBinWorker(strFilePath, pContents, tContentsSize);
+		return WriteFileContentsBinWorker(strFilePath, pContents, (DWORD)tContentsSize);
 	}
 
 	//////////////////////////////////////////////////////////////////////////
@@ -379,7 +429,7 @@ namespace core
 			vecEncData.resize((size_t)qwSize);
 
 			dwReadSize = 0;
-			if( !ReadFile(hFile, (void*)&vecEncData[0], vecEncData.size(), &dwReadSize) || dwReadSize < vecEncData.size() )
+			if( !ReadFile(hFile, (void*)&vecEncData[0], (DWORD)vecEncData.size(), &dwReadSize) || dwReadSize < vecEncData.size() )
 				throw exception_format(TEXT("ReadFileContents: ReadFile(size:%u, read:%u) content read failure"), vecEncData.size(), dwReadSize);
 
 			size_t tReqSize = DecodeData(stKey, &vecEncData[0], vecEncData.size(), NULL);
@@ -446,7 +496,7 @@ namespace core
 			if (!WriteFile(hFile, &header, sizeof(header), &dwWritten) || dwWritten < sizeof(header))
 				throw exception_format("WriteFileContents: WriteFile(try:%u, written:%u) has failed", sizeof(header), dwWritten);
 
-			if (!WriteFile(hFile, &vecEncContents[0], vecEncContents.size(), &dwWritten) || dwWritten < vecEncContents.size())
+			if (!WriteFile(hFile, &vecEncContents[0], (DWORD)vecEncContents.size(), &dwWritten) || dwWritten < vecEncContents.size())
 				throw exception_format("WriteFileContents: WriteFile(try:%u, written:%u) has failed", vecEncContents.size(), dwWritten);
 
 			FlushFileBuffers(hFile);
@@ -561,8 +611,8 @@ namespace core
 		if( tContextLen == 0 )
 			return false;
 
-		nBeginPox = SafeFindStr(pszContext, tContextLen, pszQutation);
-		nEndPos = SafeReverseFindStr(pszContext, tContextLen, pszQutation);
+		nBeginPox = (int)SafeFindStr(pszContext, tContextLen, pszQutation);
+		nEndPos = (int)SafeReverseFindStr(pszContext, tContextLen, pszQutation);
 
 		if( nBeginPox < 0 )
 			return false;

@@ -14,7 +14,8 @@ namespace core
 
 		try
 		{
-			hFile = CreateFile(strFilePath.c_str(), GENERIC_READ_|GENERIC_WRITE_, OPEN_EXISTING_, 0);
+			DWORD dwDesiredAccess = PAGE_READONLY_ ? GENERIC_READ_ : (GENERIC_READ_ | GENERIC_WRITE_);
+			hFile = CreateFile(strFilePath.c_str(), dwDesiredAccess, OPEN_EXISTING_, 0);
 			nRet = GetLastError();
 			if( NULL == hFile )
 				throw exception_format(TEXT("CreateFile(%s) failure"), strFilePath.c_str());
