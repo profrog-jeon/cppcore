@@ -28,38 +28,9 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	static inline void TextCopyWorker(E_BOM_TYPE nBOMType, LPCBYTE pContext, size_t tFileSize, std::string& strContents)
-	{
-		switch (nBOMType)
-		{
-		case BOM_UTF8:
-			strContents = MBSFromUTF8((LPCSTR)pContext, tFileSize);
-			break;
-
-		case BOM_UTF16:
-			strContents = MBSFromUTF16((const WORD*)pContext, tFileSize / 2);
-			break;
-
-		case BOM_UTF32:
-			strContents = MBSFromUTF32((const DWORD*)pContext, tFileSize / 4);
-			break;
-
-		case BOM_UTF16_BE:
-		case BOM_UTF32_BE:
-			printf("UTF16_BE or UTF32_BE is not implemented yet.\n");
-			break;
-
-		default:
-			if (core::IsInvalidUTF8((LPCSTR)pContext, tFileSize))
-				strContents = MBSFromANSI((LPCSTR)pContext, tFileSize);
-			else
-				strContents = MBSFromUTF8((LPCSTR)pContext, tFileSize);
-			break;
-		}
-	}
-
-	//////////////////////////////////////////////////////////////////////////
-	static inline void TextCopyWorker(E_BOM_TYPE nEncodeType, LPCBYTE pContext, size_t tFileSize, std::wstring& strContents)
+	void TextCopyWorker(E_BOM_TYPE nEncodeType, LPCBYTE pContext, size_t tFileSize, std::string& strContents);
+	void TextCopyWorker(E_BOM_TYPE nEncodeType, LPCBYTE pContext, size_t tFileSize, std::wstring& strContents);
+	void TextCopyWorker(E_BOM_TYPE nEncodeType, LPCBYTE pContext, size_t tFileSize, std::tstring& strContents)
 	{
 		ST_BOM_INFO stBomInfo;
 		E_BOM_TYPE nBOMType = ReadBOM(pContext, tFileSize, stBomInfo);
@@ -76,22 +47,27 @@ namespace core
 		switch (nBOMType)
 		{
 		case BOM_UTF8:
-			strContents = WCSFromUTF8((LPCSTR)pContext, tFileSize);
+			strContents = TCSFromUTF8((LPCSTR)pContext, tFileSize);
 			break;
 
 		case BOM_UTF16:
-			strContents = WCSFromUTF16((const WORD*)pContext, tFileSize / 2);
+			strContents = TCSFromUTF16((const WORD*)pContext, tFileSize / 2);
 			break;
 
 		case BOM_UTF32:
-			strContents = WCSFromUTF32((const DWORD*)pContext, tFileSize / 4);
+			strContents = TCSFromUTF32((const DWORD*)pContext, tFileSize / 4);
+			break;
+
+		case BOM_UTF16_BE:
+		case BOM_UTF32_BE:
+			printf("UTF16_BE or UTF32_BE is not implemented yet.\n");
 			break;
 
 		default:
 			if (core::IsInvalidUTF8((LPCSTR)pContext, tFileSize))
-				strContents = WCSFromANSI((LPCSTR)pContext, tFileSize);
+				strContents = TCSFromANSI((LPCSTR)pContext, tFileSize);
 			else
-				strContents = WCSFromUTF8((LPCSTR)pContext, tFileSize);
+				strContents = TCSFromUTF8((LPCSTR)pContext, tFileSize);
 			break;
 		}
 	}
