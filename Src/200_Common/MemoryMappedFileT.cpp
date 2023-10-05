@@ -14,7 +14,7 @@ namespace core
 
 		try
 		{
-			DWORD dwDesiredAccess = PAGE_READONLY_ ? GENERIC_READ_ : (GENERIC_READ_ | GENERIC_WRITE_);
+			DWORD dwDesiredAccess = nProtectMode == PAGE_READONLY_ ? GENERIC_READ_ : (GENERIC_READ_ | GENERIC_WRITE_);
 			hFile = CreateFile(strFilePath.c_str(), dwDesiredAccess, OPEN_EXISTING_, 0);
 			nRet = GetLastError();
 			if( NULL == hFile )
