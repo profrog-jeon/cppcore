@@ -180,7 +180,7 @@ namespace core
 				QWORD qwSize = GetFileSize(hFile);
 
 				nRet = EC_NOT_ENOUGH_MEMORY;
-				if( qwSize > 100 * 1000 * 1000 )
+				if( qwSize > 1000 * 1000 * 1000 )
 					throw exception_format("File size exceed 100(MB)");
 				dwSize = (DWORD)qwSize;
 			}
