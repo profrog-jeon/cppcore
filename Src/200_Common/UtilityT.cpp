@@ -177,11 +177,12 @@ namespace core
 
 			DWORD dwSize = 0;
 			{
-				QWORD qwSize = GetFileSize(hFile);
+				const QWORD qwSize = GetFileSize(hFile);
+				const QWORD qwLimit = 1000 * 1000000UL;
 
 				nRet = EC_NOT_ENOUGH_MEMORY;
-				if( qwSize > 1000 * 1000 * 1000 )
-					throw exception_format("File size exceed 100(MB)");
+				if (qwLimit < qwSize)
+					throw exception_format("File size exceed 1000(MB), size:%ull", qwSize);
 				dwSize = (DWORD)qwSize;
 			}
 
