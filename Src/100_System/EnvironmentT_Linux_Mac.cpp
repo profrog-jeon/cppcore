@@ -72,7 +72,7 @@ namespace core
 		int fd = ::open("/proc/sys/kernel/random/uuid", O_RDONLY);
 		if( fd < 0 )
 		{
-			SafeSPrintf(szUUID, 37, "%04x%04x-%04x-%04x-%04x-%04x%04x%04x",
+			SafeSPrintf(szUUID, 37, "%04X%04X-%04X-%04X-%04X-%04X%04X%04X",
 				GetCurrentProcessId(), GetCurrentThread(),
 				::rand()&0xffff,						// Generates a 32-bit Hex number
 				((::rand() & 0x0fff) | 0x4000),			// Generates a 32-bit Hex number of the form 4xxx (4 indicates the UUID version)
