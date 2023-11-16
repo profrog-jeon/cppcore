@@ -45,14 +45,14 @@ namespace core
 			size_t i;
 			for(i=0; i<32; i+=4)
 			{
-				btKey[i+3] = g_cSecureKey[i+3] ^ 'S';
+				btKey[i+3] = g_cSecureKey[i+3] ^ 'T';
 				btKey[i+2] = g_cSecureKey[i+2] ^ 'E';
 				btKey[i+1] = g_cSecureKey[i+1] ^ 'C';
-				btKey[i+0] = g_cSecureKey[i+0] ^ 'U';
-				btIV[i+0] = g_cSecureIV[i+0] ^ 'L';
-				btIV[i+1] = g_cSecureIV[i+1] ^ 'E';
-				btIV[i+2] = g_cSecureIV[i+2] ^ 'T';
-				btIV[i+3] = g_cSecureIV[i+3] ^ '@';
+				btKey[i+0] = g_cSecureKey[i+0] ^ 'H';
+				btIV[i+0] = g_cSecureIV[i+0] ^ 'N';
+				btIV[i+1] = g_cSecureIV[i+1] ^ 'O';
+				btIV[i+2] = g_cSecureIV[i+2] ^ 'L';
+				btIV[i+3] = g_cSecureIV[i+3] ^ 'O';
 			}
 		}
 
