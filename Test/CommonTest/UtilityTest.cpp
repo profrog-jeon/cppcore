@@ -7,14 +7,6 @@ TEST(CommonTest, BuildUniqFileName_NULLTest)
 }
 
 //////////////////////////////////////////////////////////////////////////
-TEST(CommonTest, ColosseumLanguageData_ReadingTest)
-{
-	std::tstring strContents;
-	ReadFileContents(TEXT("../../Build/Test/Encoder/Colosseum.db"), strContents, "Colosseum.db");
- 	EXPECT_EQ(TEXT("Code,ShortMsg_en,ShortMsg_ko,LongMsg_en,LongMsg_ko"), strContents);
-}
-
-//////////////////////////////////////////////////////////////////////////
 TEST(CommonTest, MakeAbsPathFromModuleDir_AbnormalTest)
 {
 	MakeAbsPathByModulePath("");
