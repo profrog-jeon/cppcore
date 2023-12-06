@@ -238,7 +238,8 @@ namespace core
 
 	//////////////////////////////////////////////////////////////////////////
 	// Deprecated, CANNOT hide console window
-	static int ShellExecuteByPipe_Old(std::tstring strCmdLine, std::string& strOutput)
+	// But open unofficially for legacy.
+	int ShellExecuteByPipe_Old(std::tstring strCmdLine, std::string& strOutput)
 	{
 		FILE* pPipe = NULL;
 		try
