@@ -3,6 +3,7 @@
 #include "Log.h"
 #include "FileSystem.h"
 #include "KernelObject.h"
+#include "Environment.h"
 
 namespace core
 {
@@ -18,7 +19,7 @@ namespace core
 		{
 			hFile = CreateFile(pszFilePath, GENERIC_READ_, OPEN_ALWAYS_, 0);
 			if (NULL == hFile)
-				throw exception_format(TEXT("ELF File:%s open failure, %s"), pszFilePath);
+				throw exception_format(TEXT("ELF File:%s open failure, %d"), pszFilePath, GetLastError());
 
 			DWORD dwReadSize = 0;
 			ST_ELF_IDENTITY stIdentity = { 0, };

@@ -370,12 +370,6 @@
     <ProjectReference Include="..\..\Src\200_Common\200_CommonW.vcxproj">
       <Project>{c576ed7f-7cbb-44eb-bd6a-2cd11b009db8}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\..\Src\300_Formatter\300_FormatterA.vcxproj">
-      <Project>{a654d95e-82c8-4f87-8b08-67dcb61b9300}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Src\300_Formatter\300_FormatterW.vcxproj">
-      <Project>{939e852f-90dd-4e1a-ae69-ea7e6369a270}</Project>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
