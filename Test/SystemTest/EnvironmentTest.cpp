@@ -278,6 +278,13 @@ TEST(SystemTest, DISABLED_GuidRandomTest)
 }
 
 //////////////////////////////////////////////////////////////////////////
+TEST(SystemTest, CapitalGuidTest)
+{
+	std::tstring strGuid = GenerateGuid();
+	EXPECT_EQ(strGuid, MakeUpper(strGuid));
+}
+
+//////////////////////////////////////////////////////////////////////////
 TEST(SystemTest, TimeZoneTest)
 {
 	ST_TIME_ZONE_INFORMATION stTimeZone = { 0, };
