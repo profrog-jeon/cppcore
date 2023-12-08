@@ -5,6 +5,7 @@
 #include "StdString.h"
 #include "StdStringLegacy.h"
 #include "Unicode.h"
+#include "ASCII.h"
 
 namespace core
 {
@@ -382,11 +383,6 @@ namespace core
 		size_t tPos = 0;
 		return NaturalNumFrom<DWORD>(strNum.c_str(), strNum.length(), nBase, tPos);
 	}
-
-
-	//////////////////////////////////////////////////////////////////////////
-	static TCHAR g_cHexCharTable[0x10] = { '0', '1', '2', '3', '4', '5', '6', '7',
-		'8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
 
 	//////////////////////////////////////////////////////////////////////////
 	std::tstring StringFromHex(const unsigned char* pData, size_t tDataSize)

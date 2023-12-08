@@ -5,6 +5,7 @@
 #include "../__Common/ErrorCode.h"
 #include "../__Common/Compatibility.h"
 
+#include "ASCII.h"
 #include "BOM.h"
 #include "EuckrEncoding.h"
 #include "Exception.h"

@@ -259,7 +259,6 @@
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\cppcore-github\Src\__Common\Define.h" />
     <ClInclude Include="..\..\..\cppcore-github\Src\__Common\ErrorCode.h" />
     <ClInclude Include="..\..\..\cppcore-github\Src\__Common\Type.h" />
     <ClInclude Include="..\__Common\Compatibility.h" />
@@ -267,6 +266,7 @@
     <ClInclude Include="..\__Common\ErrorCode.h" />
     <ClInclude Include="..\__Common\Type.h" />
     <ClInclude Include="000_String.h" />
+    <ClInclude Include="ASCII.h" />
     <ClInclude Include="BOM.h" />
     <ClInclude Include="EuckrEncoding.h" />
     <ClInclude Include="Exception.h" />
@@ -281,6 +281,7 @@
     <ClInclude Include="Utility.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ASCII.cpp" />
     <ClCompile Include="BOM.cpp" />
     <ClCompile Include="BOMT.cpp" />
     <ClCompile Include="EuckrEncoding.cpp">

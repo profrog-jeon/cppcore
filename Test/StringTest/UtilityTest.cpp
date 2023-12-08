@@ -57,3 +57,15 @@ TEST(UtilityString, ExtractFileNameWithoutExtTest)
 	EXPECT_EQ(TEXT(""), 	ExtractFileNameWithoutExt(TEXT("/")));
 	EXPECT_EQ(TEXT(""), 	ExtractFileNameWithoutExt(TEXT("\\")));
 }
+
+//////////////////////////////////////////////////////////////////////////
+TEST(UtilityString, MakeHexDumpStrTest)
+{
+	std::vector<BYTE> vecData;
+	vecData.resize(256);
+	for (size_t i = 0; i < 256; i++)
+		vecData[i] = (BYTE)i;
+
+	std::string strContext = MakeHexDumpStrA(vecData.data(), vecData.size());
+	ASSERT_EQ(strContext.size(), 256);
+}

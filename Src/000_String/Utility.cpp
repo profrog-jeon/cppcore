@@ -1,26 +1,18 @@
 #include "stdafx.h"
 #include "Utility.h"
 #include "STLString.h"
+#include "ASCII.h"
+#include "NumericString.h"
 
 namespace core
 {
 	//////////////////////////////////////////////////////////////////////////
-	static const bool s_bReadbleCharTable[32] =
-	{	/*			0  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15	*/
-		/*0x00*/	1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 0, 0,
-		/*0x10*/	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	};
-
-	//////////////////////////////////////////////////////////////////////////
 	bool IsReadableChar(TCHAR cChar)
 	{
-		if (cChar < 0)
-			return false;
+		if (0xFF < cChar)
+			return true;
 
-		if (cChar < 32)
-			return s_bReadbleCharTable[cChar];
-
-		return (BYTE)cChar <= 0x80;
+		return g_bTextAscii[cChar] != 0;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
@@ -160,5 +152,77 @@ namespace core
 	{
 		std::tstring strInformalPath(pszInformalPath);
 		return MakeFormalPath(strInformalPath);
+	}
+	
+	//////////////////////////////////////////////////////////////////////////
+	static inline std::tstring MakeHexDumpStrWorker(LPCBYTE pData, size_t tSize)
+	{
+		std::tstring strRet;
+
+		std::tstring strChar;
+		std::tstring strHexArray;
+
+		for (size_t i=0; i<tSize; i++)
+		{
+			const BYTE btHex = pData[i];
+			if (g_bDisplayableAscii[btHex])
+				strChar += core::Format(TEXT("%c"), btHex);
+			else
+				strChar += TEXT(".");
+
+			TCHAR szHex[5] = {
+				g_cHexCharTable[(btHex >> 4) & 0x0F],
+				g_cHexCharTable[(btHex >> 0) & 0x0F],
+				0
+			};
+
+			const size_t tColIndex = (i + 1) & 0xF;
+			switch (tColIndex)
+			{
+			case 0:
+				szHex[2] = TEXT('\r');
+				szHex[3] = TEXT('\n');
+				strHexArray += szHex;
+				strRet += strChar + TEXT("\t") + strHexArray;
+				strChar.clear();
+				strHexArray.clear();
+				break;
+
+			case 8:
+				szHex[2] = TEXT(' ');
+				szHex[3] = TEXT(' ');
+				strHexArray += szHex;
+				break;
+
+			default:
+				szHex[2] = TEXT(' ');
+				szHex[3] = 0;
+				strHexArray += szHex;
+				break;
+			}
+		}
+
+		return strRet;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+#ifdef UNICODE
+	std::wstring MakeHexDumpStrW(LPCBYTE pData, size_t tSize)
+#else
+	std::string MakeHexDumpStrA(LPCBYTE pData, size_t tSize)
+#endif
+	{
+		return MakeHexDumpStrWorker(pData, tSize);
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	std::tstring MakeHexDumpStr(std::tstring strHexDump)
+	{
+		std::vector<BYTE> vecHex;
+		vecHex.resize(strHexDump.size() / 2);
+		for (size_t i = 0; i < vecHex.size(); i++)
+			HexFromString(&vecHex[i], 1, strHexDump.substr(i * 2, 2));
+
+		return MakeHexDumpStrWorker(vecHex.data(), vecHex.size());
 	}
 }

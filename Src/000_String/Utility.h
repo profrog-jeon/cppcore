@@ -1,5 +1,11 @@
 #pragma once
 
+#ifdef UNICODE
+#define MakeHexDumpStr	MakeHexDumpStrA
+#else
+#define MakeHexDumpStr	MakeHexDumpStrW
+#endif
+
 namespace core
 {
 	bool IsReadableChar(char cChar);
@@ -18,4 +24,9 @@ namespace core
 	std::wstring ExtractFileNameWithoutExt(std::wstring strFilename);
 	std::string ExtractFileExt(std::string strFullPath);
 	std::wstring ExtractFileExt(std::wstring strFullPath);
+
+	std::string MakeHexDumpStrA(LPCBYTE pData, size_t tSize);
+	std::wstring MakeHexDumpStrW(LPCBYTE pData, size_t tSize);
+	std::string MakeHexDumpStrA(std::string strHexDump);
+	std::wstring MakeHexDumpStrW(std::wstring strHexDump);
 }
