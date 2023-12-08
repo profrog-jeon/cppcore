@@ -61,11 +61,22 @@ TEST(UtilityString, ExtractFileNameWithoutExtTest)
 //////////////////////////////////////////////////////////////////////////
 TEST(UtilityString, MakeHexDumpStrTest)
 {
-	std::vector<BYTE> vecData;
-	vecData.resize(256);
+	std::vector<BYTE> vecHexDump;
+	vecHexDump.resize(256);
 	for (size_t i = 0; i < 256; i++)
-		vecData[i] = (BYTE)i;
+	{
+		if (g_bDisplayableAscii[i])
+			vecHexDump[i] = BYTE(i);
+		else
+			vecHexDump[i] = '.';
+	}
 
-	std::string strContext = MakeHexDumpStrA(vecData.data(), vecData.size());
-	ASSERT_EQ(strContext.size(), 256);
+	LPCTSTR pszTestFile = TEXT("../../Build/Test/Ascii/HexDump.txt");
+	//WriteFileContents(pszTestFile, vecHexDump.data(), vecHexDump.size());
+
+	std::vector<BYTE> vecExpectData;
+	ReadFileContents(pszTestFile, vecExpectData);
+	ASSERT_EQ(vecHexDump.size(), 256);
+	ASSERT_EQ(vecExpectData.size(), 256);
+	EXPECT_EQ(0, memcmp(vecHexDump.data(), vecExpectData.data(), 256));
 }

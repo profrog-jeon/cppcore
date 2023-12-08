@@ -1,9 +1,9 @@
 #pragma once
 
 #ifdef UNICODE
-#define MakeHexDumpStr	MakeHexDumpStrA
-#else
 #define MakeHexDumpStr	MakeHexDumpStrW
+#else
+#define MakeHexDumpStr	MakeHexDumpStrA
 #endif
 
 namespace core

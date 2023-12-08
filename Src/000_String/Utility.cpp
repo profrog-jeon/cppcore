@@ -206,11 +206,7 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-#ifdef UNICODE
-	std::wstring MakeHexDumpStrW(LPCBYTE pData, size_t tSize)
-#else
-	std::string MakeHexDumpStrA(LPCBYTE pData, size_t tSize)
-#endif
+	std::tstring MakeHexDumpStr(LPCBYTE pData, size_t tSize)
 	{
 		return MakeHexDumpStrWorker(pData, tSize);
 	}
