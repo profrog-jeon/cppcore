@@ -140,7 +140,7 @@ namespace core
 	//////////////////////////////////////////////////////////////////////////
 	std::tstring MakeLower(const std::tstring& strContext)
 	{
-		std::tstring strTempContext(strContext);
+		std::tstring strTempContext(strContext.c_str());
 		return MakeLowerWorker(strTempContext);
 	}
 
@@ -160,7 +160,7 @@ namespace core
 	//////////////////////////////////////////////////////////////////////////
 	std::tstring MakeUpper(const std::tstring& strContext)
 	{
-		std::tstring strTempContext(strContext);
+		std::tstring strTempContext(strContext.c_str());
 		return MakeUpperWorker(strTempContext);
 	}
 
