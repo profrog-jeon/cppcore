@@ -20,10 +20,10 @@ namespace core
 	std::wstring MakeLower(const wchar_t* pszText);
 	std::string MakeUpper(const char* pszText);
 	std::wstring MakeUpper(const wchar_t* pszText);
-	std::string MakeLower(std::string strText);
-	std::wstring MakeLower(std::wstring strText);
-	std::string MakeUpper(std::string strText);
-	std::wstring MakeUpper(std::wstring strText);
+	std::string MakeLower(const std::string& strText);
+	std::wstring MakeLower(const std::wstring& strText);
+	std::string MakeUpper(const std::string& strText);
+	std::wstring MakeUpper(const std::wstring& strText);
 	std::string& BecomeLower(std::string& strText);
 	std::wstring& BecomeLower(std::wstring& strText);
 	std::string& BecomeUpper(std::string& strText);

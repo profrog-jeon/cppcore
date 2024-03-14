@@ -133,14 +133,15 @@ namespace core
 	//////////////////////////////////////////////////////////////////////////
 	std::tstring MakeLower(LPCTSTR pszContext)
 	{
-		std::tstring strContext(pszContext);
-		return MakeLowerWorker(strContext);
+		std::tstring strTempContext(pszContext);
+		return MakeLowerWorker(strTempContext);
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	std::tstring MakeLower(std::tstring strContext)
+	std::tstring MakeLower(const std::tstring& strContext)
 	{
-		return MakeLowerWorker(strContext);
+		std::tstring strTempContext(strContext);
+		return MakeLowerWorker(strTempContext);
 	}
 
 	//////////////////////////////////////////////////////////////////////////
@@ -152,14 +153,15 @@ namespace core
 	//////////////////////////////////////////////////////////////////////////
 	std::tstring MakeUpper(LPCTSTR pszContext)
 	{
-		std::tstring strContext(pszContext);
-		return MakeUpperWorker(strContext);
+		std::tstring strTempContext(pszContext);
+		return MakeUpperWorker(strTempContext);
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	std::tstring MakeUpper(std::tstring strContext)
+	std::tstring MakeUpper(const std::tstring& strContext)
 	{
-		return MakeUpperWorker(strContext);
+		std::tstring strTempContext(strContext);
+		return MakeUpperWorker(strTempContext);
 	}
 
 	//////////////////////////////////////////////////////////////////////////
