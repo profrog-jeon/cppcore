@@ -333,6 +333,33 @@ namespace fmt_internal
 		strContext = Replace(strContext, TEXT("&apos;"), TEXT("\'"));
 		strContext = Replace(strContext, TEXT("&quot;"), TEXT("\""));
 		strContext = Replace(strContext, TEXT("&amp;") , TEXT("&") );
+
+		while (true)
+		{
+			size_t tPos = strContext.find(TEXT("&#"));
+			if (std::tstring::npos == tPos)
+				break;
+
+			size_t tEndPos = strContext.find(TEXT(";"), tPos);
+			if (std::tstring::npos == tEndPos)
+				break;
+
+			std::tstring strToken = strContext.substr(tPos, tEndPos - tPos + 1);
+			std::tstring strNumber = strToken.substr(2, strToken.length() - 3);
+			std::tstring strDecoded;
+			if (!strNumber.empty())
+			{
+				DWORD dwUnicode = 0;
+				if (TEXT('x') == strNumber.at(0) || TEXT('X') == strNumber.at(0))
+					dwUnicode = DWORDFromBase(strNumber.substr(1), 16);
+				else
+					dwUnicode = DWORDFromBase(strNumber, 10);
+
+				strDecoded = TCSFromUTF32(&dwUnicode, 1);
+			}
+
+			strContext = Replace(strContext, strToken, strDecoded);
+		}
 		return strContext;
 	}
 }

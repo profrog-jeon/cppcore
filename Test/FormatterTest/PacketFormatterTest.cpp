@@ -90,7 +90,7 @@ TEST(PacketFormatterTest, JsonPacketTest1)
 		ST_INTERNAL_DATA stInternalData;
 		stInternalData.nInt = 2;
 		stInternalData.strString = TEXT("two");
-		stInternalData.vecFileBinary.resize(155, 0xFF);
+		stInternalData.vecFileBinary.resize(155, (BYTE)0xFF);
 		stBinPacket.listInternal.push_back(stInternalData);
 		stBinPacket.mapInternal.insert(std::make_pair(TEXT("test2"), stInternalData));
 	}
