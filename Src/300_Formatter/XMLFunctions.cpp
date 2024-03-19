@@ -121,6 +121,7 @@ namespace fmt_internal
 	inline bool __ScanXmlContext(const std::tstring& strContext, std::vector<ST_XML_TOKENIZED_TAG>& vecTokenizedTag, std::string& refStrErrMsg)
 	{
 		size_t tPos = 0;
+		size_t tLastPos = 0;
 
 		try
 		{
@@ -178,6 +179,16 @@ namespace fmt_internal
 						if( std::tstring::npos != tWhiteSpaceIndex )
 							throw exception_format("XML tokenizer failure, close tag cannot contain whitespace.");
 
+						if (tLastPos < tPos)
+						{
+							std::tstring strToken = strContext.substr(tLastPos, tPos - tLastPos);
+							ST_XML_TOKENIZED_TAG stTag;
+							stTag.nType = XML_TOKENIZED_TAG_VALUE;
+							stTag.tIndex = tLastPos;
+							stTag.tLength = tPos - stTag.tIndex;
+							vecTokenizedTag.push_back(stTag);
+						}
+
 						ST_XML_TOKENIZED_TAG stTag;
 						stTag.nType = XML_TOKENIZED_TAG_CLOSE_ELEMENT;
 						stTag.tIndex = tPos + 2;
@@ -201,6 +212,8 @@ namespace fmt_internal
 					vecTokenizedTag.push_back(stTag);
 					tPos = tEnd;
 				}
+
+				tLastPos = tPos;
 			}
 		}
 		catch(std::exception& e)
@@ -224,7 +237,9 @@ namespace fmt_internal
 			for(i=0; i<vecTags.size(); i++)
 			{
 				pCurTag = &vecTags[i];
-				std::tstring strToken = Trim(strContext.substr(pCurTag->tIndex, pCurTag->tLength).c_str());
+				std::tstring strOriginalToken = strContext.substr(pCurTag->tIndex, pCurTag->tLength);
+				std::tstring strToken = Trim(strOriginalToken.c_str());
+
 				switch(pCurTag->nType)
 				{
 				case XML_TOKENIZED_TAG_SINGLE_ELEMENT:
@@ -247,7 +262,7 @@ namespace fmt_internal
 				case XML_TOKENIZED_TAG_VALUE:
 					if( stackTags.empty() )
 						throw exception_format("No tag value has found!");
-					stackTags.top()->strValue = DecodeXmlString(strToken);
+					stackTags.top()->strValue = DecodeXmlString(strOriginalToken);
 					break;
 				case XML_TOKENIZED_TAG_ATTR_KEY:
 					if( stackTags.empty() )
