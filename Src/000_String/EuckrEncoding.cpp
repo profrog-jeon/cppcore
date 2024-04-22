@@ -2145,6 +2145,12 @@ namespace core
 	};
 
 	static ST_EUCKR_TABLE_INITIALIZER g_Initializer;
+	static char g_cUnreadableMask = '?';
+
+	void SetUnreadableMaskChar(char cMask)
+	{
+		g_cUnreadableMask = cMask;
+	}
 
 	//////////////////////////////////////////////////////////////////////////
 	std::wstring WCSFromEUCKR(std::string strEUCKR)
@@ -2172,13 +2178,13 @@ namespace core
 			{
 				WORD wIndex = ((BYTE)pSrc[i] << 8) + (BYTE)pSrc[i + 1];
 				WORD wUnicode = g_EuckrTable[wIndex];
-				pTarget[tWrittenPos++] = wUnicode == 0 ? '?' : wUnicode;
+				pTarget[tWrittenPos++] = wUnicode == 0 ? g_cUnreadableMask : wUnicode;
 				i++;
 				continue;
 			}
 
 			// Last 1byte? Unknown
-			pTarget[tWrittenPos++] = '?';
+			pTarget[tWrittenPos++] = g_cUnreadableMask;
 		}
 
 		strRet.resize(tWrittenPos);
@@ -2213,7 +2219,7 @@ namespace core
 			if (pSrc[i] > 0)
 			{
 				if ((pSrc[i] < 32) && !s_bReadbleCharTable[pSrc[i]])
-					pSrc[i] = '?';
+					pSrc[i] = g_cUnreadableMask;
 				continue;
 			}
 
@@ -2224,7 +2230,7 @@ namespace core
 				WORD wChar = g_EuckrTable[wIndex];
 				if (wChar == 0)
 				{
-					pSrc[i] = '?';
+					pSrc[i] = g_cUnreadableMask;
 					continue;
 				}
 
@@ -2234,7 +2240,7 @@ namespace core
 			}
 
 			// Last 1byte? Unknown
-			pSrc[i] = '?';
+			pSrc[i] = g_cUnreadableMask;
 		}
 	}
 

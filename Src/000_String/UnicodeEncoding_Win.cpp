@@ -56,13 +56,13 @@ namespace core
 			{
 				tDstLen = ::WideCharToMultiByte(CP_ACP, 0, (LPCWSTR)pSrc, (int)tSrcCch, NULL, 0, NULL, NULL);
 				if( 0 == tDstLen )
-					throw std::runtime_error("MultiByteToWideChar failure, calc requiredSize");
+					throw std::runtime_error("WideCharToMultiByte failure, calc requiredSize");
 			}
 			else
 			{
 				tDstLen = ::WideCharToMultiByte(CP_ACP, 0, (LPCWSTR)pSrc, (int)tSrcCch, (LPSTR)pDest, (int)tDestCch, NULL, NULL);
 				if( 0 == tDstLen )
-					throw std::runtime_error("MultiByteToWideChar failure, memory copy");
+					throw std::runtime_error("WideCharToMultiByte failure, memory copy");
 			}
 		}
 		catch(std::exception& e)

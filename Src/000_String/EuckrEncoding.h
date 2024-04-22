@@ -14,6 +14,8 @@
 
 namespace core
 {
+	void SetUnreadableMaskChar(char cMask = '?');
+
 	std::wstring		WCSFromEUCKR(std::string strEUCKR);
 	std::string			EUCKRFromEUCKR(std::string strEUCKR);
 	std::string			UTF8FromEUCKR(std::string strEUCKR);
@@ -22,5 +24,4 @@ namespace core
 	bool IsInvalidEUCKR(const std::string& strContext);
 	void MaskUnreadableEUCKR(char* pSrc, size_t tSrcSize);
 	std::string& MaskUnreadableEUCKR(std::string& strContext);
-	
 }
