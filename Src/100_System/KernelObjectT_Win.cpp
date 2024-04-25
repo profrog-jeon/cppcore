@@ -421,7 +421,7 @@ namespace core
 				continue;
 
 			ST_PROCESS_INFO stProcInfo;
-			stProcInfo.tPID = aProcesses[i];
+			stProcInfo.dwPID = aProcesses[i];
 			stProcInfo.strName = strName;
 			vecProcesses.push_back(stProcInfo);
 		}

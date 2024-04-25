@@ -219,13 +219,13 @@ namespace core
 
 	struct ST_PROCESS_INFOA
 	{
-		size_t tPID;
+		DWORD dwPID;
 		std::string strName;
 	};
 
 	struct ST_PROCESS_INFOW
 	{
-		size_t tPID;
+		DWORD dwPID;
 		std::wstring strName;
 	};
 
