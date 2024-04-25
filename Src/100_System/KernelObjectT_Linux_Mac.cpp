@@ -510,12 +510,12 @@ namespace core
 			if( std::tstring::npos != strCMD.find(TEXT(" <defunct>")) )
 				continue;
 
-			size_t tPID = ValueFrom<size_t>(strPID);
-			if( 0 == tPID )
+			const DWORD dwPID = ValueFrom<DWORD>(strPID);
+			if( 0 == dwPID )
 				continue;
 
 			ST_PROCESS_INFO stProcInfo;
-			stProcInfo.tPID = tPID;
+			stProcInfo.dwPID = dwPID;
 			stProcInfo.strName = strCMD;
 			vecProcesses.push_back(stProcInfo);
 		}
