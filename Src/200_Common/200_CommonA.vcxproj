@@ -267,6 +267,7 @@
   <ItemGroup>
     <ClInclude Include="CircularQueue.h" />
     <ClInclude Include="200_Common.h" />
+    <ClInclude Include="CmdLineHelper.h" />
     <ClInclude Include="CriticalSection.h" />
     <ClInclude Include="DuplicatedProcChecker.h" />
     <ClInclude Include="FileUtility.h" />
@@ -296,6 +297,7 @@
     <ClInclude Include="zip.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CmdLineHelper.cpp" />
     <ClCompile Include="CriticalSection.cpp" />
     <ClCompile Include="DuplicatedProcChecker.cpp" />
     <ClCompile Include="FileUtility.cpp" />

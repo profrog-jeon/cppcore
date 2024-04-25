@@ -340,6 +340,7 @@
     <ClCompile Include="..\..\Inc\gtest-all.cc" />
     <ClCompile Include="..\..\Inc\gtest_main.cc" />
     <ClCompile Include="CircularQueueTest.cpp" />
+    <ClCompile Include="CmdLineHelperTest.cpp" />
     <ClCompile Include="CriticalSectionTest.cpp" />
     <ClCompile Include="HashFunctionTest.cpp" />
     <ClCompile Include="LockFreeQueueTest.cpp" />

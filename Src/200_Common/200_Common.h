@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CriticalSection.h"
+#include "CmdLineHelper.h"
 #include "DuplicatedProcChecker.h"
 #include "Mutex.h"
 #include "PEParser.h"
