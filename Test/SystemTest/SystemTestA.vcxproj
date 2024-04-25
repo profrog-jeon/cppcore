@@ -345,6 +345,7 @@
     <ClCompile Include="FileSystemTest.cpp" />
     <ClCompile Include="FileTest.cpp" />
     <ClCompile Include="GlobalSemaphoreMapTest.cpp" />
+    <ClCompile Include="InformationTest.cpp" />
     <ClCompile Include="InterlockedOperationTest.cpp" />
     <ClCompile Include="KernelObjectTest.cpp" />
     <ClCompile Include="LogTest.cpp" />

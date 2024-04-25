@@ -139,4 +139,46 @@ namespace core
 			, stVersionInfo.dwPatch
 			, stVersionInfo.dwBuild);
 	}
+
+	//////////////////////////////////////////////////////////////////////////
+	std::tstring StringFrom(const ST_SYSTEMTIME& stTime)
+	{
+		return Format(TEXT("%04d-%02d-%02d %02d:%02d:%02d")
+			, stTime.wYear, stTime.wMonth, stTime.wDay
+			, stTime.wHour, stTime.wMinute, stTime.wSecond);
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	ST_VERSIONINFO VersionFrom(std::tstring strVersionContext)
+	{
+		std::vector<std::tstring> vecToken;
+		TokenizeToArray(strVersionContext, TEXT("."), vecToken, false);
+
+		ST_VERSIONINFO stVersion = { 0, };
+		if (0 < vecToken.size())		stVersion.dwMajor = DWORDFrom(vecToken[0]);
+		if (1 < vecToken.size())		stVersion.dwMinor = DWORDFrom(vecToken[1]);
+		if (2 < vecToken.size())		stVersion.dwPatch = DWORDFrom(vecToken[2]);
+		if (3 < vecToken.size())		stVersion.dwBuild = DWORDFrom(vecToken[3]);
+
+		return stVersion;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	ST_SYSTEMTIME SystemTimeFrom(std::tstring strTimeContext)
+	{
+		std::vector<std::tstring> vecToken;
+		TokenizeToArray(strTimeContext, TEXT("- :."), vecToken, false);
+
+		ST_SYSTEMTIME stTime = { 0, };
+		if (0 < vecToken.size())		stTime.wYear		 = WORDFrom(vecToken[0]);
+		if (1 < vecToken.size())		stTime.wMonth		 = WORDFrom(vecToken[1]);
+		if (2 < vecToken.size())		stTime.wDay			 = WORDFrom(vecToken[2]);
+		if (3 < vecToken.size())		stTime.wHour		 = WORDFrom(vecToken[3]);
+		if (4 < vecToken.size())		stTime.wMinute		 = WORDFrom(vecToken[4]);
+		if (5 < vecToken.size())		stTime.wSecond		 = WORDFrom(vecToken[5]);
+		if (6 < vecToken.size())		stTime.wMilliseconds = WORDFrom(vecToken[6]);
+
+		stTime.wDayOfWeek = CalcDayOfWeek(stTime.wYear, stTime.wMonth, stTime.wDay);
+		return stTime;
+	}
 };

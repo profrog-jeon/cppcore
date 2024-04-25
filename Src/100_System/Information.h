@@ -48,4 +48,13 @@ namespace core
 
 	std::string		StringFromA(const ST_VERSIONINFO& stVersionInfo);
 	std::wstring	StringFromW(const ST_VERSIONINFO& stVersionInfo);
+
+	std::string StringFromA(const ST_SYSTEMTIME& stTime);
+	std::wstring StringFromW(const ST_SYSTEMTIME& stTime);
+
+	ST_VERSIONINFO VersionFrom(std::string strVersionContext);
+	ST_VERSIONINFO VersionFrom(std::wstring strVersionContext);
+
+	ST_SYSTEMTIME SystemTimeFrom(std::string strTimeContext);
+	ST_SYSTEMTIME SystemTimeFrom(std::wstring strTimeContext);
 }

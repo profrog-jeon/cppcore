@@ -179,7 +179,7 @@ TEST(SystemTest, CreateProcessTest_TerminateProcess)
         size_t i;
         for(i=0; i<vecProc.size(); i++)
         {
-            tprintf(TEXT("=========> %s(%lu)\n"), vecProc[i].strName.c_str(), vecProc[i].tPID);
+            tprintf(TEXT("=========> %s(%u)\n"), vecProc[i].strName.c_str(), vecProc[i].tPID);
         }
     }
 
@@ -194,7 +194,7 @@ TEST(SystemTest, CreateProcessTest_TerminateProcess)
         size_t i;
         for(i=0; i<vecProc.size(); i++)
         {
-            tprintf(TEXT("=========> %s(%lu)\n"), vecProc[i].strName.c_str(), vecProc[i].tPID);
+            tprintf(TEXT("=========> %s(%u)\n"), vecProc[i].strName.c_str(), vecProc[i].tPID);
         }
     }
 }

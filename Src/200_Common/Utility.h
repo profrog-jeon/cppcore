@@ -89,7 +89,4 @@ namespace core
 	std::wstring BuildUniqFileName(std::wstring strTempFile);
 
 	double GetCurrentSecond(void);
-
-	std::string StringFromA(const ST_SYSTEMTIME& stTime);
-	std::wstring StringFromW(const ST_SYSTEMTIME& stTime);
 }

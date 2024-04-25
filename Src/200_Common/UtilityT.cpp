@@ -723,12 +723,4 @@ namespace core
 
 		return strTempFile;
 	}
-
-	//////////////////////////////////////////////////////////////////////////
-	std::tstring StringFrom(const ST_SYSTEMTIME& stTime)
-	{
-		return Format(TEXT("%04d-%02d-%02d %02d:%02d:%02d")
-			, stTime.wYear, stTime.wMonth, stTime.wDay
-			, stTime.wHour, stTime.wMinute, stTime.wSecond);
-	}
 }
