@@ -34,3 +34,52 @@ TEST(CommonTest, BuildFileHashTest_NonExistedFile)
 {
 	EXPECT_EQ(TEXT(""), BuildFileHash(HASH_TYPE_MD5, TEXT("non-existed-file")));
 }
+
+
+//////////////////////////////////////////////////////////////////////////
+TEST(CommonTest, HMACTest_MD5)
+{
+	std::string strKey = "key";
+	std::string strMessage = "The quick brown fox jumps over the lazy dog";
+
+	std::vector<BYTE> KeyStream;
+	BuildHMAC(HASH_TYPE_MD5, strKey.c_str(), strMessage.c_str(), KeyStream);
+
+	const std::vector<BYTE> ExpectedKeyStream = {
+		0x80, 0x07, 0x07, 0x13, 0x46, 0x3e, 0x77, 0x49, 0xb9, 0x0c, 0x2d, 0xc2, 0x49, 0x11, 0xe2, 0x75
+	};
+	ASSERT_EQ(KeyStream.size(), ExpectedKeyStream.size());
+	EXPECT_EQ(0, memcmp(KeyStream.data(), ExpectedKeyStream.data(), KeyStream.size()));
+}
+
+//////////////////////////////////////////////////////////////////////////
+TEST(CommonTest, HMACTest_SHA1)
+{
+	std::string strKey = "key";
+	std::string strMessage = "The quick brown fox jumps over the lazy dog";
+
+	std::vector<BYTE> KeyStream;
+	BuildHMAC(HASH_TYPE_SHA1, strKey.c_str(), strMessage.c_str(), KeyStream);
+
+	const std::vector<BYTE> ExpectedKeyStream = {
+		0xde, 0x7c, 0x9b, 0x85, 0xb8, 0xb7, 0x8a, 0xa6, 0xbc, 0x8a, 0x7a, 0x36, 0xf7, 0x0a, 0x90, 0x70, 0x1c, 0x9d, 0xb4, 0xd9
+	};
+	ASSERT_EQ(KeyStream.size(), ExpectedKeyStream.size());
+	EXPECT_EQ(0, memcmp(KeyStream.data(), ExpectedKeyStream.data(), KeyStream.size()));
+}
+
+//////////////////////////////////////////////////////////////////////////
+TEST(CommonTest, HMACTest_SHA256)
+{
+	std::string strKey = "key";
+	std::string strMessage = "The quick brown fox jumps over the lazy dog";
+
+	std::vector<BYTE> KeyStream;
+	BuildHMAC(HASH_TYPE_SHA256, strKey.c_str(), strMessage.c_str(), KeyStream);
+
+	const std::vector<BYTE> ExpectedKeyStream = {
+		0xf7, 0xbc, 0x83, 0xf4, 0x30, 0x53, 0x84, 0x24, 0xb1, 0x32, 0x98, 0xe6, 0xaa, 0x6f, 0xb1, 0x43, 0xef, 0x4d, 0x59, 0xa1, 0x49, 0x46, 0x17, 0x59, 0x97, 0x47, 0x9d, 0xbc, 0x2d, 0x1a, 0x3c, 0xd8
+	};
+	ASSERT_EQ(KeyStream.size(), ExpectedKeyStream.size());
+	EXPECT_EQ(0, memcmp(KeyStream.data(), ExpectedKeyStream.data(), KeyStream.size()));
+}
