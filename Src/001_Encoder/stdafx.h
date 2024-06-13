@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdexcept>
+#include <map>
 
 #include "../__Common/Type.h"
 #include "../__Common/Define.h"

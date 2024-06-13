@@ -48,7 +48,7 @@
     <ClInclude Include="001_Encoder.h" />
     <ClInclude Include="Base64.h" />
     <ClInclude Include="CryptoPPSingleton.h" />
-    <ClInclude Include="HashFunction.h" />
+    <ClInclude Include="Hash.h" />
     <ClInclude Include="IPubKeyCipher.h" />
     <ClInclude Include="ISymAlgorithm.h" />
     <ClInclude Include="ISymMode.h" />
@@ -88,6 +88,8 @@
     <ClInclude Include="sha512.h">
       <Filter>hash</Filter>
     </ClInclude>
+    <ClInclude Include="HMAC.h" />
+    <ClInclude Include="HashFunction.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="AES\aescrypt.asm">
@@ -142,7 +144,7 @@
     </ClCompile>
     <ClCompile Include="Base64.cpp" />
     <ClCompile Include="CryptoPPSingleton.cpp" />
-    <ClCompile Include="HashFunction.cpp" />
+    <ClCompile Include="Hash.cpp" />
     <ClCompile Include="PubKeyCipherFunction.cpp" />
     <ClCompile Include="PubKeyElGamal.cpp" />
     <ClCompile Include="PubKeyRSA.cpp" />
@@ -178,5 +180,8 @@
     <ClCompile Include="sha512.cpp">
       <Filter>hash</Filter>
     </ClCompile>
+    <ClCompile Include="HashFunctionT.cpp" />
+    <ClCompile Include="HMAC.cpp" />
+    <ClCompile Include="HashFunction.cpp" />
   </ItemGroup>
 </Project>

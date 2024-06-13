@@ -14,7 +14,7 @@
 #include "MemoryMappedFile.h"
 #include "FileUtility.h"
 #include "Utility.h"
-#include "HashFunction.h"
+#include "FileHashFunction.h"
 #include "INIParser.h"
 #include "INIParserFunc.h"
 #include "Semaphore.h"

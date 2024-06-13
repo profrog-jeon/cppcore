@@ -92,6 +92,9 @@
     <ClCompile Include="SHA1.cpp">
       <Filter>hash</Filter>
     </ClCompile>
+    <ClCompile Include="HMAC.cpp" />
+    <ClCompile Include="HashFunctionT.cpp" />
+    <ClCompile Include="Hash.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ssdeep\edit_dist.h">
@@ -167,6 +170,8 @@
     <ClInclude Include="SHA1.h">
       <Filter>hash</Filter>
     </ClInclude>
+    <ClInclude Include="HMAC.h" />
+    <ClInclude Include="Hash.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="AES\aescrypt.asm">

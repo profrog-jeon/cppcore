@@ -1,14 +1,25 @@
 #pragma once
 
-#include <vector>
-
-#include "../__Common/Type.h"
-#include "Type.h"
+#define HashFile	BuildHash		// for lower compatibility
 
 namespace core
 {
-	HANDLE		InitHash(E_HASH_TYPE dwHashType);
-	void		UpdateHash(HANDLE hHash, const unsigned char* pData, size_t tSize);
-	void		FinalHash(HANDLE hHash, std::vector<BYTE>& outBuff);
-	std::string	FinalHash(HANDLE hHash);
+	void AppendData(std::vector<BYTE>& vecDest, const std::vector<BYTE>& vecData);
+	void AppendData(std::vector<BYTE>& vecDest, LPCBYTE pData, size_t tDataSize);
+
+	std::string BuildHash(E_HASH_TYPE nType, const std::vector<BYTE>& vecData);
+	void BuildHash(E_HASH_TYPE nType, LPCBYTE pData, size_t tDataSize, std::vector<BYTE>& outHash);
+	void BuildHash(E_HASH_TYPE nType, const std::vector<BYTE>& vecData, std::vector<BYTE>& outHash);
+
+	ECODE BuildHMAC(E_HASH_TYPE nHashType, const std::vector<BYTE>& Key, const std::vector<BYTE>& Message, std::vector<BYTE>& outResult);
+	ECODE BuildHMAC(core::E_HASH_TYPE nHashType, const std::string& Key, const std::string& Message, std::vector<BYTE>& outResult);
+
+	std::string BuildStringHash(E_HASH_TYPE nType, std::string strContext);
+	std::wstring BuildStringHash(E_HASH_TYPE nType, std::wstring strContext);
+	std::string BuildStringHashA(E_HASH_TYPE nType, std::string strContext);
+	std::string BuildStringHashA(E_HASH_TYPE nType, std::wstring strContext);
+	std::wstring BuildStringHashW(E_HASH_TYPE nType, std::string strContext);
+	std::wstring BuildStringHashW(E_HASH_TYPE nType, std::wstring strContext);
+	bool BuildStringHash(E_HASH_TYPE nType, std::string strContext, std::vector<BYTE>& vecHash);
+	bool BuildStringHash(E_HASH_TYPE nType, std::wstring strContext, std::vector<BYTE>& vecHash);
 }

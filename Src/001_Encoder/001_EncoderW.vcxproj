@@ -41,7 +41,9 @@
     <ClInclude Include="Base64.h" />
     <ClInclude Include="CryptoPPSingleton.h" />
     <ClInclude Include="has160.h" />
+    <ClInclude Include="Hash.h" />
     <ClInclude Include="HashFunction.h" />
+    <ClInclude Include="HMAC.h" />
     <ClInclude Include="IPubKeyCipher.h" />
     <ClInclude Include="ISymAlgorithm.h" />
     <ClInclude Include="ISymMode.h" />
@@ -137,7 +139,10 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='ReleaseMT|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Hash.cpp" />
+    <ClCompile Include="HashFunctionT.cpp" />
     <ClCompile Include="HashFunction.cpp" />
+    <ClCompile Include="HMAC.cpp" />
     <ClCompile Include="md5.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='DebugMT|Win32'">NotUsing</PrecompiledHeader>

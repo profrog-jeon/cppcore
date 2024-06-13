@@ -113,7 +113,7 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	HANDLE InitSymCipher(ST_SYM_CIPHER_KEY stCipherKey, E_CIPHER_METHOD nMethod)
+	HANDLE InitSymCipher(const ST_SYM_CIPHER_KEY& stCipherKey, E_CIPHER_METHOD nMethod)
 	{
 		ISymAlgorithm* pAlgorithm = NULL;
 		ISymMode* pMode = NULL;
@@ -197,7 +197,7 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	inline size_t CommonCipherFunc(E_CIPHER_METHOD nMethod, ST_SYM_CIPHER_KEY stCipherKey, LPCBYTE pSrc, size_t tSrcSize, LPBYTE pDest)
+	inline size_t CommonCipherFunc(E_CIPHER_METHOD nMethod, const ST_SYM_CIPHER_KEY& stCipherKey, LPCBYTE pSrc, size_t tSrcSize, LPBYTE pDest)
 	{
 		if( 0 == tSrcSize )
 			return 0;
@@ -232,13 +232,13 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t EncodeData(ST_SYM_CIPHER_KEY stCipherKey, LPCBYTE pSrc, size_t tSrcSize, LPBYTE pDest)
+	size_t EncodeData(const ST_SYM_CIPHER_KEY& stCipherKey, LPCBYTE pSrc, size_t tSrcSize, LPBYTE pDest)
 	{
 		return CommonCipherFunc(CIPHER_METHOD_ENCRYPT, stCipherKey, pSrc, tSrcSize, pDest);
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t DecodeData(ST_SYM_CIPHER_KEY stCipherKey, LPCBYTE pSrc, size_t tSrcSize, LPBYTE pDest)
+	size_t DecodeData(const ST_SYM_CIPHER_KEY& stCipherKey, LPCBYTE pSrc, size_t tSrcSize, LPBYTE pDest)
 	{
 		return CommonCipherFunc(CIPHER_METHOD_DECRYPT, stCipherKey, pSrc, tSrcSize, pDest);
 	}

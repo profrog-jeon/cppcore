@@ -1,46 +1,8 @@
 #include "stdafx.h"
-#include "HashFunction.h"
+#include "FileHashFunction.h"
 
 namespace core
 {
-	//////////////////////////////////////////////////////////////////////////
-	void AppendData(std::vector<BYTE>& vecDest, const std::vector<BYTE>& vecData)
-	{
-		vecDest.insert(vecDest.end(), vecData.begin(), vecData.end());
-	}
-
-	//////////////////////////////////////////////////////////////////////////
-	void AppendData(std::vector<BYTE>& vecDest, LPCBYTE pData, size_t tDataSize)
-	{
-		const size_t tPrevSize = vecDest.size();
-		vecDest.resize(tPrevSize + tDataSize);
-		memcpy(vecDest.data() + tPrevSize, pData, tDataSize);
-	}
-
-	//////////////////////////////////////////////////////////////////////////
-	std::string BuildHash(E_HASH_TYPE nType, const std::vector<BYTE>& vecData)
-	{
-		HANDLE hHash = InitHash(nType);
-		UpdateHash(hHash, vecData.data(), vecData.size());
-		return FinalHash(hHash);
-	}
-
-	//////////////////////////////////////////////////////////////////////////
-	void BuildHash(E_HASH_TYPE nType, LPCBYTE pData, size_t tDataSize, std::vector<BYTE>& outHash)
-	{
-		HANDLE hHash = InitHash(nType);
-		UpdateHash(hHash, pData, tDataSize);
-		FinalHash(hHash, outHash);
-	}
-
-	//////////////////////////////////////////////////////////////////////////
-	void BuildHash(E_HASH_TYPE nType, const std::vector<BYTE>& vecData, std::vector<BYTE>& outHash)
-	{
-		HANDLE hHash = InitHash(nType);
-		UpdateHash(hHash, vecData.data(), vecData.size());
-		FinalHash(hHash, outHash);
-	}
-
 	//////////////////////////////////////////////////////////////////////////
 	static const std::map<E_HASH_TYPE, size_t> g_mapHMAC_BlockSize = {
 		{	HASH_TYPE_MD5, 64	},

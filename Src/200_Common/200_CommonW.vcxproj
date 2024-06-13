@@ -270,8 +270,8 @@
     <ClInclude Include="CmdLineHelper.h" />
     <ClInclude Include="CriticalSection.h" />
     <ClInclude Include="DuplicatedProcChecker.h" />
+    <ClInclude Include="FileHashFunction.h" />
     <ClInclude Include="FileUtility.h" />
-    <ClInclude Include="HashFunction.h" />
     <ClInclude Include="IMemoryAccess.h" />
     <ClInclude Include="INIParser.h" />
     <ClInclude Include="INIParserFunc.h" />
@@ -302,9 +302,9 @@
     <ClCompile Include="CmdLineHelper.cpp" />
     <ClCompile Include="CriticalSection.cpp" />
     <ClCompile Include="DuplicatedProcChecker.cpp" />
+    <ClCompile Include="FileHashFunction.cpp" />
     <ClCompile Include="FileUtility.cpp" />
-    <ClCompile Include="HashFunction.cpp" />
-    <ClCompile Include="HashFunctionT.cpp" />
+    <ClCompile Include="FileHashFunctionT.cpp" />
     <ClCompile Include="INIParser.cpp" />
     <ClCompile Include="INIParserFunc.cpp" />
     <ClCompile Include="MemoryMappedFile.cpp" />
