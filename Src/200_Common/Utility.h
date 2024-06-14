@@ -23,9 +23,12 @@ namespace core
 	bool IsFileExist(std::string strFile);
 	bool IsFileExist(std::wstring strFile);
     
-	char ReverseByteOrder(char btData);
+	BYTE ReverseByteOrder(BYTE btData);
 	WORD ReverseByteOrder(WORD wData);
 	DWORD ReverseByteOrder(DWORD dwData);
+	LPBYTE ReverseByteOrder(LPBYTE pDest, size_t tSize);
+	std::vector<BYTE>& ReverseByteOrder(std::vector<BYTE>& refData);
+	std::vector<BYTE>& ReverseByteOrder(const std::vector<BYTE>& inData, std::vector<BYTE>& outData);
 
 	E_BOM_TYPE ReadBOM(HANDLE hFile);
 	ECODE WriteBOM(HANDLE hFile, E_BOM_TYPE nType);

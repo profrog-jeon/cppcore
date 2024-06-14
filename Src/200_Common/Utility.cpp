@@ -15,9 +15,24 @@ namespace core
 	{
 		printf("---------- %s finished ----------\n", m_strName.c_str());
 	}
-    
+
+	//////////////////////////////////////////////////////////////////////////
+	static inline LPBYTE ReverseByteOrderWorker(LPBYTE pDest, size_t tSize)
+	{
+		size_t i = 0;
+		const size_t tHalfIndex = tSize / 2;
+		for (i = 0; i < tHalfIndex; i++)
+		{
+			size_t o = tSize - i - 1;
+			BYTE temp = pDest[i];
+			pDest[i] = pDest[o];
+			pDest[o] = temp;
+		}
+		return pDest;
+	}
+
     //////////////////////////////////////////////////////////////////////////
-	char ReverseByteOrder(char btData)
+	BYTE ReverseByteOrder(BYTE btData)
 	{
 		return btData;
 	}
@@ -25,17 +40,33 @@ namespace core
 	//////////////////////////////////////////////////////////////////////////
 	WORD ReverseByteOrder(WORD wData)
 	{
-		return ((wData >>  8) & 0x000000FF)
-			|  ((wData <<  8) & 0x0000FF00);
+		return *(WORD*)ReverseByteOrderWorker((LPBYTE)&wData, 2);
 	}
 
 	//////////////////////////////////////////////////////////////////////////
 	DWORD ReverseByteOrder(DWORD dwData)
 	{
-		return ((dwData << 24) & 0xFF000000)
-			|  ((dwData <<  8) & 0x00FF0000)
-			|  ((dwData >>  8) & 0x0000FF00)
-			|  ((dwData >> 24) & 0x000000FF);
+		return *(DWORD*)ReverseByteOrderWorker((LPBYTE)&dwData, 4);
+	}
+
+	LPBYTE ReverseByteOrder(LPBYTE pDest, size_t tSize)
+	{
+		return ReverseByteOrderWorker(pDest, tSize);;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	std::vector<BYTE>& ReverseByteOrder(std::vector<BYTE>& refData)
+	{
+		ReverseByteOrderWorker(refData.data(), refData.size());
+		return refData;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	std::vector<BYTE>& ReverseByteOrder(const std::vector<BYTE>& inData, std::vector<BYTE>& outData)
+	{
+		outData = inData;
+		ReverseByteOrderWorker(outData.data(), outData.size());
+		return outData;
 	}
 
 	//////////////////////////////////////////////////////////////////////////

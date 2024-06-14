@@ -448,3 +448,24 @@ TEST(CommonTest, CopyDirectoryTest)
 		EXPECT_EQ(vecFiles[i], vecFiles2[i]);
 	}
 }
+
+bool operator==(const std::vector<BYTE>& lhs, const std::vector<BYTE>& rhs)
+{
+	return false;
+}
+
+//////////////////////////////////////////////////////////////////////////
+TEST(CommonTest, ReverseByteOrderTest)
+{
+	EXPECT_EQ(0x01, ReverseByteOrder((BYTE)0x01));
+	EXPECT_EQ(0x0201, ReverseByteOrder((WORD)0x0102));
+	EXPECT_EQ(0x04030201, ReverseByteOrder((DWORD)0x01020304));
+
+	std::vector<BYTE> vecOriginal3 = { 0x01, 0x02, 0x03 };
+	std::vector<BYTE> vecExpected3 = { 0x03, 0x02, 0x01 };
+	EXPECT_EQ(vecExpected3, ReverseByteOrder(vecOriginal3));
+
+	std::vector<BYTE> vecOriginal4 = { 0x01, 0x02, 0x03, 0x04 };
+	std::vector<BYTE> vecExpected4 = { 0x04, 0x03, 0x02, 0x01 };
+	EXPECT_EQ(vecExpected4, ReverseByteOrder(vecOriginal4));
+}
