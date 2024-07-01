@@ -7,9 +7,6 @@
     <Filter Include="SEED">
       <UniqueIdentifier>{94dcb8f6-4b84-4a84-9074-0d5966d3b195}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ssdeep">
-      <UniqueIdentifier>{b4bcdfad-d791-42f2-b718-96d3e5f65d0b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="hash">
       <UniqueIdentifier>{ad90c69d-03e2-4a45-a717-8d37076e1eed}</UniqueIdentifier>
     </Filter>
@@ -26,24 +23,6 @@
     </ClInclude>
     <ClInclude Include="SEED\SEED_256_KISA.h">
       <Filter>SEED</Filter>
-    </ClInclude>
-    <ClInclude Include="ssdeep\edit_dist.h">
-      <Filter>ssdeep</Filter>
-    </ClInclude>
-    <ClInclude Include="ssdeep\filedata.h">
-      <Filter>ssdeep</Filter>
-    </ClInclude>
-    <ClInclude Include="ssdeep\fuzzy.h">
-      <Filter>ssdeep</Filter>
-    </ClInclude>
-    <ClInclude Include="ssdeep\match.h">
-      <Filter>ssdeep</Filter>
-    </ClInclude>
-    <ClInclude Include="ssdeep\ssdeep.h">
-      <Filter>ssdeep</Filter>
-    </ClInclude>
-    <ClInclude Include="ssdeep\tchar-local.h">
-      <Filter>ssdeep</Filter>
     </ClInclude>
     <ClInclude Include="001_Encoder.h" />
     <ClInclude Include="Base64.h" />
@@ -118,27 +97,6 @@
     </ClCompile>
     <ClCompile Include="SEED\SEED_256_KISA.cpp">
       <Filter>SEED</Filter>
-    </ClCompile>
-    <ClCompile Include="ssdeep\edit_dist.cpp">
-      <Filter>ssdeep</Filter>
-    </ClCompile>
-    <ClCompile Include="ssdeep\filedata.cpp">
-      <Filter>ssdeep</Filter>
-    </ClCompile>
-    <ClCompile Include="ssdeep\find-file-size.cpp">
-      <Filter>ssdeep</Filter>
-    </ClCompile>
-    <ClCompile Include="ssdeep\fuzzy.cpp">
-      <Filter>ssdeep</Filter>
-    </ClCompile>
-    <ClCompile Include="ssdeep\helpers.cpp">
-      <Filter>ssdeep</Filter>
-    </ClCompile>
-    <ClCompile Include="ssdeep\match.cpp">
-      <Filter>ssdeep</Filter>
-    </ClCompile>
-    <ClCompile Include="ssdeep\ui.cpp">
-      <Filter>ssdeep</Filter>
     </ClCompile>
     <ClCompile Include="Base64.cpp" />
     <ClCompile Include="CryptoPPSingleton.cpp" />

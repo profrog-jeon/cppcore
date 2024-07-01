@@ -5,7 +5,6 @@
 #include "sha512.h"
 #include "has160.h"
 #include "md5.h"
-#include "ssdeep/fuzzy.h"
 
 namespace core
 {
@@ -20,7 +19,6 @@ namespace core
 			_SHA256_CTX*	pSha256;
 			_SHA512_CTX*	pSha512;
 			KISA_HAS160*	pHas160;
-			fuzzy_state*	pSsdeep;
 		}	Context;
 	};
 
@@ -53,10 +51,6 @@ namespace core
 		case HASH_TYPE_HAS160:
 			stHashInfo.Context.pHas160 = new KISA_HAS160();
 			KISA_HAS160_init(stHashInfo.Context.pHas160);
-			break;
-
-		case HASH_TYPE_SSDEEP:
-			stHashInfo.Context.pSsdeep = fuzzy_new();
 			break;
 
 		default:
@@ -92,8 +86,7 @@ namespace core
 			KISA_HAS160_update(pHashInfo->Context.pHas160, pData, (DWORD)tSize);
 			break;
 
-		case HASH_TYPE_SSDEEP:
-			fuzzy_update(pHashInfo->Context.pSsdeep, pData, tSize);
+		default:
 			break;
 		}
 	}
@@ -159,17 +152,7 @@ namespace core
 				delete pHashInfo->Context.pHas160;
 			}
 			break;
-
-		case HASH_TYPE_SSDEEP:
-			{
-				char szSSDEEP[FUZZY_MAX_RESULT+1] = { 0, };
-				fuzzy_digest(pHashInfo->Context.pSsdeep, szSSDEEP, 0);
-				fuzzy_free(pHashInfo->Context.pSsdeep);
-
-				size_t tSSDEEPLen = strlen(szSSDEEP);
-				outBuff.resize(tSSDEEPLen);
-				memcpy(&outBuff[0], szSSDEEP, tSSDEEPLen);
-			}
+		default:
 			break;
 		}
 
@@ -225,14 +208,7 @@ namespace core
 				delete pHashInfo->Context.pHas160;
 			}
 			break;
-
-		case HASH_TYPE_SSDEEP:
-			{
-				char szSSDEEP[FUZZY_MAX_RESULT+1] = { 0, };
-				fuzzy_digest(pHashInfo->Context.pSsdeep, szSSDEEP, 0);
-				fuzzy_free(pHashInfo->Context.pSsdeep);
-				strOutput = szSSDEEP;
-			}
+		default:
 			break;
 		}
 

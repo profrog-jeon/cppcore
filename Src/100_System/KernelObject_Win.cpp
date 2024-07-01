@@ -235,8 +235,8 @@ namespace core
 		case THREAD_PRIORITY_ABOVE_NORMAL:	return THREAD_PRIORITY_HIGH			;
 		case THREAD_PRIORITY_HIGHEST:
 		case THREAD_PRIORITY_TIME_CRITICAL:	return THREAD_PRIORITY_ABOVE_HIGH	;
+		default:							return THREAD_PRIORITY_ERROR		;
 		}
-		return THREAD_PRIORITY_ERROR;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
@@ -336,6 +336,10 @@ namespace core
 			break;
 		case THREAD_PRIORITY_ABOVE_HIGH:
 			bRet = ::SetThreadPriority(hThread, THREAD_PRIORITY_HIGHEST);
+			break;
+
+		default:
+			bRet = FALSE;
 			break;
 		}
 

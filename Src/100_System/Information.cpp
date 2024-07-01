@@ -29,9 +29,9 @@ namespace core
 		case 4:			return TEXT("Thursday");
 		case 5:			return TEXT("Friday");
 		case 6:			return TEXT("Saturday");
+		default:
+			return Format(TEXT("Unknown Week:%u"), wDayOfWeek);
 		}
-
-		return Format(TEXT("Unknown Week:%u"), wDayOfWeek);
 	}
 
 	//////////////////////////////////////////////////////////////////////////
@@ -51,9 +51,9 @@ namespace core
 		case 10:		return TEXT("October");
 		case 11:		return TEXT("November");
 		case 12:		return TEXT("December");
+		default:
+			return Format(TEXT("Undefined Month:%u"), wMonth);
 		}
-
-		return Format(TEXT("Undefined Month:%u"), wMonth);
 	}
 
 	//////////////////////////////////////////////////////////////////////////
@@ -78,8 +78,10 @@ namespace core
 		case OS_TYPE_WINDOWS_10				:		return TEXT("Windows 10");
 		case OS_TYPE_LINUX_X86				:		return TEXT("Linux x86");
 		case OS_TYPE_LINUX_X64				:		return TEXT("Linux x64");
+		default:
+			return TEXT("Unknown OS Type");
 		}
-		return TEXT("Unknown OS Type");
+		
 	}
 
 	//////////////////////////////////////////////////////////////////////////

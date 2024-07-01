@@ -19,8 +19,9 @@ namespace fmt_internal
 			CASE_TO_STR(TT_COLON);
 			CASE_TO_STR(TT_KEY);
 			CASE_TO_STR(TT_VALUE);
+		default:
+			return TEXT("UnknownTokenType");
 		}
-		return TEXT("UnknownTokenType");
 	}
 
 	//////////////////////////////////////////////////////////////////////////

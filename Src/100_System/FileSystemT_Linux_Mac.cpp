@@ -24,12 +24,6 @@
 namespace core
 {
 	//////////////////////////////////////////////////////////////////////////
-	FILE* fopenT(LPCTSTR pszPath, LPCTSTR pszMode)
-	{
-		return ::fopen(MBSFromTCS(pszPath).c_str(), MBSFromTCS(pszMode).c_str());
-	}
-
-	//////////////////////////////////////////////////////////////////////////
 	std::tstring GetSystemDirectory(void)
 	{
 		return TEXT("/sys/");
@@ -71,11 +65,8 @@ namespace core
 	//////////////////////////////////////////////////////////////////////////
 	bool CopyFile(LPCTSTR pszExistFile, LPCTSTR pszNewFile, BOOL bFailIfExist)
 	{
-		std::string strExistFile = MBSFromTCS(pszExistFile);
-		std::string strNewFile = MBSFromTCS(pszNewFile);
-		FILE* pInFile = NULL;
-		FILE* pOutFile = NULL;
-		size_t tReadLen = 0;
+		HANDLE hInFile = NULL;
+		HANDLE hOutFile = NULL;
 
 		try
 		{
@@ -85,41 +76,50 @@ namespace core
 				return false;
 			}
 
-			if( (pInFile = fopen(strExistFile.c_str(), "rb")) == NULL )
+			if( (hInFile = CreateFile(pszExistFile, GENERIC_READ_, OPEN_EXISTING_, 0)) == NULL )
 				throw exception_format(TEXT("Opening exist(%s) failed."), pszExistFile);
 
-			if( (pOutFile = fopen(strNewFile.c_str(), "wb")) == NULL )
+			if( (hOutFile = CreateFile(pszNewFile, GENERIC_WRITE_, CREATE_ALWAYS_, 0)) == NULL )
 				throw exception_format(TEXT("Opening new(%s) failed."), pszNewFile);
 
-			const size_t tBuffSize = 1024;
+			const DWORD tBuffSize = 1024;
 			char szBuff[tBuffSize];
-			while( (tReadLen = fread(szBuff, 1, tBuffSize, pInFile)) > 0 )
+			DWORD dwReadSize = 0;
+			while( ReadFile(hInFile, szBuff, tBuffSize, &dwReadSize) && 0 < dwReadSize)
 			{
-				if( 0 == fwrite(szBuff, sizeof(char), tReadLen, pOutFile) )
-					throw exception_format("Writing file contents failed.");
+				DWORD dwTotalWrittenSize = 0;
+				while (dwTotalWrittenSize < dwReadSize)
+				{
+					const DWORD dwRemainedSize = dwReadSize - dwTotalWrittenSize;
+					DWORD dwWrittenSize = 0;
+					if (!WriteFile(hOutFile, szBuff + dwTotalWrittenSize, dwRemainedSize, &dwWrittenSize) 
+						|| 0 == dwWrittenSize)
+						throw exception_format("Writing file contents failed.");
+					dwTotalWrittenSize += dwWrittenSize;
+				}
 			}
 
-			fclose(pInFile);
-			fclose(pOutFile);
+			CloseFile(hInFile);
+			CloseFile(hOutFile);
 		}
 		catch( std::exception& e )
 		{
 			Log_Debug("%s", e.what());
 
-			if( pInFile )
-				fclose(pInFile);
+			if( hInFile )
+				CloseFile(hInFile);
 
-			if( pOutFile )
-				fclose(pOutFile);
+			if( hOutFile )
+				CloseFile(hOutFile);
 
 			DeleteFile(pszNewFile);
 			return false;
 		}
 
 		struct stat stStat = { 0, };
-		if( ::stat(strExistFile.c_str(), &stStat) < 0 )
+		if( ::stat(MBSFromTCS(pszExistFile).c_str(), &stStat) < 0 )
 			Log_Warn(TEXT("%s mode_t copy has failed."), pszExistFile);
-		else if( chmod(strNewFile.c_str(), stStat.st_mode) < 0 )
+		else if( chmod(MBSFromTCS(pszNewFile).c_str(), stStat.st_mode) < 0 )
 			Log_Warn(TEXT("%s mode_t copy has failed."), pszNewFile);
 		return true;
 	}

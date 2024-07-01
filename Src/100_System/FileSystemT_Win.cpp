@@ -21,20 +21,6 @@
 namespace core
 {
 	//////////////////////////////////////////////////////////////////////////
-	FILE* fopenT(LPCTSTR pszPath, LPCTSTR pszMode)
-	{
-		FILE* pFile = NULL;
-		errno_t tRet = tfopen_s(&pFile, pszPath, pszMode);
-		if( 0 != tRet )
-		{
-			Log_Debug(TEXT("_tfopen_s(%s, %s) failure, %u"), pszPath, pszMode, tRet);
-			return NULL;
-		}
-
-		return pFile;
-	}
-
-	//////////////////////////////////////////////////////////////////////////
 	std::tstring GetSystemDirectory(void)
 	{
 		const size_t tBuffSize = 1024;

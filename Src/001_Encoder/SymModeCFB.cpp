@@ -45,6 +45,9 @@ namespace core
 			pOutput[1] ^= pInput[1];
 			pOutput[0] ^= pInput[0];
 			break;
+
+		default:
+			break;
 		}
 		memcpy(m_dwXOR, pOutput, m_tBlockSize);
 		return EC_SUCCESS;
@@ -73,6 +76,9 @@ namespace core
 		case 8:
 			pOutput[1] ^= pInput[1];
 			pOutput[0] ^= pInput[0];
+			break;
+
+		default:
 			break;
 		}
 		memcpy(m_dwXOR, pSrc, m_tBlockSize);

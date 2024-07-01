@@ -264,6 +264,8 @@ aes_rval aes_enc_blk(const unsigned char in_blk[], unsigned char out_blk[], cons
                 round(fwd_rnd,  b0, b1, kp + 7 * nc);
                 round(fwd_rnd,  b1, b0, kp + 8 * nc);
                 round(fwd_lrnd, b0, b1, kp + 9 * nc);
+    default:
+        break;
     }
 #else
     
@@ -386,6 +388,8 @@ aes_rval aes_dec_blk(const unsigned char in_blk[], unsigned char out_blk[], cons
                 round(inv_rnd,  b0, b1, kp - 7 * nc);
                 round(inv_rnd,  b1, b0, kp - 8 * nc);
                 round(inv_lrnd, b0, b1, kp - 9 * nc);
+    default:
+        break;
     }
 #else
     

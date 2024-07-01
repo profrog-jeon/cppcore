@@ -2,6 +2,7 @@
 #include "Network.h"
 #include "System_Mac.h"
 #include "Log.h"
+#include "KernelObject.h"
 #include <arpa/inet.h>
 #include <net/if.h>
 #include <sys/ioctl.h>
@@ -40,21 +41,24 @@ namespace core
 		ECODE nRet = EC_SUCCESS;
 		try
 		{
-			FILE* pFile = fopen("/etc/resolv.conf", "rt");
-			if( NULL == pFile )
+			HANDLE hFile = CreateFile(TEXT("/etc/resolv.conf"), GENERIC_READ_, OPEN_ALWAYS_, 0);
+			if( NULL == hFile )
 			{
 				nRet = errno;
 				throw exception_format("opening resolv.conf has failed, %s", strerror(errno));
 			}
 
+			const DWORD dwBuffSize = 256;
+			char szBuff[dwBuffSize + 1] = { 0, };
+			DWORD dwReadSize = 0;
+
 			std::string strResolvContents;
-			while(!feof(pFile))
+			while(ReadFile(hFile, szBuff, dwBuffSize, &dwReadSize) && 0 < dwReadSize)
 			{
-				char szBuff[256] = { 0, };
-				char* pRet = fgets(szBuff, 256, pFile);
+				szBuff[dwReadSize] = 0;
 				strResolvContents += szBuff;
 			}
-			fclose(pFile);
+			CloseFile(hFile);
 
 			ParsingDNSContext(strResolvContents, outInfo);
 		}

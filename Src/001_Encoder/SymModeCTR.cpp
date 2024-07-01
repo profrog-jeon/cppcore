@@ -41,6 +41,9 @@ namespace core
 		case 8:
 			dwInput[1] ^= m_dwCounter;	break;
 			break;
+
+		default:
+			break;
 		}
 
 		m_dwCounter ++;
@@ -65,6 +68,9 @@ namespace core
 		case 8:				
 			pOutput[1] ^= pInput[1];
 			pOutput[0] ^= pInput[0];
+			break;
+
+		default:
 			break;
 		}
 		return EC_SUCCESS;
@@ -87,6 +93,9 @@ namespace core
 		case 8:
 			dwInput[1] ^= m_dwCounter;	break;
 			break;
+
+		default:
+			break;
 		}
 
 		m_dwCounter ++;
@@ -111,6 +120,9 @@ namespace core
 		case 8:				
 			pOutput[1] ^= pInput[1];
 			pOutput[0] ^= pInput[0];
+			break;
+
+		default:
 			break;
 		}
 		return EC_SUCCESS;

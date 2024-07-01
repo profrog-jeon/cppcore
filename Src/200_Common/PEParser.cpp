@@ -959,7 +959,8 @@ namespace core
 	ECODE CPEParser::SaveIconToFile(const ST_RESOURCE_GROUPICON_ENTRY& stIcon, LPCSTR pszFileName)
 	{
 		ECODE nRet = EC_SUCCESS;
-		FILE* pFile = NULL;
+		HANDLE hFile = NULL;
+		DWORD dwWritten = 0;
 
 		try
 		{
@@ -967,8 +968,8 @@ namespace core
 			if (EC_SUCCESS != GetResource(CORE_RT_ICON, stIcon.ResourceID, vecResource))
 				throw exception_format("CORE_RT_ICON ID:%u is not found", stIcon.ResourceID);
 
-			pFile = fopenA(pszFileName, "w+b");
-			if (NULL == pFile)
+			hFile = CreateFileA(pszFileName, GENERIC_WRITE_, CREATE_ALWAYS_, 0);
+			if (NULL == hFile)
 			{
 				nRet = GetLastError();
 				throw exception_format("Cannot open file %s", pszFileName);
@@ -984,8 +985,8 @@ namespace core
 
 			if (40 != info.Size)
 			{
-				fwrite(&vecResource[0], vecResource.size(), 1, pFile);
-				fclose(pFile);
+				WriteFile(hFile, &vecResource[0], vecResource.size(), &dwWritten);
+				CloseFile(hFile);
 			}
 			else
 			{
@@ -999,17 +1000,17 @@ namespace core
 				header.Tagging1 = header.Tagging2 = 0;
 				header.TotalFileSize = (DWORD)(sizeof(ST_BMP_HEADER) + vecResource.size());
 				header.RawDataPoint = (DWORD)(sizeof(ST_BMP_HEADER) + sizeof(ST_BMP_INFO_HEADER) + dwPaletteSize);
-				fwrite(&header, sizeof(header), 1, pFile);
-				fwrite(&info, sizeof(info), 1, pFile);
-				fwrite(&vecResource[sizeof(info)], vecResource.size() - sizeof(info), 1, pFile);
-				fclose(pFile);
+				WriteFile(hFile, &header, sizeof(header), &dwWritten);
+				WriteFile(hFile, &info, sizeof(info), &dwWritten);
+				WriteFile(hFile, &vecResource[sizeof(info)], vecResource.size() - sizeof(info), &dwWritten);
+				CloseFile(hFile);
 			}	while (0);
 		}
 		catch (std::exception& e)
 		{
 			Log_Error("%s - %s", __FUNCTION__, e.what());
-			if (pFile)
-				fclose(pFile);
+			if (hFile)
+				CloseFile(hFile);
 			return nRet;
 		}
 

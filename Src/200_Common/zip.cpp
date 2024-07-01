@@ -2203,7 +2203,7 @@ ZRESULT GetFileInfo(HANDLE hf, ulg *attr, long *size, iztimes *times, ulg *times
 
 class TZip
 { public:
-  TZip(const char *pwd) : hfout(0),mustclosehfout(false),hmapout(0),zfis(0),obuf(0),hfin(0),writ(0),oerr(false),hasputcen(false),ooffset(0),encwriting(false),encbuf(0),password(0), state(0) {if (pwd!=0 && *pwd!=0) {password=new char[strlen(pwd)+1]; strcpy(password,pwd);}}
+    TZip(const char* pwd);
   ~TZip() {if (state!=0) delete state; state=0; if (encbuf!=0) delete[] encbuf; encbuf=0; if (password!=0) delete[] password; password=0;}
 
   // These variables say about the file we're writing into
@@ -2267,6 +2267,17 @@ class TZip
 };
 
 
+
+TZip::TZip(const char* pwd)
+    : hfout(0), mustclosehfout(false), hmapout(0), zfis(0), obuf(0), hfin(0), writ(0), oerr(false), hasputcen(false), ooffset(0), encwriting(false), encbuf(0), password(0), state(0)
+{
+    if (pwd != 0 && *pwd != 0)
+    {
+        const size_t tPwdLength = strlen(pwd);
+        password = new char[tPwdLength + 1];
+        SafeStrCpy(password, tPwdLength, pwd);
+    }
+}
 
 ZRESULT TZip::Create(void *z,unsigned int len,DWORD flags)
 { if (hfout!=0 || hmapout!=0 || obuf!=0 || writ!=0 || oerr!=ZR_OK || hasputcen) return ZR_NOTINITED;
@@ -2551,15 +2562,15 @@ ZRESULT TZip::Add(const TCHAR *odstzn, void *src,unsigned int len, DWORD flags)
 
   // Initialize the local header
   TZipFileInfo zfi; zfi.nxt=NULL;
-  strcpy(zfi.name,"");
+  SafeStrCpy(zfi.name, MAX_PATH, "");
 
   {
 	  std::string dstznt = MBSFromTCS(dstzn);
 	  SafeStrCpy(zfi.iname, MAX_PATH, dstznt.c_str());
   }
   zfi.nam=strlen(zfi.iname);
-  if (needs_trailing_slash) {strcat(zfi.iname,"/"); zfi.nam++;}
-  strcpy(zfi.zname,"");
+  if (needs_trailing_slash) {SafeStrCat(zfi.iname, MAX_PATH, "/"); zfi.nam++;}
+  SafeStrCpy(zfi.zname, MAX_PATH, "");
   zfi.extra=NULL; zfi.ext=0;   // extra header to go after this compressed data, and its length
   zfi.cextra=NULL; zfi.cext=0; // extra header to go in the central end-of-zip directory, and its length
   zfi.comment=NULL; zfi.com=0; // comment, and its length
@@ -2730,6 +2741,8 @@ unsigned int FormatZipMessageZ(ZRESULT code, char *buf,unsigned int len)
     case ZR_MISSIZE: msg="Zip-bug: the anticipated size turned out wrong"; break;
     case ZR_NOCHANGE: msg="Zip-bug: tried to change mind, but not allowed"; break;
     case ZR_FLATE: msg="Zip-bug: an internal error during flation"; break;
+    default:
+        break;
   }
   unsigned int mlen=(unsigned int)strlen(msg);
   if (buf==0 || len==0) return mlen;

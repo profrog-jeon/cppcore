@@ -14,7 +14,6 @@ namespace core
 		HASH_TYPE_SHA256			,
 		HASH_TYPE_SHA512			,
 		HASH_TYPE_HAS160			,
-		HASH_TYPE_SSDEEP			,
 		HASH_TYPE_COUNT				,
 		HASH_TYPE_UNDEFINED			,
 	};

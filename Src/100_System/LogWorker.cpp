@@ -201,6 +201,8 @@ namespace core
 			case LOG_ROTATION_SIZE_OR_SECOND:
 				if (bIsSameSecond && bUnderMaxFileSize)		return;
 				break;
+			default:
+				break;
 			}
 				
 			pContext->stLastCheckTime = pContext->stLastTime;

@@ -4,6 +4,7 @@
 #include "Environment.h"
 #include "Log.h"
 #include <string.h>
+#include "KernelObject.h"
 
 namespace core
 {
@@ -60,15 +61,15 @@ namespace core
 	{
 		INTERNAL_TZ_FILEHEADER header;
 
-		FILE* pFile = NULL;
+		HANDLE hFile = NULL;
 		try
 		{
-			pFile = fopenT(pszFileName, TEXT("rb"));
-			if( NULL == pFile )
+			hFile = CreateFile(pszFileName, GENERIC_READ_, OPEN_ALWAYS_, 0);
+			if( NULL == hFile )
 				throw exception_format(TEXT("fopen(%s) has failed."), pszFileName);
 
-			size_t tRead = fread(&header, 1, sizeof(header), pFile);
-			if( sizeof(header) != tRead )
+			DWORD dwReadSize = 0;
+			if( !ReadFile(hFile, &header, sizeof(header), &dwReadSize) || sizeof(header) != dwReadSize )
 				throw exception_format(TEXT("TZFile(%s) header reading failure"), pszFileName);
 
 			if( memcmp(header.szMarker, "TZif", 4) )
@@ -85,46 +86,46 @@ namespace core
 			{
 				outData.vecTransitTime.resize(header.dwTimeCount);
 				outData.vecTransitTimeIndex.resize(header.dwTimeCount);
-				fread(&outData.vecTransitTime[0], sizeof(outData.vecTransitTime[0]), header.dwTimeCount, pFile);
-				fread(&outData.vecTransitTimeIndex[0], 1, header.dwTimeCount, pFile);
+				ReadFile(hFile, &outData.vecTransitTime[0], sizeof(outData.vecTransitTime[0]) * header.dwTimeCount, &dwReadSize);
+				ReadFile(hFile, &outData.vecTransitTimeIndex[0], header.dwTimeCount, &dwReadSize);
 			}
 
 			if( header.dwTypeCount )
 			{
 				outData.vecType.resize(header.dwTypeCount);
-				fread(&outData.vecType[0], sizeof(outData.vecType[0]), header.dwTypeCount, pFile);
+				ReadFile(hFile, &outData.vecType[0], sizeof(outData.vecType[0]) * header.dwTypeCount, &dwReadSize);
 			}
 
 			if( header.dwCharLength >= TZ_MAX_CHARS )
 				throw exception_format(TEXT("TZFile(%s) char len:%u exceeded max:%u is not matched"), pszFileName, header.dwCharLength, TZ_MAX_CHARS);
-			fread(outData.szAbbreviation, 1, header.dwCharLength, pFile);
+			ReadFile(hFile, outData.szAbbreviation, header.dwCharLength, &dwReadSize);
 
 			if( header.dwLeapCount )
 			{
 				outData.vecLeapSec.resize(header.dwLeapCount);
-				fread(&outData.vecLeapSec[0], sizeof(outData.vecLeapSec[0]), header.dwLeapCount, pFile);
+				ReadFile(hFile, &outData.vecLeapSec[0], sizeof(outData.vecLeapSec[0]) * header.dwLeapCount, &dwReadSize);
 			}
 
 			if( header.dwStdCount )
 			{
 				outData.vecIsStd.resize(header.dwStdCount);
-				fread(&outData.vecIsStd[0], 1, header.dwStdCount, pFile);
+				ReadFile(hFile, &outData.vecIsStd[0], header.dwStdCount, &dwReadSize);
 			}
 
 			if( header.dwGMTCount )
 			{
 				outData.vecIsGmt.resize(header.dwGMTCount);
-				fread(&outData.vecIsGmt[0], 1, header.dwGMTCount, pFile);
+				ReadFile(hFile, &outData.vecIsGmt[0], header.dwGMTCount, &dwReadSize);
 			}
 
-			fclose(pFile);
-			pFile = NULL;
+			CloseFile(hFile);
+			hFile = NULL;
 		}
 		catch (std::exception& e)
 		{
 			Log_Debug("%s", e.what());
-			if( pFile )
-				fclose(pFile);
+			if( hFile )
+				CloseFile(hFile);
 			return EC_INVALID_DATA;
 		}
 
@@ -184,7 +185,7 @@ namespace core
 		for(iter=info.mapTransitTime.begin(); iter!=info.mapTransitTime.end(); iter++)
 		{
 			ST_SYSTEMTIME stTime = SystemTimeFrom(iter->first);
-			printf("%5s %04u-%02u-%02u %02u:%02u:%02u offset:%d %s\n"
+			Log_Info("%5s %04u-%02u-%02u %02u:%02u:%02u offset:%d %s\n"
 				, info.szAbbreviation + iter->second.btAbbrind
 				, stTime.wYear, stTime.wMonth, stTime.wDay
 				, stTime.wHour, stTime.wMinute, stTime.wSecond

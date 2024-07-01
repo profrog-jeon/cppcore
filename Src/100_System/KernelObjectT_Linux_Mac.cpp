@@ -63,6 +63,8 @@ namespace core
 		case OPEN_EXISTING_		:		nFlag |= O_EXCL;			break;
 		case OPEN_ALWAYS_		:		nFlag |= O_CREAT;			break;
 		case TRUNCATE_EXISTING_	:		nFlag |= O_EXCL|O_TRUNC;	break;
+		default:
+			return NULL;
 		}
 
 		int nFile = ::open(strFileNameA.c_str(), nFlag, dwMode);
@@ -477,8 +479,8 @@ namespace core
 		std::string strCommand = "ps -e -o pid,comm > " + strTempFile;
 		::system(strCommand.c_str());
 
-		FILE* pFile = fopen(strTempFile.c_str(), "rb");
-		if( NULL == pFile )
+		HANDLE hFile = CreateFileA(strTempFile.c_str(), GENERIC_READ_, OPEN_EXISTING_, 0);
+		if( NULL == hFile )
 		{
 			Log_Debug("Getting ps -e list(%s) has failed.", strCommand.c_str());
 			return 0;
@@ -487,15 +489,18 @@ namespace core
 		int i;
 		for(i=0; ; i++)
 		{
-			char szBuff[1024] = { 0, };
-			char* pszRet = fgets(szBuff, 1024, pFile);
-			if( NULL == pszRet )
+			const DWORD dwBufSize = 1024;
+			char szBuff[dwBufSize + 1] = { 0, };
+			DWORD dwReadSize = 0;
+			if (!ReadFile(hFile, szBuff, dwBufSize, &dwReadSize) || 0 == dwReadSize )
 				break;
+
+			szBuff[dwReadSize] = 0;
 
 			if( 0 == i ) // skip the first, it has not process info, but title
 				continue;
 
-			std::string strLine = Trim(pszRet);
+			std::string strLine = Trim(szBuff);
 			if( strLine.empty() )
 				break;
 
@@ -520,7 +525,7 @@ namespace core
 			vecProcesses.push_back(stProcInfo);
 		}
 
-		fclose(pFile);
+		CloseFile(hFile);
 		::unlink(strTempFile.c_str());
 		return vecProcesses.size();
 	}

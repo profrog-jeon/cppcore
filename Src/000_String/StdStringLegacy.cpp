@@ -9,14 +9,14 @@ namespace core
 	//////////////////////////////////////////////////////////////////////////
 	static const size_t g_tCharSize = sizeof(TCHAR);
     
-    struct __INTERNAL_ST_DEFAULT_LOCALE_FOR_MAC
-    {
-        __INTERNAL_ST_DEFAULT_LOCALE_FOR_MAC(void)
-        {
-            setlocale(LC_ALL, "ko_KR");
-        }
-    };
 #if defined(__APPLE__) && defined(UNICODE)
+	struct __INTERNAL_ST_DEFAULT_LOCALE_FOR_MAC
+	{
+		__INTERNAL_ST_DEFAULT_LOCALE_FOR_MAC(void)
+		{
+			setlocale(LC_ALL, "ko_KR");
+		}
+	};
     __INTERNAL_ST_DEFAULT_LOCALE_FOR_MAC g_GlobalLocale;
 #endif
 
@@ -135,6 +135,8 @@ namespace core
 			{
 			case TEXT('s'):		strFormat[i+1] = TEXT('S');			break;
 			case TEXT('S'):		strFormat[i+1] = TEXT('s');			break;
+			default:
+				break;
 			}
 		}
 		int nRet = vsntprintf(pszDest, tDestCch, strFormat.c_str(), vaList);

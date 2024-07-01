@@ -60,7 +60,7 @@ namespace core
 
 		case BOM_UTF16_BE:
 		case BOM_UTF32_BE:
-			printf("UTF16_BE or UTF32_BE is not implemented yet.\n");
+			Log_Warn("UTF16_BE or UTF32_BE is not implemented yet.\n");
 			break;
 
 		default:

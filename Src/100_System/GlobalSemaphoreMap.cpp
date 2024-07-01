@@ -25,7 +25,6 @@ namespace core
 		{
 			m_hSharedMem = CreateFileMapping(NULL, PAGE_READWRITE_, FILE_MAP_READ_|FILE_MAP_WRITE_, m_tMemorySize, s_SharedMemKey);
 			m_pMemory = (LPBYTE)MapViewOfFile(m_hSharedMem, 0, m_tMemorySize);
-			printf("memory cleaning.\n");
 			memset(m_pMemory, 0, m_tMemorySize);
 		}
 		else

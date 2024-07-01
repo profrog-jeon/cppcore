@@ -240,9 +240,10 @@ namespace core
 			if( g_fpTerminationSignalCallback )
 				g_fpTerminationSignalCallback();			
 			return TRUE; 
-		}
 
-		return FALSE; 
+		default:
+			return FALSE;
+		}
 	}
 
 	//////////////////////////////////////////////////////////////////////////

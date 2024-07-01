@@ -1352,6 +1352,8 @@ int inflate_blocks(inflate_blocks_statef *s, z_streamp z, int r)
           z->msg = (char*)"invalid block type";
           r = Z_DATA_ERROR;
           LEAVE
+        default:
+            break;
       }
       break;
     case IBM_LENS:
@@ -2933,7 +2935,7 @@ unzFile unzOpenInternal(LUFILE *fin)
   uLong central_pos,uL;
   central_pos = unzlocal_SearchCentralDir(fin);
   if (central_pos==0xFFFFFFFF) err=UNZ_ERRNO;
-  if (lufseek(fin,central_pos,SEEK_SET)!=0) err=UNZ_ERRNO;
+  if (lufseek(fin,(long)central_pos,SEEK_SET)!=0) err=UNZ_ERRNO;
   // the signature, already checked
   if (unzlocal_getLong(fin,&uL)!=UNZ_OK) err=UNZ_ERRNO;
   // number of this disk
@@ -3750,7 +3752,7 @@ UINT64 utcfromlocaltime(UINT64 uLocalTime)
 
 class TUnzip
 { public:
-  TUnzip(const char *pwd) : uf(0), unzbuf(0), currentfile(-1), czei(-1), password(0) {if (pwd!=0) {password=new char[strlen(pwd)+1]; strcpy(password,pwd);}}
+    TUnzip(const char* pwd);
   ~TUnzip() {if (password!=0) delete[] password; password=0; if (unzbuf!=0) delete[] unzbuf; unzbuf=0;}
 
   unzFile uf; int currentfile; ZIPENTRY cze; int czei;
@@ -3766,6 +3768,17 @@ class TUnzip
   ZRESULT Close();
 };
 
+
+TUnzip::TUnzip(const char* pwd)
+    : uf(0), unzbuf(0), currentfile(-1), czei(-1), password(0)
+{
+    if (pwd != 0)
+    {
+        const size_t tPwdLength = strlen(pwd);
+        password = new char[tPwdLength + 1];
+        SafeStrCpy(password, tPwdLength, pwd);
+    }
+}
 
 ZRESULT TUnzip::Open(void *z,unsigned int len,DWORD flags)
 { if (uf!=0 || currentfile!=-1) return ZR_NOTINITED;
@@ -4060,6 +4073,8 @@ unsigned int FormatZipMessageU(ZRESULT code, TCHAR *buf,unsigned int len)
     case ZR_MISSIZE: msg=_T("Zip-bug: the anticipated size turned out wrong"); break;
     case ZR_NOCHANGE: msg=_T("Zip-bug: tried to change mind, but not allowed"); break;
     case ZR_FLATE: msg=_T("Zip-bug: an internal error during flation"); break;
+    default:
+        msg = _T("Undefied error type"); break;
   }
   unsigned int mlen=(unsigned int)SafeStrLen(msg, 512);
   if (buf==0 || len==0) return mlen;

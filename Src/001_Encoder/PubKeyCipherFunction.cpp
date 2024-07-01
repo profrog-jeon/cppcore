@@ -69,6 +69,9 @@ namespace core
 			case PUBKEY_CIPHER_TYPE_ELGAMAL:
 				pCipher = new CPubKeyElGamalEncoder(vecKey, strSeed);
 				break;
+
+			default:
+				break;
 			}
 		}
 		if (CIPHER_METHOD_DECRYPT == nMethod)
@@ -81,6 +84,9 @@ namespace core
 
 			case PUBKEY_CIPHER_TYPE_ELGAMAL:
 				pCipher = new CPubKeyElGamalDecoder(vecKey, strSeed);
+				break;
+
+			default:
 				break;
 			}
 		}

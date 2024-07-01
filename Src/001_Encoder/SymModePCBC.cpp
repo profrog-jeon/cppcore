@@ -43,6 +43,9 @@ namespace core
 			m_dwXOR[1] ^= pInput[1];
 			m_dwXOR[0] ^= pInput[0];
 			break;
+
+		default:
+			break;
 		}
 
 		ECODE nRet = pAlgorithm->Encrypt((LPCBYTE)m_dwXOR, pDest);
@@ -64,6 +67,9 @@ namespace core
 		case 8:						
 			m_dwXOR[1] = dwSrcBackup[1] ^ pOutput[1];
 			m_dwXOR[0] = dwSrcBackup[0] ^ pOutput[0];
+			break;
+
+		default:
 			break;
 		}
 		return EC_SUCCESS;
@@ -102,6 +108,9 @@ namespace core
 			pOutput[0] = pOutput[0] ^ m_dwXOR[0];
 			m_dwXOR[1] = dwSrcBackup[1] ^ pOutput[1];
 			m_dwXOR[0] = dwSrcBackup[0] ^ pOutput[0];
+			break;
+
+		default:
 			break;
 		}
 		return EC_SUCCESS;

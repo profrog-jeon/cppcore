@@ -209,8 +209,14 @@ namespace core
 		{
 		case TEXT('-'):
 			bNegative = true;
+			tPos++;
+			break;
+
 		case TEXT('+'):
 			tPos ++;
+			break;
+
+		default:
 			break;
 		}
 

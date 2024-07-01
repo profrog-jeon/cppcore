@@ -3,7 +3,6 @@
 #include "Struct.h"
 
 #ifdef UNICODE
-#define fopenT						fopenW
 #define GetSystemDirectory			GetSystemDirectoryW
 #define GetCurrentDirectory			GetCurrentDirectoryW
 #define SetCurrentDirectory			SetCurrentDirectoryW
@@ -21,7 +20,6 @@
 #define FindFirstFile				FindFirstFileW
 #define FindNextFile				FindNextFileW
 #else
-#define fopenT						fopenA
 #define GetSystemDirectory			GetSystemDirectoryA
 #define GetCurrentDirectory			GetCurrentDirectoryA
 #define SetCurrentDirectory			SetCurrentDirectoryA
@@ -42,9 +40,6 @@
 
 namespace core
 {
-	FILE*			fopenA(const char* pszPath, const char* pszMode);
-	FILE*			fopenW(const wchar_t* pszPath, const wchar_t* pszMode);
-
 	std::string		GetSystemDirectoryA(void);		// c:\Windows\System32  or  /
 	std::wstring	GetSystemDirectoryW(void);
 	std::string		GetTempPathA(void);		// c:\User\Local\Temp  or  /etc/local
