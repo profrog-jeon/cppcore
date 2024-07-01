@@ -29,10 +29,12 @@ namespace core
 	//////////////////////////////////////////////////////////////////////////
 	static struct SIGNPIPE_IGN_INITIALIZATION
 	{
+		__sighandler_t fpOldSigPipe;
 		SIGNPIPE_IGN_INITIALIZATION(void)
 		{
-			::signal(SIGPIPE, SIG_IGN);
+			fpOldSigPipe = ::signal(SIGPIPE, SIG_IGN);
 		}
+		
 	}	g_InitSignalIGN;
 
 	//////////////////////////////////////////////////////////////////////////
@@ -436,7 +438,9 @@ namespace core
 
 		int nStatus = 0;
 		pInfo->nRet = ::waitpid(pInfo->nPID, &nStatus, 0);
-		::pthread_mutex_lock(&pInfo->tMutex);
+		if (::pthread_mutex_lock(&pInfo->tMutex))
+			return NULL;
+		
 		if( -1 == pInfo->nRet )
 			pInfo->nErrno = errno;
 		else
@@ -470,7 +474,9 @@ namespace core
 			if( nRet = ::pthread_create(&tThread, NULL, WaitForProcessWorker, &stInfo) )
 				throw exception_format("pthread_create operation failure, ret:%d", nRet);
 
-			::pthread_mutex_lock(&stInfo.tMutex);
+			if( nRet = ::pthread_mutex_lock(&stInfo.tMutex))
+				throw exception_format("pthread_mutex_lock operation failure, ret:%d", nRet);
+			
 			nRet = ::pthread_cond_timedwait(&stInfo.tCond, &stInfo.tMutex, &tTimeout);
 			::pthread_mutex_unlock(&stInfo.tMutex);
 			if( nRet == ETIMEDOUT )
@@ -666,7 +672,8 @@ namespace core
 	void EnterCriticalSection(HANDLE hCS)
 	{
 		pthread_mutex_t* hMutex = (pthread_mutex_t*)hCS;
-		pthread_mutex_lock(hMutex);
+		if (pthread_mutex_lock(hMutex))
+			return;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
@@ -868,7 +875,9 @@ namespace core
 		if( !Internal()->GetEventHandle(hEvent, EventHandle) )
 			return false;
 
-		pthread_mutex_lock(&EventHandle->tMutex);
+		if (pthread_mutex_lock(&EventHandle->tMutex))
+			return false;
+		
 		EventHandle->bSignaled = true;
 		pthread_cond_signal(&EventHandle->tCond);
 		pthread_mutex_unlock(&EventHandle->tMutex);
@@ -882,7 +891,9 @@ namespace core
 		if( !Internal()->GetEventHandle(hEvent, EventHandle) )
 			return false;
 
-		pthread_mutex_lock(&EventHandle->tMutex);
+		if (pthread_mutex_lock(&EventHandle->tMutex))
+			return false;
+		
 		if( EventHandle->bAutoReset )
 			pthread_cond_signal(&EventHandle->tCond);
 		else
@@ -925,7 +936,9 @@ namespace core
 			return WAIT_OBJECT_0_;
 		}
 
-		pthread_mutex_lock(&EventHandle->tMutex);
+		if (pthread_mutex_lock(&EventHandle->tMutex))
+			return WAIT_FAILED_;
+		
 		nRet = pthread_cond_timedwait(&EventHandle->tCond, &EventHandle->tMutex, &tTimeout);
 		if( EventHandle->bAutoReset )
 			EventHandle->bSignaled = false;

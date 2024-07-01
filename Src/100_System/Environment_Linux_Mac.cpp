@@ -221,11 +221,25 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	FP_TerminateSignalCallback g_fpTerminationSignalCallback = NULL;
+	struct __INTERNAL_ST_TERMINATE_SIGNAL_CALLBACK
+	{
+		FP_TerminateSignalCallback fpCallback;
+		__sighandler_t fpOldSigInt;
+		__sighandler_t fpOldSigTerm;
+		
+		__INTERNAL_ST_TERMINATE_SIGNAL_CALLBACK(void)
+			: fpCallback(NULL)
+			, fpOldSigInt(NULL)
+			, fpOldSigTerm(NULL)
+		{
+		}
+	};
+	static __INTERNAL_ST_TERMINATE_SIGNAL_CALLBACK g_TerminateSignal;
+	
 	static void SignalCtrlHandler(int sig)
 	{
-		if( g_fpTerminationSignalCallback )
-			g_fpTerminationSignalCallback();
+		if( g_TerminateSignal.fpCallback )
+			g_TerminateSignal.fpCallback();
 	}
 
 	//////////////////////////////////////////////////////////////////////////
@@ -234,9 +248,9 @@ namespace core
 		if( NULL == fpCallback )
 			return EC_INVALID_ARGUMENT;
 
-		::signal(SIGINT, SignalCtrlHandler);
-		::signal(SIGTERM, SignalCtrlHandler);
-		g_fpTerminationSignalCallback = fpCallback;
+		g_TerminateSignal.fpCallback = fpCallback;
+		g_TerminateSignal.fpOldSigInt = ::signal(SIGINT, SignalCtrlHandler);
+		g_TerminateSignal.fpOldSigTerm = ::signal(SIGTERM, SignalCtrlHandler);
 		return EC_SUCCESS;
 	}
 

@@ -272,7 +272,9 @@ static void* sem_timedwait_worker(void* pContext)
 	_ST_SEM_TIMEDWAIT_DATA* pData = (_ST_SEM_TIMEDWAIT_DATA*)pContext;
 	pData->nRet = ::sem_wait(pData->pSem);
 
-	::pthread_mutex_lock(&pData->tMutex);
+	if (::pthread_mutex_lock(&pData->tMutex))
+		return NULL;
+	
 	::pthread_cond_signal(&pData->tCond);
 	::pthread_mutex_unlock(&pData->tMutex);
 	return NULL;
@@ -294,7 +296,9 @@ int sem_timedwait(sem_t *sem, const struct timespec *abs_timeout)
 	pthread_t tWorkerThread;
 	::pthread_create(&tWorkerThread, NULL, sem_timedwait_worker, &stData);
 
-	::pthread_mutex_lock(&stData.tMutex);
+	if (nRet = ::pthread_mutex_lock(&stData.tMutex))
+		return nRet;
+	
 	nRet = pthread_cond_timedwait(&stData.tCond, &stData.tMutex, abs_timeout);
 	::pthread_mutex_unlock(&stData.tMutex);
 
@@ -350,7 +354,9 @@ static void* pthread_timedjoin_np_worker(void* pContext)
 	_ST_PTHREAD_TIMEDJOIN_DATA* pData = (_ST_PTHREAD_TIMEDJOIN_DATA*)pContext;
 	pData->nRet = ::pthread_join(pData->tThread, &pData->pThreadExit);
 
-	::pthread_mutex_lock(&pData->tMutex);
+	if (::pthread_mutex_lock(&pData->tMutex))
+		return NULL;
+	
 	::pthread_cond_signal(&pData->tCond);
 	::pthread_mutex_unlock(&pData->tMutex);
 	return NULL;
@@ -359,14 +365,18 @@ static void* pthread_timedjoin_np_worker(void* pContext)
 //////////////////////////////////////////////////////////////////////////
 int pthread_timedjoin_np(pthread_t thread, void **retval, const struct timespec *abstime)
 {
+	int nRet = 0;
+	
 	_ST_PTHREAD_TIMEDJOIN_DATA stData;
 	stData.tThread = thread;
 
 	pthread_t tWorkerThread;
 	::pthread_create(&tWorkerThread, NULL, pthread_timedjoin_np_worker, &stData);
 
-	::pthread_mutex_lock(&stData.tMutex);
-	int nRet = pthread_cond_timedwait(&stData.tCond, &stData.tMutex, abstime);
+	if (nRet = ::pthread_mutex_lock(&stData.tMutex))
+		return nRet;
+		
+	nRet = pthread_cond_timedwait(&stData.tCond, &stData.tMutex, abstime);
 	::pthread_mutex_unlock(&stData.tMutex);
 
 	if( ETIMEDOUT == nRet )

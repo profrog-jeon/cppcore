@@ -114,12 +114,17 @@ namespace core
 			{
 				if (pStartupInfo)
 				{
-					if (pStartupInfo->hStdInput)
-						dup2((int)(size_t)pStartupInfo->hStdInput, STDIN_FILENO);
-					if (pStartupInfo->hStdOutput)
-						dup2((int)(size_t)pStartupInfo->hStdOutput, STDOUT_FILENO);
-					if (pStartupInfo->hStdError)
-						dup2((int)(size_t)pStartupInfo->hStdError, STDERR_FILENO);
+					if (pStartupInfo->hStdInput
+						&& -1 == dup2((int)(size_t)pStartupInfo->hStdInput, STDIN_FILENO))
+						throw exception_format("dup2((int)(size_t)pStartupInfo->hStdInput, STDIN_FILENO) failure, %s", strerror(errno));
+						
+					if (pStartupInfo->hStdOutput
+						&& -1 == dup2((int)(size_t)pStartupInfo->hStdOutput, STDOUT_FILENO))
+						throw exception_format("dup2((int)(size_t)pStartupInfo->hStdOutput, STDIN_FILENO) failure, %s", strerror(errno));
+						
+					if (pStartupInfo->hStdError
+						&& -1 == dup2((int)(size_t)pStartupInfo->hStdError, STDERR_FILENO))
+						throw exception_format("dup2((int)(size_t)pStartupInfo->hStdError, STDIN_FILENO) failure, %s", strerror(errno));
 				}
 
 				if( pszDirectory )

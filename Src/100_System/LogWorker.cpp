@@ -276,10 +276,11 @@ namespace core
 
 			if (pContext->dwOutputFlag & LOG_OUTPUT_CONSOLE)
 			{
+				int nWrittenSize = 0;
 				if (LOG_ERROR == dwInputType)
-					fprintf(stderr, "%s %s\n", pszPrefix, strLog.c_str());
+					nWrittenSize = fprintf(stderr, "%s %s\n", pszPrefix, strLog.c_str());
 				else
-					printf("%s %s\n", pszPrefix, strLog.c_str());
+					nWrittenSize = printf("%s %s\n", pszPrefix, strLog.c_str());
 			}
 
 			if (pContext->dwOutputFlag & LOG_OUTPUT_DBGWND)
