@@ -2168,9 +2168,12 @@ ZRESULT GetFileInfo(HANDLE hf, ulg *attr, long *size, iztimes *times, ulg *times
   // now just a small heuristic to check if it's an executable:
   DWORD red, hsize=(DWORD)GetFileSize(hf); if (hsize>40)
   { SetFilePointer(hf,0,FILE_BEGIN_); unsigned short magic; ReadFile(hf,&magic,sizeof(magic),&red);
+    if (red != sizeof(magic))        return ZR_READ;
     SetFilePointer(hf,36,FILE_BEGIN_); unsigned long hpos;  ReadFile(hf,&hpos,sizeof(hpos),&red);
+    if (red != sizeof(hpos))        return ZR_READ;
     if (magic==0x54AD && hsize>hpos+4+20+28)
     { SetFilePointer(hf,hpos,FILE_BEGIN_); unsigned long signature; ReadFile(hf,&signature,sizeof(signature),&red);
+      if (red != sizeof(signature)) return ZR_READ;
       if (signature==CORE_IMAGE_DOS_SIGNATURE || signature==CORE_IMAGE_OS2_SIGNATURE
          || signature==CORE_IMAGE_OS2_SIGNATURE_LE || signature==CORE_IMAGE_NT_SIGNATURE)
       { a |= 0x00400000; // executable

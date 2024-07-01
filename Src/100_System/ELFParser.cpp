@@ -37,7 +37,7 @@ namespace core
 				throw exception_format("Section VersionInfo size is not matched, try:%lu, stored:%lu", sizeof(nVersion), shVersionInfo.sh_size);
 
 			DWORD dwReadSize = 0;
-			if( !ReadFile(hFile, nVersion, sizeof(nVersion), &dwReadSize) )
+			if( !ReadFile(hFile, nVersion, sizeof(nVersion), &dwReadSize) || (dwReadSize < sizeof(nVersion)))
 				throw exception_format("VersionInfo section read failure, try:%lu, read:%lu", sizeof(nVersion), dwReadSize);
 
 			stVersionInfo.dwMajor = nVersion[0];

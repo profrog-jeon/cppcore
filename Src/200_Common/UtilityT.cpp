@@ -95,6 +95,9 @@ namespace core
 				throw exception_format(TEXT("%s size:%lu is too big"), pszFilePath, qwSize);
 			}
 
+			if (0 == qwSize)
+				return EC_SUCCESS;
+
 			std::vector<BYTE> vecContext;
 			vecContext.resize(qwSize);
 
