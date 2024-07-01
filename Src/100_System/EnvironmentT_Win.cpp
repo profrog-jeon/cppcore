@@ -2,6 +2,7 @@
 #include "Environment.h"
 #include "Log.h"
 #include "Information.h"
+#include "Random.h"
 #undef TEXT
 #undef GetTimeZoneInformation
 #include <WS2tcpip.h>
@@ -85,11 +86,11 @@ namespace core
 		{
 			Log_Warn("CoCreateGuid failure, generating random value");
 			strRet = Format(TEXT("%04x%04x-%04x-%04x-%04x-%04x%04x%04x")
-				, ::rand()&0xffff, ::rand()&0xffff						// Generates a 64-bit Hex number
-				, ::rand()&0xffff										// Generates a 32-bit Hex number
-				, ((::rand() & 0x0fff) | 0x4000)						// Generates a 32-bit Hex number of the form 4xxx (4 indicates the UUID version)
-				, ::rand() % 0x3fff + 0x8000							// Generates a 32-bit Hex number in the range [0x8000, 0xbfff]
-				, ::rand()&0xffff, ::rand()&0xffff, ::rand()&0xffff);	// Generates a 96-bit Hex number
+				, Rand()&0xffff, Rand()&0xffff						// Generates a 64-bit Hex number
+				, Rand()&0xffff										// Generates a 32-bit Hex number
+				, ((Rand() & 0x0fff) | 0x4000)						// Generates a 32-bit Hex number of the form 4xxx (4 indicates the UUID version)
+				, Rand() % 0x3fff + 0x8000							// Generates a 32-bit Hex number in the range [0x8000, 0xbfff]
+				, Rand()&0xffff, Rand()&0xffff, Rand()&0xffff);	// Generates a 96-bit Hex number
 		}
 
 		return strRet;

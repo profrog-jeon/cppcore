@@ -280,6 +280,7 @@
     <ClInclude Include="LogWorker.h" />
     <ClInclude Include="MemoryLeakFinder.h" />
     <ClInclude Include="Network.h" />
+    <ClInclude Include="Random.h" />
     <ClInclude Include="Socket.h" />
     <ClInclude Include="SocketDefine.h" />
     <ClInclude Include="stdafx.h" />
@@ -309,6 +310,7 @@
     <ClCompile Include="MemoryLeakFinder_Win.cpp" />
     <ClCompile Include="NetworkT.cpp" />
     <ClCompile Include="NetworkT_Win.cpp" />
+    <ClCompile Include="Random.cpp" />
     <ClCompile Include="SocketDefine.cpp" />
     <ClCompile Include="SocketDefine_Win.cpp" />
     <ClCompile Include="Socket_Win.cpp" />
