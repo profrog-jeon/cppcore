@@ -202,6 +202,7 @@ namespace core
 				if (bIsSameSecond && bUnderMaxFileSize)		return;
 				break;
 			default:
+				assert(false);
 				break;
 			}
 				

@@ -9,6 +9,7 @@
 #include <queue>
 #include <map>
 #include <set>
+#include <cassert>
 
 #include "../__Common/Type.h"
 #include "../__Common/Define.h"

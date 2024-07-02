@@ -49,6 +49,7 @@ namespace core
 			break;
 
 		default:
+			assert(false);
 			break;
 		}
 		
@@ -83,6 +84,7 @@ namespace core
 			break;
 
 		default:
+			assert(false);
 			break;
 		}
 

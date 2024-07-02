@@ -2744,8 +2744,7 @@ unsigned int FormatZipMessageZ(ZRESULT code, char *buf,unsigned int len)
     case ZR_MISSIZE: msg="Zip-bug: the anticipated size turned out wrong"; break;
     case ZR_NOCHANGE: msg="Zip-bug: tried to change mind, but not allowed"; break;
     case ZR_FLATE: msg="Zip-bug: an internal error during flation"; break;
-    default:
-        break;
+    default: msg = "Undefined error code"; break;
   }
   unsigned int mlen=(unsigned int)strlen(msg);
   if (buf==0 || len==0) return mlen;

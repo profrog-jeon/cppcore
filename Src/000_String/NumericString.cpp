@@ -210,18 +210,13 @@ namespace core
 		case TEXT('-'):
 			bNegative = true;
 			tPos++;
-			break;
+			return NaturalNumFrom<T>(pszNumber, tNumberLen, 10, tPos) * -1;
 
 		case TEXT('+'):
 			tPos ++;
-			break;
-
 		default:
-			break;
+			return NaturalNumFrom<T>(pszNumber, tNumberLen, 10, tPos);
 		}
-
-		T outValue = NaturalNumFrom<T>(pszNumber, tNumberLen, 10, tPos);
-		return bNegative? (T)outValue * -1 : (T)outValue;
 	}
 
 	//////////////////////////////////////////////////////////////////////////

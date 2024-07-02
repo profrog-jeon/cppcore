@@ -136,7 +136,7 @@ namespace core
 			case TEXT('s'):		strFormat[i+1] = TEXT('S');			break;
 			case TEXT('S'):		strFormat[i+1] = TEXT('s');			break;
 			default:
-				break;
+				continue;
 			}
 		}
 		int nRet = vsntprintf(pszDest, tDestCch, strFormat.c_str(), vaList);

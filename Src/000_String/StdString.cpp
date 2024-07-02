@@ -54,7 +54,7 @@ namespace core
 			case TEXT('s'):		strFormat[i+1] = TEXT('S');			break;
 			case TEXT('S'):		strFormat[i+1] = TEXT('s');			break;
 			default:
-				break;
+				continue;
 			}
 		}
 		int nWritten = vsntprintf(pszDest, tDestCch, strFormat.c_str(), vaList);

@@ -43,6 +43,7 @@ namespace core
 			break;
 
 		default:
+			assert(false);
 			break;
 		}
 
@@ -68,6 +69,7 @@ namespace core
 			break;
 
 		default:
+			assert(false);
 			break;
 		}
 		return EC_SUCCESS;
@@ -101,6 +103,7 @@ namespace core
 			break;
 
 		default:
+			assert(false);
 			break;
 		}
 

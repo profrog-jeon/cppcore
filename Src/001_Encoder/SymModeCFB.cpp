@@ -47,6 +47,7 @@ namespace core
 			break;
 
 		default:
+			assert(false);
 			break;
 		}
 		memcpy(m_dwXOR, pOutput, m_tBlockSize);
@@ -79,6 +80,7 @@ namespace core
 			break;
 
 		default:
+			assert(false);
 			break;
 		}
 		memcpy(m_dwXOR, pSrc, m_tBlockSize);
