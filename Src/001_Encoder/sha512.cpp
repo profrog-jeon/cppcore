@@ -475,7 +475,7 @@ void E_SHA512_Final(sha2_byte digest[], SHA512_CTX* context) {
 }
 
 char* E_SHA512_End(SHA512_CTX* context, char buffer[]) {
-	sha2_byte	digest[SHA512_DIGEST_LENGTH], * d = digest;
+	sha2_byte	digest[SHA512_DIGEST_LENGTH] = { 0, }, *d = digest;
 	int		i;
 
 	/* Sanity check: */

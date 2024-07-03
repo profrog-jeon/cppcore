@@ -14,14 +14,6 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	ST_FUNC_CONSOLE_LOG::ST_FUNC_CONSOLE_LOG(std::tstring strName)
-		: m_strName()
-	{
-		m_strName = MBSFromTCS(strName);
-		printf("---------- %s started ----------\n", m_strName.c_str());
-	}
-
-	//////////////////////////////////////////////////////////////////////////
 	bool IsFileExist(std::tstring strFile)
 	{
 		return PathFileExists(strFile);

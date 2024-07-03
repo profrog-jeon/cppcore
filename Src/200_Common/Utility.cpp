@@ -9,12 +9,6 @@ namespace core
     {
         Log_Info("---------- %s finished ----------", m_strName.c_str());
     }
-
-	//////////////////////////////////////////////////////////////////////////
-	ST_FUNC_CONSOLE_LOG::~ST_FUNC_CONSOLE_LOG(void)
-	{
-		printf("---------- %s finished ----------\n", m_strName.c_str());
-	}
     
     //////////////////////////////////////////////////////////////////////////
 	char ReverseByteOrder(char btData)

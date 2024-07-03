@@ -266,7 +266,6 @@ aes_rval aes_enc_blk(const unsigned char in_blk[], unsigned char out_blk[], cons
                 round(fwd_lrnd, b0, b1, kp + 9 * nc);
                 break;
     default:
-        assert(false);
         break;
     }
 #else
@@ -392,7 +391,6 @@ aes_rval aes_dec_blk(const unsigned char in_blk[], unsigned char out_blk[], cons
                 round(inv_lrnd, b0, b1, kp - 9 * nc);
                 break;
     default:
-        assert(false);
         break;
     }
 #else

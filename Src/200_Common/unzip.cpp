@@ -2989,7 +2989,7 @@ int unzClose (unzFile file)
         unzCloseCurrentFile(file);
 
 	lufclose(s->file);
-	if (s) zfree(s); // unused s=0;
+	zfree(s); // unused s=0;
 	return UNZ_OK;
 }
 
@@ -3688,7 +3688,7 @@ int unzCloseCurrentFile (unzFile file)
 		inflateEnd(&pfile_in_zip_read_info->stream);
 
 	pfile_in_zip_read_info->stream_initialised = 0;
-        if (pfile_in_zip_read_info!=0) zfree(pfile_in_zip_read_info); // unused pfile_in_zip_read_info=0;
+    zfree(pfile_in_zip_read_info); // unused pfile_in_zip_read_info=0;
 
     s->pfile_in_zip_read=NULL;
 
@@ -3704,6 +3704,7 @@ int unzGetGlobalComment (unzFile file, char *szComment, uLong uSizeBuf)
   unz_s* s;
   uLong uReadThis ;
   if (file==NULL) return UNZ_PARAMERROR;
+  if (szComment==NULL) return UNZ_PARAMERROR;
   s=(unz_s*)file;
   uReadThis = uSizeBuf;
   if (uReadThis>s->gi.size_comment) uReadThis = s->gi.size_comment;
@@ -3741,9 +3742,10 @@ UINT64 unixtimefromdosdatetime(WORD dosdate,WORD dostime)
 
 UINT64 utcfromlocaltime(UINT64 uLocalTime)
 {
-	ST_SYSTEMTIME stLocalTime, stSystemTime;
+    ST_SYSTEMTIME stLocalTime = { 0, };
 	GetLocalTime(&stLocalTime);
-	GetSystemTime(&stSystemTime);
+    ST_SYSTEMTIME stSystemTime = { 0, };
+    GetSystemTime(&stSystemTime);
 
 	UINT64 tCurrentLocalTime = UnixTimeFrom(stLocalTime);
 	UINT64 tCurrentSystemTime = UnixTimeFrom(stSystemTime);

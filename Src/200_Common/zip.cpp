@@ -1252,7 +1252,7 @@ ulg flush_block(TState &state,char *buf, ulg stored_len, int eof)
  */
 int ct_tally (TState &state,int dist, int lc)
 {
-    assert(0 <= lc || lc < (ush)(MAX_MATCH - MIN_MATCH));
+    Assert(state, 0 <= lc || lc < (ush)(MAX_MATCH - MIN_MATCH), "ct_tally: bad argument");
 
     state.ts.l_buf[state.ts.last_lit++] = (uch)lc;
     if (dist == 0) {
