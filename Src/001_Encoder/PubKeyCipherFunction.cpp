@@ -50,9 +50,10 @@ namespace core
 
 				return EC_SUCCESS;
 			}
-		}
 
-		return EC_INVALID_ARGUMENT;
+			default:
+				return EC_INVALID_ARGUMENT;
+		}
 	}
 
 	HANDLE InitPubKeyCipher(E_PUBKEY_CIPHER_TYPE nType, std::vector<BYTE> vecKey, std::string strSeed, E_CIPHER_METHOD nMethod, ST_PUBKEY_CIPHER_INFO& outInfo)

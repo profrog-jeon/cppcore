@@ -243,7 +243,7 @@ namespace fmt_internal
 				switch(pCurTag->nType)
 				{
 				case XML_TOKENIZED_TAG_SINGLE_ELEMENT:
-					break;
+					continue;
 				case XML_TOKENIZED_TAG_OPEN_ELEMENT:
 					if( stackTags.empty() )
 						stackTags.push(&root);

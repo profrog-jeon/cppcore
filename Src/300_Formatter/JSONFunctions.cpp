@@ -68,7 +68,7 @@ namespace fmt_internal
 			// Replace tokens with JSON special charaters
 			// text + CHAR + text + CHAR + text ... + CHAR + text
 			std::map<size_t, sSpecialCharPosInfo>::iterator iter = mapSpecialCharPos.begin();
-			sSpecialCharPosInfo prePosInfo;
+			sSpecialCharPosInfo prePosInfo = { 0, };
 
 			// Adding a head text and replaced token with JSON special character.
 			{

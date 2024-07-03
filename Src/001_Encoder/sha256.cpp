@@ -497,7 +497,7 @@ void E_SHA256_Final(sha2_byte digest[], SHA256_CTX* context)
 }
 
 char * E_SHA256_End(SHA256_CTX* context, char buffer[]) {
-	sha2_byte	digest[SHA256_DIGEST_LENGTH], *d = digest;
+	sha2_byte	digest[SHA256_DIGEST_LENGTH] = { 0, }, *d = digest;
 	int		i;
 
 	/* Sanity check: */

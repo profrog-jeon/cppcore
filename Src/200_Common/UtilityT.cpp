@@ -32,7 +32,7 @@ namespace core
 	void TextCopyWorker(E_BOM_TYPE nEncodeType, LPCBYTE pContext, size_t tFileSize, std::wstring& strContents);
 	void TextCopyWorker(E_BOM_TYPE nEncodeType, LPCBYTE pContext, size_t tFileSize, std::tstring& strContents)
 	{
-		ST_BOM_INFO stBomInfo;
+		ST_BOM_INFO stBomInfo = { 0, };
 		E_BOM_TYPE nBOMType = ReadBOM(pContext, tFileSize, stBomInfo);
 
 		if (BOM_UNDEFINED != nBOMType)

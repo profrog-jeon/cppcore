@@ -40,7 +40,7 @@ namespace core
 	//////////////////////////////////////////////////////////////////////////
 	bool CreatePipe(HANDLE* pOutReadHandle, HANDLE* pOutWriteHandle)
 	{
-		int nFD[2];
+		int nFD[2] = 0;
 		int nRet = pipe(nFD);
 		
 		// On success, zero is returned.  On error, -1 is returned, errno is set appropriately, and pipefd is left unchanged.

@@ -1252,6 +1252,8 @@ ulg flush_block(TState &state,char *buf, ulg stored_len, int eof)
  */
 int ct_tally (TState &state,int dist, int lc)
 {
+    assert(0 <= lc || lc < (ush)(MAX_MATCH - MIN_MATCH));
+
     state.ts.l_buf[state.ts.last_lit++] = (uch)lc;
     if (dist == 0) {
         /* lc is the unmatched char */
@@ -2166,13 +2168,13 @@ ZRESULT GetFileInfo(HANDLE hf, ulg *attr, long *size, iztimes *times, ulg *times
   a|=0x01000000;      // readable
   if (fa&FILE_ATTRIBUTE_READONLY_) {} else a|=0x00800000; // writeable
   // now just a small heuristic to check if it's an executable:
-  DWORD red, hsize=(DWORD)GetFileSize(hf); if (hsize>40)
+  DWORD red=0, hsize=(DWORD)GetFileSize(hf); if (hsize>40)
   { SetFilePointer(hf,0,FILE_BEGIN_); unsigned short magic; ReadFile(hf,&magic,sizeof(magic),&red);
     if (red != sizeof(magic))        return ZR_READ;
     SetFilePointer(hf,36,FILE_BEGIN_); unsigned long hpos;  ReadFile(hf,&hpos,sizeof(hpos),&red);
     if (red != sizeof(hpos))        return ZR_READ;
     if (magic==0x54AD && hsize>hpos+4+20+28)
-    { SetFilePointer(hf,hpos,FILE_BEGIN_); unsigned long signature; ReadFile(hf,&signature,sizeof(signature),&red);
+    { SetFilePointer(hf,hpos,FILE_BEGIN_); unsigned long signature = 0; ReadFile(hf,&signature,sizeof(signature),&red);
       if (red != sizeof(signature)) return ZR_READ;
       if (signature==CORE_IMAGE_DOS_SIGNATURE || signature==CORE_IMAGE_OS2_SIGNATURE
          || signature==CORE_IMAGE_OS2_SIGNATURE_LE || signature==CORE_IMAGE_NT_SIGNATURE)
@@ -2354,7 +2356,7 @@ unsigned int TZip::write(const char *buf,unsigned int size)
     return size;
   }
   else if (hfout!=0)
-  { DWORD writ; WriteFile(hfout,srcbuf,size,&writ);
+  { DWORD writ=0; WriteFile(hfout,srcbuf,size,&writ);
     return writ;
   }
   oerr=ZR_NOTINITED; return 0;
@@ -2478,7 +2480,7 @@ unsigned TZip::read(char *buf, unsigned size)
     return red;
   }
   else if (hfin!=0)
-  { DWORD red;
+  { DWORD red = 0;
     BOOL ok = ReadFile(hfin,buf,size,&red);
     if (!ok) return 0;
     ired += red;
@@ -2544,7 +2546,7 @@ ZRESULT TZip::Add(const TCHAR *odstzn, void *src,unsigned int len, DWORD flags)
   int passex=0; if (password!=0 && flags!=ZIP_FOLDER) passex=12;
 
   // zip has its own notion of what its names should look like: i.e. dir/file.stuff
-  TCHAR dstzn[MAX_PATH]; SafeStrCpy(dstzn,MAX_PATH,odstzn);
+  TCHAR dstzn[MAX_PATH] = { 0, }; SafeStrCpy(dstzn, MAX_PATH, odstzn);
   if (*dstzn==0) return ZR_ARGS;
   TCHAR *d=dstzn; while (*d!=0) {if (*d=='\\') *d='/'; d++;}
   bool isdir = (flags==ZIP_FOLDER);
@@ -2632,8 +2634,7 @@ ZRESULT TZip::Add(const TCHAR *odstzn, void *src,unsigned int len, DWORD flags)
   keys[2]=878082192L;
   for (const char *cp=password; cp!=0 && *cp!=0; cp++) update_keys(keys,*cp);
   // generate some random bytes
-  if (!has_seeded) srand(GetTickCount()^GetCurrentProcessId());
-  char encbuf[12]; for (int i=0; i<12; i++) encbuf[i]=(char)((rand()>>7)&0xff);
+  char encbuf[12]; for (int i=0; i<12; i++) encbuf[i]=(char)((Rand()>>7)&0xff);
   encbuf[11] = (char)((zfi.tim>>8)&0xff);
   for (int ei=0; ei<12; ei++) encbuf[ei]=zencode(keys,encbuf[ei]);
   if (password!=0 && !isdir) {swrite(this,encbuf,12); writ+=12;}
@@ -2678,7 +2679,13 @@ ZRESULT TZip::Add(const TCHAR *odstzn, void *src,unsigned int len, DWORD flags)
   char *cextra = new char[zfi.cext]; memcpy(cextra,zfi.cextra,zfi.cext); zfi.cextra=cextra;
   TZipFileInfo *pzfi = new TZipFileInfo; memcpy(pzfi,&zfi,sizeof(zfi));
   if (zfis==NULL) zfis=pzfi;
-  else {TZipFileInfo *z=zfis; while (z->nxt!=NULL) z=z->nxt; z->nxt=pzfi;}
+  else
+  {
+      TZipFileInfo* z = zfis;
+      while (z->nxt != NULL)
+          z = z->nxt;
+      z->nxt = pzfi;
+  }
   return ZR_OK;
 }
 

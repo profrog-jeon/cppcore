@@ -1353,6 +1353,7 @@ int inflate_blocks(inflate_blocks_statef *s, z_streamp z, int r)
           r = Z_DATA_ERROR;
           LEAVE
         default:
+            LuTracev((stderr, "inflate:     invalid type\n"));
             break;
       }
       break;
@@ -2692,7 +2693,7 @@ int lufseek(LUFILE *stream, long offset, int whence)
 size_t lufread(void *ptr,size_t size,size_t n,LUFILE *stream)
 { unsigned int toread = (unsigned int)(size*n);
   if (stream->is_handle)
-  { DWORD red; BOOL res = ReadFile(stream->h,ptr,toread,&red);
+  { DWORD red = 0; BOOL res = ReadFile(stream->h,ptr,toread,&red);
     if (!res) stream->herr=true;
     return red/size;
   }
@@ -2782,7 +2783,7 @@ int unzGetLocalExtrafield (unzFile file, voidp buf, unsigned len);
 // IN assertion: the stream s has been sucessfully opened for reading.
 
 int unzlocal_getByte(LUFILE *fin,int *pi)
-{ unsigned char c;
+{ unsigned char c = 0;
   int err = (int)lufread(&c, 1, 1, fin);
   if (err==1)
   { *pi = (int)c;
@@ -2799,9 +2800,9 @@ int unzlocal_getByte(LUFILE *fin,int *pi)
 // Reads a long in LSB order from the given gz_stream. Sets
 int unzlocal_getShort (LUFILE *fin,uLong *pX)
 {
-    uLong x ;
-    int i;
-    int err;
+    uLong x = 0;
+    int i = 0;
+    int err = 0;
 
     err = unzlocal_getByte(fin,&i);
     x = (uLong)i;
@@ -2819,9 +2820,9 @@ int unzlocal_getShort (LUFILE *fin,uLong *pX)
 
 int unzlocal_getLong (LUFILE *fin,uLong *pX)
 {
-    uLong x ;
-    int i;
-    int err;
+    uLong x = 0;
+    int i = 0;
+    int err = 0;
 
     err = unzlocal_getByte(fin,&i);
     x = (uLong)i;
@@ -3984,7 +3985,7 @@ ZRESULT TUnzip::Unzip(int index,void *dst,unsigned int len,DWORD flags)
   if (index>=(int)uf->gi.number_entry) return ZR_ARGS;
   if (index<(int)uf->num_file) unzGoToFirstFile(uf);
   while ((int)uf->num_file<index) unzGoToNextFile(uf);
-  ZIPENTRY ze; Get(index,&ze);
+  ZIPENTRY ze = { 0, }; Get(index, &ze);
   // zipentry=directory is handled specially
   if ((ze.attr&FILE_ATTRIBUTE_DIRECTORY_)!=0)
   { if (flags==ZIP_HANDLE) return ZR_OK; // don't do anything
@@ -4006,7 +4007,7 @@ ZRESULT TUnzip::Unzip(int index,void *dst,unsigned int len,DWORD flags)
     // a malicious zip could unzip itself into c:\windows. Our solution is that GetZipItem (which
     // is how the user retrieve's the file's name within the zip) never returns absolute paths.
     const TCHAR *name=ufn; const TCHAR *c=name; while (*c!=0) {if (*c=='/' || *c=='\\') name=c+1; c++;}
-    TCHAR dir[MAX_PATH]; SafeStrCpy(dir,MAX_PATH,ufn); if (name==ufn) *dir=0; else dir[name-ufn]=0;
+    TCHAR dir[MAX_PATH] = { 0, }; SafeStrCpy(dir, MAX_PATH, ufn); if (name == ufn) *dir = 0; else dir[name - ufn] = 0;
     TCHAR fn[MAX_PATH]; 
     bool isabsolute = (dir[0]=='/' || dir[0]=='\\' || (dir[0]!=0 && dir[1]==':'));
     if (isabsolute) {SafeSPrintf(fn,MAX_PATH,_T("%s%s"),dir,name); EnsureDirectory(0,dir);}

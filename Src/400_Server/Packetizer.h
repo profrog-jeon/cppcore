@@ -9,6 +9,7 @@ namespace core
 	{
 		DWORD dwID;
 		DWORD dwLen;
+		ST_PACKET_HEADER(void);
 	};
 
 	// BIN type

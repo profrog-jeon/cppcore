@@ -10,6 +10,7 @@
 #include "ELFParser.h"
 #include "FileSystem.h"
 #include "TZFileParser.h"
+#include "Random.h"
 #include <arpa/inet.h>
 #include <net/if.h>
 #include <sys/ioctl.h>
@@ -74,10 +75,10 @@ namespace core
 		{
 			SafeSPrintf(szUUID, 37, "%04X%04X-%04X-%04X-%04X-%04X%04X%04X",
 				GetCurrentProcessId(), GetCurrentThread(),
-				::rand()&0xffff,						// Generates a 32-bit Hex number
-				((::rand() & 0x0fff) | 0x4000),			// Generates a 32-bit Hex number of the form 4xxx (4 indicates the UUID version)
-				::rand() % 0x3fff + 0x8000,				// Generates a 32-bit Hex number in the range [0x8000, 0xbfff]
-				::rand()&0xffff, ::rand()&0xffff, ::rand()&0xffff);		// Generates a 96-bit Hex number
+				Rand()&0xffff,						// Generates a 32-bit Hex number
+				((Rand() & 0x0fff) | 0x4000),			// Generates a 32-bit Hex number of the form 4xxx (4 indicates the UUID version)
+				Rand() % 0x3fff + 0x8000,				// Generates a 32-bit Hex number in the range [0x8000, 0xbfff]
+				Rand()&0xffff, Rand()&0xffff, Rand()&0xffff);		// Generates a 96-bit Hex number
 
 			return TCSFromMBS(szUUID);
 		}

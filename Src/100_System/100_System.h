@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Struct.h"
+#include "Random.h"
 #include "Environment.h"
 #include "Information.h"
 #include "ELFParser.h"

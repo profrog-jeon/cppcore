@@ -199,7 +199,7 @@ namespace core
 					continue;
 				}
 
-				CSyncConnection* pNewConnection;
+				CSyncConnection* pNewConnection = NULL;
 				if (WAIT_OBJECT_0_ != m_queReady.Pop(&pNewConnection))
 				{
 					Log_Error("Retrieving ready connection has failed.");

@@ -19,6 +19,6 @@ namespace core
 
     int Rand(void)
     {
-        return rand();
+        return ::rand();
     }
 }

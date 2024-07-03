@@ -128,7 +128,7 @@ namespace core
 				break;
 
 			default:
-				break;
+				continue;
 			}
 		}
 		return true;

@@ -53,7 +53,7 @@ namespace core
 		//////////////////////////////////////////////////////////////////////////
 		static inline std::wstring BuildLocalTimeStringW(void)
 		{
-			ST_SYSTEMTIME stLocalTime;
+			ST_SYSTEMTIME stLocalTime = { 0, };
 			GetLocalTime(&stLocalTime);
 
 			std::wstring strRet = Format(L"%04u%02u%02uT%02u%02u%02u_%03u"
@@ -249,7 +249,7 @@ namespace core
 			}
 
 			{
-				ST_SYSTEMTIME stTime;
+				ST_SYSTEMTIME stTime = { 0, };
 				GetLocalTime(&stTime);
 
 				strOutputMsgA = core::Format("%04u-%02u-%02u %02u:%02u:%02u.%03u [p%04u|t%04u|e%u] %-5.5s %s - %s\n"

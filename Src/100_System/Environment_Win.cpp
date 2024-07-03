@@ -30,7 +30,7 @@ namespace core
 	//////////////////////////////////////////////////////////////////////////
 	void GetLocalTime(ST_SYSTEMTIME* pOutTime)
 	{
-		SYSTEMTIME stTime;
+		SYSTEMTIME stTime = { 0, };
 		::GetLocalTime(&stTime);
 		memcpy(pOutTime, &stTime, sizeof(SYSTEMTIME));
 	}

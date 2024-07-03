@@ -419,7 +419,7 @@ void CSHA1::ProcessMessageBlock()
 	};
 	int         t;                          // Loop counter
 	unsigned    temp;                       // Temporary word value
-	unsigned    W[80];                      // Word sequence
+	unsigned    W[80] = { 0, };             // Word sequence
 	unsigned    A, B, C, D, E;              // Word buffers
 
 	/*
