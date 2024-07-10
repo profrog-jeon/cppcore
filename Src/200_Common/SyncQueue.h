@@ -52,11 +52,13 @@ namespace core
 
 		bool IsEmpty(void)
 		{
+			CCriticalSection::Owner Lock(m_csItems);
 			return m_queItems.empty();
 		}
 		
 		size_t Count(void)
 		{
+			CCriticalSection::Owner Lock(m_csItems);
 			return m_queItems.size();
 		}
 

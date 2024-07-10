@@ -215,6 +215,8 @@ namespace core
 					continue;
 				}
 
+				Log_Info(TEXT("Connection allocated, remaining:%u"), m_queReady.Count());
+
 				ST_CONNECTION_THREAD_DATA* pThreadData = new ST_CONNECTION_THREAD_DATA();
 				pThreadData->pServer = this;
 				pThreadData->pConnection = pNewConnection;
@@ -262,6 +264,7 @@ namespace core
 			}
 
 			m_queReady.Push(pConnection);
+			Log_Info(TEXT("Connection returned, remaining:%u"), m_queReady.Count());
 		}
 		return 0;
 	}
