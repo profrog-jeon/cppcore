@@ -150,14 +150,6 @@ namespace core
 		if (SOCKET_ERROR_ == nRet)
 			Log_Warn("setsockopt(m_hSocket, SOL_SOCKET_, SO_RCVTIMEO_, %d) failure, %s", dwTimeOut, GetErrorStringA(GetLastError()).c_str());
 
-int broadcastEnable = 1;
-nRet = setsockopt(m_hSocket, SOL_SOCKET_, SO_BROADCAST_, (const char*)&broadcastEnable, sizeof(broadcastEnable));
-if (nRet < 0)
-{
-	Log_Error("setsockopt(SOL_SOCKET, SO_BROADCAST) failure, %d(%s)", nRet, GetErrorStringA(GetLastError()).c_str());
-	return GetLastError();
-}
-
 		ST_SOURCE_INFO stSourceInfo;
 		nRet = recvfrom(m_hSocket, (char*)pBuff, (int)tBufSize, 0, &stSourceInfo);
 		if (SOCKET_ERROR_ == nRet)
