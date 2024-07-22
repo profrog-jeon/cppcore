@@ -8,6 +8,7 @@ for %%i in (*.exe) do (
 	"%%i" --gtest_output=xml:%REPORT_DIR%\%%i.xml
 )
 
+wsl dos2unix ./RunTest.sh
 wsl chmod 0755 ./RunTest.sh
 wsl ./RunTest.sh
 pause
