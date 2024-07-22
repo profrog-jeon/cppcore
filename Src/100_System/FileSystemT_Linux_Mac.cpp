@@ -85,6 +85,14 @@ namespace core
 				return false;
 			}
 
+			if (MakeFormalPath(strExistFile) == MakeFormalPath(strNewFile))
+			{
+				Log_Info("CopyFile Src: %s", MakeFormalPath(strExistFile).c_str());
+				Log_Info("CopyFile Dst: %s", MakeFormalPath(strNewFile).c_str());
+				Log_Info(TEXT("Source(%s) and dest(%s) is same."), pszExistFile, pszNewFile);
+				return false;
+			}
+
 			if( (pInFile = fopen(strExistFile.c_str(), "rb")) == NULL )
 				throw exception_format(TEXT("Opening exist(%s) failed."), pszExistFile);
 

@@ -291,8 +291,9 @@ TEST(SystemTest, CopyFileTest_NonExistFile)
 }
 
 //////////////////////////////////////////////////////////////////////////
-TEST(SystemTest, CopyFileTest_SameFile)
+TEST(SystemTest, CopyFileTest_SameFile1)
 {
+	std::string strFileContents;
 	std::tstring strFilename = TEXT("test.txt");
 	DeleteFile(strFilename.c_str());
 
@@ -301,13 +302,45 @@ TEST(SystemTest, CopyFileTest_SameFile)
 		do
 		{
 			fputs("test", pFile);
-		}	while(rand() % 100);
+			strFileContents += "test";
+		} while (rand() % 100);
 		fclose(pFile);
 	}
 
 	ASSERT_TRUE(IsFileExist(strFilename.c_str()));
 	EXPECT_FALSE(CopyFile(strFilename.c_str(), strFilename.c_str(), TRUE));
+
+	std::string strRestoredContents = __test_internal_ReadFileContents(strFilename);
+	EXPECT_FALSE(strRestoredContents.empty());
+	EXPECT_EQ(strFileContents, strRestoredContents);
+
+	DeleteFile(strFilename.c_str());
+}
+
+//////////////////////////////////////////////////////////////////////////
+TEST(SystemTest, CopyFileTest_SameFile2)
+{
+	std::string strFileContents;
+	std::tstring strFilename = TEXT("test.txt");
+	DeleteFile(strFilename.c_str());
+
+	{
+		FILE* pFile = fopenT(strFilename.c_str(), TEXT("w"));
+		do
+		{
+			fputs("test", pFile);
+			strFileContents += "test";
+		} while (rand() % 100);
+		fclose(pFile);
+	}
+
 	ASSERT_TRUE(IsFileExist(strFilename.c_str()));
+	EXPECT_FALSE(CopyFile(strFilename.c_str(), strFilename.c_str(), FALSE));
+
+	std::string strRestoredContents = __test_internal_ReadFileContents(strFilename);
+	EXPECT_FALSE(strRestoredContents.empty());
+	EXPECT_EQ(strFileContents, strRestoredContents);
+
 	DeleteFile(strFilename.c_str());
 }
 
