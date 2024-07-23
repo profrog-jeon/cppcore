@@ -61,9 +61,8 @@ endforeach(SOURCE)
 ##############################################################
 ## Build setting
 ##############################################################
-#include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../../opensrc/Inc)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../Inc)
-#link_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../../opensrc/Build/LinuxRelease)
+link_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../Build/LinuxRelease)
 
 #target_compile_options(${TARGET_NAME} PUBLIC -fPIC -Wno-narrowing)
 add_executable(${TARGET_NAME}A ${SOURCES})
