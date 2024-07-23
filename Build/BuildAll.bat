@@ -34,18 +34,20 @@ IF %ERRORLEVEL% NEQ 0 GOTO Error
 %MSBUILD% %SLNFILE% /m /t:Rebuild /p:Configuration=DebugMT;Platform=Win32
 IF %ERRORLEVEL% NEQ 0 GOTO Error
 
+
 REM =====================================
 REM ===========  LINUX BUILD  ===========
 REM =====================================
 RD /S /Q .\LinuxRelease
+RD /S /Q ..\Output\LinuxRelease
+mkdir ..\Output\LinuxRelease
 
-cd ..
-mkdir Output\LinuxRelease
-cd Output\LinuxRelease
+cd ..\Output\LinuxRelease
 wsl cmake ../../Src
 IF %ERRORLEVEL% NEQ 0 GOTO Error
 wsl cmake --build .
 IF %ERRORLEVEL% NEQ 0 GOTO Error
+
 
 REM ===============================
 REM ===========  Final  ===========
