@@ -48,10 +48,13 @@ TEST(FormatterTest, Simpletest)
 		stStatus.mapPatternStatus.insert(std::make_pair(info.strPatternName, info));
 	}
 
-	core::UTF8::WriteJsonToFile(&stStatus, TEXT("d:/output.txt"));
+	const std::tstring strFileName = GenerateGuid() + TEXT(".txt");
+	core::UTF8::WriteJsonToFile(&stStatus, strFileName);
 
 	ST_FILELESS_STATUS stStatusRestored;
-	core::UTF8::ReadJsonFromFile(&stStatusRestored, TEXT("d:/output.txt"));
+	core::UTF8::ReadJsonFromFile(&stStatusRestored, strFileName);
+
+	DeleteFile(strFileName.c_str());
 
 	EXPECT_EQ(2U, stStatusRestored.mapPatternStatus.size());
 }
