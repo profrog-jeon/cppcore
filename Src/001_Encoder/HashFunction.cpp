@@ -55,6 +55,12 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
+	ECODE BuildHMAC(E_HASH_TYPE nHashType, const std::vector<BYTE>& Key, LPCBYTE pMessage, size_t tMessageSize, std::vector<BYTE>& outResult)
+	{
+		return BuildHMACWorker(nHashType, Key.data(), Key.size(), pMessage, tMessageSize, outResult);
+	}
+
+	//////////////////////////////////////////////////////////////////////////
 	ECODE BuildHMAC(E_HASH_TYPE nHashType, const std::vector<BYTE>& Key, const std::vector<BYTE>& Message, std::vector<BYTE>& outResult)
 	{
 		return BuildHMACWorker(nHashType, Key.data(), Key.size(), Message.data(), Message.size(), outResult);
