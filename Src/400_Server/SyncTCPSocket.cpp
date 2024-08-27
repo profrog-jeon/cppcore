@@ -227,6 +227,26 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
+	ECODE CSyncTCPSocket::Recv(void* pBuff, size_t tBufSize, size_t* ptRead, DWORD dwTimeOut)
+	{
+		ECODE nRet;
+		LPBYTE pBuffer = (LPBYTE)pBuff;
+		try
+		{
+			nRet = RecvWorker(m_hSocket, pBuffer, tBufSize, dwTimeOut, ptRead);
+			if (EC_SUCCESS != nRet && EC_TIMEOUT != nRet)
+				throw exception_format(TEXT("Recv failure, %d"), nRet);
+		}
+		catch (std::exception& e)
+		{
+			Log_Error("%s", e.what());
+			return nRet;
+		}
+
+		return EC_SUCCESS;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
 	ECODE CSyncTCPSocket::PeekWorker(SOCKET hSocket, void* pBuff, size_t tBufSize, DWORD dwTimeOut, size_t* ptRead)
 	{
 		if (INVALID_SOCKET_ == hSocket)
