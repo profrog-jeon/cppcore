@@ -8,14 +8,14 @@ namespace core
 
 	public:
 		CSyncUDPSocket(void);
-		~CSyncUDPSocket();
+		virtual ~CSyncUDPSocket();
 
-		ECODE Listen(WORD wPort);
-		ECODE Create(void);
-		void Destroy(void);
+		virtual ECODE Listen(WORD wPort);
+		virtual ECODE Create(void);
+		virtual void Destroy(void);
 
-		ECODE Broadcast(DWORD dwIP, WORD wPort, const void* pData, size_t tDataSize);
-		ECODE SendTo(const ST_SOURCE_INFO& pSourceInfo, const void* pBuff, size_t tBufSize, DWORD dwTimeOut, size_t* ptSent = NULL);
-		ECODE RecvFrom(void* pBuff, size_t tBufSize, DWORD dwTimeOut, size_t* ptRead = NULL, ST_SOURCE_INFO* pSourceInfo = NULL);
+		virtual ECODE Broadcast(DWORD dwIP, WORD wPort, const void* pData, size_t tDataSize);
+		virtual ECODE SendTo(const ST_SOURCE_INFO& pSourceInfo, const void* pBuff, size_t tBufSize, DWORD dwTimeOut, size_t* ptSent = NULL);
+		virtual ECODE RecvFrom(void* pBuff, size_t tBufSize, DWORD dwTimeOut, size_t* ptRead = NULL, ST_SOURCE_INFO* pSourceInfo = NULL);
 	};
 }
