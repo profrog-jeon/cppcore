@@ -136,8 +136,10 @@ namespace core
 		socklen_t tLen = sizeof(stAddress);
 		int nRet = ::recvfrom(s, buf, len, 0, (sockaddr*)&stAddress, &tLen);
 		if ((nRet < 0) && (EAGAIN == errno))
+		{
 			errno = EC_TIMEOUT;
-		return nRet;
+			return nRet;
+		}
 
 		if( pSourceInfo )
 		{
