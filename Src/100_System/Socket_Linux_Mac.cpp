@@ -136,15 +136,16 @@ namespace core
 		socklen_t tLen = sizeof(stAddress);
 		int nRet = ::recvfrom(s, buf, len, 0, (sockaddr*)&stAddress, &tLen);
 		if ((nRet < 0) && (EAGAIN == errno))
-		{
-			errno = EC_TIMEOUT;
-			return nRet;
-		}
-
-		if( pSourceInfo )
-		{
-			pSourceInfo->dwIP = (DWORD)stAddress.sin_addr.s_addr;
-			pSourceInfo->wPort = HostFromNetwork(stAddress.sin_port);
+			errno = EC_TIMEOUT;			
+		else if (0 == nRet)
+			errno = EC_DISCONNECTED;
+		else
+		{			
+			if( pSourceInfo )
+			{
+				pSourceInfo->dwIP = (DWORD)stAddress.sin_addr.s_addr;
+				pSourceInfo->wPort = HostFromNetwork(stAddress.sin_port);
+			}
 		}
 		return nRet;
 	}
