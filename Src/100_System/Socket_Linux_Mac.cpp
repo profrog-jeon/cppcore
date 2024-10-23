@@ -135,8 +135,11 @@ namespace core
 		struct sockaddr_in stAddress = { 0, };
 		socklen_t tLen = sizeof(stAddress);
 		int nRet = ::recvfrom(s, buf, len, 0, (sockaddr*)&stAddress, &tLen);
-		if ((nRet < 0) && (EAGAIN == errno))
-			errno = EC_TIMEOUT;			
+		if ((nRet < 0))
+		{
+			if (EAGAIN == errno)				
+				errno = EC_TIMEOUT;			
+		}
 		else if (0 == nRet)
 			errno = EC_DISCONNECTED;
 		else
