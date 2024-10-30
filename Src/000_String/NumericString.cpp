@@ -142,34 +142,13 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	static const char g_cDigitTable[256] = 
-	{
-		-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,	/* 00-0F */
-		-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,	/* 10-1F */
-		-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,	/* 20-2F */
-		 0,  1,  2,  3,  4,  5,  6,  7,  8,  9, -1, -1, -1, -1, -1, -1,	/* 30-3F */
-		-1, 10, 11, 12, 13, 14, 15, -1, -1, -1, -1, -1, -1, -1, -1, -1,	/* 40-4F */
-		-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,	/* 50-5F */
-		-1, 10, 11, 12, 13, 14, 15, -1, -1, -1, -1, -1, -1, -1, -1, -1,	/* 60-6F */
-		-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,	/* 70-7F */
-		-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,	/* 80-8F */
-		-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,	/* 90-9F */
-		-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,	/* A0-AF */
-		-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,	/* B0-BF */
-		-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,	/* C0-CF */
-		-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,	/* D0-DF */
-		-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,	/* E0-EF */
-		-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,	/* F0-FF */
-	};
-
-	//////////////////////////////////////////////////////////////////////////
 	template<typename T>
 	static inline T NaturalNumFrom(LPCTSTR pszNumber, size_t tNumberLen, int nBase, size_t& tPos)
 	{
 		T uRet = 0;
 		for(; tPos<tNumberLen; tPos++)
 		{
-			int nValue = g_cDigitTable[pszNumber[tPos] & 0xFF];
+			int nValue = g_cHexCharAscii[pszNumber[tPos] & 0xFF];
 			if( (nValue < 0) || (nValue >= nBase) )
 				return uRet;
 
@@ -437,8 +416,8 @@ namespace core
 			if (cBack > 0xFF)
 				return EC_INVALID_DATA;
 
-			BYTE btFrontValue = g_cDigitTable[cFront];
-			BYTE btBackValue = g_cDigitTable[cBack];
+			BYTE btFrontValue = g_cHexCharAscii[cFront];
+			BYTE btBackValue = g_cHexCharAscii[cBack];
 			if (btFrontValue == 0xFF)
 				return EC_INVALID_DATA;
 			if (btBackValue == 0xFF)
