@@ -2,6 +2,9 @@
 
 namespace core
 {
+	bool operator<(const core::ST_VERSIONINFO& lhs, const core::ST_VERSIONINFO& rhs);
+	bool operator<(const core::ST_SYSTEMTIME& lhs, const core::ST_SYSTEMTIME& rhs);
+
 	class CCurrentDirectorySettter
 	{
 		std::wstring m_strOriginalDir;
