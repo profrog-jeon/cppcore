@@ -384,6 +384,24 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
+	bool WriteUBJsonToFile(const IFormatterObject* pObject, std::tstring strFilename, std::tstring* pStrErrMsg)
+	{
+		fmt_internal::CFileWritter channel(strFilename);
+		fmt_internal::CUBJSONSerializer formatter(channel);
+		formatter.Synchronize(const_cast<IFormatterObject*>(pObject));
+		return formatter.CheckValidity(pStrErrMsg);
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	bool ReadUBJsonFromFile(IFormatterObject* pObject, std::tstring strFilename, std::tstring* pStrErrMsg)
+	{
+		fmt_internal::CFileReader channel(strFilename);
+		fmt_internal::CUBJSONDeserializer formatter(channel);
+		formatter.Synchronize(pObject);
+		return formatter.CheckValidity(pStrErrMsg);
+	}
+
+	//////////////////////////////////////////////////////////////////////////
 	void PacketizeToBytes(const core::IFormatterObject* pObject, std::vector<BYTE>& vecData)
 	{
 		fmt_internal::CBytesWriter channel(vecData);

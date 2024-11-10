@@ -108,6 +108,11 @@ namespace core
 	bool ReadBinFromFile(IFormatterObjectA* pObject, std::string strFilename);
 	bool ReadBinFromFile(IFormatterObjectW* pObject, std::wstring strFilename);
 
+	bool WriteUBJsonToFile(const IFormatterObjectA* pObject, std::string strFilename, std::string* pStrErrMsg = NULL);
+	bool WriteUBJsonToFile(const IFormatterObjectW* pObject, std::wstring strFilename, std::wstring* pStrErrMsg = NULL);
+	bool ReadUBJsonFromFile(IFormatterObjectA* pObject, std::string strFilename, std::string* pStrErrMsg = NULL);
+	bool ReadUBJsonFromFile(IFormatterObjectW* pObject, std::wstring strFilename, std::wstring* pStrErrMsg = NULL);
+
 	// Packet
 	void PacketizeToBytes(const core::IFormatterObjectA* pObject, std::vector<BYTE>& vecData);
 	void PacketizeToBytes(const core::IFormatterObjectW* pObject, std::vector<BYTE>& vecData);
