@@ -220,7 +220,7 @@ namespace core
 
 	//////////////////////////////////////////////////////////////////////////
 	template<typename T>
-	static inline ECODE WriteFileContentsWorker(LPCTSTR pszFilePath, const T strContents, bool bWithBOM)
+	static inline ECODE WriteFileContentsWorker(LPCTSTR pszFilePath, const T strContents, bool bIsUTF8, bool bWithBOM)
 	{
 		ECODE nRet = EC_SUCCESS;
 		HANDLE hFile = NULL;
@@ -237,7 +237,26 @@ namespace core
 
 			if( bWithBOM )
 			{
-				nRet = WriteBOM(hFile, BOM_UTF8);
+				E_BOM_TYPE nBOMType = BOM_UNDEFINED;
+				switch (sizeof(strContents.at(0)))
+				{
+				case 4:
+					nBOMType = BOM_UTF32;
+					break;
+
+				case 2:
+					nBOMType = BOM_UTF16;
+					break;
+
+				case 1:
+				default:
+					nBOMType = BOM_UNDEFINED;
+					if (bIsUTF8)
+						nBOMType = BOM_UTF8;
+					break;
+				}
+
+				nRet = WriteBOM(hFile, nBOMType);
 				if( EC_SUCCESS != nRet )
 					throw exception_format(TEXT("WriteBOM(%s, BOM_UTF8) failure."), pszFilePath);
 			}
@@ -276,25 +295,25 @@ namespace core
 	ECODE WriteFileContents(std::tstring strFilePath, const std::tstring strContents, bool bWithBOM)
 	{
 		std::string strContentsU8 = UTF8FromTCS(strContents);
-		return WriteFileContentsWorker(strFilePath.c_str(), strContentsU8, bWithBOM);
+		return WriteFileContentsWorker(strFilePath.c_str(), strContentsU8, true, bWithBOM);
 	}
 
 	//////////////////////////////////////////////////////////////////////////
 	ECODE WriteFileContentsT(std::tstring strFilePath, const std::tstring strContents, bool bWithBOM)
 	{
-		return WriteFileContentsWorker(strFilePath.c_str(), strContents, bWithBOM);
+		return WriteFileContentsWorker(strFilePath.c_str(), strContents, false, bWithBOM);
 	}
 
 	//////////////////////////////////////////////////////////////////////////
 	ECODE WriteFileContentsA(std::tstring strFilePath, const std::string strContents, bool bWithBOM)
 	{
-		return WriteFileContentsWorker(strFilePath.c_str(), strContents, bWithBOM);
+		return WriteFileContentsWorker(strFilePath.c_str(), strContents, false, bWithBOM);
 	}
 
 	//////////////////////////////////////////////////////////////////////////
 	ECODE WriteFileContentsW(std::tstring strFilePath, const std::wstring strContents, bool bWithBOM)
 	{
-		return WriteFileContentsWorker(strFilePath.c_str(), strContents, bWithBOM);
+		return WriteFileContentsWorker(strFilePath.c_str(), strContents, false, bWithBOM);
 	}
 
 	//////////////////////////////////////////////////////////////////////////
