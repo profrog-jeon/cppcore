@@ -1,4 +1,151 @@
-﻿---------- V.0.0.0.0 2021-09-16 20:18:30
+﻿---------- V.0.0.0.0 2024-11-23 18:07:30
+FIXED WriteFileContentsA/W/T BOM mismatch bug.
+ADDED VERION and SYSTEMTIME compare functions.
+ADDED WriteUBJsonToFile/ReadUBJsonToFile functions.
+ADDED g_cHexCharAscii constant for HEX <-> STR
+Merge pull request #3 from k4nul/bugfix/recvfrom
+FIXED invalid if conditional statement
+ADDED error information for recvfrom return value
+FIXED Incorrect ip address and port number were due to unexpected return code
+ADDED error-code.
+MAKE SyncUDPSocket to be overridable.
+ADDED SyncTCPSocket partial Recv method.
+ADDED BuildHMAC overload function.
+CORRECTED Linux unit-test failure.
+MODIFIED Test Script.
+MODIFIED Test Script.
+MODIFIED Test Script.
+MODIFIED RunTest Scripts.
+MODIFIED RunTest.bat
+ADDED RunTest.sh
+ADDED CMakeLists.txt for test on linux/MAC.
+MAKE CopyFile samefile from/to to be failed on linux.
+REMOVED Unused testing code.
+FOR DEBUG Server logs remaining connection count.
+ADDED various ReverseByteOrder functions.
+ADDED HMAC function to separate INIT/UPDATE/FINAL
+ADDED HMAC functions
+MODIFIED Linux compile error.
+MODIFIED size_t tPID -> DWORD dwPID
+ADDED String function for struct of SystemTime, Version
+ADDED CmdLineHelper functions.
+MODIFIED Make the setter a masking char for unreadable EucKR.
+MODIFIED XmlFormatter to preserve whitespace value.
+MODIFIED trivial.
+ADDED xml decoding pattern, &#N; UNICODE.
+MODIFIED malfunc MakeUpper/MakeLower by CentOS(RHEL) optimization
+MODIFIED MakeUpper/MakeLower for CentOS(RHEL) malfunc failure
+MODIFIED MakeHexDumpStr test failure.
+MODIFIED Make GenratedGuid returns only CAPITAL string.
+ADDED ASCII boolean table for separate DISPLAYABLE or TEXT or BINARY data.
+MODIFED ShellExecuteByPipe_Old not to be static for unofficially use.
+FIXED CElfParser crash bug.
+FIXED UnitTest failure
+MODIFIED SymCipher initial key
+MODIFIED GenerateGuid on linux returning lower-case string to be upper.
+MODIFIED ReadFileContents 1000(MB) limitation error.
+MODIFIED ReadFileContents size limitation 100(MB) -> 1000(MB)
+MODIFIED PathFileExists linux version implementation.
+MODIFIED UNITTEST failure regarding TextReaderTest
+MODIFIED UNITTEST failure regarding ReadFileContents
+MODIFIED ReadFileContents authority failure when requested READONLY.
+FIXED PathFileExists exceptional case.
+FIXED a bug IsFileExists regarding stream.
+FIXED a bug ADS access failure caused by MAX_PATH limitation.
+FIXED a bug ExtractDirectory regarding stream filepath ex) d:\test.txt:Zone.Identifier
+FIXED a bug, UBJDeserializer cannot fill key to container items.
+FIXED a bug with UBJDeserializer regarding array values.
+MODIFIED trivial code.
+MODIFIED IpFromDomain coding convention
+ADDED UBJsonProtocol and FIXED some error
+SUPRESSED compilation error and warning.
+SIMPLIFY JsonFormatter codes.
+ADDED UBJsonFormatter deserializer implemented
+ADDED UBJsonFormatter(not ready for deserializer yet)
+RESTORED JSONFormatter modification for binary
+MODIFIED Remove namespace UTF8 of PacketFormatter
+MODIFIED JsonFormatter for binary data(REMAINING zero value issue)
+ADDED TMAIN define for UNICODE wmain
+MOVED Two functions(HexFromString, StringFromHex) from 001_Encoder to 000_String
+FIX CreateProcess error log will be noted as Log_Error from Log_Debug
+[ServerTest] Bin 형식의 패키타이저 테스트
+ADDED to ProtocolSuper SendBinary/RecvBinary.
+FIXED cppcore.lib generating failure.
+ADDED 999_Cppcore.vcxproj for build cppcore.lib
+FIXED Linux-side compile error.
+ALTERED SocketForProtocol to Protocol(Bin/Json)
+DELETED BuildAll.vcxproj
+MODIFIED Test code for Windows-side process return code
+FIXED Windows-side process return code will be DWORD value again.
+FIXED SocketForProtocol TCHAR packetizing failure
+MODIFIED CSocketForProtocol's socket instance can be injected from outside for SSLSocket.
+MODIFIED CSyncTCPSocket for SSL customizing
+ADDED virtual keyword to CSyncTCPSocket for implement CSyncSSLSocket
+FIXED VS compile error
+ADDED MakeRelativePath function.
+ADDED IpFromDomain function.
+ADDED Malicious errorCode.
+ADDED tchar regex type.
+FIXED XmlFormatter parsing error
+빌드 스크립트에 주석 추가
+UPDATED Build script
+VC2022로 업데이트 - 테스트 프로젝트
+UPDATED VC2019 professional -> VC2022 community
+FIXED a bug always succeeded when writing file by INI serializer
+ADDED Overloded packetize function
+FIXED Unmatched WriteIniToFile function declaration
+FIXED RecvPacket invalid exception handling in Packetizer
+ADDED SkipTitle option for CSVReadFormatter
+ADDED ErrorCode define
+ADDED RemoveDirectoryForcely function FOR remove all files and directory
+MODIFIED HashFunction Compile failure
+ADDED BuildHash function for vector<BYTE>
+MODIFED CSocketForProtocol link error
+MODIFED CSocketForProtocol compile error
+ADDED CSocketForProtocol using packet header(id, length)
+REMOVED SendForcely and RecvForcely functions on SyncTCPSocket  - Send and Recv function was replaced and simplified
+ADDED StringFrom function for ST_SYSTEMTIME
+OPTIMIZED PacketFormatter by removing key-string, MODIFED length-type from WORD to DWORD
+OPTIMIZED PacketFormatter for BYTE array
+FIXED PacketFormatter for BYTE array error
+MSG_WAITALL 상수 추가
+TCPSocket 코드 정리
+Packet 포매터 추가구현
+윈도우 프로젝트에 누락된 파일들 추가
+가독성을 위한 네이밍 변경
+기존 코드 호환성을 위한 매크로 추가
+유니코드 용어변경 ASCII -> ANSI (기존 코드 호환성을 위해 매크로 형태로 남겨둠)
+ReadFileContents 리눅스 환경에서의 최적화(디스크 접근횟수 줄임)
+TestFileReader가 줄 단위로 읽지 못하던 버그 수정
+리눅스 빌드시 fPIC 옵션 적용되지 않던 문제 수정
+ReadFileContents 최적화
+리눅스 컴파일 최적화 옵션 추가
+일부 컴파일 경고 수정
+일부 테스트오류 수정
+테스트 프로젝트 빌드오류 수정
+DoubleFrom이 float형으로 변환하던 버그 수정
+Replace 함수 최적화
+LOG 글로벌 컨텍스트를 Singleton으로 변경함  - 기존 static 형식은 같은 static 생성 타이밍의 로그 초기화를 무효화함
+Replace()에 변경대상 문자열을 ""으로 넣으면 무한루프에 빠지던 문제 수정
+[000_String] ReverseSplit 함수 추가
+[200_Common] 텍스트 파일 읽을 때 길이가 256인 문장에서 쓰레기 값이 붙던 오류 수정
+[000_String] Trim 최적화
+[000_String] MakeUpper 및 Lower 최적화
+포매터 operator+ 연산자 오류 수정
+Formatter 사용시 "정의되지 않은 FormatterSuper를 사용하고 있다"는 컴파일 오류 수정
+설계문서 추가
+[300_Formatter] 포매터 내부 네이밍 정리, Grouping 용어 제외
+[300_Formatter] 포매터 내부 네이밍 정리
+미리 컴파일된 헤더를 이용해서 윈도우컴파일 시간 단축
+[100_System] 사소한 버그 수정
+[400_Server][전상현] SyncServer 권한 변경
+[300_Formatter] 빈 문자열인 경우 Packetizer 오류가 있음
+[100_System] Windows.h 와 충돌 발생하는 매크로 예외처리
+[BuildAll.bat] 8가지 빌드 타입을 모두 빌드하도록 수정
+[100_System] 윈도우 UDP 소켓에서 데이터를 수신할 때 SourceInfo 구조체 값을 읽어오지 못하던 버그 수정
+[000_String] Right 함수와 대응되는 Left 함수 구현 (이걸 왜 빠트렸을까..?)
+
+---------- V.0.0.0.0 2021-09-16 20:18:30
 [100_System] 시스템 함수 호출 중에 발생하는 에러는 Debug 로그로 남기도록 변경함(불필요하게 많은 오류가 로그에 남음)
 [100_System] ShellExecuteByPipe 함수가 콘솔 출력을 수집할 때 화면에도 같이 출력하도록 함
 
