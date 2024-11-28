@@ -171,9 +171,13 @@ namespace core
 		//////////////////////////////////////////////////////////////////////////
 		inline static void Internal_FileRotateWorker(ST_LOG_CONTEXT* pContext, size_t tCurFileSize)
 		{
-			static DWORD s_dwTiming = 0;
-			if ((InterlockedIncrement_(&s_dwTiming) & 0x3F) != 0)
-				return;
+			{	// For multiple thread race condition,
+				// reduce the rotation check timing as 1/64.
+				// 1 is for the first check
+				static DWORD s_dwTiming = 0;
+				if ((InterlockedIncrement_(&s_dwTiming) % 64) != 1)
+					return;
+			}
 
 			bool bUnderMaxFileSize	= tCurFileSize < (size_t)pContext->dwMaxFileSize;
 			bool bIsSameDay			= IsSameDay(pContext->stLastCheckTime, pContext->stLastTime);
