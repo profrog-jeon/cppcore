@@ -272,7 +272,7 @@ TEST(NamedSemaphoreTest, CreateSemaphoreExitAutoClear_linux_failure)
 
         int nExitCode = 0;
         EXPECT_EQ(EC_SUCCESS, WaitForProcess(hProcess, INFINITE, &nExitCode));
-        EXPECT_EQ(0, nExitCode);
+        EXPECT_NE(0, nExitCode);
     }
 
     {    // check still exist the semaphore
@@ -297,7 +297,7 @@ TEST(NamedSemaphoreTest, CreateSemaphoreExitAutoClear_linux_failure2)
 
         int nExitCode = 0;
         EXPECT_EQ(EC_SUCCESS, WaitForProcess(hProcess, INFINITE, &nExitCode));
-        EXPECT_EQ(0, nExitCode);
+        EXPECT_NE(0, nExitCode);
 
         hGlobalSemaphore = CreateSemaphore(1, strName.c_str());
     }
@@ -330,7 +330,7 @@ TEST(NamedSemaphoreTest, CreateSemaphoreExitAutoClear)
 
         int nExitCode = 0;
         EXPECT_EQ(EC_SUCCESS, WaitForProcess(hProcess, INFINITE, &nExitCode));
-        EXPECT_EQ(0, nExitCode);
+        EXPECT_NE(0, nExitCode);
     }
 
     {

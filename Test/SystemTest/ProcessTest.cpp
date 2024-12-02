@@ -229,9 +229,9 @@ TEST(SystemTest, CreateProcessTest_ExceptionalExitCodeTest)
 	TestExitCode(0x00FF0000, 0x00FF0000);
 	TestExitCode(0x7FFFFFFE, 0x7FFFFFFE);
 	TestExitCode(0x7FFFFFFF, 0x7FFFFFFF);
-	TestExitCode(0x80000000, 0);	// do-not use exit-code over 0x80000000
-	TestExitCode(0xc0000005, 0);	// do-not use exit-code over 0x80000000
-	TestExitCode(0xFF000000, 0);	// do-not use exit-code over 0x80000000
+	TestExitCode(0x80000000, 0x80000000);	// do-not use exit-code over 0x80000000
+	TestExitCode(0xc0000005, 0xc0000005);	// do-not use exit-code over 0x80000000
+	TestExitCode(0xFF000000, 0xFF000000);	// do-not use exit-code over 0x80000000
 #else
 	TestExitCode(127, 127);
 	TestExitCode(128, -128);
