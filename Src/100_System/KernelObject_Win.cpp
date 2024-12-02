@@ -279,20 +279,15 @@ namespace core
 			return WAIT_OBJECT_0_;
 		}
 
-		if( (DWORD)-128 > dwExitCode && dwExitCode >= 0xC0000000 )
-		{
+		if ((DWORD)-128 <= dwExitCode)
+			Log_Info("User defined error, %d", (int)dwExitCode);
+		else if(0xC0000000 <= dwExitCode)
 			Log_Info("Process terminated with SEH exception-code:0x%08X", dwExitCode);
-			return WAIT_OBJECT_0_;
-		}
-
-		if( (DWORD)-128 > dwExitCode && dwExitCode >= 0x80000000 )
-		{
+		else if(0x80000000 <= dwExitCode )
 			Log_Info("Process terminated with HRESULT rethrown as an SEH:0x%08X", dwExitCode);
-			return WAIT_OBJECT_0_;
-		}
 
-		if( pOutExitCode )
-			*pOutExitCode = (int)dwExitCode;// (signed char)(dwExitCode & 0x000000FF);
+		if (pOutExitCode)
+			*pOutExitCode = (int)dwExitCode;
 
 		return WAIT_OBJECT_0_;
 	}
