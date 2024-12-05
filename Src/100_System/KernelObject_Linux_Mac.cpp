@@ -442,8 +442,12 @@ namespace core
 		else
 		{
 			if( 0 == WIFEXITED(nStatus) )
-				Log_Warn("process is not well finished");
-			pInfo->nExitCode = (signed char)WEXITSTATUS(nStatus);
+			{
+				Log_Warn("process is not well finished, status:%d", nStatus);
+				pInfo->nExitCode = nStatus;	// when returned as CRASH, return an original error code.
+			}
+			else
+				pInfo->nExitCode = (signed char)WEXITSTATUS(nStatus);
 			pInfo->nErrno = 0;
 		}
 		::pthread_cond_signal(&pInfo->tCond);
@@ -484,6 +488,7 @@ namespace core
 			if( -1 == stInfo.nRet )
 				throw exception_format("wait operation has failed, %s", strerror(errno));
 
+			Log_Info("stInfo.nExitCode:%d", stInfo.nExitCode);
 			if( pOutExitCode )
 				*pOutExitCode = stInfo.nExitCode;
 
