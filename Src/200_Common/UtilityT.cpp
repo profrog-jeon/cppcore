@@ -256,9 +256,12 @@ namespace core
 					break;
 				}
 
-				nRet = WriteBOM(hFile, nBOMType);
-				if( EC_SUCCESS != nRet )
-					throw exception_format(TEXT("WriteBOM(%s, BOM_UTF8) failure."), pszFilePath);
+				if (BOM_UNDEFINED != nBOMType)
+				{
+					nRet = WriteBOM(hFile, nBOMType);
+					if (EC_SUCCESS != nRet)
+						throw exception_format(TEXT("WriteBOM(%s, BOM_UTF8) failure."), pszFilePath);
+				}
 			}
 
 			DWORD dwWritten = 0;
