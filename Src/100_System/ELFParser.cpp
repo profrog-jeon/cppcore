@@ -17,7 +17,7 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	ECODE CELFParser::Open(HANDLE hFile)
+	ECODE CELFParser::OpenWorker(HANDLE hFile)
 	{
 		try
 		{

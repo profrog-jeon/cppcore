@@ -33,7 +33,7 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	ECODE CPEParser::Open(HANDLE hFile)
+	ECODE CPEParser::OpenWorker(HANDLE hFile)
 	{
 		ECODE nRet = EC_SUCCESS;
 		try

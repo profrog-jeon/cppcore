@@ -92,7 +92,7 @@ namespace core
 		bool		Parse(std::wstring strFilePath);
 		bool		Parse(LPCBYTE pContents, size_t tContentsSize);
 
-		ECODE		Open(HANDLE hFile);
+		ECODE		OpenWorker(HANDLE hFile);
 		void		Close(void);
 
 		bool		Is64Bit(void);

@@ -15,7 +15,7 @@ namespace core
 		ECODE Open(LPCSTR pszFilePath);
 		ECODE Open(LPCWSTR pszFilePath);
 
-		virtual ECODE Open(HANDLE hFile) = 0;
+		virtual ECODE OpenWorker(HANDLE hFile) = 0;
 		virtual void Close(void) = 0;
 
 		virtual ECODE GetFileVersion(ST_VERSIONINFO& outVersionInfo) = 0;
@@ -29,7 +29,7 @@ namespace core
 
 		virtual ECODE QueryProductVersion(ST_VERSIONINFO& outVersionInfo)
 		{
-			return QueryProductVersion(outVersionInfo);
+			return GetProductVersion(outVersionInfo);
 		}
 	};
 }

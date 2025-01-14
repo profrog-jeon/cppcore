@@ -19,7 +19,7 @@ namespace core
 			if (NULL == hFile)
 				throw exception_format(TEXT("%s CreateFile failure"), pszFilePath);
 
-			nRet = Open(hFile);
+			nRet = OpenWorker(hFile);
 			if (EC_SUCCESS != nRet)
 				throw exception_format(TEXT("%s Open failure"), pszFilePath);
 

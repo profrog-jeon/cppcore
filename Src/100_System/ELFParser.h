@@ -247,7 +247,7 @@ namespace core
 	public:
 		CELFParser(void);
 
-		ECODE Open(HANDLE hFile);
+		ECODE OpenWorker(HANDLE hFile);
 		void Close(void);
 
 		ECODE GetFileVersion(ST_VERSIONINFO& outVersionInfo);

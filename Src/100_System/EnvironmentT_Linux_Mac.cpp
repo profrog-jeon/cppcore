@@ -142,7 +142,7 @@ namespace core
 	{
 #ifdef __linux__
 		CELFParser ELF;
-		ECODE nRet = ELF.Parse(MBSFromTCS(pszFilePath).c_str());
+		ECODE nRet = ELF.Open(pszFilePath);
 		if( EC_SUCCESS != nRet )
 			return nRet;
 
@@ -157,7 +157,7 @@ namespace core
 	{
 #ifdef __linux__
 		CELFParser ELF;
-		ECODE nRet = ELF.Parse(MBSFromTCS(pszFilePath).c_str());
+		ECODE nRet = ELF.Open(pszFilePath);
 		if( EC_SUCCESS != nRet )
 			return nRet;
 
