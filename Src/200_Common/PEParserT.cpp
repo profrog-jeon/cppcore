@@ -6,41 +6,7 @@ namespace core
 	//////////////////////////////////////////////////////////////////////////
 	bool CPEParser::Parse(std::tstring strFilePath)
 	{
-		HANDLE hFile = NULL;
-		try
-		{
-			hFile = CreateFile(strFilePath.c_str(), GENERIC_READ_, OPEN_EXISTING_, 0);
-			if (NULL == hFile)
-				throw exception_format(TEXT("%s open failure"), strFilePath.c_str());
-
-			m_tFileSize = (size_t)core::GetFileSize(hFile);
-			if (0 == m_tFileSize)
-				throw exception_format(TEXT("%s file size is zero"), strFilePath.c_str());
-
-			m_hFileMapping = CreateFileMapping(hFile, PAGE_READONLY_, FILE_MAP_READ_, m_tFileSize);
-			if (NULL == m_hFileMapping)
-				throw exception_format("CreateFileMapping failure(m_hFile, PAGE_READONLY_, GENERIC_READ_, %lu)", m_tFileSize);
-
-			m_pFileContents = (LPCBYTE)MapViewOfFile(m_hFileMapping, 0, (size_t)m_tFileSize);
-			if (NULL == m_pFileContents)
-				throw exception_format("MapViewOfFile(%llu) has failed", m_tFileSize);
-
-			CloseFile(hFile);
-			hFile = NULL;
-
-			if (!Parse())
-				throw exception_format("Parsing failure.");
-		}
-		catch (std::exception& e)
-		{
-			Log_Error("%s", e.what());
-			if (hFile)
-				CloseFile(hFile);
-			Close();
-			return false;
-		}
-
-		return true;
+		return CExeParserSuper::Open(strFilePath) == EC_SUCCESS;
 	}
 
 	//////////////////////////////////////////////////////////////////////////

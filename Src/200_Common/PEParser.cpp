@@ -6,7 +6,8 @@ namespace core
 {
 	//////////////////////////////////////////////////////////////////////////
 	CPEParser::CPEParser(void)
-		: m_hFileMapping(NULL)
+		: CExeParserSuper()
+		, m_hFileMapping(NULL)
 		, m_pFileContents(NULL)
 		, m_tFileSize(0)
 		, m_DosHeader()
@@ -29,6 +30,45 @@ namespace core
 		m_pFileContents = pContents;
 		m_tFileSize = tContentsSize;
 		return Parse();
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	ECODE CPEParser::Open(HANDLE hFile)
+	{
+		ECODE nRet = EC_SUCCESS;
+		try
+		{
+			m_tFileSize = (size_t)core::GetFileSize(hFile);
+
+			nRet = EC_NO_DATA;
+			if (0 == m_tFileSize)
+				throw exception_format(TEXT("file size is zero"));
+
+			m_hFileMapping = CreateFileMapping(hFile, PAGE_READONLY_, FILE_MAP_READ_, m_tFileSize);
+			nRet = GetLastError();
+			if (NULL == m_hFileMapping)
+				throw exception_format("CreateFileMapping failure(m_hFile, PAGE_READONLY_, GENERIC_READ_, %lu)", m_tFileSize);
+
+			m_pFileContents = (LPCBYTE)MapViewOfFile(m_hFileMapping, 0, (size_t)m_tFileSize);
+			nRet = GetLastError();
+			if (NULL == m_pFileContents)
+				throw exception_format("MapViewOfFile(%llu) has failed", m_tFileSize);
+
+			nRet = EC_INVALID_DATA;
+			if (!Parse())
+				throw exception_format("Parsing failure.");
+		}
+		catch (std::exception& e)
+		{
+			Log_Debug("%s", e.what());
+			Close();
+
+			if (EC_SUCCESS != nRet)
+				return nRet;
+			return EC_INVALID_DATA;
+		}
+
+		return EC_SUCCESS;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
@@ -94,7 +134,6 @@ namespace core
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	// MDS-4078: for resolve resource parsing problem, that have to match RVA with DIRECTORY
 	inline static ST_IMAGE_SECTION_HEADER* GetResourceSection(std::vector<ST_IMAGE_SECTION_HEADER>& vecDest, const ST_IMAGE_DATA_DIRECTORY& stResourceDirInfo)
 	{
 		size_t i;
@@ -179,7 +218,7 @@ namespace core
 		}
 		catch (std::exception& e)
 		{
-			Log_Error("%s - %s", __FUNCTION__, e.what());
+			Log_Debug("%s - %s", __FUNCTION__, e.what());
 			return false;
 		}
 
@@ -266,7 +305,6 @@ namespace core
 					if (!CopyTo(&stPDBInfo, stImageDebugDirectory.SizeOfData, m_pFileContents, m_tFileSize, tReadPos))
 						throw exception_format("Reading IMAGE_DEBUG_DIRECTORY has failed.");
 
-					// ENGINE-383
 					//if (0 != memcmp(stPDBInfo.Signature, "RSDS", 4))
 					//	throw exception_format("Invalid PDB info.");
 				}
@@ -274,7 +312,7 @@ namespace core
 		}
 		catch (std::exception& e)
 		{
-			Log_Error("%s", e.what());
+			Log_Debug("%s", e.what());
 			return false;
 		}
 
@@ -330,7 +368,7 @@ namespace core
 		}
 		catch (std::exception& e)
 		{
-			Log_Error("%s - %s", __FUNCTION__, e.what());
+			Log_Debug("%s - %s", __FUNCTION__, e.what());
 			return false;
 		}
 
@@ -449,7 +487,7 @@ namespace core
 		}
 		catch (std::exception& e)
 		{
-			Log_Error("%s", e.what());
+			Log_Debug("%s", e.what());
 			return nRet;
 		}
 
@@ -486,7 +524,7 @@ namespace core
 		}
 		catch (std::exception& e)
 		{
-			Log_Error("%s", e.what());
+			Log_Debug("%s", e.what());
 			return nRet;
 		}
 
@@ -533,7 +571,7 @@ namespace core
 		}
 		catch (std::exception& e)
 		{
-			Log_Error("%s - %s", __FUNCTION__, e.what());
+			Log_Debug("%s - %s", __FUNCTION__, e.what());
 			return EC_INVALID_DATA;
 		}
 
@@ -615,7 +653,7 @@ namespace core
 		}
 		catch (std::exception& e)
 		{
-			Log_Error("%s - %s", __FUNCTION__, e.what());
+			Log_Debug("%s - %s", __FUNCTION__, e.what());
 			return EC_INVALID_DATA;
 		}
 
@@ -652,7 +690,7 @@ namespace core
 		}
 		catch (std::exception& e)
 		{
-			Log_Error("%s - %s", __FUNCTION__, e.what());
+			Log_Debug("%s - %s", __FUNCTION__, e.what());
 			return EC_INVALID_DATA;
 		}
 
@@ -674,7 +712,7 @@ namespace core
 			nRet = EC_NO_DATA;
 			if (vecGroupIconID.empty())
 			{
-				Log_Error("There is no GroupIcon");
+				Log_Debug("There is no GroupIcon");
 				return nRet;
 			}
 
@@ -700,7 +738,7 @@ namespace core
 		}
 		catch (std::exception& e)
 		{
-			Log_Error("%s - %s", __FUNCTION__, e.what());
+			Log_Debug("%s - %s", __FUNCTION__, e.what());
 			return EC_INVALID_DATA;
 		}
 
@@ -781,7 +819,7 @@ namespace core
 		}
 		catch (std::exception& e)
 		{
-			Log_Error("%s", e.what());
+			Log_Debug("%s", e.what());
 			return nRet;
 		}
 		
@@ -864,7 +902,7 @@ namespace core
 		}
 		catch (std::exception& e)
 		{
-			Log_Error("%s", e.what());
+			Log_Debug("%s", e.what());
 			return EC_INVALID_DATA;
 		}
 
@@ -949,7 +987,7 @@ namespace core
 		}
 		catch (std::exception& e)
 		{
-			Log_Error("%s", e.what());
+			Log_Debug("%s", e.what());
 			return EC_INVALID_DATA;
 		}
 		return EC_SUCCESS;
@@ -1007,7 +1045,7 @@ namespace core
 		}
 		catch (std::exception& e)
 		{
-			Log_Error("%s - %s", __FUNCTION__, e.what());
+			Log_Debug("%s - %s", __FUNCTION__, e.what());
 			if (pFile)
 				fclose(pFile);
 			return nRet;

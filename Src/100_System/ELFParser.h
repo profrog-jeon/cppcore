@@ -3,7 +3,9 @@
 #include <map>
 #include <vector>
 #include <string>
-#include "../../Src/__Common/Type.h"
+
+#include "../__Common/Type.h"
+#include "ExeParserSuper.h"
 
 //const int gc_nFileVersion[4] __attribute__((section ("FileVersion"))) = { 9, 8, 7, 6 };
 //const int gc_nProductVersion[4] __attribute__((section ("ProductVersion"))) = { 9, 8, 7, 6 };
@@ -233,7 +235,7 @@ namespace core
 		}	d_un;
 	};
 
-	class CELFParser
+	class CELFParser : public CExeParserSuper
 	{
 		typedef std::map<std::string, ST_ELF_SECTION_HEADER64>				CELFSectionHeader64;
 		typedef std::map<std::string, ST_ELF_SECTION_HEADER64>::iterator	CELFSectionHeader64It;
@@ -245,10 +247,11 @@ namespace core
 	public:
 		CELFParser(void);
 
-		ECODE Parse(const char* pszFilePath);
-		ECODE Parse(const wchar_t* pszFilePath);
-		ECODE QueryFileVersion(ST_VERSIONINFO& outVersionInfo);
-		ECODE QueryProductVersion(ST_VERSIONINFO& outVersionInfo);
+		ECODE Open(HANDLE hFile);
+		void Close(void);
+
+		ECODE GetFileVersion(ST_VERSIONINFO& outVersionInfo);
+		ECODE GetProductVersion(ST_VERSIONINFO& outVersionInfo);
 
 	private:
 		ECODE Parse32Bit(HANDLE hFile, const ST_ELF_IDENTITY& stIdentity);

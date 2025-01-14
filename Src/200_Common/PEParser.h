@@ -69,7 +69,7 @@ namespace core
 	};
 
 	//////////////////////////////////////////////////////////////////////////
-	class CPEParser
+	class CPEParser : public CExeParserSuper
 	{
 	protected:
 		HANDLE		m_hFileMapping;
@@ -91,6 +91,8 @@ namespace core
 		bool		Parse(std::string strFilePath);
 		bool		Parse(std::wstring strFilePath);
 		bool		Parse(LPCBYTE pContents, size_t tContentsSize);
+
+		ECODE		Open(HANDLE hFile);
 		void		Close(void);
 
 		bool		Is64Bit(void);

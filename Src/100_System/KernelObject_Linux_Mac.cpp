@@ -444,7 +444,7 @@ namespace core
 			if( 0 == WIFEXITED(nStatus) )
 			{
 				Log_Warn("process is not well finished, status:%d", nStatus);
-				pInfo->nExitCode = nStatus;	// when returned as CRASH, return an original error code.
+				pInfo->nExitCode = nStatus;	// 비정상종료인 경우에는 에러코드를 그대로 반환
 			}
 			else
 				pInfo->nExitCode = (signed char)WEXITSTATUS(nStatus);

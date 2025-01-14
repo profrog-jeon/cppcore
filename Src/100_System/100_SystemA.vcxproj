@@ -270,6 +270,7 @@
     <ClInclude Include="..\__Common\Type.h" />
     <ClInclude Include="ELFParser.h" />
     <ClInclude Include="Environment.h" />
+    <ClInclude Include="ExeParserSuper.h" />
     <ClInclude Include="FileSystem.h" />
     <ClInclude Include="GlobalSemaphoreMap.h" />
     <ClInclude Include="Information.h" />
@@ -291,11 +292,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ELFParser.cpp" />
-    <ClCompile Include="ELFParserT.cpp" />
     <ClCompile Include="Environment.cpp" />
     <ClCompile Include="EnvironmentT.cpp" />
     <ClCompile Include="EnvironmentT_Win.cpp" />
     <ClCompile Include="Environment_Win.cpp" />
+    <ClCompile Include="ExeParserSuper.cpp" />
     <ClCompile Include="FileSystemT_Win.cpp" />
     <ClCompile Include="FileSystem_Win.cpp" />
     <ClCompile Include="GlobalSemaphoreMap.cpp" />

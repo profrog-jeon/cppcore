@@ -3,6 +3,7 @@
 #include "Struct.h"
 #include "Environment.h"
 #include "Information.h"
+#include "ExeParserSuper.h"
 #include "ELFParser.h"
 #include "FileSystem.h"
 #include "KernelObject.h"
