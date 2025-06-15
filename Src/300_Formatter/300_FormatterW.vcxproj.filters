@@ -114,8 +114,6 @@
     <ClCompile Include="UTF8StringWritter.cpp">
       <Filter>Channel</Filter>
     </ClCompile>
-    <ClCompile Include="ANSIFormatter.cpp" />
-    <ClCompile Include="FormatterSuper.cpp" />
     <ClCompile Include="HelperFunc.cpp" />
     <ClCompile Include="INIFormatter.cpp" />
     <ClCompile Include="Interface.cpp" />
@@ -131,6 +129,19 @@
       <Filter>Formatter</Filter>
     </ClCompile>
     <ClCompile Include="UTF8Formatter.cpp" />
+    <ClCompile Include="YAMLDeserializer.cpp">
+      <Filter>Formatter</Filter>
+    </ClCompile>
+    <ClCompile Include="YAMLSerializer.cpp">
+      <Filter>Formatter</Filter>
+    </ClCompile>
+    <ClCompile Include="YAMLParser.cpp">
+      <Filter>Formatter</Filter>
+    </ClCompile>
+    <ClCompile Include="FormatterSuper.cpp" />
+    <ClCompile Include="DBValueArraySerializer.cpp">
+      <Filter>Formatter</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CSVDeserializer.h">
@@ -239,18 +250,13 @@
       <Filter>Channel</Filter>
     </ClInclude>
     <ClInclude Include="300_Formatter.h" />
-    <ClInclude Include="ANSIFormatter.h" />
     <ClInclude Include="FmtTypes.h" />
-    <ClInclude Include="FormatterSuper.h" />
     <ClInclude Include="HelperFunc.h" />
     <ClInclude Include="IChannel.h" />
     <ClInclude Include="INIFormatter.h" />
     <ClInclude Include="Interface.h" />
-    <ClInclude Include="Pair.h" />
-    <ClInclude Include="PairSuper.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="TCHARFormatter.h" />
-    <ClInclude Include="ValuePtrHolder.h" />
     <ClInclude Include="UBJSONDeserializer.h">
       <Filter>Formatter</Filter>
     </ClInclude>
@@ -261,5 +267,21 @@
       <Filter>Formatter</Filter>
     </ClInclude>
     <ClInclude Include="UTF8Formatter.h" />
+    <ClInclude Include="YAMLDeserializer.h">
+      <Filter>Formatter</Filter>
+    </ClInclude>
+    <ClInclude Include="YAMLSerializer.h">
+      <Filter>Formatter</Filter>
+    </ClInclude>
+    <ClInclude Include="YAMLParser.h">
+      <Filter>Formatter</Filter>
+    </ClInclude>
+    <ClInclude Include="FormatterSuper.h" />
+    <ClInclude Include="InterfaceLegacy.h" />
+    <ClInclude Include="IFormatterA.h" />
+    <ClInclude Include="IFormatterW.h" />
+    <ClInclude Include="DBValueArraySerializer.h">
+      <Filter>Formatter</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

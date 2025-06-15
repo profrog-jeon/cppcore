@@ -3,7 +3,6 @@
 #include <string>
 #include <vector>
 #include "Interface.h"
-#include "Pair.h"
 
 ////////////////////////////////////////////////////////////////////////////
 // JSON formatter interfaces
@@ -19,6 +18,16 @@ namespace core
 	bool WriteJsonToString(const IFormatterObjectA* pObject, std::string& strOutput, std::string* pStrErrMsg = NULL);
 	bool ReadJsonFromString(IFormatterObjectW* pObject, std::wstring strInput, std::wstring* pStrErrMsg = NULL);
 	bool ReadJsonFromString(IFormatterObjectA* pObject, std::string strInput, std::string* pStrErrMsg = NULL);
+
+	// YAML
+	bool WriteYamlToFile(const IFormatterObjectW* pObject, std::wstring strFilename, std::wstring strRootName = L"default", std::wstring* pStrErrMsg = NULL);
+	bool WriteYamlToFile(const IFormatterObjectA* pObject, std::string strFilename, std::string strRootName = "default", std::string* pStrErrMsg = NULL);
+	bool ReadYamlFromFile(IFormatterObjectW* pObject, std::wstring strFilename, std::wstring* pOutRootName = NULL, std::wstring* pStrErrMsg = NULL);
+	bool ReadYamlFromFile(IFormatterObjectA* pObject, std::string strFilename, std::string* pOutRootName = NULL, std::string* pStrErrMsg = NULL);
+	bool WriteYamlToString(const IFormatterObjectW* pObject, std::wstring& strOutput, std::wstring strRootName = L"default", std::wstring* pStrErrMsg = NULL);
+	bool WriteYamlToString(const IFormatterObjectA* pObject, std::string& strOutput, std::string strRootName = "default", std::string* pStrErrMsg = NULL);
+	bool ReadYamlFromString(IFormatterObjectW* pObject, std::wstring strInput, std::wstring* pOutRootName = NULL, std::wstring* pStrErrMsg = NULL);
+	bool ReadYamlFromString(IFormatterObjectA* pObject, std::string strInput, std::string* pOutRootName = NULL, std::string* pStrErrMsg = NULL);
 
 	// CSV
 	bool WriteCSVToFile(const IFormatterObjectW* pObject, std::wstring strFilename, std::wstring* pStrErrMsg = NULL);
@@ -80,16 +89,19 @@ namespace core
 	bool ReadIniSectionFromString(IFormatterObjectA* pObject, std::string strInput, std::string strSection, std::string* pStrErrMsg = NULL);
 
 	// strSchema : ex) "[KEY]=\'[VALUE]\'"  - [KEY][VALUE] will be replaced key, value
-	void WriteKeyValueArrayToString(const IFormatterObjectW* pObject, std::wstring strSep, std::wstring strSchema, std::wstring& strOutput, bool bUseHex = false);
-	void WriteKeyValueArrayToString(const IFormatterObjectA* pObject, std::string strSep, std::string strSchema, std::string& strOutput, bool bUseHex = false);
+	bool WriteKeyValueArrayToString(const IFormatterObjectW* pObject, std::wstring strSep, std::wstring strSchema, std::wstring& strOutput, bool bUseHex = false);
+	bool WriteKeyValueArrayToString(const IFormatterObjectA* pObject, std::string strSep, std::string strSchema, std::string& strOutput, bool bUseHex = false);
 	bool WriteKeyValueArrayToFile(const IFormatterObjectW* pObject, std::wstring strSep, std::wstring strSchema, std::wstring strFilename, bool bUseHex = false, std::wstring* pStrErrMsg = NULL);
 	bool WriteKeyValueArrayToFile(const IFormatterObjectA* pObject, std::string strSep, std::string strSchema, std::string strFilename, bool bUseHex = false, std::string* pStrErrMsg = NULL);
-	void WriteKeyArrayToString(const IFormatterObjectW* pObject, std::wstring strSep, std::wstring strQuo, std::wstring& strOutput);
-	void WriteKeyArrayToString(const IFormatterObjectA* pObject, std::string strSep, std::string strQuo, std::string& strOutput);	
-	void WriteValueArrayToString(const IFormatterObjectW* pObject, std::wstring strSep, std::wstring strQuo, std::wstring& strOutput, bool bUseHex = false);
-	void WriteValueArrayToString(const IFormatterObjectA* pObject, std::string strSep, std::string strQuo, std::string& strOutput, bool bUseHex = false);
-	void WriteValueArrayToFile(const IFormatterObjectW* pObject, std::wstring strSep, std::wstring strQuo, std::wstring strFilename, bool bUseHex = false);
-	void WriteValueArrayToFile(const IFormatterObjectA* pObject, std::string strSep, std::string strQuo, std::string strFilename, bool bUseHex = false);
+	bool WriteKeyArrayToString(const IFormatterObjectW* pObject, std::wstring strSep, std::wstring strQuo, std::wstring& strOutput);
+	bool WriteKeyArrayToString(const IFormatterObjectA* pObject, std::string strSep, std::string strQuo, std::string& strOutput);
+	bool WriteValueArrayToString(const IFormatterObjectW* pObject, std::wstring strSep, std::wstring strQuo, std::wstring& strOutput, bool bUseHex = false);
+	bool WriteValueArrayToString(const IFormatterObjectA* pObject, std::string strSep, std::string strQuo, std::string& strOutput, bool bUseHex = false);
+	bool WriteValueArrayToFile(const IFormatterObjectW* pObject, std::wstring strSep, std::wstring strQuo, std::wstring strFilename, bool bUseHex = false);
+	bool WriteValueArrayToFile(const IFormatterObjectA* pObject, std::string strSep, std::string strQuo, std::string strFilename, bool bUseHex = false);
+
+	bool WriteDBValueArrayToString(const IFormatterObjectW* pObject, std::wstring& strOutput);
+	bool WriteDBValueArrayToString(const IFormatterObjectA* pObject, std::string& strOutput);
 
 	// [KEY]=[VALUE]\n[KEY]=[VALUE]: strTokenDelimiter = '\n', strSpliter = '='
 	bool ReadKeyValueArrayFromString(IFormatterObjectW* pObject, std::wstring strTokenDelimiter, std::wstring strSpliter, std::wstring strContext, std::wstring* pStrErrMsg = NULL);
@@ -133,5 +145,7 @@ namespace core
 	bool WriteUBJsonToPacket(const IFormatterObjectA* pObject, std::vector<BYTE>& vecPacket, std::string* pStrErrMsg = NULL);
 	bool ReadUBJsonFromPacket(IFormatterObjectW* pObject, const std::vector<BYTE>& vecPacket, std::wstring* pStrErrMsg = NULL);
 	bool ReadUBJsonFromPacket(IFormatterObjectA* pObject, const std::vector<BYTE>& vecPacket, std::string* pStrErrMsg = NULL);
+
+
 }
 

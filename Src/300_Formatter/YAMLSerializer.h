@@ -1,53 +1,41 @@
 #pragma once
 
 #include <string>
-#include <stack>
+#include <vector>
 
 #include "Interface.h"
 #include "FmtTypes.h"
 #include "IChannel.h"
-#include "UBJSONFunctions.h"
+#include "HelperFunc.h"
 
 namespace fmt_internal
 {
-	class CUBJSONDeserializer : public CFormatterSuper
+	class CYAMLSerializer : public CFormatterSuper
 	{
-	public:
-		struct sGroupingInfo
-		{
-			E_GROUPING_TYPE nType;
-			ST_UBJ_NODE* pNode;
-			size_t tReadPos;
-			sGroupingInfo(E_GROUPING_TYPE t, ST_UBJ_NODE* pUBJNode)
-				: nType(t), pNode(pUBJNode), tReadPos(0) {}
-		};
-
-		ST_UBJ_NODE					m_RootNode;
-		std::stack<sGroupingInfo>	m_GroupingStack;
+	private:
+		std::vector<sGroupingData> m_vecObjectCountStack;
 
 	public:
-		CUBJSONDeserializer(core::IChannel& channel);
-		~CUBJSONDeserializer(void);
+		CYAMLSerializer(core::IChannel& channel);
+		~CYAMLSerializer(void);
 
 	private:
 		bool			OnPrepare(IFormatterObject* pObject, std::tstring& strErrMsg);
-
-		void			OnBeginRoot(std::tstring& strRootName);
-		void			OnEndRoot();
 
 		size_t			OnBeginDictionary(std::tstring& strKey, const size_t tSize, bool bAllowMultiKey);
 		void			OnEndDictionary();
 
 		size_t			OnBeginArray(std::tstring& strKey, const size_t tSize);
-		void			OnBeginArrayItem(size_t tIndex, size_t tCount);
-		void			OnEndArrayItem(size_t tIndex, size_t tCount);
 		void			OnEndArray();
 
 		void			OnBeginObject(std::tstring& strKey);
 		void			OnEndObject();
 
-		core::IFormatter& OnSync(std::tstring& strKey, std::wstring* pValue);
-		core::IFormatter& OnSync(std::tstring& strKey, std::string* pValue);
+		void			OnBeginRoot(std::tstring& strRootName);
+		void			OnEndRoot();
+
+		core::IFormatter& OnSync(std::tstring& strKey, std::tstring* pValue);
+		core::IFormatter& OnSync(std::tstring& strKey, std::ntstring* pValue);
 		core::IFormatter& OnSync(std::tstring& strKey, bool* pValue);
 		core::IFormatter& OnSync(std::tstring& strKey, char* pValue);
 		core::IFormatter& OnSync(std::tstring& strKey, short* pValue);
@@ -63,3 +51,4 @@ namespace fmt_internal
 	};
 
 }
+

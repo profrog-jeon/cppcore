@@ -1,33 +1,35 @@
 #pragma once
 
 #include <string>
-#include <stack>
+#include <vector>
+#include <vector>
 
 #include "Interface.h"
 #include "FmtTypes.h"
 #include "IChannel.h"
-#include "UBJSONFunctions.h"
+#include "YAMLParser.h"
 
 namespace fmt_internal
 {
-	class CUBJSONDeserializer : public CFormatterSuper
+	class CYAMLDeserializer : public CFormatterSuper
 	{
 	public:
 		struct sGroupingInfo
 		{
 			E_GROUPING_TYPE nType;
-			ST_UBJ_NODE* pNode;
+			ST_YAML_NODE* pNode;
 			size_t tReadPos;
-			sGroupingInfo(E_GROUPING_TYPE t, ST_UBJ_NODE* pUBJNode)
-				: nType(t), pNode(pUBJNode), tReadPos(0) {}
+			sGroupingInfo(E_GROUPING_TYPE t, ST_YAML_NODE* pUBJNode)
+				: nType(t), pNode(pUBJNode), tReadPos(0) {
+			}
 		};
 
-		ST_UBJ_NODE					m_RootNode;
+		ST_YAML_NODE				m_RootNode;
 		std::stack<sGroupingInfo>	m_GroupingStack;
 
 	public:
-		CUBJSONDeserializer(core::IChannel& channel);
-		~CUBJSONDeserializer(void);
+		CYAMLDeserializer(core::IChannel& channel);
+		~CYAMLDeserializer(void);
 
 	private:
 		bool			OnPrepare(IFormatterObject* pObject, std::tstring& strErrMsg);

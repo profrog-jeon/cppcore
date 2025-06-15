@@ -6,29 +6,11 @@ namespace fmt_internal
 {
 	//////////////////////////////////////////////////////////////////////////
 	CXMLDeserializer_V2::CXMLDeserializer_V2(core::IChannel& channel)
-	: IFormatter(channel)
+	: CFormatterSuper(channel)
 	, m_vecObjectCountStack()
 	, m_stackTraverse()
-	, m_bValidity(false)
-	, m_strErrMsg()
 	, m_stRoot()
 	{
-		if( !(m_bValidity = channel.CheckValidity(m_strErrMsg)) )
-			return;
-
-		std::tstring strContext;
-		while(1)
-		{
-			const size_t tTokenSize = 512;
-			TCHAR szBuff[tTokenSize+1] = { 0, };
-			size_t tReadSize = channel.Access(szBuff, sizeof(TCHAR) * tTokenSize);
-			if( 0 == tReadSize )
-				break;
-
-			strContext += szBuff;
-		}
-
-		m_bValidity = ParseXmlContext(strContext, m_stRoot, m_strErrMsg);
 	}
 
 	//////////////////////////////////////////////////////////////////////////
@@ -37,7 +19,31 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t CXMLDeserializer_V2::BeginDictionary(std::tstring& strKey, const size_t tSize, bool bAllowMultiKey)
+	bool CXMLDeserializer_V2::OnPrepare(IFormatterObject* pObject, std::tstring& strErrMsg)
+	{
+		if (!m_Channel.CheckValidity(strErrMsg))
+			return false;
+
+		std::tstring strContext;
+		while(1)
+		{
+			const size_t tTokenSize = 512;
+			TCHAR szBuff[tTokenSize+1] = { 0, };
+			size_t tReadSize = m_Channel.Access(szBuff, sizeof(TCHAR) * tTokenSize);
+			if( 0 == tReadSize )
+				break;
+
+			strContext += szBuff;
+		}
+
+		if (!ParseXmlContext(strContext, m_stRoot, strErrMsg))
+			return false;
+
+		return true;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	size_t CXMLDeserializer_V2::OnBeginDictionary(std::tstring& strKey, const size_t tSize, bool bAllowMultiKey)
 	{
 		size_t tChildrenCount = 0;
 
@@ -56,13 +62,13 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CXMLDeserializer_V2::EndDictionary()
+	void CXMLDeserializer_V2::OnEndDictionary()
 	{
 		m_vecObjectCountStack.pop_back();
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t CXMLDeserializer_V2::BeginArray(std::tstring& strKey, const size_t tSize)
+	size_t CXMLDeserializer_V2::OnBeginArray(std::tstring& strKey, const size_t tSize)
 	{
 		size_t tCount = 0;
 		size_t i;
@@ -79,13 +85,13 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CXMLDeserializer_V2::EndArray()
+	void CXMLDeserializer_V2::OnEndArray()
 	{
 		m_vecObjectCountStack.pop_back();
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CXMLDeserializer_V2::BeginObject(std::tstring& strKey)
+	void CXMLDeserializer_V2::OnBeginObject(std::tstring& strKey)
 	{
 		sGroupingData stGroupingData(GT_OBJECT, 0xFFFFFFFF);
 		m_vecObjectCountStack.push_back(stGroupingData);
@@ -129,14 +135,14 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CXMLDeserializer_V2::EndObject()
+	void CXMLDeserializer_V2::OnEndObject()
 	{
 		m_vecObjectCountStack.pop_back();
 		m_stackTraverse.pop();
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CXMLDeserializer_V2::BeginRoot()
+	void CXMLDeserializer_V2::OnBeginRoot(std::tstring& strRootName)
 	{
 		sGroupingData stGroupingData(GT_ROOT, 0xFFFFFFFF);
 		m_vecObjectCountStack.push_back(stGroupingData);
@@ -144,7 +150,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CXMLDeserializer_V2::EndRoot()
+	void CXMLDeserializer_V2::OnEndRoot()
 	{
 		m_vecObjectCountStack.pop_back();
 		m_stackTraverse.pop();
@@ -226,98 +232,98 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CXMLDeserializer_V2::Sync(std::tstring& strKey, std::tstring* pValue)
+	core::IFormatter& CXMLDeserializer_V2::OnSync(std::tstring& strKey, std::tstring* pValue)
 	{
 		__XMLDeserializerSync(m_stackTraverse, m_vecObjectCountStack, strKey, pValue);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT & CXMLDeserializer_V2::Sync(std::tstring & strKey, std::ntstring * pValue)
+	core::IFormatter& CXMLDeserializer_V2::OnSync(std::tstring & strKey, std::ntstring * pValue)
 	{
 		__XMLDeserializerSync(m_stackTraverse, m_vecObjectCountStack, strKey, pValue);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CXMLDeserializer_V2::Sync(std::tstring& strKey, bool* pValue)
+	core::IFormatter& CXMLDeserializer_V2::OnSync(std::tstring& strKey, bool* pValue)
 	{
 		__XMLDeserializerSync(m_stackTraverse, m_vecObjectCountStack, strKey, pValue);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CXMLDeserializer_V2::Sync(std::tstring& strKey, char* pValue)
+	core::IFormatter& CXMLDeserializer_V2::OnSync(std::tstring& strKey, char* pValue)
 	{
 		__XMLDeserializerSync(m_stackTraverse, m_vecObjectCountStack, strKey, pValue);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CXMLDeserializer_V2::Sync(std::tstring& strKey, short* pValue)
+	core::IFormatter& CXMLDeserializer_V2::OnSync(std::tstring& strKey, short* pValue)
 	{
 		__XMLDeserializerSync(m_stackTraverse, m_vecObjectCountStack, strKey, pValue);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CXMLDeserializer_V2::Sync(std::tstring& strKey, int32_t* pValue)
+	core::IFormatter& CXMLDeserializer_V2::OnSync(std::tstring& strKey, int32_t* pValue)
 	{
 		__XMLDeserializerSync(m_stackTraverse, m_vecObjectCountStack, strKey, pValue);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CXMLDeserializer_V2::Sync(std::tstring& strKey, int64_t* pValue)
+	core::IFormatter& CXMLDeserializer_V2::OnSync(std::tstring& strKey, int64_t* pValue)
 	{
 		__XMLDeserializerSync(m_stackTraverse, m_vecObjectCountStack, strKey, pValue);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CXMLDeserializer_V2::Sync(std::tstring& strKey, BYTE* pValue)
+	core::IFormatter& CXMLDeserializer_V2::OnSync(std::tstring& strKey, BYTE* pValue)
 	{
 		__XMLDeserializerSync(m_stackTraverse, m_vecObjectCountStack, strKey, pValue);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CXMLDeserializer_V2::Sync(std::tstring& strKey, WORD* pValue)
+	core::IFormatter& CXMLDeserializer_V2::OnSync(std::tstring& strKey, WORD* pValue)
 	{
 		__XMLDeserializerSync(m_stackTraverse, m_vecObjectCountStack, strKey, pValue);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CXMLDeserializer_V2::Sync(std::tstring& strKey, DWORD* pValue)
+	core::IFormatter& CXMLDeserializer_V2::OnSync(std::tstring& strKey, DWORD* pValue)
 	{
 		__XMLDeserializerSync(m_stackTraverse, m_vecObjectCountStack, strKey, pValue);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CXMLDeserializer_V2::Sync(std::tstring& strKey, QWORD* pValue)
+	core::IFormatter& CXMLDeserializer_V2::OnSync(std::tstring& strKey, QWORD* pValue)
 	{
 		__XMLDeserializerSync(m_stackTraverse, m_vecObjectCountStack, strKey, pValue);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CXMLDeserializer_V2::Sync(std::tstring& strKey, float* pValue)
+	core::IFormatter& CXMLDeserializer_V2::OnSync(std::tstring& strKey, float* pValue)
 	{
 		__XMLDeserializerSync(m_stackTraverse, m_vecObjectCountStack, strKey, pValue);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CXMLDeserializer_V2::Sync(std::tstring& strKey, double* pValue)
+	core::IFormatter& CXMLDeserializer_V2::OnSync(std::tstring& strKey, double* pValue)
 	{
 		__XMLDeserializerSync(m_stackTraverse, m_vecObjectCountStack, strKey, pValue);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CXMLDeserializer_V2::Sync(std::tstring& strKey, std::vector<BYTE>* pvecData)
+	core::IFormatter& CXMLDeserializer_V2::OnSync(std::tstring& strKey, std::vector<BYTE>* pvecData)
 	{
 		// Ignore
 		return *this;

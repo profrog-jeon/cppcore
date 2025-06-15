@@ -5,17 +5,25 @@ namespace fmt_internal
 {
 	//////////////////////////////////////////////////////////////////////////
 	CValueArrayDeserializer::CValueArrayDeserializer(core::IChannel& channel, std::tstring strTokenDelimiter, std::tstring strQuotation, bool bSkipTitle)
-		: IFormatter(channel)
+		: CFormatterSuper(channel)
 		, m_vecValueTable()
+		, m_strTokenDelimiter(strTokenDelimiter)
 		, m_strQuotation(strQuotation)
 		, m_tArrayIndex(0)
 		, m_tItemIndex(0)
-		, m_strErrMsg()
-		, m_bValidity(false)
+		, m_bSkipTitle(bSkipTitle)
 	{
-		m_bValidity = channel.CheckValidity(m_strErrMsg);
-		if( !m_bValidity )
-			return;
+	}
+	//////////////////////////////////////////////////////////////////////////
+	CValueArrayDeserializer::~CValueArrayDeserializer(void)
+	{
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	bool CValueArrayDeserializer::OnPrepare(IFormatterObject* pObject, std::tstring& strErrMsg)
+	{
+		if (!m_Channel.CheckValidity(strErrMsg))
+			return false;
 
 		std::tstring strContext;
 		std::tstring strBuff;
@@ -34,7 +42,7 @@ namespace fmt_internal
 		}
 
 		int nOffset = 0;
-		if( bSkipTitle )
+		if (m_bSkipTitle)
 			Tokenize(strContext, TEXT("\n"), nOffset);
 
 		while(nOffset >= 0)
@@ -45,70 +53,67 @@ namespace fmt_internal
 				break;
 
 			std::vector<std::tstring> vecToken;
-			TokenToVectorByExactDelimiter(strLine, strTokenDelimiter, vecToken);
+			TokenToVectorByExactDelimiter(strLine, m_strTokenDelimiter, vecToken);
 
 			m_vecValueTable.push_back(vecToken);
 		}
+
+		return true;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	CValueArrayDeserializer::~CValueArrayDeserializer(void)
-	{
-	}
-
-	//////////////////////////////////////////////////////////////////////////
-	size_t CValueArrayDeserializer::BeginDictionary(std::tstring& strKey, const size_t tSize, bool bAllowMultiKey)
+	size_t CValueArrayDeserializer::OnBeginDictionary(std::tstring& strKey, const size_t tSize, bool bAllowMultiKey)
 	{
 		return m_vecValueTable.size();
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CValueArrayDeserializer::EndDictionary()
+	void CValueArrayDeserializer::OnEndDictionary()
 	{
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t CValueArrayDeserializer::BeginArray(std::tstring& strKey, const size_t tSize)
+	size_t CValueArrayDeserializer::OnBeginArray(std::tstring& strKey, const size_t tSize)
 	{
 		return m_vecValueTable.size();
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CValueArrayDeserializer::EndArray()
+	void CValueArrayDeserializer::OnEndArray()
 	{
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CValueArrayDeserializer::BeginArrayItem(size_t tIndex, size_t tCount)
+	void CValueArrayDeserializer::OnBeginArrayItem(size_t tIndex, size_t tCount)
 	{
 		m_tArrayIndex = tIndex;
 		m_tItemIndex = 0;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CValueArrayDeserializer::EndArrayItem(size_t tIndex, size_t tCount)
+	void CValueArrayDeserializer::OnEndArrayItem(size_t tIndex, size_t tCount)
 	{
 		m_tArrayIndex = tIndex;
 		m_tItemIndex = 0;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CValueArrayDeserializer::BeginObject(std::tstring& strKey)
+	void CValueArrayDeserializer::OnBeginObject(std::tstring& strKey)
 	{
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CValueArrayDeserializer::EndObject()
+	void CValueArrayDeserializer::OnEndObject()
 	{
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CValueArrayDeserializer::BeginRoot()
+	void CValueArrayDeserializer::OnBeginRoot(std::tstring& strRootName)
 	{
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CValueArrayDeserializer::EndRoot()
+	void CValueArrayDeserializer::OnEndRoot()
 	{
 	}
 
@@ -124,98 +129,98 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CValueArrayDeserializer::Sync(std::tstring& strKey, std::tstring* pValue)
+	core::IFormatter& CValueArrayDeserializer::OnSync(std::tstring& strKey, std::tstring* pValue)
 	{
 		__ValueArrayDeserializerMetaFunction(m_vecValueTable[m_tArrayIndex], m_strQuotation, m_tItemIndex, pValue);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT & CValueArrayDeserializer::Sync(std::tstring & strKey, std::ntstring * pValue)
+	core::IFormatter& CValueArrayDeserializer::OnSync(std::tstring & strKey, std::ntstring * pValue)
 	{
 		__ValueArrayDeserializerMetaFunction(m_vecValueTable[m_tArrayIndex], m_strQuotation, m_tItemIndex, pValue);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CValueArrayDeserializer::Sync(std::tstring& strKey, bool* pValue)
+	core::IFormatter& CValueArrayDeserializer::OnSync(std::tstring& strKey, bool* pValue)
 	{
 		__ValueArrayDeserializerMetaFunction(m_vecValueTable[m_tArrayIndex], m_strQuotation, m_tItemIndex, pValue);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CValueArrayDeserializer::Sync(std::tstring& strKey, char* pValue)
+	core::IFormatter& CValueArrayDeserializer::OnSync(std::tstring& strKey, char* pValue)
 	{
 		__ValueArrayDeserializerMetaFunction(m_vecValueTable[m_tArrayIndex], m_strQuotation, m_tItemIndex, pValue);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CValueArrayDeserializer::Sync(std::tstring& strKey, short* pValue)
+	core::IFormatter& CValueArrayDeserializer::OnSync(std::tstring& strKey, short* pValue)
 	{
 		__ValueArrayDeserializerMetaFunction(m_vecValueTable[m_tArrayIndex], m_strQuotation, m_tItemIndex, pValue);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CValueArrayDeserializer::Sync(std::tstring& strKey, int32_t* pValue)
+	core::IFormatter& CValueArrayDeserializer::OnSync(std::tstring& strKey, int32_t* pValue)
 	{
 		__ValueArrayDeserializerMetaFunction(m_vecValueTable[m_tArrayIndex], m_strQuotation, m_tItemIndex, pValue);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CValueArrayDeserializer::Sync(std::tstring& strKey, int64_t* pValue)
+	core::IFormatter& CValueArrayDeserializer::OnSync(std::tstring& strKey, int64_t* pValue)
 	{
 		__ValueArrayDeserializerMetaFunction(m_vecValueTable[m_tArrayIndex], m_strQuotation, m_tItemIndex, pValue);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CValueArrayDeserializer::Sync(std::tstring& strKey, BYTE* pValue)
+	core::IFormatter& CValueArrayDeserializer::OnSync(std::tstring& strKey, BYTE* pValue)
 	{
 		__ValueArrayDeserializerMetaFunction(m_vecValueTable[m_tArrayIndex], m_strQuotation, m_tItemIndex, pValue);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CValueArrayDeserializer::Sync(std::tstring& strKey, WORD* pValue)
+	core::IFormatter& CValueArrayDeserializer::OnSync(std::tstring& strKey, WORD* pValue)
 	{
 		__ValueArrayDeserializerMetaFunction(m_vecValueTable[m_tArrayIndex], m_strQuotation, m_tItemIndex, pValue);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CValueArrayDeserializer::Sync(std::tstring& strKey, DWORD* pValue)
+	core::IFormatter& CValueArrayDeserializer::OnSync(std::tstring& strKey, DWORD* pValue)
 	{
 		__ValueArrayDeserializerMetaFunction(m_vecValueTable[m_tArrayIndex], m_strQuotation, m_tItemIndex, pValue);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CValueArrayDeserializer::Sync(std::tstring& strKey, QWORD* pValue)
+	core::IFormatter& CValueArrayDeserializer::OnSync(std::tstring& strKey, QWORD* pValue)
 	{
 		__ValueArrayDeserializerMetaFunction(m_vecValueTable[m_tArrayIndex], m_strQuotation, m_tItemIndex, pValue);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CValueArrayDeserializer::Sync(std::tstring& strKey, float* pValue)
+	core::IFormatter& CValueArrayDeserializer::OnSync(std::tstring& strKey, float* pValue)
 	{
 		__ValueArrayDeserializerMetaFunction(m_vecValueTable[m_tArrayIndex], m_strQuotation, m_tItemIndex, pValue);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CValueArrayDeserializer::Sync(std::tstring& strKey, double* pValue)
+	core::IFormatter& CValueArrayDeserializer::OnSync(std::tstring& strKey, double* pValue)
 	{
 		__ValueArrayDeserializerMetaFunction(m_vecValueTable[m_tArrayIndex], m_strQuotation, m_tItemIndex, pValue);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CValueArrayDeserializer::Sync(std::tstring& strKey, std::vector<BYTE>* pvecData)
+	core::IFormatter& CValueArrayDeserializer::OnSync(std::tstring& strKey, std::vector<BYTE>* pvecData)
 	{
 		// Ignore
 		return *this;

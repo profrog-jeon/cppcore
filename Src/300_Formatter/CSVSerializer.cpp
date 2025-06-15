@@ -5,12 +5,9 @@ namespace fmt_internal
 {
 	//////////////////////////////////////////////////////////////////////////
 	CCSVSerializer::CCSVSerializer(core::IChannel& channel)
-		: IFormatter(channel)
-		, m_strErrMsg()
-		, m_bValidity(false)
+		: CFormatterSuper(channel)
 		, m_bFirst(true)
 	{
-		m_bValidity = channel.CheckValidity(m_strErrMsg);
 	}
 
 	//////////////////////////////////////////////////////////////////////////
@@ -19,29 +16,35 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t CCSVSerializer::BeginDictionary(std::tstring& strKey, const size_t tSize, bool bAllowMultiKey)
+	bool CCSVSerializer::OnPrepare(IFormatterObject* pObject, std::tstring& strErrMsg)
+	{
+		return m_Channel.CheckValidity(strErrMsg);
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	size_t CCSVSerializer::OnBeginDictionary(std::tstring& strKey, const size_t tSize, bool bAllowMultiKey)
 	{
 		return tSize;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CCSVSerializer::EndDictionary()
+	void CCSVSerializer::OnEndDictionary()
 	{
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t CCSVSerializer::BeginArray(std::tstring& strKey, const size_t tSize)
+	size_t CCSVSerializer::OnBeginArray(std::tstring& strKey, const size_t tSize)
 	{
 		return tSize;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CCSVSerializer::BeginArrayItem(size_t tIndex, size_t tCount)
+	void CCSVSerializer::OnBeginArrayItem(size_t tIndex, size_t tCount)
 	{
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CCSVSerializer::EndArrayItem(size_t tIndex, size_t tCount)
+	void CCSVSerializer::OnEndArrayItem(size_t tIndex, size_t tCount)
 	{
 		std::tstring strOutput = TEXT("\r\n");
 		m_Channel.Access((void*)strOutput.c_str(), strOutput.length() * sizeof(TCHAR));
@@ -50,28 +53,28 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CCSVSerializer::EndArray()
+	void CCSVSerializer::OnEndArray()
 	{
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CCSVSerializer::BeginObject(std::tstring& strKey)
+	void CCSVSerializer::OnBeginObject(std::tstring& strKey)
 	{
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CCSVSerializer::EndObject()
+	void CCSVSerializer::OnEndObject()
 	{
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CCSVSerializer::BeginRoot()
+	void CCSVSerializer::OnBeginRoot(std::tstring& strRootName)
 	{
 		m_bFirst = true;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CCSVSerializer::EndRoot()
+	void CCSVSerializer::OnEndRoot()
 	{
 	}	
 
@@ -89,98 +92,98 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CCSVSerializer::Sync(std::tstring& strKey, std::tstring* pValue)
+	core::IFormatter& CCSVSerializer::OnSync(std::tstring& strKey, std::tstring* pValue)
 	{
 		__CSVSerializerMetaFunction(m_Channel, pValue, m_bFirst);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT & CCSVSerializer::Sync(std::tstring & strKey, std::ntstring * pValue)
+	core::IFormatter& CCSVSerializer::OnSync(std::tstring & strKey, std::ntstring * pValue)
 	{
 		__CSVSerializerMetaFunction(m_Channel, pValue, m_bFirst);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CCSVSerializer::Sync(std::tstring& strKey, bool* pValue)
+	core::IFormatter& CCSVSerializer::OnSync(std::tstring& strKey, bool* pValue)
 	{
 		__CSVSerializerMetaFunction(m_Channel, pValue, m_bFirst);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CCSVSerializer::Sync(std::tstring& strKey, char* pValue)
+	core::IFormatter& CCSVSerializer::OnSync(std::tstring& strKey, char* pValue)
 	{
 		__CSVSerializerMetaFunction(m_Channel, pValue, m_bFirst);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CCSVSerializer::Sync(std::tstring& strKey, short* pValue)
+	core::IFormatter& CCSVSerializer::OnSync(std::tstring& strKey, short* pValue)
 	{
 		__CSVSerializerMetaFunction(m_Channel, pValue, m_bFirst);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CCSVSerializer::Sync(std::tstring& strKey, int32_t* pValue)
+	core::IFormatter& CCSVSerializer::OnSync(std::tstring& strKey, int32_t* pValue)
 	{
 		__CSVSerializerMetaFunction(m_Channel, pValue, m_bFirst);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CCSVSerializer::Sync(std::tstring& strKey, int64_t* pValue)
+	core::IFormatter& CCSVSerializer::OnSync(std::tstring& strKey, int64_t* pValue)
 	{
 		__CSVSerializerMetaFunction(m_Channel, pValue, m_bFirst);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CCSVSerializer::Sync(std::tstring& strKey, BYTE* pValue)
+	core::IFormatter& CCSVSerializer::OnSync(std::tstring& strKey, BYTE* pValue)
 	{
 		__CSVSerializerMetaFunction(m_Channel, pValue, m_bFirst);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CCSVSerializer::Sync(std::tstring& strKey, WORD* pValue)
+	core::IFormatter& CCSVSerializer::OnSync(std::tstring& strKey, WORD* pValue)
 	{
 		__CSVSerializerMetaFunction(m_Channel, pValue, m_bFirst);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CCSVSerializer::Sync(std::tstring& strKey, DWORD* pValue)
+	core::IFormatter& CCSVSerializer::OnSync(std::tstring& strKey, DWORD* pValue)
 	{
 		__CSVSerializerMetaFunction(m_Channel, pValue, m_bFirst);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CCSVSerializer::Sync(std::tstring& strKey, QWORD* pValue)
+	core::IFormatter& CCSVSerializer::OnSync(std::tstring& strKey, QWORD* pValue)
 	{
 		__CSVSerializerMetaFunction(m_Channel, pValue, m_bFirst);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CCSVSerializer::Sync(std::tstring& strKey, float* pValue)
+	core::IFormatter& CCSVSerializer::OnSync(std::tstring& strKey, float* pValue)
 	{
 		__CSVSerializerMetaFunction(m_Channel, pValue, m_bFirst);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CCSVSerializer::Sync(std::tstring& strKey, double* pValue)
+	core::IFormatter& CCSVSerializer::OnSync(std::tstring& strKey, double* pValue)
 	{
 		__CSVSerializerMetaFunction(m_Channel, pValue, m_bFirst);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CCSVSerializer::Sync(std::tstring& strKey, std::vector<BYTE>* pvecData)
+	core::IFormatter& CCSVSerializer::OnSync(std::tstring& strKey, std::vector<BYTE>* pvecData)
 	{
 		// Ignore
 		return *this;

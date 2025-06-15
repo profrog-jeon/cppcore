@@ -9,35 +9,34 @@
 
 #include "../000_String/000_String.h"
 #include "FmtTypes.h"
-#include "PairSuper.h"
 
-#define IFormatterA				CFormatterSuperA
-#define IFormatterW				CFormatterSuperW
-
-#ifdef UNICODE	
-	#define IFormatter				CFormatterSuperW
-	#define IFormatterT				CFormatterSuperW
+#ifdef UNICODE
+	#define CFormatterSuper			CFormatterSuperW	
+	#define IFormatter				IFormatterW
+	#define IFormatterT				IFormatterW
 	#define IFormatterObject		IFormatterObjectW
 	#define IFormatterObjectT		IFormatterObjectW
 #else
-	#define IFormatter				CFormatterSuperA
-	#define IFormatterT				CFormatterSuperA
+	#define CFormatterSuper			CFormatterSuperA
+	#define IFormatter				IFormatterA
+	#define IFormatterT				IFormatterA
 	#define IFormatterObject		IFormatterObjectA
 	#define IFormatterObjectT		IFormatterObjectA
 #endif
 
 namespace core
 {
-	class CFormatterSuperA;
-	class CFormatterSuperW;
+	struct IFormatterA;
 	struct IFormatterObjectA
 	{
 		virtual ~IFormatterObjectA()	{}
-		virtual void OnSync(CFormatterSuperA& formatter) = 0;
+		virtual void OnSync(IFormatterA& formatter) = 0;
 	};
+
+	struct IFormatterW;
 	struct IFormatterObjectW
 	{
 		virtual ~IFormatterObjectW()	{}
-		virtual void OnSync(CFormatterSuperW& formatter) = 0;
+		virtual void OnSync(IFormatterW& formatter) = 0;
 	};
 }

@@ -86,7 +86,7 @@ namespace fmt_internal
 		if( tRemainedSize == 0 )
 			return 0;
 
-		if( tDataSize > tRemainedSize )
+		if(tRemainedSize < tDataSize)
 		{
 			memcpy(pData, &m_strContext[m_tReadPos], tRemainedSize * sizeof(TCHAR));
 			m_tReadPos += tRemainedSize;

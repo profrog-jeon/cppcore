@@ -5,25 +5,33 @@ namespace fmt_internal
 {
 	//////////////////////////////////////////////////////////////////////////
 	CINIDeserializer::CINIDeserializer(core::IChannel& channel, std::tstring strSection)
-		: IFormatter(channel)
+		: CFormatterSuper(channel)
 		, m_stkGroupData()
 		, m_INI()
 		, m_strRootSection(strSection)
-		, m_strErrMsg()
 		, m_mapArrayValues()
-		, m_bValidity(true)
+	{
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	CINIDeserializer::~CINIDeserializer(void)
+	{
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	bool CINIDeserializer::OnPrepare(IFormatterObject* pObject, std::tstring& strErrMsg)
 	{
 		try
 		{
-			if( !channel.CheckValidity(m_strErrMsg) )
-				throw exception_format(TEXT("%s"), m_strErrMsg.c_str());
+			if( !m_Channel.CheckValidity(strErrMsg) )
+				throw exception_format(TEXT("%s"), strErrMsg.c_str());
 
 			std::tstring strContext;
 			while(1)
 			{
 				const size_t tTokenSize = 512;
 				TCHAR szBuff[tTokenSize+1] = { 0, };
-				size_t tReadSize = channel.Access(szBuff, sizeof(TCHAR) * tTokenSize);
+				size_t tReadSize = m_Channel.Access(szBuff, sizeof(TCHAR) * tTokenSize);
 				if( 0 == tReadSize )
 					break;
 
@@ -33,26 +41,20 @@ namespace fmt_internal
 			ECODE errRet = m_INI.Open(strContext);
 			if( EC_SUCCESS != errRet )
 			{
-				m_strErrMsg = Format(TEXT("INI Parsing failure, CINIDeserializer(), %d"), errRet);
-				throw exception_format(TEXT("%s"), m_strErrMsg.c_str());
+				strErrMsg = Format(TEXT("INI Parsing failure, CINIDeserializer(), %d"), errRet);
+				throw exception_format(TEXT("%s"), strErrMsg.c_str());
 			}
-
-			m_bValidity = true;
 		}
 		catch (std::exception& e)
 		{
 			Log_Error("%s", e.what());
-			m_bValidity = false;
+			return false;
 		}
+		return true;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	CINIDeserializer::~CINIDeserializer(void)
-	{
-	}
-
-	//////////////////////////////////////////////////////////////////////////
-	size_t CINIDeserializer::BeginDictionary(std::tstring& strKey, const size_t tSize, bool bAllowMultiKey)
+	size_t CINIDeserializer::OnBeginDictionary(std::tstring& strKey, const size_t tSize, bool bAllowMultiKey)
 	{
 		m_mapArrayValues.clear();
 
@@ -72,13 +74,13 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CINIDeserializer::EndDictionary()
+	void CINIDeserializer::OnEndDictionary()
 	{
 		m_stkGroupData.pop();
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t CINIDeserializer::BeginArray(std::tstring& strKey, const size_t tSize)
+	size_t CINIDeserializer::OnBeginArray(std::tstring& strKey, const size_t tSize)
 	{
 		m_mapArrayValues.clear();
 		m_INI.GetSectionValues(strKey.c_str(), m_mapArrayValues);
@@ -88,13 +90,13 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CINIDeserializer::EndArray()
+	void CINIDeserializer::OnEndArray()
 	{
 		m_stkGroupData.pop();
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CINIDeserializer::BeginObject(std::tstring& strKey)
+	void CINIDeserializer::OnBeginObject(std::tstring& strKey)
 	{
 		sGroupingData& refTopGroupingData = m_stkGroupData.top();
 		if( GT_DICTIONARY == refTopGroupingData.nType )
@@ -107,19 +109,19 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CINIDeserializer::EndObject()
+	void CINIDeserializer::OnEndObject()
 	{
 		m_stkGroupData.pop();
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CINIDeserializer::BeginRoot()
+	void CINIDeserializer::OnBeginRoot(std::tstring& strRootName)
 	{
 		m_stkGroupData.push(sGroupingData(m_strRootSection.empty()? TEXT("DEFAULT") : m_strRootSection, GT_ROOT, 0));
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CINIDeserializer::EndRoot()
+	void CINIDeserializer::OnEndRoot()
 	{
 		m_stkGroupData.pop();
 	}
@@ -145,98 +147,98 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CINIDeserializer::Sync(std::tstring& strKey, std::tstring* pValue)
+	core::IFormatter& CINIDeserializer::OnSync(std::tstring& strKey, std::tstring* pValue)
 	{
 		__INIDeserializerMetaFunction(m_INI, m_stkGroupData.top(), strKey, pValue, m_mapArrayValues);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT & CINIDeserializer::Sync(std::tstring & strKey, std::ntstring * pValue)
+	core::IFormatter& CINIDeserializer::OnSync(std::tstring & strKey, std::ntstring * pValue)
 	{
 		__INIDeserializerMetaFunction(m_INI, m_stkGroupData.top(), strKey, pValue, m_mapArrayValues);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CINIDeserializer::Sync(std::tstring& strKey, bool* pValue)
+	core::IFormatter& CINIDeserializer::OnSync(std::tstring& strKey, bool* pValue)
 	{
 		__INIDeserializerMetaFunction(m_INI, m_stkGroupData.top(), strKey, pValue, m_mapArrayValues);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CINIDeserializer::Sync(std::tstring& strKey, char* pValue)
+	core::IFormatter& CINIDeserializer::OnSync(std::tstring& strKey, char* pValue)
 	{
 		__INIDeserializerMetaFunction(m_INI, m_stkGroupData.top(), strKey, pValue, m_mapArrayValues);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CINIDeserializer::Sync(std::tstring& strKey, short* pValue)
+	core::IFormatter& CINIDeserializer::OnSync(std::tstring& strKey, short* pValue)
 	{
 		__INIDeserializerMetaFunction(m_INI, m_stkGroupData.top(), strKey, pValue, m_mapArrayValues);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CINIDeserializer::Sync(std::tstring& strKey, int32_t* pValue)
+	core::IFormatter& CINIDeserializer::OnSync(std::tstring& strKey, int32_t* pValue)
 	{
 		__INIDeserializerMetaFunction(m_INI, m_stkGroupData.top(), strKey, pValue, m_mapArrayValues);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CINIDeserializer::Sync(std::tstring& strKey, int64_t* pValue)
+	core::IFormatter& CINIDeserializer::OnSync(std::tstring& strKey, int64_t* pValue)
 	{
 		__INIDeserializerMetaFunction(m_INI, m_stkGroupData.top(), strKey, pValue, m_mapArrayValues);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CINIDeserializer::Sync(std::tstring& strKey, BYTE* pValue)
+	core::IFormatter& CINIDeserializer::OnSync(std::tstring& strKey, BYTE* pValue)
 	{
 		__INIDeserializerMetaFunction(m_INI, m_stkGroupData.top(), strKey, pValue, m_mapArrayValues);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CINIDeserializer::Sync(std::tstring& strKey, WORD* pValue)
+	core::IFormatter& CINIDeserializer::OnSync(std::tstring& strKey, WORD* pValue)
 	{
 		__INIDeserializerMetaFunction(m_INI, m_stkGroupData.top(), strKey, pValue, m_mapArrayValues);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CINIDeserializer::Sync(std::tstring& strKey, DWORD* pValue)
+	core::IFormatter& CINIDeserializer::OnSync(std::tstring& strKey, DWORD* pValue)
 	{
 		__INIDeserializerMetaFunction(m_INI, m_stkGroupData.top(), strKey, pValue, m_mapArrayValues);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CINIDeserializer::Sync(std::tstring& strKey, QWORD* pValue)
+	core::IFormatter& CINIDeserializer::OnSync(std::tstring& strKey, QWORD* pValue)
 	{
 		__INIDeserializerMetaFunction(m_INI, m_stkGroupData.top(), strKey, pValue, m_mapArrayValues);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CINIDeserializer::Sync(std::tstring& strKey, float* pValue)
+	core::IFormatter& CINIDeserializer::OnSync(std::tstring& strKey, float* pValue)
 	{
 		__INIDeserializerMetaFunction(m_INI, m_stkGroupData.top(), strKey, pValue, m_mapArrayValues);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CINIDeserializer::Sync(std::tstring& strKey, double* pValue)
+	core::IFormatter& CINIDeserializer::OnSync(std::tstring& strKey, double* pValue)
 	{
 		__INIDeserializerMetaFunction(m_INI, m_stkGroupData.top(), strKey, pValue, m_mapArrayValues);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CINIDeserializer::Sync(std::tstring& strKey, std::vector<BYTE>* pvecData)
+	core::IFormatter& CINIDeserializer::OnSync(std::tstring& strKey, std::vector<BYTE>* pvecData)
 	{
 		// Ignore
 		return *this;

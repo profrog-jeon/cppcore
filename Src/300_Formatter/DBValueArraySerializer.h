@@ -1,39 +1,26 @@
 #pragma once
 
 #include <string>
-#include <stack>
+#include <vector>
 
 #include "Interface.h"
 #include "FmtTypes.h"
 #include "IChannel.h"
-#include "UBJSONFunctions.h"
 
 namespace fmt_internal
 {
-	class CUBJSONDeserializer : public CFormatterSuper
+	class CDBValueArraySerializer : public CFormatterSuper
 	{
-	public:
-		struct sGroupingInfo
-		{
-			E_GROUPING_TYPE nType;
-			ST_UBJ_NODE* pNode;
-			size_t tReadPos;
-			sGroupingInfo(E_GROUPING_TYPE t, ST_UBJ_NODE* pUBJNode)
-				: nType(t), pNode(pUBJNode), tReadPos(0) {}
-		};
-
-		ST_UBJ_NODE					m_RootNode;
-		std::stack<sGroupingInfo>	m_GroupingStack;
+	private:
+		bool			m_bFirst;
+		bool			m_bReserved[7];
 
 	public:
-		CUBJSONDeserializer(core::IChannel& channel);
-		~CUBJSONDeserializer(void);
+						CDBValueArraySerializer(core::IChannel& channel);
+						~CDBValueArraySerializer(void);
 
 	private:
 		bool			OnPrepare(IFormatterObject* pObject, std::tstring& strErrMsg);
-
-		void			OnBeginRoot(std::tstring& strRootName);
-		void			OnEndRoot();
 
 		size_t			OnBeginDictionary(std::tstring& strKey, const size_t tSize, bool bAllowMultiKey);
 		void			OnEndDictionary();
@@ -46,8 +33,11 @@ namespace fmt_internal
 		void			OnBeginObject(std::tstring& strKey);
 		void			OnEndObject();
 
-		core::IFormatter& OnSync(std::tstring& strKey, std::wstring* pValue);
-		core::IFormatter& OnSync(std::tstring& strKey, std::string* pValue);
+		void			OnBeginRoot(std::tstring& strRootName);
+		void			OnEndRoot();
+
+		core::IFormatter& OnSync(std::tstring& strKey, std::tstring* pValue);
+		core::IFormatter& OnSync(std::tstring& strKey, std::ntstring* pValue);
 		core::IFormatter& OnSync(std::tstring& strKey, bool* pValue);
 		core::IFormatter& OnSync(std::tstring& strKey, char* pValue);
 		core::IFormatter& OnSync(std::tstring& strKey, short* pValue);
@@ -61,5 +51,4 @@ namespace fmt_internal
 		core::IFormatter& OnSync(std::tstring& strKey, double* pValue);
 		core::IFormatter& OnSync(std::tstring& strKey, std::vector<BYTE>* pvecData);
 	};
-
 }

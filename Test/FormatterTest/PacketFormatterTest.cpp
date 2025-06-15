@@ -8,11 +8,9 @@ struct ST_INTERNAL_DATA : public core::IFormatterObject
 
 	void OnSync(core::IFormatter& formatter)
 	{
-		formatter
-			+ core::sPair(TEXT("FileBinary"), vecFileBinary)
-			+ core::sPair(TEXT("Int"), nInt)
-			+ core::sPair(TEXT("String"), strString)
-			;
+		formatter.Sync(TEXT("FileBinary"), vecFileBinary);
+		formatter.Sync(TEXT("Int"), nInt);
+		formatter.Sync(TEXT("String"), strString);
 	}
 };
 
@@ -40,13 +38,11 @@ struct ST_BIN_PACKET : public core::IFormatterObject
 
 	void OnSync(core::IFormatter& formatter)
 	{
-		formatter
-			+ core::sPair(TEXT("Int"), nInt)
-			+ core::sPair(TEXT("String"), strString)
-			+ core::sPair(TEXT("InternalList"), listInternal)
-			+ core::sPair(TEXT("InternalMap"), mapInternal)
-			+ core::sPair(TEXT("FileBinary"), vecFileBinary)
-			;
+		formatter.Sync(TEXT("Int"), nInt);
+		formatter.Sync(TEXT("String"), strString);
+		formatter.Sync(TEXT("InternalList"), listInternal);
+		formatter.Sync(TEXT("InternalMap"), mapInternal);
+		formatter.Sync(TEXT("FileBinary"), vecFileBinary);
 	}
 };
 
@@ -195,9 +191,7 @@ struct ST_FILE_LIST : public core::IFormatterObject
 
 	void OnSync(core::IFormatter& formatter)
 	{
-		formatter
-			+ core::sPair(TEXT("Files"), vecFiles)
-			;
+		formatter.Sync(TEXT("Files"), vecFiles);
 	}
 };
 

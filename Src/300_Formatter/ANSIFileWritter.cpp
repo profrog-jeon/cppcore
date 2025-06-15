@@ -67,7 +67,7 @@ namespace fmt_internal
 		}
 		
 		DWORD dwWritten = 0;
-		if (!WriteFile(m_hFile, strContextEuckr.c_str(), strContextEuckr.size(), &dwWritten))
+		if (!WriteFile(m_hFile, strContextEuckr.c_str(), (DWORD)strContextEuckr.size(), &dwWritten))
 			return 0;
 
 		return dwWritten;

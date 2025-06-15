@@ -226,11 +226,11 @@ namespace fmt_internal
 				{
 					ST_UBJ_NODE child;
 					BYTE len = ReadUBJConst<BYTE>(Channel);
-					if (0 == len)
-						throw exception_format(TEXT("KEY LEN is Zero"));
-
-					child.strKey.resize(len);
-					ReadUBJConst(Channel, (void*)child.strKey.data(), len);
+					if (len)
+					{
+						child.strKey.resize(len);
+						ReadUBJConst(Channel, (void*)child.strKey.data(), len);
+					}
 
 					child.strValue = ReadUBJValue(Channel);
 					pCurNode->Children.push_back(child);

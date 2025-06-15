@@ -5,14 +5,20 @@ namespace fmt_internal
 {
 	//////////////////////////////////////////////////////////////////////////
 	CPacketDeserializer::CPacketDeserializer(core::IChannel& channel)
-		: IFormatter(channel)
-		, m_bValidity(false)
+		: CFormatterSuper(channel)
+
 	{
 	}
 
 	//////////////////////////////////////////////////////////////////////////
 	CPacketDeserializer::~CPacketDeserializer(void)
 	{
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	bool CPacketDeserializer::OnPrepare(IFormatterObject* pObject, std::tstring& strErrMsg)
+	{
+		return true;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
@@ -29,7 +35,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t CPacketDeserializer::BeginDictionary(std::tstring& strKey, const size_t tSize, bool bAllowMultiKey)
+	size_t CPacketDeserializer::OnBeginDictionary(std::tstring& strKey, const size_t tSize, bool bAllowMultiKey)
 	{
 		// Not supported for unknown-key
 		assert(false);
@@ -37,12 +43,12 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CPacketDeserializer::EndDictionary()
+	void CPacketDeserializer::OnEndDictionary()
 	{
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t CPacketDeserializer::BeginArray(std::tstring& strKey, const size_t tSize)
+	size_t CPacketDeserializer::OnBeginArray(std::tstring& strKey, const size_t tSize)
 	{
 		//DeserializeString(m_Channel, strKey);
 
@@ -52,28 +58,28 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CPacketDeserializer::EndArray()
+	void CPacketDeserializer::OnEndArray()
 	{
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CPacketDeserializer::BeginObject(std::tstring& strKey)
+	void CPacketDeserializer::OnBeginObject(std::tstring& strKey)
 	{
 		//DeserializeString(m_Channel, strKey);
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CPacketDeserializer::EndObject()
+	void CPacketDeserializer::OnEndObject()
 	{
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CPacketDeserializer::BeginRoot()
+	void CPacketDeserializer::OnBeginRoot(std::tstring& strRootName)
 	{
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CPacketDeserializer::EndRoot()
+	void CPacketDeserializer::OnEndRoot()
 	{
 	}
 
@@ -86,7 +92,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CPacketDeserializer::Sync(std::tstring& strKey, std::tstring* pValue)
+	core::IFormatter& CPacketDeserializer::OnSync(std::tstring& strKey, std::tstring* pValue)
 	{
 		//DeserializeString(m_Channel, strKey);
 		DeserializeString(m_Channel, *pValue);
@@ -94,93 +100,93 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT & CPacketDeserializer::Sync(std::tstring & strKey, std::ntstring * pValue)
+	core::IFormatter& CPacketDeserializer::OnSync(std::tstring & strKey, std::ntstring * pValue)
 	{
 		std::tstring strTempString = TCSFromNTCS(*pValue);
-		Sync(strKey, &strTempString);
+		OnSync(strKey, &strTempString);
 		*pValue = NTCSFromTCS(strTempString);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CPacketDeserializer::Sync(std::tstring& strKey, bool* pValue)
+	core::IFormatter& CPacketDeserializer::OnSync(std::tstring& strKey, bool* pValue)
 	{
 		PacketDeserializerMetaFunction(m_Channel, strKey, pValue);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CPacketDeserializer::Sync(std::tstring& strKey, char* pValue)
+	core::IFormatter& CPacketDeserializer::OnSync(std::tstring& strKey, char* pValue)
 	{
 		PacketDeserializerMetaFunction(m_Channel, strKey, pValue);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CPacketDeserializer::Sync(std::tstring& strKey, short* pValue)
+	core::IFormatter& CPacketDeserializer::OnSync(std::tstring& strKey, short* pValue)
 	{
 		PacketDeserializerMetaFunction(m_Channel, strKey, pValue);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CPacketDeserializer::Sync(std::tstring& strKey, int32_t* pValue)
+	core::IFormatter& CPacketDeserializer::OnSync(std::tstring& strKey, int32_t* pValue)
 	{
 		PacketDeserializerMetaFunction(m_Channel, strKey, pValue);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CPacketDeserializer::Sync(std::tstring& strKey, int64_t* pValue)
+	core::IFormatter& CPacketDeserializer::OnSync(std::tstring& strKey, int64_t* pValue)
 	{
 		PacketDeserializerMetaFunction(m_Channel, strKey, pValue);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CPacketDeserializer::Sync(std::tstring& strKey, BYTE* pValue)
+	core::IFormatter& CPacketDeserializer::OnSync(std::tstring& strKey, BYTE* pValue)
 	{
 		PacketDeserializerMetaFunction(m_Channel, strKey, pValue);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CPacketDeserializer::Sync(std::tstring& strKey, WORD* pValue)
+	core::IFormatter& CPacketDeserializer::OnSync(std::tstring& strKey, WORD* pValue)
 	{
 		PacketDeserializerMetaFunction(m_Channel, strKey, pValue);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CPacketDeserializer::Sync(std::tstring& strKey, DWORD* pValue)
+	core::IFormatter& CPacketDeserializer::OnSync(std::tstring& strKey, DWORD* pValue)
 	{
 		PacketDeserializerMetaFunction(m_Channel, strKey, pValue);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CPacketDeserializer::Sync(std::tstring& strKey, QWORD* pValue)
+	core::IFormatter& CPacketDeserializer::OnSync(std::tstring& strKey, QWORD* pValue)
 	{
 		PacketDeserializerMetaFunction(m_Channel, strKey, pValue);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CPacketDeserializer::Sync(std::tstring& strKey, float* pValue)
+	core::IFormatter& CPacketDeserializer::OnSync(std::tstring& strKey, float* pValue)
 	{
 		PacketDeserializerMetaFunction(m_Channel, strKey, pValue);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CPacketDeserializer::Sync(std::tstring& strKey, double* pValue)
+	core::IFormatter& CPacketDeserializer::OnSync(std::tstring& strKey, double* pValue)
 	{
 		PacketDeserializerMetaFunction(m_Channel, strKey, pValue);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CPacketDeserializer::Sync(std::tstring& strKey, std::vector<BYTE>* pvecData)
+	core::IFormatter& CPacketDeserializer::OnSync(std::tstring& strKey, std::vector<BYTE>* pvecData)
 	{
 		//DeserializeString(m_Channel, strKey);
 		DWORD dwLength;
