@@ -2,6 +2,14 @@
 
 #include "../001_Encoder/Type.h"
 
+#ifdef UNICODE
+#define GetCurrentFileVersionStr	GetCurrentFileVersionStrW
+#define GetCurrentProductVersionStr	GetCurrentProductVersionStrW
+#else
+#define GetCurrentFileVersionStr	GetCurrentFileVersionStrA
+#define GetCurrentProductVersionStr	GetCurrentProductVersionStrA
+#endif
+
 namespace core
 {
     struct ST_FUNC_LOG
@@ -92,4 +100,14 @@ namespace core
 	std::wstring BuildUniqFileName(std::wstring strTempFile);
 
 	double GetCurrentSecond(void);
+
+	std::string GetFileVersionStr(std::string strFilePath);
+	std::wstring GetFileVersionStr(std::wstring strFilePath);
+	std::string GetProductVersionStr(std::string strFilePath);
+	std::wstring GetProductVersionStr(std::wstring strFilePath);
+
+	std::string GetCurrentFileVersionStrA(void);
+	std::wstring GetCurrentFileVersionStrW(void);
+	std::string GetCurrentProductVersionStrA(void);
+	std::wstring GetCurrentProductVersionStrW(void);
 }
