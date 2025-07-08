@@ -745,4 +745,38 @@ namespace core
 
 		return strTempFile;
 	}
+
+	inline std::tstring GetFileVersionStrWorker(std::tstring strFilePath)
+	{
+		ST_VERSIONINFO stVersion;
+		GetFileVersionInfo(strFilePath.c_str(), &stVersion);
+		return StringFrom(stVersion);
+	}
+
+	inline std::tstring GetProductVersionStrWorker(std::tstring strFilePath)
+	{
+		ST_VERSIONINFO stVersion;
+		GetProductVersionInfo(strFilePath.c_str(), &stVersion);
+		return StringFrom(stVersion);
+	}
+
+	std::tstring GetFileVersionStr(std::tstring strFilePath)
+	{
+		return GetFileVersionStrWorker(GetFileName());
+	}
+
+	std::tstring GetProductVersionStr(std::tstring strFilePath)
+	{
+		return GetProductVersionStrWorker(GetFileName());
+	}
+
+	std::tstring GetCurrentFileVersionStr(void)
+	{
+		return GetFileVersionStrWorker(GetFileName());
+	}
+
+	std::tstring GetCurrentProductVersionStr(void)
+	{
+		return GetProductVersionStrWorker(GetFileName());
+	}
 }
