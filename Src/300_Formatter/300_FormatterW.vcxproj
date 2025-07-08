@@ -37,13 +37,13 @@
   <ItemGroup>
     <ClCompile Include="ANSIFileReader.cpp" />
     <ClCompile Include="ANSIFileWritter.cpp" />
-    <ClCompile Include="ANSIFormatter.cpp" />
     <ClCompile Include="ANSIStringReader.cpp" />
     <ClCompile Include="ANSIStringWritter.cpp" />
     <ClCompile Include="BytesReader.cpp" />
     <ClCompile Include="BytesWriter.cpp" />
     <ClCompile Include="CSVDeserializer.cpp" />
     <ClCompile Include="CSVSerializer.cpp" />
+    <ClCompile Include="DBValueArraySerializer.cpp" />
     <ClCompile Include="FileReader.cpp" />
     <ClCompile Include="FileWritter.cpp" />
     <ClCompile Include="FormatterSuper.cpp" />
@@ -90,24 +90,29 @@
     <ClCompile Include="XMLSerializer.cpp" />
     <ClCompile Include="XMLSerializer_V2.cpp" />
     <ClCompile Include="XMLSerializer_V3.cpp" />
+    <ClCompile Include="YAMLDeserializer.cpp" />
+    <ClCompile Include="YAMLParser.cpp" />
+    <ClCompile Include="YAMLSerializer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="300_Formatter.h" />
     <ClInclude Include="ANSIFileReader.h" />
     <ClInclude Include="ANSIFileWritter.h" />
-    <ClInclude Include="ANSIFormatter.h" />
     <ClInclude Include="ANSIStringReader.h" />
     <ClInclude Include="ANSIStringWritter.h" />
     <ClInclude Include="BytesReader.h" />
     <ClInclude Include="BytesWriter.h" />
     <ClInclude Include="CSVDeserializer.h" />
     <ClInclude Include="CSVSerializer.h" />
+    <ClInclude Include="DBValueArraySerializer.h" />
     <ClInclude Include="FileReader.h" />
     <ClInclude Include="FileWritter.h" />
     <ClInclude Include="FmtTypes.h" />
     <ClInclude Include="FormatterSuper.h" />
     <ClInclude Include="HelperFunc.h" />
     <ClInclude Include="IChannel.h" />
+    <ClInclude Include="IFormatterA.h" />
+    <ClInclude Include="IFormatterW.h" />
     <ClInclude Include="INIDeserializer.h" />
     <ClInclude Include="INIFormatter.h" />
     <ClInclude Include="INISerializer.h" />
@@ -118,11 +123,10 @@
     <ClInclude Include="KeyArraySerializer.h" />
     <ClInclude Include="KeyValueArrayDeserializer.h" />
     <ClInclude Include="KeyValueArraySerializer.h" />
+    <ClInclude Include="InterfaceLegacy.h" />
     <ClInclude Include="MarkerSerializer.h" />
     <ClInclude Include="PacketDeserializer.h" />
     <ClInclude Include="PacketSerializer.h" />
-    <ClInclude Include="Pair.h" />
-    <ClInclude Include="PairSuper.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="StringReader.h" />
     <ClInclude Include="StringWriter.h" />
@@ -137,13 +141,15 @@
     <ClInclude Include="UTF8StringWritter.h" />
     <ClInclude Include="ValueArrayDeserializer.h" />
     <ClInclude Include="ValueArraySerializer.h" />
-    <ClInclude Include="ValuePtrHolder.h" />
     <ClInclude Include="XMLDeserializer.h" />
     <ClInclude Include="XMLDeserializer_V2.h" />
     <ClInclude Include="XMLFunctions.h" />
     <ClInclude Include="XMLSerializer.h" />
     <ClInclude Include="XMLSerializer_V2.h" />
     <ClInclude Include="XMLSerializer_V3.h" />
+    <ClInclude Include="YAMLDeserializer.h" />
+    <ClInclude Include="YAMLParser.h" />
+    <ClInclude Include="YAMLSerializer.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{939E852F-90DD-4E1A-AE69-EA7E6369A270}</ProjectGuid>

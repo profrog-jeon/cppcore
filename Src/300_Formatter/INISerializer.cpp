@@ -5,15 +5,12 @@ namespace fmt_internal
 {
 	//////////////////////////////////////////////////////////////////////////
 	CINISerializer::CINISerializer(core::IChannel& channel)
-		: IFormatter(channel)
+		: CFormatterSuper(channel)
 		, m_stkSection()
 		, m_INI()
-		, m_strErrMsg()
 		, m_dwArrayIndex(0)
 		, m_bInArray(false)
-		, m_bValidity(false)
 	{
-		m_bValidity = channel.CheckValidity(m_strErrMsg);
 	}
 
 	//////////////////////////////////////////////////////////////////////////
@@ -22,19 +19,25 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t CINISerializer::BeginDictionary(std::tstring& strKey, const size_t tSize, bool bAllowMultiKey)
+	bool CINISerializer::OnPrepare(IFormatterObject* pObject, std::tstring& strErrMsg)
+	{
+		return m_Channel.CheckValidity(strErrMsg);
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	size_t CINISerializer::OnBeginDictionary(std::tstring& strKey, const size_t tSize, bool bAllowMultiKey)
 	{
 		m_stkSection.push(strKey);
 		return tSize;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CINISerializer::EndDictionary()
+	void CINISerializer::OnEndDictionary()
 	{
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t CINISerializer::BeginArray(std::tstring& strKey, const size_t tSize)
+	size_t CINISerializer::OnBeginArray(std::tstring& strKey, const size_t tSize)
 	{
 		m_bInArray = true;
 		m_dwArrayIndex = 0;
@@ -43,40 +46,39 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CINISerializer::EndArray()
+	void CINISerializer::OnEndArray()
 	{
 		m_bInArray = false;
 		m_stkSection.pop();
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CINISerializer::BeginObject(std::tstring& strKey)
+	void CINISerializer::OnBeginObject(std::tstring& strKey)
 	{
 		m_stkSection.push(strKey);
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CINISerializer::EndObject()
+	void CINISerializer::OnEndObject()
 	{
 		m_stkSection.pop();
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CINISerializer::BeginRoot()
+	void CINISerializer::OnBeginRoot(std::tstring& strRootName)
 	{
 		m_stkSection.push(TEXT("DEFAULT"));
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CINISerializer::EndRoot()
+	void CINISerializer::OnEndRoot()
 	{
 		m_stkSection.pop();
 
 		ECODE errRet = m_INI.Flush(m_Channel);
 		if( EC_SUCCESS != errRet )
 		{
-			m_strErrMsg = Format(TEXT("INI.Flush operating failure, %d"), errRet);
-			m_bValidity = false;
+			Log_Error(TEXT("INI.Flush operating failure, %d"), errRet);
 		}
 	}
 
@@ -93,98 +95,98 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CINISerializer::Sync(std::tstring& strKey, std::tstring* pValue)
+	core::IFormatter& CINISerializer::OnSync(std::tstring& strKey, std::tstring* pValue)
 	{
 		__INISerializerMetaFunction(m_INI, m_stkSection.top(), strKey, pValue, m_bInArray, m_dwArrayIndex);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT & CINISerializer::Sync(std::tstring & strKey, std::ntstring * pValue)
+	core::IFormatter& CINISerializer::OnSync(std::tstring & strKey, std::ntstring * pValue)
 	{
 		__INISerializerMetaFunction(m_INI, m_stkSection.top(), strKey, pValue, m_bInArray, m_dwArrayIndex);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CINISerializer::Sync(std::tstring& strKey, bool* pValue)
+	core::IFormatter& CINISerializer::OnSync(std::tstring& strKey, bool* pValue)
 	{
 		__INISerializerMetaFunction(m_INI, m_stkSection.top(), strKey, pValue, m_bInArray, m_dwArrayIndex);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CINISerializer::Sync(std::tstring& strKey, char* pValue)
+	core::IFormatter& CINISerializer::OnSync(std::tstring& strKey, char* pValue)
 	{
 		__INISerializerMetaFunction(m_INI, m_stkSection.top(), strKey, pValue, m_bInArray, m_dwArrayIndex);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CINISerializer::Sync(std::tstring& strKey, short* pValue)
+	core::IFormatter& CINISerializer::OnSync(std::tstring& strKey, short* pValue)
 	{
 		__INISerializerMetaFunction(m_INI, m_stkSection.top(), strKey, pValue, m_bInArray, m_dwArrayIndex);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CINISerializer::Sync(std::tstring& strKey, int32_t* pValue)
+	core::IFormatter& CINISerializer::OnSync(std::tstring& strKey, int32_t* pValue)
 	{
 		__INISerializerMetaFunction(m_INI, m_stkSection.top(), strKey, pValue, m_bInArray, m_dwArrayIndex);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CINISerializer::Sync(std::tstring& strKey, int64_t* pValue)
+	core::IFormatter& CINISerializer::OnSync(std::tstring& strKey, int64_t* pValue)
 	{
 		__INISerializerMetaFunction(m_INI, m_stkSection.top(), strKey, pValue, m_bInArray, m_dwArrayIndex);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CINISerializer::Sync(std::tstring& strKey, BYTE* pValue)
+	core::IFormatter& CINISerializer::OnSync(std::tstring& strKey, BYTE* pValue)
 	{
 		__INISerializerMetaFunction(m_INI, m_stkSection.top(), strKey, pValue, m_bInArray, m_dwArrayIndex);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CINISerializer::Sync(std::tstring& strKey, WORD* pValue)
+	core::IFormatter& CINISerializer::OnSync(std::tstring& strKey, WORD* pValue)
 	{
 		__INISerializerMetaFunction(m_INI, m_stkSection.top(), strKey, pValue, m_bInArray, m_dwArrayIndex);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CINISerializer::Sync(std::tstring& strKey, DWORD* pValue)
+	core::IFormatter& CINISerializer::OnSync(std::tstring& strKey, DWORD* pValue)
 	{
 		__INISerializerMetaFunction(m_INI, m_stkSection.top(), strKey, pValue, m_bInArray, m_dwArrayIndex);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CINISerializer::Sync(std::tstring& strKey, QWORD* pValue)
+	core::IFormatter& CINISerializer::OnSync(std::tstring& strKey, QWORD* pValue)
 	{
 		__INISerializerMetaFunction(m_INI, m_stkSection.top(), strKey, pValue, m_bInArray, m_dwArrayIndex);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CINISerializer::Sync(std::tstring& strKey, float* pValue)
+	core::IFormatter& CINISerializer::OnSync(std::tstring& strKey, float* pValue)
 	{
 		__INISerializerMetaFunction(m_INI, m_stkSection.top(), strKey, pValue, m_bInArray, m_dwArrayIndex);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CINISerializer::Sync(std::tstring& strKey, double* pValue)
+	core::IFormatter& CINISerializer::OnSync(std::tstring& strKey, double* pValue)
 	{
 		__INISerializerMetaFunction(m_INI, m_stkSection.top(), strKey, pValue, m_bInArray, m_dwArrayIndex);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CINISerializer::Sync(std::tstring& strKey, std::vector<BYTE>* pvecData)
+	core::IFormatter& CINISerializer::OnSync(std::tstring& strKey, std::vector<BYTE>* pvecData)
 	{
 		// Ignore
 		return *this;

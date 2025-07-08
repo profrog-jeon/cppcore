@@ -8,11 +8,9 @@ struct ST_MALICOUS_PATTERN_INFO : public core::IFormatterObject
 
 	void OnSync(core::IFormatter& formatter)
 	{
-		formatter
-			+ core::sPair(TEXT("PatternName"), strPatternName)
-			+ core::sPair(TEXT("TotalChainCount"), dwTotalChainCount)
-			+ core::sPair(TEXT("CurrentProcessingChainNo"), dwCurrentProcessingChainNo)
-			;
+		formatter.Sync(TEXT("PatternName"), strPatternName);
+		formatter.Sync(TEXT("TotalChainCount"), dwTotalChainCount);
+		formatter.Sync(TEXT("CurrentProcessingChainNo"), dwCurrentProcessingChainNo);
 	}
 };
 
@@ -22,9 +20,7 @@ struct ST_FILELESS_STATUS : public core::IFormatterObject
 
 	void OnSync(core::IFormatter& formatter)
 	{
-		formatter
-			+ core::sPair(TEXT("PatternStatus"), mapPatternStatus)
-			;
+		formatter.Sync(TEXT("PatternStatus"), mapPatternStatus);
 	}
 };
 

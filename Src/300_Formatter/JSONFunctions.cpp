@@ -316,7 +316,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	bool Parse(CTStringVec& vecToken, CTokenVec& vecJsonToken, std::tstring& strErrMsgDump)
+	bool Parse(CTStringVec& vecToken, CJsonChunkVec& vecJsonToken, std::tstring& strErrMsgDump)
 	{
 		std::vector<char> parsingStack;
 
@@ -485,7 +485,7 @@ namespace fmt_internal
 	}
 	
 	//////////////////////////////////////////////////////////////////////////
-	size_t Build(CTokenVec& vecJsonToken, CChunkVec& vecJsonChunk)
+	size_t Build(CJsonChunkVec& vecJsonToken, CJsonTokenVec& vecJsonChunk)
 	{
 		try
 		{
@@ -555,11 +555,11 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t ExpandArray(size_t tIndex, CChunkVec& vecJsonChunk)
+	size_t ExpandArray(size_t tIndex, CJsonTokenVec& vecJsonChunk)
 	{
 		std::tstring strErrMsg;
 
-		CTokenVec vecTempJsonToken;
+		CJsonChunkVec vecTempJsonToken;
 		if (!Parse(vecJsonChunk[tIndex].vecToken, vecTempJsonToken, strErrMsg))
 		{
 			Log_Error(TEXT("Expanding failure, %s"), strErrMsg.c_str());
@@ -568,7 +568,7 @@ namespace fmt_internal
 
 		std::tstring strKey = vecJsonChunk[tIndex].strKey;
 
-		CChunkVec vecTempChunkVec;
+		CJsonTokenVec vecTempChunkVec;
 		size_t tRet = fmt_internal::Build(vecTempJsonToken, vecTempChunkVec);
 		if (0 == tRet)
 			return 0;

@@ -5,15 +5,12 @@ namespace fmt_internal
 {
 	//////////////////////////////////////////////////////////////////////////
 	CValueArraySerializer::CValueArraySerializer(core::IChannel& channel, std::tstring strSeperator, std::tstring strQuotator, bool bUseHex)
-		: IFormatter(channel)
-		, m_strErrMsg()
+		: CFormatterSuper(channel)
 		, m_strSeperator(strSeperator)
 		, m_strQuotator(strQuotator)
-		, m_bValidity(false)
 		, m_bFirst(true)
 		, m_bUseHexValue(bUseHex)
 	{
-		m_bValidity = channel.CheckValidity(m_strErrMsg);
 	}
 
 	//////////////////////////////////////////////////////////////////////////
@@ -22,29 +19,35 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t CValueArraySerializer::BeginDictionary(std::tstring& strKey, const size_t tSize, bool bAllowMultiKey)
+	bool CValueArraySerializer::OnPrepare(IFormatterObject* pObject, std::tstring& strErrMsg)
+	{
+		return m_Channel.CheckValidity(strErrMsg);
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	size_t CValueArraySerializer::OnBeginDictionary(std::tstring& strKey, const size_t tSize, bool bAllowMultiKey)
 	{
 		return tSize;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CValueArraySerializer::EndDictionary()
+	void CValueArraySerializer::OnEndDictionary()
 	{
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t CValueArraySerializer::BeginArray(std::tstring& strKey, const size_t tSize)
+	size_t CValueArraySerializer::OnBeginArray(std::tstring& strKey, const size_t tSize)
 	{
 		return tSize;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CValueArraySerializer::BeginArrayItem(size_t tIndex, size_t tCount)
+	void CValueArraySerializer::OnBeginArrayItem(size_t tIndex, size_t tCount)
 	{
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CValueArraySerializer::EndArrayItem(size_t tIndex, size_t tCount)
+	void CValueArraySerializer::OnEndArrayItem(size_t tIndex, size_t tCount)
 	{
 		std::tstring strOutput = TEXT("\n");
 		m_Channel.Access((void*)strOutput.c_str(), strOutput.length() * sizeof(TCHAR));
@@ -53,28 +56,28 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CValueArraySerializer::EndArray()
+	void CValueArraySerializer::OnEndArray()
 	{
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CValueArraySerializer::BeginObject(std::tstring& strKey)
+	void CValueArraySerializer::OnBeginObject(std::tstring& strKey)
 	{
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CValueArraySerializer::EndObject()
+	void CValueArraySerializer::OnEndObject()
 	{
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CValueArraySerializer::BeginRoot()
+	void CValueArraySerializer::OnBeginRoot(std::tstring& strRootName)
 	{
 		m_bFirst = true;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CValueArraySerializer::EndRoot()
+	void CValueArraySerializer::OnEndRoot()
 	{
 	}
 
@@ -92,98 +95,98 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CValueArraySerializer::Sync(std::tstring& strKey, std::tstring* pValue)
+	core::IFormatter& CValueArraySerializer::OnSync(std::tstring& strKey, std::tstring* pValue)
 	{
 		ValueArraySerializerMetaFunction(m_Channel, m_strSeperator, m_strQuotator, pValue, m_bFirst, m_bUseHexValue);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT & CValueArraySerializer::Sync(std::tstring & strKey, std::ntstring * pValue)
+	core::IFormatter& CValueArraySerializer::OnSync(std::tstring & strKey, std::ntstring * pValue)
 	{
 		ValueArraySerializerMetaFunction(m_Channel, m_strSeperator, m_strQuotator, pValue, m_bFirst, m_bUseHexValue);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CValueArraySerializer::Sync(std::tstring& strKey, bool* pValue)
+	core::IFormatter& CValueArraySerializer::OnSync(std::tstring& strKey, bool* pValue)
 	{
 		ValueArraySerializerMetaFunction(m_Channel, m_strSeperator, m_strQuotator, pValue, m_bFirst, m_bUseHexValue);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CValueArraySerializer::Sync(std::tstring& strKey, char* pValue)
+	core::IFormatter& CValueArraySerializer::OnSync(std::tstring& strKey, char* pValue)
 	{
 		ValueArraySerializerMetaFunction(m_Channel, m_strSeperator, m_strQuotator, pValue, m_bFirst, m_bUseHexValue);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CValueArraySerializer::Sync(std::tstring& strKey, short* pValue)
+	core::IFormatter& CValueArraySerializer::OnSync(std::tstring& strKey, short* pValue)
 	{
 		ValueArraySerializerMetaFunction(m_Channel, m_strSeperator, m_strQuotator, pValue, m_bFirst, m_bUseHexValue);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CValueArraySerializer::Sync(std::tstring& strKey, int32_t* pValue)
+	core::IFormatter& CValueArraySerializer::OnSync(std::tstring& strKey, int32_t* pValue)
 	{
 		ValueArraySerializerMetaFunction(m_Channel, m_strSeperator, m_strQuotator, pValue, m_bFirst, m_bUseHexValue);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CValueArraySerializer::Sync(std::tstring& strKey, int64_t* pValue)
+	core::IFormatter& CValueArraySerializer::OnSync(std::tstring& strKey, int64_t* pValue)
 	{
 		ValueArraySerializerMetaFunction(m_Channel, m_strSeperator, m_strQuotator, pValue, m_bFirst, m_bUseHexValue);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CValueArraySerializer::Sync(std::tstring& strKey, BYTE* pValue)
+	core::IFormatter& CValueArraySerializer::OnSync(std::tstring& strKey, BYTE* pValue)
 	{
 		ValueArraySerializerMetaFunction(m_Channel, m_strSeperator, m_strQuotator, pValue, m_bFirst, m_bUseHexValue);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CValueArraySerializer::Sync(std::tstring& strKey, WORD* pValue)
+	core::IFormatter& CValueArraySerializer::OnSync(std::tstring& strKey, WORD* pValue)
 	{
 		ValueArraySerializerMetaFunction(m_Channel, m_strSeperator, m_strQuotator, pValue, m_bFirst, m_bUseHexValue);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CValueArraySerializer::Sync(std::tstring& strKey, DWORD* pValue)
+	core::IFormatter& CValueArraySerializer::OnSync(std::tstring& strKey, DWORD* pValue)
 	{
 		ValueArraySerializerMetaFunction(m_Channel, m_strSeperator, m_strQuotator, pValue, m_bFirst, m_bUseHexValue);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CValueArraySerializer::Sync(std::tstring& strKey, QWORD* pValue)
+	core::IFormatter& CValueArraySerializer::OnSync(std::tstring& strKey, QWORD* pValue)
 	{
 		ValueArraySerializerMetaFunction(m_Channel, m_strSeperator, m_strQuotator, pValue, m_bFirst, m_bUseHexValue);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CValueArraySerializer::Sync(std::tstring& strKey, float* pValue)
+	core::IFormatter& CValueArraySerializer::OnSync(std::tstring& strKey, float* pValue)
 	{
 		ValueArraySerializerMetaFunction(m_Channel, m_strSeperator, m_strQuotator, pValue, m_bFirst, m_bUseHexValue);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CValueArraySerializer::Sync(std::tstring& strKey, double* pValue)
+	core::IFormatter& CValueArraySerializer::OnSync(std::tstring& strKey, double* pValue)
 	{
 		ValueArraySerializerMetaFunction(m_Channel, m_strSeperator, m_strQuotator, pValue, m_bFirst, m_bUseHexValue);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CValueArraySerializer::Sync(std::tstring& strKey, std::vector<BYTE>* pvecData)
+	core::IFormatter& CValueArraySerializer::OnSync(std::tstring& strKey, std::vector<BYTE>* pvecData)
 	{
 		// Ignore
 		return *this;

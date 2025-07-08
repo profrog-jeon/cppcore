@@ -36,7 +36,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	inline void InsertComma(std::vector<sGroupingData>& vecObjectCountStack, core::IChannel& channel)
+	inline void InsertComma(std::vector<sGroupingData>& vecObjectCountStack, core::IChannel& m_Channel)
 	{
 		if( vecObjectCountStack.empty() )
 			return;
@@ -46,29 +46,27 @@ namespace fmt_internal
 		{
 			TCHAR cDelToken;
 			cDelToken = TEXT(',');
-			channel.Access(&cDelToken, sizeof(TCHAR));
+			m_Channel.Access(&cDelToken, sizeof(TCHAR));
 			cDelToken = TEXT('\r');
-			channel.Access(&cDelToken, sizeof(TCHAR));
+			m_Channel.Access(&cDelToken, sizeof(TCHAR));
 			cDelToken = TEXT('\n');
-			channel.Access(&cDelToken, sizeof(TCHAR));
+			m_Channel.Access(&cDelToken, sizeof(TCHAR));
 		}
 
 		size_t i;
 		for(i=0; i<vecObjectCountStack.size(); i++)
 		{
 			TCHAR cDelToken = TEXT('\t');
-			channel.Access(&cDelToken, sizeof(TCHAR));
+			m_Channel.Access(&cDelToken, sizeof(TCHAR));
 		}
 		counter.tSequence++;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
 	CJSONSerializer::CJSONSerializer(core::IChannel& channel)
-		: IFormatter(channel)
+		: CFormatterSuper(channel)
 		, m_vecObjectCountStack()
-		, m_bValidity(false)
 	{
-		m_bValidity = channel.CheckValidity(m_strErrMsg);
 	}
 
 	//////////////////////////////////////////////////////////////////////////
@@ -77,7 +75,13 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t CJSONSerializer::BeginDictionary(std::tstring& strKey, const size_t tSize, bool bAllowMultiKey)
+	bool CJSONSerializer::OnPrepare(IFormatterObject* pObject, std::tstring& strErrMsg)
+	{
+		return m_Channel.CheckValidity(strErrMsg);
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	size_t CJSONSerializer::OnBeginDictionary(std::tstring& strKey, const size_t tSize, bool bAllowMultiKey)
 	{
 		InsertComma(m_vecObjectCountStack, m_Channel);
 
@@ -95,7 +99,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CJSONSerializer::EndDictionary()
+	void CJSONSerializer::OnEndDictionary()
 	{
 		if( m_vecObjectCountStack.empty() )
 			return;
@@ -105,7 +109,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t CJSONSerializer::BeginArray(std::tstring& strKey, const size_t tSize)
+	size_t CJSONSerializer::OnBeginArray(std::tstring& strKey, const size_t tSize)
 	{
 		InsertComma(m_vecObjectCountStack, m_Channel);
 
@@ -123,7 +127,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CJSONSerializer::EndArray()
+	void CJSONSerializer::OnEndArray()
 	{
 		if( m_vecObjectCountStack.empty() )
 			return;
@@ -133,7 +137,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CJSONSerializer::BeginObject(std::tstring& strKey)
+	void CJSONSerializer::OnBeginObject(std::tstring& strKey)
 	{
 		InsertComma(m_vecObjectCountStack, m_Channel);
 
@@ -150,7 +154,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CJSONSerializer::EndObject()
+	void CJSONSerializer::OnEndObject()
 	{
 		if( m_vecObjectCountStack.empty() )
 			return;
@@ -160,7 +164,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CJSONSerializer::BeginRoot()
+	void CJSONSerializer::OnBeginRoot(std::tstring& strRootName)
 	{
 		AddOpeningToken(m_vecObjectCountStack, m_Channel, TEXT('{'));
 
@@ -169,7 +173,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CJSONSerializer::EndRoot()
+	void CJSONSerializer::OnEndRoot()
 	{
 		if( m_vecObjectCountStack.empty() )
 			return;
@@ -179,7 +183,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CJSONSerializer::Sync(std::tstring& strKey, std::tstring* pString)
+	core::IFormatter& CJSONSerializer::OnSync(std::tstring& strKey, std::tstring* pString)
 	{
 		InsertComma(m_vecObjectCountStack, m_Channel);
 
@@ -200,10 +204,10 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT & CJSONSerializer::Sync(std::tstring & strKey, std::ntstring * pValue)
+	core::IFormatter& CJSONSerializer::OnSync(std::tstring & strKey, std::ntstring * pValue)
 	{
 		std::tstring strTempString = TCSFromNTCS(*pValue);
-		Sync(strKey, &strTempString);
+		OnSync(strKey, &strTempString);
 		*pValue = NTCSFromTCS(strTempString);
 		return *this;
 	}
@@ -231,62 +235,62 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CJSONSerializer::Sync(std::tstring& strKey, bool* pValue)
+	core::IFormatter& CJSONSerializer::OnSync(std::tstring& strKey, bool* pValue)
 	{
 		JSONSerializerMetaSync(m_vecObjectCountStack, m_Channel, strKey, *pValue);
 		return *this;
 	}
-	core::IFormatterT& CJSONSerializer::Sync(std::tstring& strKey, char* pValue)
+	core::IFormatter& CJSONSerializer::OnSync(std::tstring& strKey, char* pValue)
 	{
 		JSONSerializerMetaSync(m_vecObjectCountStack, m_Channel, strKey, *pValue);
 		return *this;
 	}
-	core::IFormatterT& CJSONSerializer::Sync(std::tstring& strKey, short* pValue)
+	core::IFormatter& CJSONSerializer::OnSync(std::tstring& strKey, short* pValue)
 	{
 		JSONSerializerMetaSync(m_vecObjectCountStack, m_Channel, strKey, *pValue);
 		return *this;
 	}
-	core::IFormatterT& CJSONSerializer::Sync(std::tstring& strKey, int32_t* pValue)
+	core::IFormatter& CJSONSerializer::OnSync(std::tstring& strKey, int32_t* pValue)
 	{
 		JSONSerializerMetaSync(m_vecObjectCountStack, m_Channel, strKey, *pValue);
 		return *this;
 	}
-	core::IFormatterT& CJSONSerializer::Sync(std::tstring& strKey, int64_t* pValue)
+	core::IFormatter& CJSONSerializer::OnSync(std::tstring& strKey, int64_t* pValue)
 	{
 		JSONSerializerMetaSync(m_vecObjectCountStack, m_Channel, strKey, *pValue);
 		return *this;
 	}
-	core::IFormatterT& CJSONSerializer::Sync(std::tstring& strKey, BYTE* pValue)
+	core::IFormatter& CJSONSerializer::OnSync(std::tstring& strKey, BYTE* pValue)
 	{
 		JSONSerializerMetaSync(m_vecObjectCountStack, m_Channel, strKey, *pValue);
 		return *this;
 	}
-	core::IFormatterT& CJSONSerializer::Sync(std::tstring& strKey, WORD* pValue)
+	core::IFormatter& CJSONSerializer::OnSync(std::tstring& strKey, WORD* pValue)
 	{
 		JSONSerializerMetaSync(m_vecObjectCountStack, m_Channel, strKey, *pValue);
 		return *this;
 	}
-	core::IFormatterT& CJSONSerializer::Sync(std::tstring& strKey, DWORD* pValue)
+	core::IFormatter& CJSONSerializer::OnSync(std::tstring& strKey, DWORD* pValue)
 	{
 		JSONSerializerMetaSync(m_vecObjectCountStack, m_Channel, strKey, *pValue);
 		return *this;
 	}
-	core::IFormatterT& CJSONSerializer::Sync(std::tstring& strKey, QWORD* pValue)
+	core::IFormatter& CJSONSerializer::OnSync(std::tstring& strKey, QWORD* pValue)
 	{
 		JSONSerializerMetaSync(m_vecObjectCountStack, m_Channel, strKey, *pValue);
 		return *this;
 	}
-	core::IFormatterT& CJSONSerializer::Sync(std::tstring& strKey, float* pValue)
+	core::IFormatter& CJSONSerializer::OnSync(std::tstring& strKey, float* pValue)
 	{
 		JSONSerializerMetaSync(m_vecObjectCountStack, m_Channel, strKey, *pValue);
 		return *this;
 	}
-	core::IFormatterT& CJSONSerializer::Sync(std::tstring& strKey, double* pValue)
+	core::IFormatter& CJSONSerializer::OnSync(std::tstring& strKey, double* pValue)
 	{
 		JSONSerializerMetaSync(m_vecObjectCountStack, m_Channel, strKey, *pValue);
 		return *this;
 	}
-	core::IFormatterT& CJSONSerializer::Sync(std::tstring& strKey, std::vector<BYTE>* pvecData)
+	core::IFormatter& CJSONSerializer::OnSync(std::tstring& strKey, std::vector<BYTE>* pvecData)
 	{
 		// ignored, use UBJSON instead
 		return *this;

@@ -29,6 +29,9 @@
 #include "UTF8FileWritter.h"
 #include "UTF8StringReader.h"
 #include "UTF8StringWritter.h"
+#include "YAMLSerializer.h"
+#include "YAMLDeserializer.h"
+#include "DBValueArraySerializer.h"
 
 namespace core
 {
@@ -39,8 +42,7 @@ namespace core
 		{
 			fmt_internal::CUTF8FileWritter channel(strFilename.c_str());
 			fmt_internal::CJSONSerializer formatter(channel);
-			formatter.Synchronize(const_cast<IFormatterObject*>(pObject));
-			return formatter.CheckValidity(pStrErrMsg);
+			return formatter.Transform(pObject, pStrErrMsg);
 		}
 
 		//////////////////////////////////////////////////////////////////////////
@@ -48,8 +50,7 @@ namespace core
 		{
 			fmt_internal::CUTF8FileWritter channel(strFilename.c_str(), bWriteBOM);
 			fmt_internal::CJSONSerializer formatter(channel);
-			formatter.Synchronize(const_cast<IFormatterObject*>(pObject));
-			return formatter.CheckValidity(NULL);
+			return formatter.Transform(pObject);
 		}
 
 		//////////////////////////////////////////////////////////////////////////
@@ -57,8 +58,7 @@ namespace core
 		{
 			fmt_internal::CUTF8FileReader channel(strFilename.c_str());
 			fmt_internal::CJSONDeserializer formatter(channel);
-			formatter.Synchronize(const_cast<IFormatterObject*>(pObject));
-			return formatter.CheckValidity(pStrErrMsg);
+			return formatter.Transform(pObject, pStrErrMsg);
 		}
 
 		//////////////////////////////////////////////////////////////////////////
@@ -66,8 +66,7 @@ namespace core
 		{
 			fmt_internal::CUTF8StringWriter channel(strOutput);
 			fmt_internal::CJSONSerializer formatter(channel);
-			formatter.Synchronize(const_cast<IFormatterObject*>(pObject));
-			return true;
+			return formatter.Transform(pObject);
 		}
 
 		//////////////////////////////////////////////////////////////////////////
@@ -75,8 +74,39 @@ namespace core
 		{
 			fmt_internal::CUTF8StringReader channel(strInput);
 			fmt_internal::CJSONDeserializer formatter(channel);
-			formatter.Synchronize(const_cast<IFormatterObject*>(pObject));
-			return formatter.CheckValidity(pStrErrMsg);
+			return formatter.Transform(pObject, pStrErrMsg);
+		}
+
+		//////////////////////////////////////////////////////////////////////////
+		bool WriteYamlToFile(const IFormatterObject* pObject, std::tstring strFilename, std::tstring strRootName, std::tstring* pStrErrMsg)
+		{
+			fmt_internal::CUTF8FileWritter channel(strFilename);
+			fmt_internal::CYAMLSerializer formatter(channel);
+			return formatter.Transform(pObject, pStrErrMsg, &strRootName);
+		}
+
+		//////////////////////////////////////////////////////////////////////////
+		bool ReadYamlFromFile(IFormatterObject* pObject, std::tstring strFilename, std::tstring* pOutRootName, std::tstring* pStrErrMsg)
+		{
+			fmt_internal::CUTF8FileReader channel(strFilename);
+			fmt_internal::CYAMLDeserializer formatter(channel);
+			return formatter.Transform(pObject, pStrErrMsg, pOutRootName);
+		}
+
+		//////////////////////////////////////////////////////////////////////////
+		bool WriteYamlToString(const IFormatterObject* pObject, std::string& strOutput, std::tstring strRootName, std::tstring* pStrErrMsg)
+		{
+			fmt_internal::CUTF8StringWriter channel(strOutput);
+			fmt_internal::CYAMLSerializer formatter(channel);
+			return formatter.Transform(pObject, pStrErrMsg, &strRootName);
+		}
+
+		//////////////////////////////////////////////////////////////////////////
+		bool ReadYamlFromString(IFormatterObject* pObject, std::string strInput, std::tstring* pOutRootName, std::tstring* pStrErrMsg)
+		{
+			fmt_internal::CUTF8StringReader channel(strInput);
+			fmt_internal::CYAMLDeserializer formatter(channel);
+			return formatter.Transform(pObject, pStrErrMsg, pOutRootName);
 		}
 
 		//////////////////////////////////////////////////////////////////////////
@@ -84,12 +114,10 @@ namespace core
 		{
 			fmt_internal::CUTF8FileWritter channel(strFilename);
 			fmt_internal::CKeyArraySerializer key_formatter(channel, TEXT(","), TEXT(""));
-			key_formatter.Synchronize(const_cast<IFormatterObject*>(pObject));
 			((IChannel*)&channel)->Access((void*)TEXT("\r\n"), sizeof(TCHAR) * 2);
 
-			fmt_internal::CCSVSerializer value_formatter(channel);
-			value_formatter.Synchronize(const_cast<IFormatterObject*>(pObject));
-			return value_formatter.CheckValidity(pStrErrMsg);
+			fmt_internal::CCSVSerializer formatter(channel);
+			return formatter.Transform(pObject, pStrErrMsg);
 		}
 
 		//////////////////////////////////////////////////////////////////////////
@@ -97,12 +125,10 @@ namespace core
 		{
 			fmt_internal::CUTF8FileWritter channel(strFilename, bWriteBOM);
 			fmt_internal::CKeyArraySerializer key_formatter(channel, TEXT(","), TEXT(""));
-			key_formatter.Synchronize(const_cast<IFormatterObject*>(pObject));
 			((IChannel*)&channel)->Access((void*)TEXT("\r\n"), sizeof(TCHAR) * 2);
 
-			fmt_internal::CCSVSerializer value_formatter(channel);
-			value_formatter.Synchronize(const_cast<IFormatterObject*>(pObject));
-			return value_formatter.CheckValidity(NULL);
+			fmt_internal::CCSVSerializer formatter(channel);
+			return formatter.Transform(pObject);
 		}
 
 		//////////////////////////////////////////////////////////////////////////
@@ -110,8 +136,7 @@ namespace core
 		{
 			fmt_internal::CUTF8FileReader channel(strFilename);
 			fmt_internal::CCSVDeserializer formatter(channel, true);
-			formatter.Synchronize(pObject);
-			return formatter.CheckValidity(pStrErrMsg);
+			return formatter.Transform(pObject, pStrErrMsg);
 		}
 
 		//////////////////////////////////////////////////////////////////////////
@@ -119,12 +144,10 @@ namespace core
 		{
 			fmt_internal::CUTF8StringWriter channel(strOutput);			
 			fmt_internal::CKeyArraySerializer key_formatter(channel, TEXT(","), TEXT(""));
-			key_formatter.Synchronize(const_cast<IFormatterObject*>(pObject));
 			((IChannel*)&channel)->Access((void*)TEXT("\r\n"), sizeof(TCHAR) * 2);
 
-			fmt_internal::CCSVSerializer value_formatter(channel);
-			value_formatter.Synchronize(const_cast<IFormatterObject*>(pObject));
-			return value_formatter.CheckValidity(pStrErrMsg);
+			fmt_internal::CCSVSerializer formatter(channel);
+			return formatter.Transform(pObject, pStrErrMsg);
 		}
 
 		//////////////////////////////////////////////////////////////////////////
@@ -132,8 +155,7 @@ namespace core
 		{
 			fmt_internal::CUTF8StringReader channel(strInput);
 			fmt_internal::CCSVDeserializer formatter(channel, true);
-			formatter.Synchronize(pObject);
-			return formatter.CheckValidity(pStrErrMsg);
+			return formatter.Transform(pObject, pStrErrMsg);
 		}
 
 		//////////////////////////////////////////////////////////////////////////
@@ -141,8 +163,7 @@ namespace core
 		{
 			fmt_internal::CUTF8StringReader channel(strInput);
 			fmt_internal::CCSVDeserializer formatter(channel, bSkipTitle);
-			formatter.Synchronize(pObject);
-			return formatter.CheckValidity(pStrErrMsg);
+			return formatter.Transform(pObject, pStrErrMsg);
 		}
 
 		//////////////////////////////////////////////////////////////////////////
@@ -150,8 +171,7 @@ namespace core
 		{
 			fmt_internal::CUTF8FileWritter channel(strFilename.c_str());
 			fmt_internal::CXMLSerializer formatter(channel, BOM_UTF8, pszRootTag? pszRootTag : TEXT("root"), pRootAttr);
-			formatter.Synchronize(const_cast<IFormatterObject*>(pObject));
-			return formatter.CheckValidity(NULL);
+			return formatter.Transform(pObject);
 		}
 
 		//////////////////////////////////////////////////////////////////////////
@@ -159,8 +179,7 @@ namespace core
 		{
 			fmt_internal::CUTF8FileWritter channel(strFilename.c_str(), bWriteBOM);
 			fmt_internal::CXMLSerializer formatter(channel, BOM_UTF8, pszRootTag? pszRootTag : TEXT("root"), pRootAttr);
-			formatter.Synchronize(const_cast<IFormatterObject*>(pObject));
-			return formatter.CheckValidity(NULL);
+			return formatter.Transform(pObject);
 		}
 
 		//////////////////////////////////////////////////////////////////////////
@@ -168,8 +187,7 @@ namespace core
 		{
 			fmt_internal::CUTF8FileReader channel(strFilename.c_str());
 			fmt_internal::CXMLDeserializer formatter(channel);
-			formatter.Synchronize(const_cast<IFormatterObject*>(pObject));
-			return formatter.CheckValidity(pStrErrMsg);
+			return formatter.Transform(pObject, pStrErrMsg);
 		}
 
 		//////////////////////////////////////////////////////////////////////////
@@ -177,8 +195,7 @@ namespace core
 		{
 			fmt_internal::CUTF8StringWriter channel(strOutput);
 			fmt_internal::CXMLSerializer formatter(channel, BOM_UTF8, pszRootTag? pszRootTag : TEXT("root"), pRootAttr);
-			formatter.Synchronize(const_cast<IFormatterObject*>(pObject));
-			return true;
+			return formatter.Transform(pObject);
 		}
 
 		//////////////////////////////////////////////////////////////////////////
@@ -186,8 +203,7 @@ namespace core
 		{
 			fmt_internal::CUTF8StringReader channel(strInput);
 			fmt_internal::CXMLDeserializer formatter(channel);
-			formatter.Synchronize(const_cast<IFormatterObject*>(pObject));
-			return formatter.CheckValidity(pStrErrMsg);
+			return formatter.Transform(pObject, pStrErrMsg);
 		}
 
 		//////////////////////////////////////////////////////////////////////////
@@ -195,8 +211,7 @@ namespace core
 		{
 			fmt_internal::CUTF8FileWritter channel(strFilename.c_str());
 			fmt_internal::CXMLSerializer_V2 formatter(channel, BOM_UTF8, pszRootTag? pszRootTag : TEXT("root"), pRootAttr);
-			formatter.Synchronize(const_cast<IFormatterObject*>(pObject));
-			return formatter.CheckValidity(NULL);
+			return formatter.Transform(pObject);
 		}
 
 		//////////////////////////////////////////////////////////////////////////
@@ -204,8 +219,7 @@ namespace core
 		{
 			fmt_internal::CUTF8FileWritter channel(strFilename.c_str(), bWriteBOM);
 			fmt_internal::CXMLSerializer_V2 formatter(channel, BOM_UTF8, pszRootTag? pszRootTag : TEXT("root"), pRootAttr);
-			formatter.Synchronize(const_cast<IFormatterObject*>(pObject));
-			return formatter.CheckValidity(NULL);
+			return formatter.Transform(pObject);
 		}
 
 		//////////////////////////////////////////////////////////////////////////
@@ -213,8 +227,7 @@ namespace core
 		{
 			fmt_internal::CUTF8FileReader channel(strFilename.c_str());
 			fmt_internal::CXMLDeserializer_V2 formatter(channel);
-			formatter.Synchronize(const_cast<IFormatterObject*>(pObject));
-			return formatter.CheckValidity(pStrErrMsg);
+			return formatter.Transform(pObject, pStrErrMsg);
 		}
 
 		//////////////////////////////////////////////////////////////////////////
@@ -222,8 +235,7 @@ namespace core
 		{
 			fmt_internal::CUTF8StringWriter channel(strOutput);
 			fmt_internal::CXMLSerializer_V2 formatter(channel, BOM_UTF8, pszRootTag? pszRootTag : TEXT("root"), pRootAttr);
-			formatter.Synchronize(const_cast<IFormatterObject*>(pObject));
-			return true;
+			return formatter.Transform(pObject);
 		}
 
 		//////////////////////////////////////////////////////////////////////////
@@ -231,8 +243,7 @@ namespace core
 		{
 			fmt_internal::CUTF8StringReader channel(strInput);
 			fmt_internal::CXMLDeserializer_V2 formatter(channel);
-			formatter.Synchronize(const_cast<IFormatterObject*>(pObject));
-			return formatter.CheckValidity(pStrErrMsg);
+			return formatter.Transform(pObject, pStrErrMsg);
 		}
 
 		//////////////////////////////////////////////////////////////////////////
@@ -240,8 +251,7 @@ namespace core
 		{
 			fmt_internal::CUTF8FileWritter channel(strFilename);
 			fmt_internal::CXMLSerializer_V3 formatter(channel, GetCurrentBOM(), pszRootTag? pszRootTag : TEXT("root"));
-			formatter.Synchronize(const_cast<IFormatterObject*>(pObject));
-			return formatter.CheckValidity(NULL);
+			return formatter.Transform(pObject);
 		}
 
 		//////////////////////////////////////////////////////////////////////////
@@ -249,8 +259,7 @@ namespace core
 		{
 			fmt_internal::CUTF8FileWritter channel(strFilename, bWriteBOM);
 			fmt_internal::CXMLSerializer_V3 formatter(channel, GetCurrentBOM(), pszRootTag? pszRootTag : TEXT("root"));
-			formatter.Synchronize(const_cast<IFormatterObject*>(pObject));
-			return formatter.CheckValidity(NULL);
+			return formatter.Transform(pObject);
 		}
 
 		//////////////////////////////////////////////////////////////////////////
@@ -258,8 +267,7 @@ namespace core
 		{
 			fmt_internal::CUTF8StringWriter channel(strOutput);
 			fmt_internal::CXMLSerializer_V3 formatter(channel, GetCurrentBOM(), pszRootTag? pszRootTag : TEXT("root"));
-			formatter.Synchronize(const_cast<IFormatterObject*>(pObject));
-			return formatter.CheckValidity(NULL);
+			return formatter.Transform(pObject);
 		}
 
 		//////////////////////////////////////////////////////////////////////////
@@ -267,8 +275,7 @@ namespace core
 		{
 			fmt_internal::CUTF8FileWritter channel(strFilename.c_str());
 			fmt_internal::CMarkerSerializer formatter(channel, strSchema);
-			formatter.Synchronize(const_cast<IFormatterObject*>(pObject));
-			return formatter.CheckValidity(pStrErrMsg);
+			return formatter.Transform(pObject, pStrErrMsg);
 		}
 
 		//////////////////////////////////////////////////////////////////////////
@@ -276,8 +283,7 @@ namespace core
 		{
 			fmt_internal::CUTF8FileWritter channel(strFilename.c_str(), bWriteBOM);
 			fmt_internal::CMarkerSerializer formatter(channel, strSchema);
-			formatter.Synchronize(const_cast<IFormatterObject*>(pObject));
-			return formatter.CheckValidity(NULL);
+			return formatter.Transform(pObject);
 		}
 
 		//////////////////////////////////////////////////////////////////////////
@@ -285,16 +291,15 @@ namespace core
 		{
 			fmt_internal::CUTF8StringWriter channel(strOutput);
 			fmt_internal::CMarkerSerializer formatter(channel, strSchema);
-			formatter.Synchronize(const_cast<IFormatterObject*>(pObject));
-			return formatter.CheckValidity(pStrErrMsg);
+			return formatter.Transform(pObject, pStrErrMsg);
 		}
 
 		//////////////////////////////////////////////////////////////////////////
-		void WriteKeyValueArrayToString(const IFormatterObject* pObject, std::tstring strSep, std::tstring strSchema, std::string& strOutput, bool bUseHex)
+		bool WriteKeyValueArrayToString(const IFormatterObject* pObject, std::tstring strSep, std::tstring strSchema, std::string& strOutput, bool bUseHex)
 		{
 			fmt_internal::CUTF8StringWriter channel(strOutput);
 			fmt_internal::CKeyValueArraySerializer formatter(channel, strSep, strSchema, bUseHex);
-			formatter.Synchronize(const_cast<IFormatterObject*>(pObject));
+			return formatter.Transform(pObject);
 		}
 
 		//////////////////////////////////////////////////////////////////////////	
@@ -302,8 +307,7 @@ namespace core
 		{
 			fmt_internal::CUTF8FileWritter channel(strFilename);
 			fmt_internal::CKeyValueArraySerializer formatter(channel, strSep, strSchema, bUseHex);
-			formatter.Synchronize(const_cast<IFormatterObject*>(pObject));
-			return formatter.CheckValidity(pStrErrMsg);
+			return formatter.Transform(pObject, pStrErrMsg);
 		}
 
 		//////////////////////////////////////////////////////////////////////////	
@@ -311,8 +315,7 @@ namespace core
 		{
 			fmt_internal::CUTF8FileWritter channel(strFilename, bWriteBOM);
 			fmt_internal::CKeyValueArraySerializer formatter(channel, strSep, strSchema, bUseHex);
-			formatter.Synchronize(const_cast<IFormatterObject*>(pObject));
-			return formatter.CheckValidity(NULL);
+			return formatter.Transform(pObject);
 		}
 
 		//////////////////////////////////////////////////////////////////////////
@@ -320,8 +323,7 @@ namespace core
 		{
 			fmt_internal::CUTF8StringReader channel(strContext);
 			fmt_internal::CKeyValueArrayDeserializer formatter(channel, strTokenDelimiter, strSpliter);
-			formatter.Synchronize(pObject);
-			return formatter.CheckValidity(pStrErrMsg);
+			return formatter.Transform(pObject, pStrErrMsg);
 		}
 
 		//////////////////////////////////////////////////////////////////////////
@@ -329,8 +331,7 @@ namespace core
 		{
 			fmt_internal::CUTF8FileReader channel(strFilename);
 			fmt_internal::CKeyValueArrayDeserializer formatter(channel, strTokenDelimiter, strSpliter);
-			formatter.Synchronize(pObject);
-			return formatter.CheckValidity(pStrErrMsg);
+			return formatter.Transform(pObject, pStrErrMsg);
 		}
 
 		////////////////////////////////////////////////////////////////////////////
@@ -338,7 +339,6 @@ namespace core
 		//{
 		//	fmt_internal::CUTF8StringWritter channel(strOutput);
 		//	fmt_internal::CValueArraySerializer formatter(channel, strSep, strQuo);
-		//	formatter.Synchronize(const_cast<IFormatterObject*>(pObject));
 		//}
 
 		////////////////////////////////////////////////////////////////////////////
@@ -346,17 +346,15 @@ namespace core
 		//{
 		//	fmt_internal::CUTF8StringReader channel(strContext);
 		//	fmt_internal::CValueArrayDeserializer formatter(channel, strSep, strQuo, vecKey, bIgnoreCase);
-		//	formatter.Synchronize(pObject);
-		//	return formatter.CheckValidity(pStrErrMsg);
+		//	return formatter.Transform(pObject, pStrErrMsg);
 		//}
 
 		////////////////////////////////////////////////////////////////////////////
 		//bool ReadValueArrayFromArray(IFormatterObject* pObject, std::vector<std::tstring> vecKey, std::vector<std::tstring> vecValue, bool bIgnoreCase, std::tstring* pStrErrMsg)
 		//{
 		//	fmt_internal::CUTF8StringReader dummyChannel(TEXT(""));
-		//	fmt_internal::CValueArrayDeserializer formatter(dummyChannel, vecKey, vecValue, bIgnoreCase);
-		//	formatter.Synchronize(pObject);
-		//	return formatter.CheckValidity(pStrErrMsg);
+		//	fmt_internal::CValueArrayDeserializer formatter(dummyChannel, pObject, vecKey, vecValue, bIgnoreCase);
+		//	return formatter.Transform(pObject, pStrErrMsg);
 		//}
 
 		//////////////////////////////////////////////////////////////////////////
@@ -364,8 +362,7 @@ namespace core
 		{
 			fmt_internal::CUTF8FileWritter channel(strFilename.c_str());
 			fmt_internal::CINISerializer formatter(channel);
-			formatter.Synchronize(const_cast<IFormatterObject*>(pObject));
-			return formatter.CheckValidity(pStrErrMsg);
+			return formatter.Transform(pObject, pStrErrMsg);
 		}
 
 		//////////////////////////////////////////////////////////////////////////
@@ -373,8 +370,7 @@ namespace core
 		{
 			fmt_internal::CUTF8FileWritter channel(strFilename.c_str(), bWriteBOM);
 			fmt_internal::CINISerializer formatter(channel);
-			formatter.Synchronize(const_cast<IFormatterObject*>(pObject));
-			return formatter.CheckValidity(NULL);
+			return formatter.Transform(pObject);
 		}
 
 		//////////////////////////////////////////////////////////////////////////
@@ -382,8 +378,7 @@ namespace core
 		{
 			fmt_internal::CUTF8FileReader channel(strFilename.c_str());
 			fmt_internal::CINIDeserializer formatter(channel);
-			formatter.Synchronize(pObject);
-			return formatter.CheckValidity(pStrErrMsg);
+			return formatter.Transform(pObject, pStrErrMsg);
 		}
 
 		//////////////////////////////////////////////////////////////////////////
@@ -391,8 +386,7 @@ namespace core
 		{
 			fmt_internal::CUTF8StringWriter channel(strOutput);
 			fmt_internal::CINISerializer formatter(channel);
-			formatter.Synchronize(const_cast<IFormatterObject*>(pObject));
-			return formatter.CheckValidity(pStrErrMsg);
+			return formatter.Transform(pObject, pStrErrMsg);
 		}
 
 		//////////////////////////////////////////////////////////////////////////
@@ -400,8 +394,7 @@ namespace core
 		{
 			fmt_internal::CUTF8StringReader channel(strInput);
 			fmt_internal::CINIDeserializer formatter(channel);
-			formatter.Synchronize(pObject);
-			return formatter.CheckValidity(pStrErrMsg);
+			return formatter.Transform(pObject, pStrErrMsg);
 		}
 
 		//////////////////////////////////////////////////////////////////////////
@@ -409,8 +402,7 @@ namespace core
 		{
 			fmt_internal::CUTF8FileReader channel(strFilename.c_str());
 			fmt_internal::CINIDeserializer formatter(channel, strSection);
-			formatter.Synchronize(pObject);
-			return formatter.CheckValidity(pStrErrMsg);
+			return formatter.Transform(pObject, pStrErrMsg);
 		}
 
 		//////////////////////////////////////////////////////////////////////////
@@ -418,32 +410,39 @@ namespace core
 		{
 			fmt_internal::CUTF8StringReader channel(strInput);
 			fmt_internal::CINIDeserializer formatter(channel, strSection);
-			formatter.Synchronize(pObject);
-			return formatter.CheckValidity(pStrErrMsg);
+			return formatter.Transform(pObject, pStrErrMsg);
 		}
 
 		//////////////////////////////////////////////////////////////////////////
-		void WriteKeyArrayToString(const IFormatterObject* pObject, std::tstring strSep, std::tstring strQuo, std::string& strOutput)
+		bool WriteKeyArrayToString(const IFormatterObject* pObject, std::tstring strSep, std::tstring strQuo, std::string& strOutput)
 		{
 			fmt_internal::CUTF8StringWriter channel(strOutput);
 			fmt_internal::CKeyArraySerializer formatter(channel, strSep, strQuo);
-			formatter.Synchronize(const_cast<IFormatterObject*>(pObject));
+			return formatter.Transform(pObject);
 		}
 
 		//////////////////////////////////////////////////////////////////////////
-		void WriteValueArrayToString(const IFormatterObject* pObject, std::tstring strSep, std::tstring strQuo, std::string& strOutput, bool bUseHex)
+		bool WriteValueArrayToString(const IFormatterObject* pObject, std::tstring strSep, std::tstring strQuo, std::string& strOutput, bool bUseHex)
 		{
 			fmt_internal::CUTF8StringWriter channel(strOutput);
 			fmt_internal::CValueArraySerializer formatter(channel, strSep, strQuo, bUseHex);
-			formatter.Synchronize(const_cast<IFormatterObject*>(pObject));
+			return formatter.Transform(pObject);
 		}
 
 		//////////////////////////////////////////////////////////////////////////
-		void WriteValueArrayToFile(const IFormatterObject* pObject, std::tstring strSep, std::tstring strQuo, std::tstring strFilename, bool bWriteBOM, bool bUseHex)
+		bool WriteValueArrayToFile(const IFormatterObject* pObject, std::tstring strSep, std::tstring strQuo, std::tstring strFilename, bool bWriteBOM, bool bUseHex)
 		{
 			fmt_internal::CUTF8FileWritter channel(strFilename, bWriteBOM);
 			fmt_internal::CValueArraySerializer formatter(channel, strSep, strQuo, bUseHex);
-			formatter.Synchronize(const_cast<IFormatterObject*>(pObject));
+			return formatter.Transform(pObject);
+		}
+
+		//////////////////////////////////////////////////////////////////////////
+		bool WriteDBValueArrayToString(const IFormatterObject* pObject, std::string& strOutput)
+		{
+			fmt_internal::CUTF8StringWriter channel(strOutput);
+			fmt_internal::CDBValueArraySerializer formatter(channel);
+			return formatter.Transform(pObject);
 		}
 
 		////////////////////////////////////////////////////////////////////////////
@@ -451,8 +450,7 @@ namespace core
 		//{
 		//	fmt_internal::CUTF8StringReader channel(strFilename);
 		//	fmt_internal::CKeyArrayDeserializer formatter(channel, strTokenDelimiter, strSpliter);
-		//	formatter.Synchronize(pObject);
-		//	return formatter.CheckValidity(pStrErrMsg);
+		//	return formatter.Transform(pObject, pStrErrMsg);
 		//}
 
 		//////////////////////////////////////////////////////////////////////////
@@ -460,8 +458,7 @@ namespace core
 		{
 			fmt_internal::CUTF8StringReader channel(strContext);
 			fmt_internal::CValueArrayDeserializer formatter(channel, strSep, strQuo);
-			formatter.Synchronize(pObject);
-			return formatter.CheckValidity(pStrErrMsg);
+			return formatter.Transform(pObject, pStrErrMsg);
 		}
 
 		//////////////////////////////////////////////////////////////////////////
@@ -469,8 +466,7 @@ namespace core
 		{
 			fmt_internal::CUTF8FileReader channel(strFilename);
 			fmt_internal::CValueArrayDeserializer formatter(channel, strSep, strQuo);
-			formatter.Synchronize(pObject);
-			return formatter.CheckValidity(pStrErrMsg);
+			return formatter.Transform(pObject, pStrErrMsg);
 		}
 
 	}

@@ -6,11 +6,9 @@ namespace fmt_internal
 {
 	//////////////////////////////////////////////////////////////////////////
 	CUBJSONSerializer::CUBJSONSerializer(core::IChannel& channel)
-		: IFormatter(channel)
+		: CFormatterSuper(channel)
 		, m_vecObjectCountStack()
-		, m_bValidity(false)
 	{
-		m_bValidity = channel.CheckValidity(m_strErrMsg);
 	}
 
 	//////////////////////////////////////////////////////////////////////////
@@ -19,7 +17,13 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t CUBJSONSerializer::BeginDictionary(std::tstring& strKey, const size_t tSize, bool bAllowMultiKey)
+	bool CUBJSONSerializer::OnPrepare(IFormatterObject* pObject, std::tstring& strErrMsg)
+	{
+		return m_Channel.CheckValidity(strErrMsg);
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	size_t CUBJSONSerializer::OnBeginDictionary(std::tstring& strKey, const size_t tSize, bool bAllowMultiKey)
 	{
 		WriteUBJsonKey(m_Channel, strKey);
 		WriteUBJsonConst(m_Channel, "{");
@@ -30,7 +34,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CUBJSONSerializer::EndDictionary()
+	void CUBJSONSerializer::OnEndDictionary()
 	{
 		if( m_vecObjectCountStack.empty() )
 			return;
@@ -40,7 +44,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t CUBJSONSerializer::BeginArray(std::tstring& strKey, const size_t tSize)
+	size_t CUBJSONSerializer::OnBeginArray(std::tstring& strKey, const size_t tSize)
 	{
 		WriteUBJsonKey(m_Channel, strKey);
 		WriteUBJsonConst(m_Channel, "[");
@@ -51,7 +55,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CUBJSONSerializer::EndArray()
+	void CUBJSONSerializer::OnEndArray()
 	{
 		if( m_vecObjectCountStack.empty() )
 			return;
@@ -61,7 +65,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CUBJSONSerializer::BeginObject(std::tstring& strKey)
+	void CUBJSONSerializer::OnBeginObject(std::tstring& strKey)
 	{
 		if( GT_ARRAY != m_vecObjectCountStack.back().nType )
 		{
@@ -74,7 +78,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CUBJSONSerializer::EndObject()
+	void CUBJSONSerializer::OnEndObject()
 	{
 		if( m_vecObjectCountStack.empty() )
 			return;
@@ -84,7 +88,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CUBJSONSerializer::BeginRoot()
+	void CUBJSONSerializer::OnBeginRoot(std::tstring& strRootName)
 	{
 		WriteUBJsonConst(m_Channel, "{");
 
@@ -93,7 +97,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CUBJSONSerializer::EndRoot()
+	void CUBJSONSerializer::OnEndRoot()
 	{
 		if( m_vecObjectCountStack.empty() )
 			return;
@@ -103,7 +107,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CUBJSONSerializer::Sync(std::tstring& strKey, std::tstring* pString)
+	core::IFormatter& CUBJSONSerializer::OnSync(std::tstring& strKey, std::tstring* pString)
 	{
 		if( GT_ARRAY != m_vecObjectCountStack.back().nType )
 		{
@@ -115,10 +119,10 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT & CUBJSONSerializer::Sync(std::tstring & strKey, std::ntstring * pValue)
+	core::IFormatter& CUBJSONSerializer::OnSync(std::tstring & strKey, std::ntstring * pValue)
 	{
 		std::tstring strTempString = TCSFromNTCS(*pValue);
-		Sync(strKey, &strTempString);
+		OnSync(strKey, &strTempString);
 		return *this;
 	}
 
@@ -135,62 +139,62 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CUBJSONSerializer::Sync(std::tstring& strKey, bool* pValue)
+	core::IFormatter& CUBJSONSerializer::OnSync(std::tstring& strKey, bool* pValue)
 	{
 		UBJSONSerializerMetaSync(m_vecObjectCountStack, m_Channel, strKey, *pValue);
 		return *this;
 	}
-	core::IFormatterT& CUBJSONSerializer::Sync(std::tstring& strKey, char* pValue)
+	core::IFormatter& CUBJSONSerializer::OnSync(std::tstring& strKey, char* pValue)
 	{
 		UBJSONSerializerMetaSync(m_vecObjectCountStack, m_Channel, strKey, *pValue);
 		return *this;
 	}
-	core::IFormatterT& CUBJSONSerializer::Sync(std::tstring& strKey, short* pValue)
+	core::IFormatter& CUBJSONSerializer::OnSync(std::tstring& strKey, short* pValue)
 	{
 		UBJSONSerializerMetaSync(m_vecObjectCountStack, m_Channel, strKey, *pValue);
 		return *this;
 	}
-	core::IFormatterT& CUBJSONSerializer::Sync(std::tstring& strKey, int32_t* pValue)
+	core::IFormatter& CUBJSONSerializer::OnSync(std::tstring& strKey, int32_t* pValue)
 	{
 		UBJSONSerializerMetaSync(m_vecObjectCountStack, m_Channel, strKey, *pValue);
 		return *this;
 	}
-	core::IFormatterT& CUBJSONSerializer::Sync(std::tstring& strKey, int64_t* pValue)
+	core::IFormatter& CUBJSONSerializer::OnSync(std::tstring& strKey, int64_t* pValue)
 	{
 		UBJSONSerializerMetaSync(m_vecObjectCountStack, m_Channel, strKey, *pValue);
 		return *this;
 	}
-	core::IFormatterT& CUBJSONSerializer::Sync(std::tstring& strKey, BYTE* pValue)
+	core::IFormatter& CUBJSONSerializer::OnSync(std::tstring& strKey, BYTE* pValue)
 	{
 		UBJSONSerializerMetaSync(m_vecObjectCountStack, m_Channel, strKey, *pValue);
 		return *this;
 	}
-	core::IFormatterT& CUBJSONSerializer::Sync(std::tstring& strKey, WORD* pValue)
+	core::IFormatter& CUBJSONSerializer::OnSync(std::tstring& strKey, WORD* pValue)
 	{
 		UBJSONSerializerMetaSync(m_vecObjectCountStack, m_Channel, strKey, *pValue);
 		return *this;
 	}
-	core::IFormatterT& CUBJSONSerializer::Sync(std::tstring& strKey, DWORD* pValue)
+	core::IFormatter& CUBJSONSerializer::OnSync(std::tstring& strKey, DWORD* pValue)
 	{
 		UBJSONSerializerMetaSync(m_vecObjectCountStack, m_Channel, strKey, *pValue);
 		return *this;
 	}
-	core::IFormatterT& CUBJSONSerializer::Sync(std::tstring& strKey, QWORD* pValue)
+	core::IFormatter& CUBJSONSerializer::OnSync(std::tstring& strKey, QWORD* pValue)
 	{
 		UBJSONSerializerMetaSync(m_vecObjectCountStack, m_Channel, strKey, *pValue);
 		return *this;
 	}
-	core::IFormatterT& CUBJSONSerializer::Sync(std::tstring& strKey, float* pValue)
+	core::IFormatter& CUBJSONSerializer::OnSync(std::tstring& strKey, float* pValue)
 	{
 		UBJSONSerializerMetaSync(m_vecObjectCountStack, m_Channel, strKey, *pValue);
 		return *this;
 	}
-	core::IFormatterT& CUBJSONSerializer::Sync(std::tstring& strKey, double* pValue)
+	core::IFormatter& CUBJSONSerializer::OnSync(std::tstring& strKey, double* pValue)
 	{
 		UBJSONSerializerMetaSync(m_vecObjectCountStack, m_Channel, strKey, *pValue);
 		return *this;
 	}
-	core::IFormatterT& CUBJSONSerializer::Sync(std::tstring& strKey, std::vector<BYTE>* pvecData)
+	core::IFormatter& CUBJSONSerializer::OnSync(std::tstring& strKey, std::vector<BYTE>* pvecData)
 	{
 		if (GT_ARRAY != m_vecObjectCountStack.back().nType)
 		{

@@ -4,54 +4,50 @@
 #include <vector>
 
 #include "Interface.h"
-#include "Pair.h"
 #include "FmtTypes.h"
 #include "IChannel.h"
 #include "HelperFunc.h"
 
 namespace fmt_internal
 {
-	class CUBJSONSerializer : public core::IFormatterT
+	class CUBJSONSerializer : public CFormatterSuper
 	{
 	private:
 		std::vector<sGroupingData> m_vecObjectCountStack;
-		std::tstring	m_strErrMsg;
-		bool			m_bValidity;
-		bool			m_bReserved[7];
 
 	public:
 						CUBJSONSerializer(core::IChannel& channel);
 						~CUBJSONSerializer(void);
 
-		bool			CheckValidity(std::tstring* pStrErrMsg)		{	if( pStrErrMsg )	*pStrErrMsg = m_strErrMsg;	return m_bValidity;		}
-
 	private:
-		size_t			BeginDictionary(std::tstring& strKey, const size_t tSize, bool bAllowMultiKey);
-		void			EndDictionary();
+		bool			OnPrepare(IFormatterObject* pObject, std::tstring& strErrMsg);
 
-		size_t			BeginArray(std::tstring& strKey, const size_t tSize);
-		void			EndArray();
+		size_t			OnBeginDictionary(std::tstring& strKey, const size_t tSize, bool bAllowMultiKey);
+		void			OnEndDictionary();
 
-		void			BeginObject(std::tstring& strKey);
-		void			EndObject();
+		size_t			OnBeginArray(std::tstring& strKey, const size_t tSize);
+		void			OnEndArray();
 
-		void			BeginRoot();
-		void			EndRoot();
+		void			OnBeginObject(std::tstring& strKey);
+		void			OnEndObject();
 
-		core::IFormatterT& Sync(std::tstring& strKey, std::tstring* pValue);
-		core::IFormatterT& Sync(std::tstring& strKey, std::ntstring* pValue);
-		core::IFormatterT& Sync(std::tstring& strKey, bool* pValue);
-		core::IFormatterT& Sync(std::tstring& strKey, char* pValue);
-		core::IFormatterT& Sync(std::tstring& strKey, short* pValue);
-		core::IFormatterT& Sync(std::tstring& strKey, int32_t* pValue);
-		core::IFormatterT& Sync(std::tstring& strKey, int64_t* pValue);
-		core::IFormatterT& Sync(std::tstring& strKey, BYTE* pValue);
-		core::IFormatterT& Sync(std::tstring& strKey, WORD* pValue);
-		core::IFormatterT& Sync(std::tstring& strKey, DWORD* pValue);
-		core::IFormatterT& Sync(std::tstring& strKey, QWORD* pValue);
-		core::IFormatterT& Sync(std::tstring& strKey, float* pValue);
-		core::IFormatterT& Sync(std::tstring& strKey, double* pValue);
-		core::IFormatterT& Sync(std::tstring& strKey, std::vector<BYTE>* pvecData);
+		void			OnBeginRoot(std::tstring& strRootName);
+		void			OnEndRoot();
+
+		core::IFormatter& OnSync(std::tstring& strKey, std::tstring* pValue);
+		core::IFormatter& OnSync(std::tstring& strKey, std::ntstring* pValue);
+		core::IFormatter& OnSync(std::tstring& strKey, bool* pValue);
+		core::IFormatter& OnSync(std::tstring& strKey, char* pValue);
+		core::IFormatter& OnSync(std::tstring& strKey, short* pValue);
+		core::IFormatter& OnSync(std::tstring& strKey, int32_t* pValue);
+		core::IFormatter& OnSync(std::tstring& strKey, int64_t* pValue);
+		core::IFormatter& OnSync(std::tstring& strKey, BYTE* pValue);
+		core::IFormatter& OnSync(std::tstring& strKey, WORD* pValue);
+		core::IFormatter& OnSync(std::tstring& strKey, DWORD* pValue);
+		core::IFormatter& OnSync(std::tstring& strKey, QWORD* pValue);
+		core::IFormatter& OnSync(std::tstring& strKey, float* pValue);
+		core::IFormatter& OnSync(std::tstring& strKey, double* pValue);
+		core::IFormatter& OnSync(std::tstring& strKey, std::vector<BYTE>* pvecData);
 	};
 
 }

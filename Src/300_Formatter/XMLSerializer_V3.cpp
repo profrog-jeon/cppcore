@@ -6,18 +6,24 @@ namespace fmt_internal
 {
 	//////////////////////////////////////////////////////////////////////////
 	CXMLSerializer_V3::CXMLSerializer_V3(core::IChannel& channel, E_BOM_TYPE nBOM, std::tstring strRoot)
-	: IFormatter(channel)
-	, m_nBOM(nBOM)
-	, m_stkTraverse()
-	, m_stkContext()
-	, m_strRootTag(strRoot)
-	, m_strAttrContext()
+		: CFormatterSuper(channel)
+		, m_nBOM(nBOM)
+		, m_stkTraverse()
+		, m_stkContext()
+		, m_strRootTag(strRoot)
+		, m_strAttrContext()
 	{
 	}
 
 	//////////////////////////////////////////////////////////////////////////
 	CXMLSerializer_V3::~CXMLSerializer_V3(void)
 	{
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	bool CXMLSerializer_V3::OnPrepare(IFormatterObject* pObject, std::tstring& strErrMsg)
+	{
+		return true;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
@@ -57,7 +63,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t CXMLSerializer_V3::BeginDictionary(std::tstring& strKey, const size_t tSize, bool bAllowMultiKey)
+	size_t CXMLSerializer_V3::OnBeginDictionary(std::tstring& strKey, const size_t tSize, bool bAllowMultiKey)
 	{
 		m_stkContext.push(BuildXmlEndContext(m_stkTraverse.size(), strKey));
 		m_stkTraverse.push(ST_INTERNAL_TREE_DATA(strKey));
@@ -65,7 +71,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CXMLSerializer_V3::EndDictionary()
+	void CXMLSerializer_V3::OnEndDictionary()
 	{
 		ST_INTERNAL_TREE_DATA stData = m_stkTraverse.top();
 		m_stkTraverse.pop();
@@ -74,25 +80,25 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t CXMLSerializer_V3::BeginArray(std::tstring& strKey, const size_t tSize)
+	size_t CXMLSerializer_V3::OnBeginArray(std::tstring& strKey, const size_t tSize)
 	{
 		return tSize;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CXMLSerializer_V3::EndArray()
+	void CXMLSerializer_V3::OnEndArray()
 	{
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CXMLSerializer_V3::BeginObject(std::tstring& strKey)
+	void CXMLSerializer_V3::OnBeginObject(std::tstring& strKey)
 	{
 		m_stkContext.push(BuildXmlEndContext(m_stkTraverse.size(), strKey));
 		m_stkTraverse.push(ST_INTERNAL_TREE_DATA(strKey));
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CXMLSerializer_V3::EndObject()
+	void CXMLSerializer_V3::OnEndObject()
 	{
 		ST_INTERNAL_TREE_DATA stData = m_stkTraverse.top();
 		m_stkTraverse.pop();
@@ -101,14 +107,14 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CXMLSerializer_V3::BeginRoot()
+	void CXMLSerializer_V3::OnBeginRoot(std::tstring& strRootName)
 	{
 		m_stkContext.push(BuildXmlEndContext(m_stkTraverse.size(), m_strRootTag));
 		m_stkTraverse.push(ST_INTERNAL_TREE_DATA(m_strRootTag));
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CXMLSerializer_V3::EndRoot()
+	void CXMLSerializer_V3::OnEndRoot()
 	{
 		ST_INTERNAL_TREE_DATA stData = m_stkTraverse.top();
 		m_stkTraverse.pop();
@@ -153,7 +159,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CXMLSerializer_V3::Sync(std::tstring& strKey, std::tstring* pValue)
+	core::IFormatter& CXMLSerializer_V3::OnSync(std::tstring& strKey, std::tstring* pValue)
 	{
 		if( TEXT("VALUE") == strKey )	{	m_stkTraverse.top().strValue = StringFrom(*pValue);	return *this;	}
 		UpdateAttrValue(m_stkTraverse.top().strAttr, strKey, *pValue);
@@ -161,7 +167,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT & CXMLSerializer_V3::Sync(std::tstring & strKey, std::ntstring * pValue)
+	core::IFormatter& CXMLSerializer_V3::OnSync(std::tstring & strKey, std::ntstring * pValue)
 	{
 		if (TEXT("VALUE") == strKey) { m_stkTraverse.top().strValue = StringFrom(*pValue);	return *this; }
 		UpdateAttrValue(m_stkTraverse.top().strAttr, strKey, *pValue);
@@ -169,7 +175,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CXMLSerializer_V3::Sync(std::tstring& strKey, bool* pValue)
+	core::IFormatter& CXMLSerializer_V3::OnSync(std::tstring& strKey, bool* pValue)
 	{
 		if( TEXT("VALUE") == strKey )	{	m_stkTraverse.top().strValue = StringFrom(*pValue);	return *this;	}
 		UpdateAttrValue(m_stkTraverse.top().strAttr, strKey, *pValue);
@@ -177,7 +183,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CXMLSerializer_V3::Sync(std::tstring& strKey, char* pValue)
+	core::IFormatter& CXMLSerializer_V3::OnSync(std::tstring& strKey, char* pValue)
 	{
 		if( TEXT("VALUE") == strKey )	{	m_stkTraverse.top().strValue = StringFrom(*pValue);	return *this;	}
 		UpdateAttrValue(m_stkTraverse.top().strAttr, strKey, *pValue);
@@ -185,7 +191,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CXMLSerializer_V3::Sync(std::tstring& strKey, short* pValue)
+	core::IFormatter& CXMLSerializer_V3::OnSync(std::tstring& strKey, short* pValue)
 	{
 		if( TEXT("VALUE") == strKey )	{	m_stkTraverse.top().strValue = StringFrom(*pValue);	return *this;	}
 		UpdateAttrValue(m_stkTraverse.top().strAttr, strKey, *pValue);
@@ -193,7 +199,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CXMLSerializer_V3::Sync(std::tstring& strKey, int32_t* pValue)
+	core::IFormatter& CXMLSerializer_V3::OnSync(std::tstring& strKey, int32_t* pValue)
 	{
 		if( TEXT("VALUE") == strKey )	{	m_stkTraverse.top().strValue = StringFrom(*pValue);	return *this;	}
 		UpdateAttrValue(m_stkTraverse.top().strAttr, strKey, *pValue);
@@ -201,7 +207,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CXMLSerializer_V3::Sync(std::tstring& strKey, int64_t* pValue)
+	core::IFormatter& CXMLSerializer_V3::OnSync(std::tstring& strKey, int64_t* pValue)
 	{
 		if( TEXT("VALUE") == strKey )	{	m_stkTraverse.top().strValue = StringFrom(*pValue);	return *this;	}
 		UpdateAttrValue(m_stkTraverse.top().strAttr, strKey, *pValue);
@@ -209,7 +215,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CXMLSerializer_V3::Sync(std::tstring& strKey, BYTE* pValue)
+	core::IFormatter& CXMLSerializer_V3::OnSync(std::tstring& strKey, BYTE* pValue)
 	{
 		if( TEXT("VALUE") == strKey )	{	m_stkTraverse.top().strValue = StringFrom(*pValue);	return *this;	}
 		UpdateAttrValue(m_stkTraverse.top().strAttr, strKey, *pValue);
@@ -217,7 +223,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CXMLSerializer_V3::Sync(std::tstring& strKey, WORD* pValue)
+	core::IFormatter& CXMLSerializer_V3::OnSync(std::tstring& strKey, WORD* pValue)
 	{
 		if( TEXT("VALUE") == strKey )	{	m_stkTraverse.top().strValue = StringFrom(*pValue);	return *this;	}
 		UpdateAttrValue(m_stkTraverse.top().strAttr, strKey, *pValue);
@@ -225,7 +231,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CXMLSerializer_V3::Sync(std::tstring& strKey, DWORD* pValue)
+	core::IFormatter& CXMLSerializer_V3::OnSync(std::tstring& strKey, DWORD* pValue)
 	{
 		if( TEXT("VALUE") == strKey )	{	m_stkTraverse.top().strValue = StringFrom(*pValue);	return *this;	}
 		UpdateAttrValue(m_stkTraverse.top().strAttr, strKey, *pValue);
@@ -233,7 +239,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CXMLSerializer_V3::Sync(std::tstring& strKey, QWORD* pValue)
+	core::IFormatter& CXMLSerializer_V3::OnSync(std::tstring& strKey, QWORD* pValue)
 	{
 		if( TEXT("VALUE") == strKey )	{	m_stkTraverse.top().strValue = StringFrom(*pValue);	return *this;	}
 		UpdateAttrValue(m_stkTraverse.top().strAttr, strKey, *pValue);
@@ -241,7 +247,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CXMLSerializer_V3::Sync(std::tstring& strKey, float* pValue)
+	core::IFormatter& CXMLSerializer_V3::OnSync(std::tstring& strKey, float* pValue)
 	{
 		if( TEXT("VALUE") == strKey )	{	m_stkTraverse.top().strValue = StringFrom(*pValue);	return *this;	}
 		UpdateAttrValue(m_stkTraverse.top().strAttr, strKey, *pValue);
@@ -249,7 +255,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CXMLSerializer_V3::Sync(std::tstring& strKey, double* pValue)
+	core::IFormatter& CXMLSerializer_V3::OnSync(std::tstring& strKey, double* pValue)
 	{
 		if( TEXT("VALUE") == strKey )	{	m_stkTraverse.top().strValue = StringFrom(*pValue);	return *this;	}
 		UpdateAttrValue(m_stkTraverse.top().strAttr, strKey, *pValue);
@@ -257,7 +263,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CXMLSerializer_V3::Sync(std::tstring& strKey, std::vector<BYTE>* pvecData)
+	core::IFormatter& CXMLSerializer_V3::OnSync(std::tstring& strKey, std::vector<BYTE>* pvecData)
 	{
 		// Ignore
 		return *this;

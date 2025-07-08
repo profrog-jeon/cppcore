@@ -36,31 +36,5 @@ namespace fmt_internal
 		TT_VALUE
 	};
 
-	//////////////////////////////////////////////////////////////////////////
-	struct ST_JSON_CHUNK
-	{
-		E_TOKEN_TYPE nType;
-		std::tstring strValue;
-		std::tstring strParsingStack;
-
-		ST_JSON_CHUNK(std::tstring strInValue) : nType(TT_UNKNOWN), strValue(strInValue) {}
-		ST_JSON_CHUNK(E_TOKEN_TYPE nInType, std::tstring strInValue) : nType(nInType), strValue(strInValue) {}
-	};
-
-	//////////////////////////////////////////////////////////////////////////
-	struct ST_JSON_TOKEN
-	{
-		std::tstring strKey;
-		std::vector<std::tstring> vecToken;
-		void Clear()
-		{
-			strKey.clear();
-			vecToken.clear();
-		}
-	};
-
-	//////////////////////////////////////////////////////////////////////////
-	typedef std::vector<ST_JSON_CHUNK>  CTokenVec;
-	typedef std::vector<ST_JSON_TOKEN>  CChunkVec;
 	typedef std::vector<std::tstring>	CTStringVec;
 }

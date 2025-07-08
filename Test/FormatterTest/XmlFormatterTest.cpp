@@ -9,12 +9,10 @@ struct ST_RELATIONSHIP : public IFormatterObject
 
 	void OnSync(core::IFormatter& formatter)
 	{
-		formatter
-			+ core::sPair(TEXT("Id"), strId)
-			+ core::sPair(TEXT("Type"), strType)
-			+ core::sPair(TEXT("Target"), strTarget)
-			+ core::sPair(TEXT("TargetMode"), strTargetMode)
-			;
+		formatter.Sync(TEXT("Id"), strId);
+		formatter.Sync(TEXT("Type"), strType);
+		formatter.Sync(TEXT("Target"), strTarget);
+		formatter.Sync(TEXT("TargetMode"), strTargetMode);
 	}
 };
 
@@ -25,11 +23,8 @@ struct ST_RELATIONSHIPS : public IFormatterObject
 
 	void OnSync(IFormatter& formatter)
 	{
-		formatter
-			+ sPair(TEXT("xmlns"), strXmlNs)
-			+ sPair(TEXT("Relationship"), vecRelationship)
-			
-			;
+		formatter.Sync(TEXT("xmlns"), strXmlNs);
+		formatter.Sync(TEXT("Relationship"), vecRelationship);
 	}
 };
 
@@ -40,10 +35,8 @@ struct ST_RELS : public IFormatterObject
 
 	void OnSync(IFormatter& formatter)
 	{
-		formatter
-			+ sPair(TEXT("version"), strVersion)
-			+ sPair(TEXT("Relationships"), Relationships)
-			;
+		formatter.Sync(TEXT("version"), strVersion);
+		formatter.Sync(TEXT("Relationships"), Relationships);
 	}
 };
 
@@ -104,9 +97,7 @@ struct ST_WORD_ROW : core::IFormatterObject
 	std::tstring strText;
 	void OnSync(core::IFormatter& formatter)
 	{
-		formatter
-			+ core::sPair(TEXT("w:t"), strText)
-			;
+		formatter.Sync(TEXT("w:t"), strText);
 	}
 };
 
@@ -115,9 +106,7 @@ struct ST_WORD_PARAGRAPH : core::IFormatterObject
 	std::vector<ST_WORD_ROW> vecRows;
 	void OnSync(core::IFormatter& formatter)
 	{
-		formatter
-			+ core::sPair(TEXT("w:r"), vecRows)
-			;
+		formatter.Sync(TEXT("w:r"), vecRows);
 	}
 };
 
@@ -126,9 +115,7 @@ struct ST_WORD_BODY : core::IFormatterObject
 	std::vector<ST_WORD_PARAGRAPH> vecParagraphs;
 	void OnSync(core::IFormatter& formatter)
 	{
-		formatter
-			+ core::sPair(TEXT("w:p"), vecParagraphs)
-			;
+		formatter.Sync(TEXT("w:p"), vecParagraphs);
 	}
 };
 
@@ -137,9 +124,7 @@ struct ST_WORD_DOCUMENT : core::IFormatterObject
 	ST_WORD_BODY Body;
 	void OnSync(core::IFormatter& formatter)
 	{
-		formatter
-			+ core::sPair(TEXT("w:body"), Body)
-			;
+		formatter.Sync(TEXT("w:body"), Body);
 	}
 };
 

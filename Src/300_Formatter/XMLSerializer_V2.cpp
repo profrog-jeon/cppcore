@@ -6,17 +6,17 @@ namespace fmt_internal
 {
 	//////////////////////////////////////////////////////////////////////////
 	CXMLSerializer_V2::CXMLSerializer_V2(core::IChannel& channel, E_BOM_TYPE nBOM, std::tstring strRoot, std::map<std::tstring, std::tstring>* pRootAttr)
-	: IFormatter(channel)
+	: CFormatterSuper(channel)
 	, m_nBOM(nBOM)
 	, m_stkElement()
 	, m_stkGroupingData()
 	, m_strRootTag(strRoot)
 	, m_strRootAttr()
 	{
-		if( pRootAttr )
+		if (pRootAttr)
 		{
 			std::map<std::tstring, std::tstring>::iterator iter;
-			for(iter=pRootAttr->begin(); iter!=pRootAttr->end(); iter++)
+			for (iter = pRootAttr->begin(); iter != pRootAttr->end(); iter++)
 				m_strRootAttr += Format(TEXT(" %s=\'%s\' "), iter->first.c_str(), iter->second.c_str());
 		}
 	}
@@ -27,7 +27,13 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	static inline void __WriteXmlThroughChannel(size_t tIndent, std::tstring strContext, IChannel& channel)
+	bool CXMLSerializer_V2::OnPrepare(IFormatterObject* pObject, std::tstring& strErrMsg)
+	{
+		return true;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	static inline void __WriteXmlThroughChannel(size_t tIndent, std::tstring strContext, IChannel& m_Channel)
 	{
 		// Build TAB indentation
 		const size_t tMaxIndex = 32;
@@ -43,7 +49,7 @@ namespace fmt_internal
 		// Insert TAB indentation
 		strContext = szIndent + strContext + TEXT("\r\n");
 
-		channel.Access((void*)strContext.c_str(), strContext.length() * sizeof(TCHAR));
+		m_Channel.Access((void*)strContext.c_str(), strContext.length() * sizeof(TCHAR));
 	}
 
 	//////////////////////////////////////////////////////////////////////////
@@ -74,33 +80,33 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t CXMLSerializer_V2::BeginDictionary(std::tstring& strKey, const size_t tSize, bool bAllowMultiKey)
+	size_t CXMLSerializer_V2::OnBeginDictionary(std::tstring& strKey, const size_t tSize, bool bAllowMultiKey)
 	{
 		m_stkGroupingData.push(sGroupingData(strKey, GT_DICTIONARY, tSize));
 		return tSize;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CXMLSerializer_V2::EndDictionary()
+	void CXMLSerializer_V2::OnEndDictionary()
 	{
 		m_stkGroupingData.pop();
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t CXMLSerializer_V2::BeginArray(std::tstring& strKey, const size_t tSize)
+	size_t CXMLSerializer_V2::OnBeginArray(std::tstring& strKey, const size_t tSize)
 	{
 		m_stkGroupingData.push(sGroupingData(strKey, GT_ARRAY, tSize));
 		return tSize;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CXMLSerializer_V2::EndArray()
+	void CXMLSerializer_V2::OnEndArray()
 	{
 		m_stkGroupingData.pop();
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CXMLSerializer_V2::BeginObject(std::tstring& strKey)
+	void CXMLSerializer_V2::OnBeginObject(std::tstring& strKey)
 	{
 		std::tstring strContext = TEXT("<") + strKey + TEXT(">");
 		__WriteXmlThroughChannel(m_stkElement.size(), strContext, m_Channel);
@@ -109,7 +115,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CXMLSerializer_V2::EndObject()
+	void CXMLSerializer_V2::OnEndObject()
 	{
 		std::tstring strKey = m_stkElement.top();
 		m_stkElement.pop();
@@ -120,7 +126,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CXMLSerializer_V2::BeginRoot()
+	void CXMLSerializer_V2::OnBeginRoot(std::tstring& strRootName)
 	{
 		LPCTSTR pszEncoding = NULL;
 		switch(m_nBOM)
@@ -148,7 +154,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CXMLSerializer_V2::EndRoot()
+	void CXMLSerializer_V2::OnEndRoot()
 	{
 		std::tstring strKey = m_stkElement.top();
 		m_stkElement.pop();
@@ -159,7 +165,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CXMLSerializer_V2::Sync(std::tstring& strKey, std::tstring* pValue)
+	core::IFormatter& CXMLSerializer_V2::OnSync(std::tstring& strKey, std::tstring* pValue)
 	{
 		std::tstring strValue = EncodeXmlString(StringFrom(*pValue));
 		__WriteXmlThroughChannel(m_stkElement.size(), m_stkGroupingData.top(), strKey, strValue, m_Channel);
@@ -167,7 +173,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT & CXMLSerializer_V2::Sync(std::tstring & strKey, std::ntstring * pValue)
+	core::IFormatter& CXMLSerializer_V2::OnSync(std::tstring & strKey, std::ntstring * pValue)
 	{
 		std::tstring strValue = EncodeXmlString(StringFrom(*pValue));
 		__WriteXmlThroughChannel(m_stkElement.size(), m_stkGroupingData.top(), strKey, strValue, m_Channel);
@@ -175,7 +181,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CXMLSerializer_V2::Sync(std::tstring& strKey, bool* pValue)
+	core::IFormatter& CXMLSerializer_V2::OnSync(std::tstring& strKey, bool* pValue)
 	{
 		std::tstring strValue = EncodeXmlString(StringFrom(*pValue));
 		__WriteXmlThroughChannel(m_stkElement.size(), m_stkGroupingData.top(), strKey, strValue, m_Channel);
@@ -183,7 +189,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CXMLSerializer_V2::Sync(std::tstring& strKey, char* pValue)
+	core::IFormatter& CXMLSerializer_V2::OnSync(std::tstring& strKey, char* pValue)
 	{
 		std::tstring strValue = EncodeXmlString(StringFrom(*pValue));
 		__WriteXmlThroughChannel(m_stkElement.size(), m_stkGroupingData.top(), strKey, strValue, m_Channel);
@@ -191,7 +197,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CXMLSerializer_V2::Sync(std::tstring& strKey, short* pValue)
+	core::IFormatter& CXMLSerializer_V2::OnSync(std::tstring& strKey, short* pValue)
 	{
 		std::tstring strValue = EncodeXmlString(StringFrom(*pValue));
 		__WriteXmlThroughChannel(m_stkElement.size(), m_stkGroupingData.top(), strKey, strValue, m_Channel);
@@ -199,7 +205,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CXMLSerializer_V2::Sync(std::tstring& strKey, int32_t* pValue)
+	core::IFormatter& CXMLSerializer_V2::OnSync(std::tstring& strKey, int32_t* pValue)
 	{
 		std::tstring strValue = EncodeXmlString(StringFrom(*pValue));
 		__WriteXmlThroughChannel(m_stkElement.size(), m_stkGroupingData.top(), strKey, strValue, m_Channel);
@@ -207,7 +213,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CXMLSerializer_V2::Sync(std::tstring& strKey, int64_t* pValue)
+	core::IFormatter& CXMLSerializer_V2::OnSync(std::tstring& strKey, int64_t* pValue)
 	{
 		std::tstring strValue = EncodeXmlString(StringFrom(*pValue));
 		__WriteXmlThroughChannel(m_stkElement.size(), m_stkGroupingData.top(), strKey, strValue, m_Channel);
@@ -215,7 +221,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CXMLSerializer_V2::Sync(std::tstring& strKey, BYTE* pValue)
+	core::IFormatter& CXMLSerializer_V2::OnSync(std::tstring& strKey, BYTE* pValue)
 	{
 		std::tstring strValue = EncodeXmlString(StringFrom(*pValue));
 		__WriteXmlThroughChannel(m_stkElement.size(), m_stkGroupingData.top(), strKey, strValue, m_Channel);
@@ -223,7 +229,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CXMLSerializer_V2::Sync(std::tstring& strKey, WORD* pValue)
+	core::IFormatter& CXMLSerializer_V2::OnSync(std::tstring& strKey, WORD* pValue)
 	{
 		std::tstring strValue = EncodeXmlString(StringFrom(*pValue));
 		__WriteXmlThroughChannel(m_stkElement.size(), m_stkGroupingData.top(), strKey, strValue, m_Channel);
@@ -231,7 +237,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CXMLSerializer_V2::Sync(std::tstring& strKey, DWORD* pValue)
+	core::IFormatter& CXMLSerializer_V2::OnSync(std::tstring& strKey, DWORD* pValue)
 	{
 		std::tstring strValue = EncodeXmlString(StringFrom(*pValue));
 		__WriteXmlThroughChannel(m_stkElement.size(), m_stkGroupingData.top(), strKey, strValue, m_Channel);
@@ -239,7 +245,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CXMLSerializer_V2::Sync(std::tstring& strKey, QWORD* pValue)
+	core::IFormatter& CXMLSerializer_V2::OnSync(std::tstring& strKey, QWORD* pValue)
 	{
 		std::tstring strValue = EncodeXmlString(StringFrom(*pValue));
 		__WriteXmlThroughChannel(m_stkElement.size(), m_stkGroupingData.top(), strKey, strValue, m_Channel);
@@ -247,7 +253,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CXMLSerializer_V2::Sync(std::tstring& strKey, float* pValue)
+	core::IFormatter& CXMLSerializer_V2::OnSync(std::tstring& strKey, float* pValue)
 	{
 		std::tstring strValue = EncodeXmlString(StringFrom(*pValue));
 		__WriteXmlThroughChannel(m_stkElement.size(), m_stkGroupingData.top(), strKey, strValue, m_Channel);
@@ -255,7 +261,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CXMLSerializer_V2::Sync(std::tstring& strKey, double* pValue)
+	core::IFormatter& CXMLSerializer_V2::OnSync(std::tstring& strKey, double* pValue)
 	{
 		std::tstring strValue = EncodeXmlString(StringFrom(*pValue));
 		__WriteXmlThroughChannel(m_stkElement.size(), m_stkGroupingData.top(), strKey, strValue, m_Channel);
@@ -263,7 +269,7 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CXMLSerializer_V2::Sync(std::tstring& strKey, std::vector<BYTE>* pvecData)
+	core::IFormatter& CXMLSerializer_V2::OnSync(std::tstring& strKey, std::vector<BYTE>* pvecData)
 	{
 		// Ignore
 		return *this;

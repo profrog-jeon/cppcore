@@ -5,16 +5,25 @@ namespace fmt_internal
 {
 	//////////////////////////////////////////////////////////////////////////
 	CCSVDeserializer::CCSVDeserializer(core::IChannel& channel, bool bSkipTitle)
-		: IFormatter(channel)
+		: CFormatterSuper(channel)
 		, m_vecValueTable()
 		, m_tArrayIndex(0)
 		, m_tItemIndex(0)
-		, m_strErrMsg()
-		, m_bValidity(false)
+		, m_bSkipTitle(bSkipTitle)
 	{
-		m_bValidity = channel.CheckValidity(m_strErrMsg);
-		if( !m_bValidity )
-			return;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	CCSVDeserializer::~CCSVDeserializer(void)
+	{
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	bool CCSVDeserializer::OnPrepare(IFormatterObject* pObject, std::tstring& strErrMsg)
+	{
+		bool bValidity = m_Channel.CheckValidity(strErrMsg);
+		if( !bValidity )
+			return false;
 
 		std::tstring strContext;
 		std::tstring strBuff;
@@ -33,7 +42,7 @@ namespace fmt_internal
 		}
 
 		int nOffset = 0;
-		if( bSkipTitle )
+		if(m_bSkipTitle)
 			Tokenize(strContext, TEXT("\n"), nOffset);
 
 		while(nOffset >= 0)
@@ -48,67 +57,63 @@ namespace fmt_internal
 
 			m_vecValueTable.push_back(vecToken);
 		}
+		return true;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	CCSVDeserializer::~CCSVDeserializer(void)
-	{
-	}
-
-	//////////////////////////////////////////////////////////////////////////
-	size_t CCSVDeserializer::BeginDictionary(std::tstring& strKey, const size_t tSize, bool bAllowMultiKey)
+	size_t CCSVDeserializer::OnBeginDictionary(std::tstring& strKey, const size_t tSize, bool bAllowMultiKey)
 	{
 		return m_vecValueTable.size();
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CCSVDeserializer::EndDictionary()
+	void CCSVDeserializer::OnEndDictionary()
 	{
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	size_t CCSVDeserializer::BeginArray(std::tstring& strKey, const size_t tSize)
+	size_t CCSVDeserializer::OnBeginArray(std::tstring& strKey, const size_t tSize)
 	{
 		return m_vecValueTable.size();
 	}
 
 
 	//////////////////////////////////////////////////////////////////////////
-	void CCSVDeserializer::EndArray()
+	void CCSVDeserializer::OnEndArray()
 	{
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CCSVDeserializer::BeginArrayItem(size_t tIndex, size_t tCount)
-	{
-		m_tArrayIndex = tIndex;
-		m_tItemIndex = 0;
-	}
-
-	//////////////////////////////////////////////////////////////////////////
-	void CCSVDeserializer::EndArrayItem(size_t tIndex, size_t tCount)
+	void CCSVDeserializer::OnBeginArrayItem(size_t tIndex, size_t tCount)
 	{
 		m_tArrayIndex = tIndex;
 		m_tItemIndex = 0;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CCSVDeserializer::BeginObject(std::tstring& strKey)
+	void CCSVDeserializer::OnEndArrayItem(size_t tIndex, size_t tCount)
+	{
+		m_tArrayIndex = tIndex;
+		m_tItemIndex = 0;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	void CCSVDeserializer::OnBeginObject(std::tstring& strKey)
 	{
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CCSVDeserializer::EndObject()
+	void CCSVDeserializer::OnEndObject()
 	{
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CCSVDeserializer::BeginRoot()
+	void CCSVDeserializer::OnBeginRoot(std::tstring& strRootName)
 	{
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	void CCSVDeserializer::EndRoot()
+	void CCSVDeserializer::OnEndRoot()
 	{
 	}
 
@@ -123,98 +128,98 @@ namespace fmt_internal
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CCSVDeserializer::Sync(std::tstring& strKey, std::tstring* pValue)
+	core::IFormatter& CCSVDeserializer::OnSync(std::tstring& strKey, std::tstring* pValue)
 	{
 		CSVDeserializerMetaFunction(m_vecValueTable[m_tArrayIndex], m_tItemIndex, pValue);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT & CCSVDeserializer::Sync(std::tstring & strKey, std::ntstring * pValue)
+	core::IFormatter& CCSVDeserializer::OnSync(std::tstring & strKey, std::ntstring * pValue)
 	{
 		CSVDeserializerMetaFunction(m_vecValueTable[m_tArrayIndex], m_tItemIndex, pValue);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CCSVDeserializer::Sync(std::tstring& strKey, bool* pValue)
+	core::IFormatter& CCSVDeserializer::OnSync(std::tstring& strKey, bool* pValue)
 	{
 		CSVDeserializerMetaFunction(m_vecValueTable[m_tArrayIndex], m_tItemIndex, pValue);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CCSVDeserializer::Sync(std::tstring& strKey, char* pValue)
+	core::IFormatter& CCSVDeserializer::OnSync(std::tstring& strKey, char* pValue)
 	{
 		CSVDeserializerMetaFunction(m_vecValueTable[m_tArrayIndex], m_tItemIndex, pValue);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CCSVDeserializer::Sync(std::tstring& strKey, short* pValue)
+	core::IFormatter& CCSVDeserializer::OnSync(std::tstring& strKey, short* pValue)
 	{
 		CSVDeserializerMetaFunction(m_vecValueTable[m_tArrayIndex], m_tItemIndex, pValue);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CCSVDeserializer::Sync(std::tstring& strKey, int32_t* pValue)
+	core::IFormatter& CCSVDeserializer::OnSync(std::tstring& strKey, int32_t* pValue)
 	{
 		CSVDeserializerMetaFunction(m_vecValueTable[m_tArrayIndex], m_tItemIndex, pValue);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CCSVDeserializer::Sync(std::tstring& strKey, int64_t* pValue)
+	core::IFormatter& CCSVDeserializer::OnSync(std::tstring& strKey, int64_t* pValue)
 	{
 		CSVDeserializerMetaFunction(m_vecValueTable[m_tArrayIndex], m_tItemIndex, pValue);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CCSVDeserializer::Sync(std::tstring& strKey, BYTE* pValue)
+	core::IFormatter& CCSVDeserializer::OnSync(std::tstring& strKey, BYTE* pValue)
 	{
 		CSVDeserializerMetaFunction(m_vecValueTable[m_tArrayIndex], m_tItemIndex, pValue);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CCSVDeserializer::Sync(std::tstring& strKey, WORD* pValue)
+	core::IFormatter& CCSVDeserializer::OnSync(std::tstring& strKey, WORD* pValue)
 	{
 		CSVDeserializerMetaFunction(m_vecValueTable[m_tArrayIndex], m_tItemIndex, pValue);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CCSVDeserializer::Sync(std::tstring& strKey, DWORD* pValue)
+	core::IFormatter& CCSVDeserializer::OnSync(std::tstring& strKey, DWORD* pValue)
 	{
 		CSVDeserializerMetaFunction(m_vecValueTable[m_tArrayIndex], m_tItemIndex, pValue);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CCSVDeserializer::Sync(std::tstring& strKey, QWORD* pValue)
+	core::IFormatter& CCSVDeserializer::OnSync(std::tstring& strKey, QWORD* pValue)
 	{
 		CSVDeserializerMetaFunction(m_vecValueTable[m_tArrayIndex], m_tItemIndex, pValue);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CCSVDeserializer::Sync(std::tstring& strKey, float* pValue)
+	core::IFormatter& CCSVDeserializer::OnSync(std::tstring& strKey, float* pValue)
 	{
 		CSVDeserializerMetaFunction(m_vecValueTable[m_tArrayIndex], m_tItemIndex, pValue);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CCSVDeserializer::Sync(std::tstring& strKey, double* pValue)
+	core::IFormatter& CCSVDeserializer::OnSync(std::tstring& strKey, double* pValue)
 	{
 		CSVDeserializerMetaFunction(m_vecValueTable[m_tArrayIndex], m_tItemIndex, pValue);
 		return *this;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	core::IFormatterT& CCSVDeserializer::Sync(std::tstring& strKey, std::vector<BYTE>* pvecData)
+	core::IFormatter& CCSVDeserializer::OnSync(std::tstring& strKey, std::vector<BYTE>* pvecData)
 	{
 		// Ignore
 		return *this;
