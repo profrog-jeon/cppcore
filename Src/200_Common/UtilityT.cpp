@@ -74,66 +74,15 @@ namespace core
 
 	//////////////////////////////////////////////////////////////////////////
 	template <typename T>
-	static inline ECODE ReadFileContents2Worker(LPCTSTR pszFilePath, T& strContents, E_BOM_TYPE nEncodeType)
-	{
-		ECODE nRet = EC_SUCCESS;
-		HANDLE hFile = NULL;
-
-		try
-		{
-			hFile = CreateFile(pszFilePath, GENERIC_READ_, OPEN_EXISTING_, 0);
-			if (NULL == hFile)
-			{
-				nRet = GetLastError();
-				throw exception_format(TEXT("CreateFile(%s, GENERIC_READ_, OPEN_EXISTING_, 0) failure, %d"), pszFilePath, nRet);
-			}
-
-			const QWORD qwSize = GetFileSize(hFile);
-			if (500 * 1024 * 1024 < qwSize)
-			{
-				nRet = EC_NOT_ENOUGH_MEMORY;
-				throw exception_format(TEXT("%s size:%lu is too big"), pszFilePath, qwSize);
-			}
-
-			std::vector<BYTE> vecContext;
-			vecContext.resize(qwSize);
-
-			DWORD dwTotalReadSize = 0;
-			while (dwTotalReadSize < qwSize)
-			{
-				const DWORD dwRemainedSize = (DWORD)qwSize - dwTotalReadSize;
-				const DWORD dwTryReadSize = std::min<DWORD>(dwRemainedSize, 1024 * 1024);
-
-				DWORD dwReadSize = 0;
-				if (!ReadFile(hFile, vecContext.data() + dwTotalReadSize, dwTryReadSize, &dwReadSize))
-					throw exception_format(TEXT("ReadFile(%s) failure at pos:%u"), pszFilePath, dwTotalReadSize);
-
-				dwTotalReadSize += dwReadSize;
-			}
-
-			CloseFile(hFile);
-
-			TextCopyWorker(nEncodeType, vecContext.data(), vecContext.size(), strContents);
-		}
-		catch (const std::exception& e)
-		{
-			Log_Debug("%s", e.what());
-			if (hFile)
-				CloseFile(hFile);
-			if (EC_SUCCESS != nRet)
-				return nRet;
-			return EC_READ_FAILURE;
-		}
-
-		return EC_SUCCESS;
-	}
-
-	//////////////////////////////////////////////////////////////////////////
-	template <typename T>
 	static inline ECODE ReadFileContentsWorker(LPCTSTR pszFilePath, T& strContents, E_BOM_TYPE nEncodeType)
 	{
 		CMemoryMappedFile MemMappedFile;
 		ECODE nRet = MemMappedFile.Create(pszFilePath, PAGE_READONLY_, FILE_MAP_READ_);
+		if (EC_NO_DATA == nRet)
+		{
+			strContents.clear();
+			return EC_SUCCESS;
+		}
 		if (EC_SUCCESS != nRet)
 			return nRet;
 
