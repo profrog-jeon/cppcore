@@ -2,6 +2,24 @@
 
 #include "../001_Encoder/Type.h"
 
+#ifdef UNICODE
+#define ST_URL_INFO	ST_URL_INFOW
+#define GetCurrentFileVersionStr	GetCurrentFileVersionStrW
+#define GetCurrentProductVersionStr	GetCurrentProductVersionStrW
+#define DateStringFrom				DateStringFromW
+#define DateTimeStringFrom			DateTimeStringFromW
+#define BuildRandomString			BuildRandomStringW
+#define FormalNumberString			FormalNumberStringW
+#else
+#define ST_URL_INFO	ST_URL_INFOA
+#define GetCurrentFileVersionStr	GetCurrentFileVersionStrA
+#define GetCurrentProductVersionStr	GetCurrentProductVersionStrA
+#define DateStringFrom				DateStringFromA
+#define DateTimeStringFrom			DateTimeStringFromA
+#define BuildRandomString			BuildRandomStringA
+#define FormalNumberString			FormalNumberStringA
+#endif
+
 namespace core
 {
     struct ST_FUNC_LOG
@@ -92,4 +110,61 @@ namespace core
 	std::wstring BuildUniqFileName(std::wstring strTempFile);
 
 	double GetCurrentSecond(void);
+
+	struct ST_URL_INFOA
+	{
+		std::string strScheme;
+		std::string strUserInfo;
+		std::string strHost;
+		std::string strPort;
+		std::string strPath;
+		std::string strQuery;
+		std::string strFragment;
+		WORD wPort;
+	};
+
+	struct ST_URL_INFOW
+	{
+		std::wstring strScheme;
+		std::wstring strUserInfo;
+		std::wstring strHost;
+		std::wstring strPort;
+		std::wstring strPath;
+		std::wstring strQuery;
+		std::wstring strFragment;
+		WORD wPort;
+	};
+
+	WORD GetKnownPort(std::string strProtocol);
+	WORD GetKnownPort(std::wstring strProtocol);
+	ECODE ParseURL(std::string strUrl, ST_URL_INFOA& outInfo);
+	ECODE ParseURL(std::wstring strUrl, ST_URL_INFOW& outInfo);
+
+	std::string GetFileVersionStr(std::string strFilePath);
+	std::wstring GetFileVersionStr(std::wstring strFilePath);
+	std::string GetProductVersionStr(std::string strFilePath);
+	std::wstring GetProductVersionStr(std::wstring strFilePath);
+
+	std::string GetCurrentFileVersionStrA(void);
+	std::wstring GetCurrentFileVersionStrW(void);
+	std::string GetCurrentProductVersionStrA(void);
+	std::wstring GetCurrentProductVersionStrW(void);
+
+	std::string DateStringFromA(const core::ST_SYSTEMTIME& stSystemTime);
+	std::wstring DateStringFromW(const core::ST_SYSTEMTIME& stSystemTime);
+	std::string DateTimeStringFromA(const core::ST_SYSTEMTIME& stSystemTime);
+	std::wstring DateTimeStringFromW(const core::ST_SYSTEMTIME& stSystemTime);
+	std::string DateStringFromA(QWORD qwUnixTime);
+	std::wstring DateStringFromW(QWORD qwUnixTime);
+	std::string DateTimeStringFromA(QWORD qwUnixTime);
+	std::wstring DateTimeStringFromW(QWORD qwUnixTime);
+	std::string BuildRandomStringA(size_t tLength);
+	std::wstring BuildRandomStringW(size_t tLength);
+	std::string FormalNumberStringA(int nValue);
+	std::wstring FormalNumberStringW(int nValue);
+	std::string FormalNumberStringA(double dValue);
+	std::wstring FormalNumberStringW(double dValue);
+
+	std::string DecodeUrlEncoding(std::string strOriginal);
+	std::wstring DecodeUrlEncoding(std::wstring strOriginal);
 }

@@ -74,66 +74,15 @@ namespace core
 
 	//////////////////////////////////////////////////////////////////////////
 	template <typename T>
-	static inline ECODE ReadFileContents2Worker(LPCTSTR pszFilePath, T& strContents, E_BOM_TYPE nEncodeType)
-	{
-		ECODE nRet = EC_SUCCESS;
-		HANDLE hFile = NULL;
-
-		try
-		{
-			hFile = CreateFile(pszFilePath, GENERIC_READ_, OPEN_EXISTING_, 0);
-			if (NULL == hFile)
-			{
-				nRet = GetLastError();
-				throw exception_format(TEXT("CreateFile(%s, GENERIC_READ_, OPEN_EXISTING_, 0) failure, %d"), pszFilePath, nRet);
-			}
-
-			const QWORD qwSize = GetFileSize(hFile);
-			if (500 * 1024 * 1024 < qwSize)
-			{
-				nRet = EC_NOT_ENOUGH_MEMORY;
-				throw exception_format(TEXT("%s size:%lu is too big"), pszFilePath, qwSize);
-			}
-
-			std::vector<BYTE> vecContext;
-			vecContext.resize(qwSize);
-
-			DWORD dwTotalReadSize = 0;
-			while (dwTotalReadSize < qwSize)
-			{
-				const DWORD dwRemainedSize = (DWORD)qwSize - dwTotalReadSize;
-				const DWORD dwTryReadSize = std::min<DWORD>(dwRemainedSize, 1024 * 1024);
-
-				DWORD dwReadSize = 0;
-				if (!ReadFile(hFile, vecContext.data() + dwTotalReadSize, dwTryReadSize, &dwReadSize))
-					throw exception_format(TEXT("ReadFile(%s) failure at pos:%u"), pszFilePath, dwTotalReadSize);
-
-				dwTotalReadSize += dwReadSize;
-			}
-
-			CloseFile(hFile);
-
-			TextCopyWorker(nEncodeType, vecContext.data(), vecContext.size(), strContents);
-		}
-		catch (const std::exception& e)
-		{
-			Log_Debug("%s", e.what());
-			if (hFile)
-				CloseFile(hFile);
-			if (EC_SUCCESS != nRet)
-				return nRet;
-			return EC_READ_FAILURE;
-		}
-
-		return EC_SUCCESS;
-	}
-
-	//////////////////////////////////////////////////////////////////////////
-	template <typename T>
 	static inline ECODE ReadFileContentsWorker(LPCTSTR pszFilePath, T& strContents, E_BOM_TYPE nEncodeType)
 	{
 		CMemoryMappedFile MemMappedFile;
 		ECODE nRet = MemMappedFile.Create(pszFilePath, PAGE_READONLY_, FILE_MAP_READ_);
+		if (EC_NO_DATA == nRet)
+		{
+			strContents.clear();
+			return EC_SUCCESS;
+		}
 		if (EC_SUCCESS != nRet)
 			return nRet;
 
@@ -172,7 +121,7 @@ namespace core
 			hFile = CreateFile(strFilePath.c_str(), GENERIC_READ_, OPEN_EXISTING_, 0);
 
 			nRet = GetLastError();
-			if( NULL == hFile )
+			if (NULL == hFile)
 				throw exception_format(TEXT("CreateFile(%s) failure, %d"), strFilePath.c_str(), nRet);
 
 			DWORD dwSize = 0;
@@ -187,31 +136,31 @@ namespace core
 			}
 
 			nRet = EC_INVALID_FILE;
-			if( 0 == dwSize )
+			if (0 == dwSize)
 				throw exception_format("File size is zero");
 
 			// if no memory, it will throw exception "bad allocation"
 			outContents.resize(dwSize);
 
 			DWORD dwTotalReadSize = 0;
-			do 
+			do
 			{
 				DWORD dwReadSize = 0;
 				bool bRet = ReadFile(hFile, &outContents[dwTotalReadSize], dwSize - dwTotalReadSize, &dwReadSize);
 
 				nRet = GetLastError();
-				if( !bRet )
+				if (!bRet)
 					throw exception_format("ReadFile failure, try:%u, read:%u", dwSize - dwTotalReadSize, dwReadSize);
 
 				dwTotalReadSize += dwReadSize;
-			}	while (dwTotalReadSize < dwSize);
+			} while (dwTotalReadSize < dwSize);
 
 			CloseFile(hFile);
 		}
 		catch (std::exception& e)
 		{
 			Log_Error("%s - %s", __FUNCTION__, e.what());
-			if( hFile )
+			if (hFile)
 				CloseFile(hFile);
 			return nRet;
 		}
@@ -226,16 +175,16 @@ namespace core
 		HANDLE hFile = NULL;
 		try
 		{
-			if( strContents.empty() )
+			if (strContents.empty())
 				throw exception_format("Contents is EMPTY.");
 
-			hFile = CreateFile(pszFilePath, GENERIC_WRITE_|GENERIC_READ_, CREATE_ALWAYS_, 0, 0644);
+			hFile = CreateFile(pszFilePath, GENERIC_WRITE_ | GENERIC_READ_, CREATE_ALWAYS_, 0, 0644);
 
 			nRet = GetLastError();
-			if( NULL == hFile )
+			if (NULL == hFile)
 				throw exception_format(TEXT("CreateFile(%s, GENERIC_WRITE_, CREATE_ALWAYS_) failure."), pszFilePath);
 
-			if( bWithBOM )
+			if (bWithBOM)
 			{
 				E_BOM_TYPE nBOMType = BOM_UNDEFINED;
 				switch (sizeof(strContents.at(0)))
@@ -268,10 +217,10 @@ namespace core
 			DWORD dwTotalWritten = 0;
 			DWORD dwCharSize = sizeof(strContents.at(0));
 			DWORD dwTotalSize = (DWORD)strContents.length() * dwCharSize;
-			while(dwTotalWritten < dwTotalSize)
+			while (dwTotalWritten < dwTotalSize)
 			{
 				DWORD dwRemainedSize = dwTotalSize - dwTotalWritten;
-				if( !WriteFile(hFile, strContents.c_str() + dwTotalWritten, dwRemainedSize, &dwWritten) )
+				if (!WriteFile(hFile, strContents.c_str() + dwTotalWritten, dwRemainedSize, &dwWritten))
 				{
 					nRet = GetLastError();
 					throw exception_format(TEXT("WriteFile(%s) failure."), pszFilePath);
@@ -286,7 +235,7 @@ namespace core
 		catch (std::exception& e)
 		{
 			Log_Error("%s - %s", __FUNCTION__, e.what());
-			if( hFile )
+			if (hFile)
 				CloseFile(hFile);
 			return nRet;
 		}
@@ -330,7 +279,7 @@ namespace core
 			hFile = CreateFile(strFilePath.c_str(), GENERIC_WRITE_, CREATE_ALWAYS_, FILE_ATTRIBUTE_NORMAL_, 0644);
 
 			nRet = GetLastError();
-			if( NULL == hFile )
+			if (NULL == hFile)
 				throw exception_format(TEXT("CreateFile(%s) failure, %d"), strFilePath.c_str(), nRet);
 
 			LPCBYTE pContentsPos = (LPCBYTE)pContents;
@@ -341,7 +290,7 @@ namespace core
 				bool bRet = WriteFile(hFile, &pContentsPos[dwTotalWrittenSize], dwContentsSize - dwTotalWrittenSize, &dwWrittenSize);
 
 				nRet = GetLastError();
-				if( !bRet )
+				if (!bRet)
 					throw exception_format("WriteFile failure, try:%u, written:%u", dwContentsSize - dwTotalWrittenSize, dwWrittenSize);
 
 				dwTotalWrittenSize += dwWrittenSize;
@@ -353,7 +302,7 @@ namespace core
 		catch (std::exception& e)
 		{
 			Log_Error("%s - %s", __FUNCTION__, e.what());
-			if( hFile )
+			if (hFile)
 				CloseFile(hFile);
 			return nRet;
 		}
@@ -364,7 +313,7 @@ namespace core
 	//////////////////////////////////////////////////////////////////////////
 	ECODE WriteFileContents(std::tstring strFilePath, const std::vector<BYTE>& vecContents)
 	{
-		if( vecContents.empty() )
+		if (vecContents.empty())
 			return EC_NO_DATA;
 		return WriteFileContentsBinWorker(strFilePath, &vecContents[0], (DWORD)vecContents.size());
 	}
@@ -390,7 +339,7 @@ namespace core
 			btMagic[0] = 'S';
 			btMagic[1] = 'E';
 			btMagic[2] = 'E';
-			::memset(btReserved, 0,  sizeof(btReserved));
+			::memset(btReserved, 0, sizeof(btReserved));
 		}
 	};
 
@@ -402,7 +351,7 @@ namespace core
 		try
 		{
 			hFile = CreateFile(strFilePath.c_str(), GENERIC_READ_, OPEN_EXISTING_, 0);
-			if( NULL == hFile )
+			if (NULL == hFile)
 				throw exception_format(TEXT("ReadFileContents: CreateFile(%s, GENERIC_READ_, OPEN_EXISTING_) failure"), strFilePath.c_str());
 
 			ST_ENCRYPT_CONTENTS_HEADER test, header;
@@ -415,11 +364,11 @@ namespace core
 
 			ST_SYM_CIPHER_KEY stKey;
 			nRet = GenerateCipherKey((E_SYM_CIPHER_TYPE)header.btType, (E_SYM_CIPHER_MODE)header.btMode, strKey, stKey);
-			if( EC_SUCCESS != nRet )
+			if (EC_SUCCESS != nRet)
 				throw exception_format("ReadFileContents: GenerateCipherKey(%d,%d,%s) failure, %d", header.btType, header.btMode, strKey.c_str(), nRet);
 
 			QWORD qwSize = GetFileSize(hFile);
-			if( qwSize <= sizeof(header))
+			if (qwSize <= sizeof(header))
 				throw exception_format(TEXT("ReadFileContents: %s Contents is empty"), strFilePath.c_str());
 
 			qwSize -= sizeof(header);
@@ -428,7 +377,7 @@ namespace core
 			vecEncData.resize((size_t)qwSize);
 
 			dwReadSize = 0;
-			if( !ReadFile(hFile, (void*)&vecEncData[0], (DWORD)vecEncData.size(), &dwReadSize) || dwReadSize < vecEncData.size() )
+			if (!ReadFile(hFile, (void*)&vecEncData[0], (DWORD)vecEncData.size(), &dwReadSize) || dwReadSize < vecEncData.size())
 				throw exception_format(TEXT("ReadFileContents: ReadFile(size:%u, read:%u) content read failure"), vecEncData.size(), dwReadSize);
 
 			size_t tReqSize = DecodeData(stKey, &vecEncData[0], vecEncData.size(), NULL);
@@ -437,21 +386,21 @@ namespace core
 			strContentsU8.resize(tReqSize);
 			DecodeData(stKey, &vecEncData[0], vecEncData.size(), (LPBYTE)strContentsU8.c_str());
 
-			if( header.btPaddingSize < tReqSize )
+			if (header.btPaddingSize < tReqSize)
 				strContentsU8.resize(tReqSize - header.btPaddingSize);
 			strContents = TCSFromUTF8(strContentsU8);
 			CloseFile(hFile);
 
-			if( pOutType )
+			if (pOutType)
 				(*pOutType) = (E_SYM_CIPHER_TYPE)header.btType;
 
-			if( pOutMode )
+			if (pOutMode)
 				(*pOutMode) = (E_SYM_CIPHER_MODE)header.btMode;
 		}
 		catch (std::exception& e)
 		{
 			Log_Error("%s - %s", __FUNCTION__, e.what());
-			if( hFile )
+			if (hFile)
 				CloseFile(hFile);
 
 			return nRet;
@@ -468,19 +417,19 @@ namespace core
 		try
 		{
 			hFile = CreateFile(strFilePath.c_str(), GENERIC_WRITE_, CREATE_ALWAYS_, 0);
-			if( NULL == hFile )
+			if (NULL == hFile)
 				throw exception_format(TEXT("WriteFileContents: CreateFile(%s, GENERIC_WRITE_, CREATE_ALWAYS_) failure"), strFilePath.c_str());
 
 			ST_SYM_CIPHER_KEY stKey;
 			nRet = GenerateCipherKey(nType, nMode, strKey, stKey);
-			if( EC_SUCCESS != nRet )
+			if (EC_SUCCESS != nRet)
 				throw exception_format("WriteFileContents: GenerateCipherKey(%d,%d,%s) failure, %d", nType, nMode, strKey.c_str(), nRet);
 
 			std::string strContentsU8 = UTF8FromTCS(strContents);
 
 			std::vector<BYTE> vecEncContents;
 			size_t tReqSize = EncodeData(stKey, (LPCBYTE)strContentsU8.c_str(), strContentsU8.size(), NULL);
-			if( 0 == tReqSize )
+			if (0 == tReqSize)
 				throw exception_format("WriteFileContents: EncodeData(%u) reqSize:%u failure", strContents.size(), tReqSize);
 
 			vecEncContents.resize(tReqSize);
@@ -538,15 +487,15 @@ namespace core
 	static inline std::tstring& MakeAbsolutePathWorker(std::tstring strParentPath, std::tstring& strRelativePath)
 	{
 		Trim(strRelativePath);
-		if( strRelativePath.empty() )
+		if (strRelativePath.empty())
 			return strRelativePath;
 
 		// Windows type absolute path like C:\... D:\...
-		if( std::tstring::npos != strRelativePath.find(TEXT(':')) )
+		if (std::tstring::npos != strRelativePath.find(TEXT(':')))
 			return strRelativePath;
 
 		// Linux type absolute path like /root/...
-		if( TEXT('/') == strRelativePath.at(0) )
+		if (TEXT('/') == strRelativePath.at(0))
 			return strRelativePath;
 
 		strRelativePath = strParentPath + TEXT("/") + strRelativePath;
@@ -583,7 +532,7 @@ namespace core
 		MakeAbsolutePathWorker(strModulePath, strRelativePath);
 		return strRelativePath;
 	}
-	
+
 	//////////////////////////////////////////////////////////////////////////
 	std::tstring& MakeAbsPathByCurPath(std::tstring& strRelativePath)
 	{
@@ -724,7 +673,7 @@ namespace core
 	//////////////////////////////////////////////////////////////////////////
 	std::tstring BuildUniqFileName(std::tstring strTempFile)
 	{
-		if( strTempFile.empty() )
+		if (strTempFile.empty())
 			strTempFile = TEXT("nonamed");
 
 		std::tstring strDirectory = ExtractDirectory(strTempFile);
@@ -732,17 +681,335 @@ namespace core
 		std::tstring strFileEXT = ExtractFileExt(strTempFile);
 
 		int nPostfix = 0;
-		while(IsFileExist(strTempFile.c_str()))
+		while (IsFileExist(strTempFile.c_str()))
 		{
-			if( strFileEXT.empty() )
+			if (strFileEXT.empty())
 				strTempFile = Format(TEXT("%s_%d"), strFilenameWithoutEXT.c_str(), nPostfix++);
 			else
 				strTempFile = Format(TEXT("%s_%d.%s"), strFilenameWithoutEXT.c_str(), nPostfix++, strFileEXT.c_str());
 
-			if( !strDirectory.empty() )
+			if (!strDirectory.empty())
 				strTempFile = Format(TEXT("%s/%s"), strDirectory.c_str(), strTempFile.c_str());
 		}
 
 		return strTempFile;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	// ex) mailto:aaa@bbb.com?subject=제목&body=본문입니다.&cc=cc@example.com&bcc=bcc@example.com
+	ECODE ParseMailTo(std::tstring strUrl, ST_URL_INFO& outInfo)
+	{
+		std::tstring strUserInfo;
+		outInfo.strScheme = Split(strUrl, TEXT(":"), &strUserInfo);
+
+		std::tstring strMailInfo;
+		outInfo.strUserInfo = Split(strUserInfo, TEXT("?"), &strMailInfo);
+
+		return EC_SUCCESS;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	WORD GetKnownPort(std::tstring strProtocol)
+	{
+		static const std::map<std::tstring, WORD> mapPort = {
+			{TEXT("HTTP"), 80},
+			{TEXT("HTTPS"), 443},
+			{TEXT("FTP"), 21},
+			{TEXT("FTPS"), 990},
+			{TEXT("SSH"), 22},
+		};
+
+		auto it = mapPort.find(MakeUpper(strProtocol));
+		if (it != mapPort.end())
+			return it->second;
+
+		return 80;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	ECODE ParseURL(std::tstring strUrl, ST_URL_INFO& outInfo)
+	{
+		// 이스케이프 (%숫자, 0숫자) 제거
+		// 관련샘플: C905E41A8BCC21535DED384AFD6AF34C7DD48DB45D6584749F7A12F77D40A3DA
+		//           c2ed9eb91d84f5b6114d34be06b6cabd.pdf
+		strUrl = DecodeUrlEncoding(strUrl);
+
+		// 크롬이나 엣지 같은 일부 브라우저는 자동 치환됨
+		// 관련샘플: FA7E1EDD021F78564B3E6FFD5F13D7AF1FE69A1891CC492BA84CCBD77E7F9E31
+		strUrl = Replace(strUrl, TEXT("\\"), TEXT("/"));
+
+		if (strUrl.empty())
+			return EC_NO_DATA;
+
+		size_t tPos = 0;
+
+		const size_t tSchemeSep = strUrl.find(TEXT("://"), tPos);
+		if (std::tstring::npos != tSchemeSep)
+		{
+			// ex) https://xxx.xxx.xxx.xxx
+			outInfo.strScheme = strUrl.substr(tPos, tSchemeSep - tPos);
+			tPos = tSchemeSep + 3;
+		}
+		else if (TEXT("mailto:") == MakeLower(strUrl.substr(0, 7)))
+			return ParseMailTo(strUrl, outInfo);
+
+		const size_t tHostSep = strUrl.find(TEXT("/"), tPos);
+		if (std::tstring::npos != tHostSep)
+		{
+			outInfo.strHost = MakeLower(strUrl.substr(tPos, tHostSep - tPos));
+			tPos = tHostSep + 1;
+		}
+		else
+		{
+			outInfo.strHost = MakeLower(strUrl.substr(tPos));
+			tPos = tHostSep;
+		}
+
+		{
+			const size_t tUserInfoSep = outInfo.strHost.find(TEXT("@"));
+			if (std::tstring::npos != tUserInfoSep)
+			{
+				outInfo.strUserInfo = outInfo.strHost.substr(0, tUserInfoSep);
+				outInfo.strHost = outInfo.strHost.substr(tUserInfoSep + 1);
+			}
+		}
+
+		{
+			const size_t tPortSep = outInfo.strHost.find(TEXT(":"));
+			if (std::tstring::npos != tPortSep)
+			{
+				outInfo.strPort = outInfo.strHost.substr(tPortSep + 1);
+				outInfo.strHost = outInfo.strHost.substr(0, tPortSep);
+			}
+		}
+
+		outInfo.wPort = outInfo.strPort.empty()
+			? GetKnownPort(outInfo.strScheme)
+			: WORDFrom(outInfo.strPort);
+
+		if (std::tstring::npos == tPos)
+			return EC_SUCCESS;
+
+		const size_t tPathSep = strUrl.find(TEXT("?"), tPos);
+		if (std::tstring::npos != tPathSep)
+		{
+			outInfo.strPath = strUrl.substr(tPos, tPathSep - tPos);
+			tPos = tPathSep + 1;
+		}
+		else
+		{
+			outInfo.strPath = strUrl.substr(tPos);
+			tPos = tPathSep;
+		}
+
+		if (std::tstring::npos == tPos)
+			return EC_SUCCESS;
+
+		const size_t tQuerySep = strUrl.find(TEXT("#"), tPos);
+		if (std::tstring::npos != tQuerySep)
+		{
+			outInfo.strQuery = strUrl.substr(tPos, tQuerySep - tPos);
+			tPos = tQuerySep + 1;
+		}
+		else
+		{
+			outInfo.strQuery = strUrl.substr(tPos);
+			tPos = tQuerySep;
+		}
+
+		if (std::tstring::npos == tPos)
+			return EC_SUCCESS;
+
+		outInfo.strFragment = strUrl.substr(tPos);
+		return EC_SUCCESS;
+	}
+
+	inline std::tstring GetFileVersionStrWorker(std::tstring strFilePath)
+	{
+		ST_VERSIONINFO stVersion;
+		GetFileVersionInfo(strFilePath.c_str(), &stVersion);
+		return StringFrom(stVersion);
+	}
+
+	inline std::tstring GetProductVersionStrWorker(std::tstring strFilePath)
+	{
+		ST_VERSIONINFO stVersion;
+		GetProductVersionInfo(strFilePath.c_str(), &stVersion);
+		return StringFrom(stVersion);
+	}
+
+	std::tstring GetFileVersionStr(std::tstring strFilePath)
+	{
+		return GetFileVersionStrWorker(GetFileName());
+	}
+
+	std::tstring GetProductVersionStr(std::tstring strFilePath)
+	{
+		return GetProductVersionStrWorker(GetFileName());
+	}
+
+	std::tstring GetCurrentFileVersionStr(void)
+	{
+		return GetFileVersionStrWorker(GetFileName());
+	}
+
+	std::tstring GetCurrentProductVersionStr(void)
+	{
+		return GetProductVersionStrWorker(GetFileName());
+	}
+
+
+	static inline std::tstring BuildDateStringWorker(const core::ST_SYSTEMTIME& stSystemTime)
+	{
+		std::tstring strRet = Format(TEXT("%04u-%02u-%02u"), stSystemTime.wYear, stSystemTime.wMonth, stSystemTime.wDay);
+		return strRet;
+	}
+
+	static inline std::tstring BuildDateTimeStringWorker(const core::ST_SYSTEMTIME& stSystemTime)
+	{
+		std::tstring strRet = Format(
+			TEXT("%04u-%02u-%02u ")
+			TEXT("%02u:%02u:%02u")
+			, stSystemTime.wYear, stSystemTime.wMonth, stSystemTime.wDay
+			, stSystemTime.wHour, stSystemTime.wMinute, stSystemTime.wSecond);
+		return strRet;
+	}
+
+
+	std::tstring DateStringFrom(const core::ST_SYSTEMTIME& stSystemTime)
+	{
+		return BuildDateStringWorker(stSystemTime);
+	}
+
+	std::tstring DateTimeStringFrom(const core::ST_SYSTEMTIME& stSystemTime)
+	{
+		return BuildDateTimeStringWorker(stSystemTime);
+	}
+
+
+	std::tstring DateStringFrom(QWORD qwUnixTime)
+	{
+		const ST_SYSTEMTIME stTime = SystemTimeFrom(qwUnixTime);
+		return BuildDateStringWorker(stTime);
+	}
+
+	std::tstring DateTimeStringFrom(QWORD qwUnixTime)
+	{
+		const ST_SYSTEMTIME stTime = SystemTimeFrom(qwUnixTime);
+		return BuildDateTimeStringWorker(stTime);
+	}
+
+
+	static const TCHAR g_pszFirstChar[] = TEXT("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_.");
+	static const size_t g_tFirstCharCount = sizeof(g_pszFirstChar) / sizeof(g_pszFirstChar[0]) - 1;
+	static inline TCHAR GetRandomFirstChar(void)
+	{
+		size_t tIndex = (rand() + core::GetTickCount()) % g_tFirstCharCount;
+		return g_pszFirstChar[tIndex];
+	}
+	static const TCHAR g_pszChar[] = TEXT("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_.");
+	static const size_t g_tCharCount = sizeof(g_pszChar) / sizeof(g_pszChar[0]) - 1;
+	static inline TCHAR GetRandomChar(void)
+	{
+		size_t tIndex = (rand() + core::GetTickCount()) % g_tCharCount;
+		return g_pszChar[tIndex];
+	}
+
+	std::tstring BuildRandomString(size_t tLength)
+	{
+		std::tstring strName;
+		strName.push_back(GetRandomFirstChar());
+
+		for (size_t i = 1; i < tLength; i++)
+			strName.push_back(GetRandomChar());
+
+		return std::move(strName);
+	}
+
+	std::tstring FormalNumberString(int nValue)
+	{
+		std::tstring strValue = StringFrom(nValue);
+
+		size_t tPos = strValue.length() % 3;
+		if (0 == tPos)
+			tPos = 3;
+
+		for (size_t i = tPos; i < strValue.length(); i += 4)
+			strValue.insert(i, TEXT(","));
+
+		return strValue;
+	}
+
+	std::tstring FormalNumberString(double dValue)
+	{
+		int nValue = (int)dValue;
+		std::tstring strValue = StringFrom(nValue);
+
+		size_t tPos = strValue.length() % 3;
+		if (0 == tPos)
+			tPos = 3;
+
+		for (size_t i = tPos; i < strValue.length(); i += 4)
+			strValue.insert(i, TEXT(","));
+
+		if (nValue < dValue)
+			strValue += Format(TEXT(".%02d"), (int)((dValue - nValue + 0.005) * 100));
+		return strValue;
+	}
+
+	std::tstring DecodeUrlEncoding(std::tstring strOriginal)
+	{
+		std::tstring strRet = strOriginal;
+
+		{	// TK-200: URL을 문자열로부터 잘못 추출해서 과진이 발생한 것 방지
+			const size_t tPipeIndex = strRet.find(TEXT('|'));
+			if (-1 != tPipeIndex)
+				strRet.erase(tPipeIndex);
+		}
+
+		size_t tPos = 0;
+		while ((tPos = strRet.find(TEXT('\\'), tPos)) != std::tstring::npos)
+		{
+			std::tstring strTarget = strRet.substr(tPos++, 4);
+			if (strTarget.length() != 4)
+				continue;
+
+			const int nCharCode = DWORDFromBase(strTarget.substr(1), 8);
+			if (0 == nCharCode)
+				continue;
+
+			std::tstring strReplace;
+			strReplace.push_back(TCHAR(nCharCode));
+
+			Replace(strRet, strTarget, strReplace);
+		}
+
+		tPos = strRet.find(TEXT('%'), 0);
+		if (std::tstring::npos != tPos)
+		{
+			std::tstring strTempUrl;
+			size_t tReadPos = 0;
+			while (tPos + 2 < strOriginal.length() && tPos != std::tstring::npos)
+			{
+				std::tstring strHex = strOriginal.substr(tPos + 1, 2);
+				char cValue = 0;
+				if (EC_SUCCESS == HexFromString((LPBYTE)&cValue, 1, strHex))
+				{
+					if (' ' == cValue)
+						cValue = '_';
+					strTempUrl += strOriginal.substr(tReadPos, tPos - tReadPos) + TCHAR(cValue);
+					tReadPos = tPos + 3;
+				}
+
+				tPos = strOriginal.find(TEXT('%'), tPos + 1);
+			}
+
+			if (tReadPos < strOriginal.size())
+				strTempUrl += strOriginal.substr(tReadPos);
+
+			strRet = strTempUrl;
+		}
+
+		return strRet;
 	}
 }
