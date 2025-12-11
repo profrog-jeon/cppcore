@@ -20,7 +20,12 @@ namespace core
 			if( NULL == hFile )
 				throw exception_format(TEXT("CreateFile(%s) failure"), strFilePath.c_str());
 
-			tFileSize = (size_t)GetFileSize(hFile);			
+			tFileSize = (size_t)GetFileSize(hFile);
+
+			nRet = EC_NO_DATA;
+			if (0 == tFileSize)
+				throw exception_format(TEXT("File(%s) size is ZERO"), strFilePath.c_str());
+
 			hFileMap = CreateFileMapping(hFile, nProtectMode, dwFileMapAccess, tFileSize);
 			nRet = GetLastError();
 			if( NULL == hFileMap )
