@@ -6,7 +6,7 @@ SET TEST_DIR=%CD%\Test
 REM =======================================
 REM ===========  WINDOWS BUILD  ===========
 REM =======================================
-SET MSBUILD="C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\MSBuild.exe"
+SET MSBUILD="C:\Program Files\Microsoft Visual Studio\18\Community\MSBuild\Current\Bin\MSBuild.exe"
 SET SLNFILE=..\Test\_BuildAll.sln
 
 %MSBUILD% %SLNFILE% /m /t:Rebuild /p:Configuration=ReleaseMT;Platform=x64
