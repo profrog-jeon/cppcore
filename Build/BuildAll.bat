@@ -45,7 +45,7 @@ mkdir ..\Output\LinuxRelease
 cd ..\Output\LinuxRelease
 wsl cmake ../../Src
 IF %ERRORLEVEL% NEQ 0 GOTO Error
-wsl cmake --build .
+wsl cmake --build . --parallel 16
 IF %ERRORLEVEL% NEQ 0 GOTO Error
 
 
